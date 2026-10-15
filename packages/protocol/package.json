@@ -1,0 +1,13 @@
+{
+  "name": "@ww2hex/protocol",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Messages between the local game host and browser clients, and per-player view types.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@ww2hex/engine": "0.1.0"
+  }
+}

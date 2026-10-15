@@ -1,0 +1,14 @@
+{
+  "name": "@ww2hex/engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Rules engine: hex geometry, pathfinding, orders, step resolution and scenario validation. No UI or network code.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run --root ../.. packages/engine",
+    "typecheck": "tsc -p ."
+  }
+}

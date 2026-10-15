@@ -1,0 +1,13 @@
+{
+  "name": "@ww2hex/server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local game-host program. Runs on one player's computer; no paid hosting.",
+  "type": "module",
+  "scripts": {
+    "start": "node src/main.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0"
+  }
+}

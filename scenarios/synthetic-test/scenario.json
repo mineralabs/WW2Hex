@@ -1,0 +1,717 @@
+{
+  "schemaVersion": 1,
+  "id": "synthetic-test-01",
+  "name": "SYNTHETIC TEST MAP - not historical",
+  "dataStatus": "synthetic",
+  "description": "Engine development map. Invented geography, placeholder counters and placeholder equipment. Nothing here represents a real place, unit or quantity.",
+  "start": {
+    "day": 1,
+    "minuteOfDay": 360
+  },
+  "map": {
+    "id": "synthetic-river-crossing",
+    "name": "Synthetic river crossing (test)",
+    "geo": {
+      "crs": "none (synthetic map; no georeference)",
+      "origin": null,
+      "orientation": "pointy-top hexes, north up, odd-r offset coordinates [col,row]",
+      "hexSpacingMeters": 1000
+    },
+    "cols": 22,
+    "rows": 16,
+    "terrainLegend": {
+      ".": "clear",
+      "p": "polder",
+      "f": "woods",
+      "t": "town",
+      "w": "water"
+    },
+    "terrain": [
+      ".......ff......fff....",
+      ".ww...fff.....ffff....",
+      ".w.....ff.....fffff...",
+      "....t.........ffff....",
+      "..........tt...fff....",
+      ".........ttt..........",
+      "ppp.......tt..........",
+      "pppppppppppp.......ppp",
+      "ppppppppppppp...pppppp",
+      "...pppp.....ppppppp...",
+      ".............ppp......",
+      "...fff............t...",
+      "...ffff...t...........",
+      "..fffff.....ff........",
+      "...ffff.....fff.......",
+      "...fff......ff........"
+    ],
+    "elevationStepMeters": 5,
+    "elevation": [
+      "2222222222222222444422",
+      "2002222222222224666422",
+      "2022222222222224666642",
+      "2222222222222246666642",
+      "2222222222222224666642",
+      "1112222111112224666111",
+      "1111111111111222111111",
+      "1111111111111111111111",
+      "2221111222221111111222",
+      "2222222222222111222222",
+      "2222222222222222222222",
+      "2222222222222222222222",
+      "2222222222222222222222",
+      "2222222222222222222222",
+      "2222222222222222222222",
+      "2222222222222222222222"
+    ],
+    "rivers": [
+      {
+        "id": "test-river",
+        "name": "Test River (synthetic)",
+        "kind": "major",
+        "edges": [
+          [
+            [0, 6],
+            [0, 7]
+          ],
+          [
+            [1, 6],
+            [0, 7]
+          ],
+          [
+            [1, 6],
+            [1, 7]
+          ],
+          [
+            [2, 6],
+            [1, 7]
+          ],
+          [
+            [2, 6],
+            [2, 7]
+          ],
+          [
+            [3, 6],
+            [2, 7]
+          ],
+          [
+            [7, 6],
+            [7, 7]
+          ],
+          [
+            [8, 6],
+            [7, 7]
+          ],
+          [
+            [8, 6],
+            [8, 7]
+          ],
+          [
+            [9, 6],
+            [8, 7]
+          ],
+          [
+            [9, 6],
+            [9, 7]
+          ],
+          [
+            [10, 6],
+            [9, 7]
+          ],
+          [
+            [10, 6],
+            [10, 7]
+          ],
+          [
+            [11, 6],
+            [10, 7]
+          ],
+          [
+            [11, 6],
+            [11, 7]
+          ],
+          [
+            [12, 6],
+            [11, 7]
+          ],
+          [
+            [19, 6],
+            [19, 7]
+          ],
+          [
+            [20, 6],
+            [19, 7]
+          ],
+          [
+            [20, 6],
+            [20, 7]
+          ],
+          [
+            [21, 6],
+            [20, 7]
+          ],
+          [
+            [21, 6],
+            [21, 7]
+          ],
+          [
+            [3, 7],
+            [2, 7]
+          ],
+          [
+            [3, 7],
+            [3, 8]
+          ],
+          [
+            [3, 7],
+            [4, 8]
+          ],
+          [
+            [4, 7],
+            [4, 8]
+          ],
+          [
+            [4, 7],
+            [5, 8]
+          ],
+          [
+            [5, 7],
+            [5, 8]
+          ],
+          [
+            [5, 7],
+            [6, 8]
+          ],
+          [
+            [6, 7],
+            [7, 7]
+          ],
+          [
+            [6, 7],
+            [6, 8]
+          ],
+          [
+            [6, 7],
+            [7, 8]
+          ],
+          [
+            [12, 7],
+            [11, 7]
+          ],
+          [
+            [12, 7],
+            [12, 8]
+          ],
+          [
+            [15, 7],
+            [16, 8]
+          ],
+          [
+            [16, 7],
+            [16, 8]
+          ],
+          [
+            [16, 7],
+            [17, 8]
+          ],
+          [
+            [17, 7],
+            [17, 8]
+          ],
+          [
+            [17, 7],
+            [18, 8]
+          ],
+          [
+            [18, 7],
+            [19, 7]
+          ],
+          [
+            [18, 7],
+            [18, 8]
+          ],
+          [
+            [18, 7],
+            [19, 8]
+          ],
+          [
+            [13, 8],
+            [12, 8]
+          ],
+          [
+            [13, 8],
+            [12, 9]
+          ],
+          [
+            [13, 8],
+            [13, 9]
+          ],
+          [
+            [14, 8],
+            [13, 9]
+          ],
+          [
+            [14, 8],
+            [14, 9]
+          ],
+          [
+            [15, 8],
+            [16, 8]
+          ],
+          [
+            [15, 8],
+            [14, 9]
+          ],
+          [
+            [15, 8],
+            [15, 9]
+          ]
+        ]
+      },
+      {
+        "id": "test-brook",
+        "name": "Test Brook (synthetic)",
+        "kind": "stream",
+        "edges": [
+          [
+            [15, 10],
+            [16, 10]
+          ],
+          [
+            [15, 11],
+            [16, 11]
+          ],
+          [
+            [15, 11],
+            [16, 10]
+          ],
+          [
+            [15, 11],
+            [16, 12]
+          ],
+          [
+            [15, 12],
+            [16, 12]
+          ],
+          [
+            [15, 13],
+            [16, 13]
+          ],
+          [
+            [15, 13],
+            [16, 12]
+          ],
+          [
+            [15, 13],
+            [16, 14]
+          ],
+          [
+            [15, 14],
+            [16, 14]
+          ],
+          [
+            [15, 15],
+            [16, 15]
+          ],
+          [
+            [15, 15],
+            [16, 14]
+          ]
+        ]
+      }
+    ],
+    "bridges": [
+      {
+        "id": "test-road-bridge",
+        "name": "Test Road Bridge",
+        "edge": [
+          [10, 6],
+          [10, 7]
+        ]
+      }
+    ],
+    "roads": [
+      {
+        "id": "main-road",
+        "name": "Main road N-S",
+        "kind": "main",
+        "hexes": [
+          [10, 0],
+          [10, 1],
+          [10, 2],
+          [10, 3],
+          [10, 4],
+          [10, 5],
+          [10, 6],
+          [10, 7],
+          [10, 8],
+          [10, 9],
+          [10, 10],
+          [10, 11],
+          [10, 12],
+          [10, 13],
+          [10, 14],
+          [10, 15]
+        ]
+      },
+      {
+        "id": "south-lateral",
+        "name": "South lateral road",
+        "kind": "secondary",
+        "hexes": [
+          [0, 11],
+          [1, 11],
+          [2, 11],
+          [3, 11],
+          [4, 11],
+          [5, 11],
+          [6, 11],
+          [7, 11],
+          [8, 11],
+          [9, 11],
+          [10, 11],
+          [11, 11],
+          [12, 11],
+          [13, 11],
+          [14, 11],
+          [15, 11],
+          [16, 11],
+          [17, 11],
+          [18, 11],
+          [19, 11],
+          [20, 11],
+          [21, 11]
+        ]
+      },
+      {
+        "id": "north-lateral",
+        "name": "North lateral road",
+        "kind": "secondary",
+        "hexes": [
+          [0, 3],
+          [1, 3],
+          [2, 3],
+          [3, 3],
+          [4, 3],
+          [5, 3],
+          [6, 3],
+          [7, 3],
+          [8, 3],
+          [9, 3],
+          [10, 3],
+          [11, 3],
+          [12, 3],
+          [13, 3],
+          [14, 3],
+          [15, 3],
+          [16, 3],
+          [17, 3],
+          [18, 3],
+          [19, 3],
+          [20, 3],
+          [21, 3]
+        ]
+      }
+    ],
+    "places": [
+      {
+        "name": "Northton",
+        "kind": "town",
+        "at": [10, 5]
+      },
+      {
+        "name": "Southby",
+        "kind": "village",
+        "at": [10, 12]
+      },
+      {
+        "name": "Westerholt",
+        "kind": "village",
+        "at": [4, 3]
+      },
+      {
+        "name": "Eastdorp",
+        "kind": "village",
+        "at": [18, 11]
+      },
+      {
+        "name": "Test River",
+        "kind": "feature",
+        "at": [3, 7]
+      },
+      {
+        "name": "Test Brook",
+        "kind": "feature",
+        "at": [16, 14]
+      }
+    ]
+  },
+  "equipment": [
+    {
+      "id": "ph-rifle-section",
+      "name": "Placeholder rifle section",
+      "role": "infantry",
+      "researchStatus": "synthetic",
+      "sources": []
+    },
+    {
+      "id": "ph-medium-tank",
+      "name": "Placeholder medium tank",
+      "role": "tank",
+      "researchStatus": "synthetic",
+      "sources": []
+    },
+    {
+      "id": "ph-armoured-car",
+      "name": "Placeholder armoured car",
+      "role": "reconnaissance",
+      "researchStatus": "synthetic",
+      "sources": []
+    },
+    {
+      "id": "ph-field-gun",
+      "name": "Placeholder field gun",
+      "role": "artillery",
+      "researchStatus": "synthetic",
+      "sources": []
+    },
+    {
+      "id": "ph-at-gun",
+      "name": "Placeholder anti-tank gun",
+      "role": "anti-tank",
+      "researchStatus": "synthetic",
+      "sources": []
+    },
+    {
+      "id": "ph-truck",
+      "name": "Placeholder truck",
+      "role": "transport",
+      "researchStatus": "synthetic",
+      "sources": []
+    }
+  ],
+  "formations": [
+    {
+      "id": "blue-div",
+      "side": "allied",
+      "name": "TEST Blue Division",
+      "parentId": null,
+      "dataStatus": "synthetic"
+    },
+    {
+      "id": "blue-armd-bde",
+      "side": "allied",
+      "name": "TEST Blue Armoured Brigade",
+      "parentId": "blue-div",
+      "dataStatus": "synthetic"
+    },
+    {
+      "id": "red-kg",
+      "side": "german",
+      "name": "TEST Red Battlegroup",
+      "parentId": null,
+      "dataStatus": "synthetic"
+    }
+  ],
+  "units": [
+    {
+      "id": "a-inf-1",
+      "side": "allied",
+      "name": "TEST Blue Infantry Bn 1",
+      "shortName": "1 Inf",
+      "formationId": "blue-div",
+      "type": "infantry",
+      "movementClass": "foot",
+      "at": [9, 12],
+      "personnel": 620,
+      "equipment": {
+        "ph-rifle-section": 27,
+        "ph-truck": 4
+      },
+      "cohesion": 100,
+      "supply": "supplied",
+      "dataStatus": "synthetic"
+    },
+    {
+      "id": "a-inf-2",
+      "side": "allied",
+      "name": "TEST Blue Infantry Bn 2",
+      "shortName": "2 Inf",
+      "formationId": "blue-div",
+      "type": "infantry",
+      "movementClass": "foot",
+      "at": [12, 12],
+      "personnel": 600,
+      "equipment": {
+        "ph-rifle-section": 27,
+        "ph-truck": 4
+      },
+      "cohesion": 100,
+      "supply": "supplied",
+      "dataStatus": "synthetic"
+    },
+    {
+      "id": "a-arm-1",
+      "side": "allied",
+      "name": "TEST Blue Tank Bn 1",
+      "shortName": "1 Tk",
+      "formationId": "blue-armd-bde",
+      "type": "armour",
+      "movementClass": "tracked",
+      "at": [10, 14],
+      "personnel": 540,
+      "equipment": {
+        "ph-medium-tank": 50
+      },
+      "cohesion": 100,
+      "supply": "supplied",
+      "dataStatus": "synthetic"
+    },
+    {
+      "id": "a-arm-2",
+      "side": "allied",
+      "name": "TEST Blue Tank Bn 2",
+      "shortName": "2 Tk",
+      "formationId": "blue-armd-bde",
+      "type": "armour",
+      "movementClass": "tracked",
+      "at": [10, 15],
+      "personnel": 540,
+      "equipment": {
+        "ph-medium-tank": 48
+      },
+      "cohesion": 100,
+      "supply": "supplied",
+      "dataStatus": "synthetic"
+    },
+    {
+      "id": "a-rec-1",
+      "side": "allied",
+      "name": "TEST Blue Recce Sqn",
+      "shortName": "Recce",
+      "formationId": "blue-div",
+      "type": "recon",
+      "movementClass": "wheeled",
+      "at": [7, 11],
+      "personnel": 180,
+      "equipment": {
+        "ph-armoured-car": 14
+      },
+      "cohesion": 100,
+      "supply": "supplied",
+      "dataStatus": "synthetic"
+    },
+    {
+      "id": "a-art-1",
+      "side": "allied",
+      "name": "TEST Blue Field Artillery Bn",
+      "shortName": "Arty",
+      "formationId": "blue-div",
+      "type": "artillery",
+      "movementClass": "wheeled",
+      "at": [11, 14],
+      "personnel": 450,
+      "equipment": {
+        "ph-field-gun": 24,
+        "ph-truck": 30
+      },
+      "cohesion": 100,
+      "supply": "supplied",
+      "dataStatus": "synthetic"
+    },
+    {
+      "id": "g-inf-1",
+      "side": "german",
+      "name": "TEST Red Infantry Bn 1",
+      "shortName": "1 Inf",
+      "formationId": "red-kg",
+      "type": "infantry",
+      "movementClass": "foot",
+      "at": [10, 5],
+      "personnel": 500,
+      "equipment": {
+        "ph-rifle-section": 22
+      },
+      "cohesion": 100,
+      "supply": "supplied",
+      "dataStatus": "synthetic"
+    },
+    {
+      "id": "g-inf-2",
+      "side": "german",
+      "name": "TEST Red Infantry Bn 2",
+      "shortName": "2 Inf",
+      "formationId": "red-kg",
+      "type": "infantry",
+      "movementClass": "foot",
+      "at": [6, 4],
+      "personnel": 480,
+      "equipment": {
+        "ph-rifle-section": 21
+      },
+      "cohesion": 100,
+      "supply": "supplied",
+      "dataStatus": "synthetic"
+    },
+    {
+      "id": "g-at-1",
+      "side": "german",
+      "name": "TEST Red Anti-Tank Coy",
+      "shortName": "AT",
+      "formationId": "red-kg",
+      "type": "anti-tank",
+      "movementClass": "tracked",
+      "at": [11, 4],
+      "personnel": 120,
+      "equipment": {
+        "ph-at-gun": 10
+      },
+      "cohesion": 100,
+      "supply": "supplied",
+      "dataStatus": "synthetic"
+    },
+    {
+      "id": "g-arm-1",
+      "side": "german",
+      "name": "TEST Red Tank Coy",
+      "shortName": "Tk Coy",
+      "formationId": "red-kg",
+      "type": "armour",
+      "movementClass": "tracked",
+      "at": [14, 3],
+      "personnel": 110,
+      "equipment": {
+        "ph-medium-tank": 12
+      },
+      "cohesion": 100,
+      "supply": "supplied",
+      "dataStatus": "synthetic"
+    },
+    {
+      "id": "g-rec-1",
+      "side": "german",
+      "name": "TEST Red Recce Coy",
+      "shortName": "Recce",
+      "formationId": "red-kg",
+      "type": "recon",
+      "movementClass": "wheeled",
+      "at": [16, 5],
+      "personnel": 130,
+      "equipment": {
+        "ph-armoured-car": 8
+      },
+      "cohesion": 100,
+      "supply": "supplied",
+      "dataStatus": "synthetic"
+    }
+  ],
+  "events": [],
+  "objectives": [],
+  "provenance": {
+    "status": "synthetic",
+    "sources": [],
+    "notes": [
+      "Entirely invented for engine development. Do not cite.",
+      "Strengths and equipment counts are round placeholders chosen only to exercise the interface."
+    ]
+  }
+}
