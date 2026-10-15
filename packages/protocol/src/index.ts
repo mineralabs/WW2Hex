@@ -1,39 +1,21 @@
 /**
  * Wire protocol between the local game host and each player's browser.
  *
- * STAGE 1 STATUS: types only. Nothing sends these yet; Stage 1 runs the
- * engine directly in the browser for development. They are here so that the
- * engine's order and event types are already shaped for Stage 2/3, where the
- * host validates every message and filters state per player before sending.
+ * STATUS (Stage 2): types only. The engine already builds everything a player
+ * may see (SideView, ObservedEvent); in Stage 3 the host sends exactly those,
+ * validated, over WebSocket. Stage 2 runs the match in one browser (hot-seat).
  */
-import type { Clock, CommittedOrderSet, GameEvent, Hex, Side, UnitState } from '@ww2hex/engine';
+import type { CommittedOrderSet, MatchPhase, ObservedEvent, Side, SideView } from '@ww2hex/engine';
 
 export const PROTOCOL_VERSION = 1;
 
-export type MatchPhase = 'planning' | 'resolving' | 'replay' | 'finished';
-
-/** An enemy contact as one player knows it. Never carries hidden detail. */
-export interface ObservedContact {
-  contactId: string;
-  side: Side;
-  pos: Hex;
-  /** Scenario minutes when this contact was last observed. */
-  observedAt: number;
-  /** False once contact is lost: position is last-seen only. */
-  live: boolean;
-  /** Only what observation reveals, e.g. "armour" or "unknown". */
-  apparentType: string;
-}
+export type { MatchPhase, ObservedEvent, SideView };
 
 /** Everything one player is allowed to know. Built by the host, never by the client. */
-export interface PlayerView {
-  side: Side;
-  clock: Clock;
+export interface PlayerView extends SideView {
   phase: MatchPhase;
-  ownUnits: UnitState[];
-  contacts: ObservedContact[];
-  ready: Record<Side, boolean>;
-  ownOrdersLocked: boolean;
+  locked: Record<Side, boolean>;
+  replayFinished: Record<Side, boolean>;
 }
 
 export type ClientMessage =
@@ -45,6 +27,6 @@ export type ServerMessage =
   | { type: 'joined'; side: Side; sideCredential: string; view: PlayerView }
   | { type: 'orders-locked'; turn: number }
   | { type: 'view'; view: PlayerView }
-  /** Only events this player could observe. */
-  | { type: 'replay'; turn: number; events: GameEvent[] }
+  /** Only what this player observed during the turn. */
+  | { type: 'replay'; turn: number; frames: SideView[]; events: ObservedEvent[] }
   | { type: 'error'; message: string };

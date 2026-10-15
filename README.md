@@ -3,9 +3,16 @@
 A two-player, simultaneous-turn WWII operational wargame on hex maps. The design is in
 [WW2_Hex_Game_Development_Brief.md](WW2_Hex_Game_Development_Brief.md).
 
-**Status: Stage 1 (map and orders).** One browser, development controls, both sides visible.
-There is no combat, fog of war or networking yet. The only scenario is a **synthetic test map**
-with placeholder counters. Nothing in it is historical.
+**Status: Stage 2 (simultaneous engine).**
+
+- Both sides plan in secret, lock their orders, and the turn resolves for both at once: two hours
+  in twelve ten-minute steps.
+- Movement, spotting, fire and losses are all worked out from the same snapshots.
+- Each side then watches a replay of only what its own units saw.
+
+For now both players share one browser, taking turns at the screen ("hot-seat"). Playing across
+two computers is Stage 3. The only scenario is a **synthetic test map** with placeholder
+counters; nothing in it is historical.
 
 ## Requirements
 
@@ -27,51 +34,77 @@ npm run host       # builds the client, then serves it → http://localhost:8790
 ```
 
 The host listens only on this computer by default. `HOST=0.0.0.0 npm run host` (PowerShell:
-`$env:HOST='0.0.0.0'; npm run host`) makes it reachable from the home network and prints the
-addresses. Set `PORT` to change the port. Stage 1 has nothing that needs a second computer yet.
+`$env:HOST='0.0.0.0'; npm run host`) makes it reachable from the home network. Set `PORT` to
+change the port.
 
-## What to try
+## Playing a turn
+
+1. **Allied player plans.** Click a counter, pick **Advance** (`A`), **Attack** (`T`) or
+   **Withdraw** (`W`), then right-click the map. **Defend** (`D`) holds and digs in. Hover first
+   to preview the route and arrival time. Shift+right-click adds waypoints. Artillery's Attack
+   button reads **Bombard**: right-click a hex within range.
+2. **Lock Allied orders.** A hand-over screen appears for the German player.
+3. **German player plans and locks.** The turn resolves immediately.
+4. **Replays.** Each player in turn watches what their own side saw: play/pause (`Space`), step
+   (`←` `→`), scrub, or change speed. Red lines are fire. Faded dashed counters are enemies last
+   seen at the time shown.
+5. **Finish replay.** Once both players have finished, planning for the next turn begins.
+
+**Umpire** (top bar) is a development view. It shows everything, lets you order and lock either
+side, and replays the complete event log.
+
+## Things to try
 
 | Do this | To see |
 | --- | --- |
-| Click a counter | Unit panel: formation, type, personnel, equipment, cohesion, supply, current order |
-| Click an empty hex | Hex panel: terrain, elevation, roads, river sides, entry costs |
-| Drag, mouse wheel | Pan and zoom. **Fit map** resets the view |
-| Select a unit, hover a hex | Route preview with time and arrival clock |
-| Right-click | Order an **Advance** along that route |
-| Shift+right-click, then right-click | Route through waypoints. `Esc` clears them |
-| **Step 10 min** or `N` | Resolve one ten-minute step |
-| **Play turn** / **Finish turn** | Watch, or jump to the end of the two-hour turn |
-| Order a southern unit north of the river | Every route uses the bridge; there is no other crossing |
-| Order two units of one side to the same hex | An orange warning before; both wait during resolution |
-| Order a unit into an enemy hex | It halts outside, the route turns dashed and the log says why |
-| Order a long march, then finish two turns | Unfinished movement carries over between turns |
+| Attack the town across the bridge with the tanks | Contact made, assault, losses reported as light/moderate/heavy |
+| Bombard a hex none of your units can see | Your log says "results not observed"; the German log says "shelled by unseen artillery" |
+| Advance towards the enemy | The advance halts when the unit spots an enemy within 2 hexes |
+| Switch between Allied, German and Umpire after a turn | The same events described from each point of view |
+| Lock, then try to change orders | Locked orders cannot be changed until the turn resolves |
 
-On the map, solid arrows are standing orders, a white dot marks where the unit will be at the end of
-this turn, and a red dot on a counter means it is halted. The dot at the top right of a counter
-shows cohesion (green/amber/red) and is hollow when supply is not normal.
+The rules, numbers and four worked examples are in [docs/combat-rules.md](docs/combat-rules.md).
+All numbers are provisional playtest values.
 
 ## Checks
 
 ```sh
-npm test           # engine tests (Vitest): geometry, validation, rivers, routes, movement, collisions, determinism
+npm test           # 76 engine tests (Vitest)
 npm run typecheck  # TypeScript across all packages
 npm run check      # both
 ```
+
+The tests cover:
+
+- geometry, scenario validation, river crossings and route finding;
+- movement and collisions;
+- every combat worked example;
+- spotting and line of sight;
+- simultaneous fire;
+- batch retreats;
+- contact tracking;
+- information leakage in views and replays;
+- duplicate commits;
+- save and reload;
+- determinism.
 
 ## Layout
 
 | Path | Contents |
 | --- | --- |
-| `packages/engine` | Rules with no UI or network code: hex geometry, map building, pathfinding, orders, step resolution, scenario validation, balance configuration |
-| `packages/protocol` | Message and per-player view types for Stage 2/3. Types only so far |
-| `apps/client` | React panels and a PixiJS map renderer. Stage 1 runs the engine in the browser |
-| `apps/server` | The local game-host program. Stage 1 serves the built client only |
+| `packages/engine` | Rules with no UI or network code: geometry, map, route finding, orders, spotting, combat, step resolution, observed events, the match lifecycle, validation and balance values |
+| `packages/protocol` | Message and per-player view types for Stage 3. Types only so far |
+| `apps/client` | React panels and a PixiJS map. Stage 2 runs the match in the browser (hot-seat) |
+| `apps/server` | The local game-host program. Serves the built client only so far |
 | `scenarios/synthetic-test` | The synthetic engine-development scenario |
-| `docs` | [Stage 1 implementation notes](docs/stage-1-notes.md) and the [scenario file format](docs/scenario-format.md) |
+| `docs` | [Combat rules](docs/combat-rules.md), [Stage 2 notes](docs/stage-2-notes.md), [Stage 1 notes](docs/stage-1-notes.md), [scenario format](docs/scenario-format.md) |
 
 ## Next
 
-Stage 2 is the simultaneous engine: private order sets, commit/lock, spotting, deterministic
-combat, and filtered observed-event logs. See section 9 of the brief and the "Stage 2 hand-off"
-list in [docs/stage-1-notes.md](docs/stage-1-notes.md).
+Stage 3 is the first real two-player match. It adds:
+
+- Host Game and Join Game across two computers, with each player sent only their own view;
+- simple objectives and victory;
+- saving, reconnecting, and restarting the host program.
+
+See [docs/stage-2-notes.md](docs/stage-2-notes.md#stage-3-hand-off).

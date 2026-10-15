@@ -1,11 +1,14 @@
 import { buildMap, fromOffset } from './map.ts';
 import { DEFAULT_RULES, type Rules } from './rules.ts';
-import type { GameMap, GameState, ScenarioFile, UnitState } from './types.ts';
+import type { GameMap, GameState, ScenarioFile, UnitState, World } from './types.ts';
 import { validateScenario, type ValidationIssue } from './validate.ts';
+import { updateContacts } from './observe.ts';
+import { computeSpotting } from './visibility.ts';
 
 export interface LoadedScenario {
   file: ScenarioFile;
   map: GameMap;
+  world: World;
   state: GameState;
   issues: ValidationIssue[];
 }
@@ -22,7 +25,15 @@ export function loadScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULES): 
       `Scenario ${file.id} failed validation:\n${errors.map((e) => `  [${e.code}] ${e.message}`).join('\n')}`,
     );
   }
-  return { file, map: buildMap(file.map), state: initialState(file, rules), issues };
+  const map = buildMap(file.map);
+  const state = initialState(file, rules);
+  // Each side starts knowing whatever its units can already see.
+  updateContacts(state, map, rules, computeSpotting(map, rules, state.units), new Set(), { time: 0, turn: 1, step: 0 });
+  return { file, map, world: buildWorld(file, map), state, issues };
+}
+
+export function buildWorld(file: ScenarioFile, map: GameMap = buildMap(file.map)): World {
+  return { map, combatClass: new Map(file.equipment.map((e) => [e.id, e.combatClass])) };
 }
 
 export function initialState(file: ScenarioFile, rules: Rules = DEFAULT_RULES): GameState {
@@ -38,11 +49,15 @@ export function initialState(file: ScenarioFile, rules: Rules = DEFAULT_RULES): 
       pos: fromOffset(u.at),
       personnel: u.personnel,
       equipment: { ...u.equipment },
+      baseline: { personnel: u.personnel, equipment: { ...u.equipment } },
       cohesion: u.cohesion,
       supply: u.supply,
       dataStatus: u.dataStatus,
       order: null,
       movement: { progress: 0, blocked: null },
+      stationarySteps: 0,
+      damageCarry: 0,
+      lastStep: { moved: false, fired: false, hit: false },
     }))
     .sort(byId);
   return {
@@ -50,6 +65,9 @@ export function initialState(file: ScenarioFile, rules: Rules = DEFAULT_RULES): 
     rulesVersion: rules.rulesVersion,
     clock: { turn: 1, step: 0 },
     units,
+    contacts: { allied: [], german: [] },
+    nextContactNo: { allied: 1, german: 1 },
+    destroyed: [],
   };
 }
 

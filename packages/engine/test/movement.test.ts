@@ -8,11 +8,12 @@ import {
   hexKey,
   initialState,
   loadScenario,
+  orderPath,
   pathCosts,
   resolveStep,
   resolveTurn,
   type GameEvent,
-  type GameMap,
+  type World,
   type GameState,
   type Hex,
   type Side,
@@ -23,16 +24,22 @@ import { rules, syntheticFile, tiny, unitFile } from './helpers.ts';
 const at = (c: number, r: number) => fromOffset([c, r]);
 const unit = (s: GameState, id: string) => s.units.find((u) => u.id === id)!;
 
-function order(state: GameState, map: GameMap, side: Side, id: string, ...waypoints: Hex[]): GameState {
-  const r = applyUnitOrder(state, map, rules, side, id, { kind: 'advance', waypoints });
+function order(state: GameState, world: World, side: Side, id: string, ...waypoints: Hex[]): GameState {
+  const r = applyUnitOrder(state, world, rules, side, id, { kind: 'advance', waypoints });
   if (!r.ok) throw new Error(r.errors.join('; '));
   return r.state;
 }
 
-function runSteps(state: GameState, map: GameMap, n: number): { state: GameState; events: GameEvent[] } {
+function attack(state: GameState, world: World, side: Side, id: string, target: Hex): GameState {
+  const r = applyUnitOrder(state, world, rules, side, id, { kind: 'attack', target });
+  if (!r.ok) throw new Error(r.errors.join('; '));
+  return r.state;
+}
+
+function runSteps(state: GameState, world: World, n: number): { state: GameState; events: GameEvent[] } {
   const events: GameEvent[] = [];
   for (let i = 0; i < n; i++) {
-    const r = resolveStep(state, map, rules);
+    const r = resolveStep(state, world, rules);
     state = r.state;
     events.push(...r.events);
   }
@@ -51,77 +58,77 @@ describe('following a route', () => {
     tiny({ cols: 12, rows: 1, terrain: ['pppppppppppp'], units: [unitFile('a', 'allied', [0, 0])] });
 
   it('moves at the rate given by integer terrain costs', () => {
-    const { map, state } = strip();
-    const s1 = resolveTurn(order(state, map, 'allied', 'a', at(11, 0)), map, rules).state;
+    const { world, state } = strip();
+    const s1 = resolveTurn(order(state, world, 'allied', 'a', at(11, 0)), world, rules).state;
     expect(unit(s1, 'a').pos).toEqual(at(4, 0));
     expect(unit(s1, 'a').movement.progress).toBe(20);
     expect(s1.clock).toEqual({ turn: 2, step: 0 });
   });
 
   it('continues the same order across turns without losing progress', () => {
-    const { map, state } = strip();
-    let s = order(state, map, 'allied', 'a', at(11, 0));
-    s = resolveTurn(s, map, rules).state;
-    s = resolveTurn(s, map, rules).state;
+    const { world, state } = strip();
+    let s = order(state, world, 'allied', 'a', at(11, 0));
+    s = resolveTurn(s, world, rules).state;
+    s = resolveTurn(s, world, rules).state;
     // 240 minutes = 9 hexes and 15 minutes.
     expect(unit(s, 'a').pos).toEqual(at(9, 0));
     expect(unit(s, 'a').movement.progress).toBe(15);
-    s = resolveTurn(s, map, rules).state;
+    s = resolveTurn(s, world, rules).state;
     expect(unit(s, 'a').pos).toEqual(at(11, 0));
     expect(unit(s, 'a').order).toBeNull();
   });
 
   it('reports moves at exactly the estimated arrival times', () => {
-    const { map, state } = strip();
-    const s = order(state, map, 'allied', 'a', at(6, 0));
+    const { world, state } = strip();
+    const s = order(state, world, 'allied', 'a', at(6, 0));
     const u = unit(s, 'a');
-    const eta = arrivalEstimates(u, pathCosts(map, rules, u.movementClass, u.pos, u.order!.path)!);
-    const { events } = runSteps(s, map, 24);
+    const eta = arrivalEstimates(u, pathCosts(world.map, rules, u.movementClass, u.pos, orderPath(u.order))!);
+    const { events } = runSteps(s, world, 24);
     const moveTimes = events.filter((e) => e.kind === 'unit-moved').map((e) => e.time);
     expect(moveTimes).toEqual(eta);
     expect(events.some((e) => e.kind === 'order-completed' && e.unitId === 'a')).toBe(true);
   });
 
   it('keeps progress when the new order enters the same next hex', () => {
-    const { map, state } = strip();
-    let s = resolveStep(order(state, map, 'allied', 'a', at(11, 0)), map, rules).state;
+    const { world, state } = strip();
+    let s = resolveStep(order(state, world, 'allied', 'a', at(11, 0)), world, rules).state;
     expect(unit(s, 'a').movement.progress).toBe(10);
-    s = order(s, map, 'allied', 'a', at(8, 0));
+    s = order(s, world, 'allied', 'a', at(8, 0));
     expect(unit(s, 'a').movement.progress).toBe(10);
   });
 
   it('never grants free distance when the order is changed or re-issued', () => {
-    const { map, state } = strip();
-    const base = order(state, map, 'allied', 'a', at(11, 0));
-    const steady = runSteps(base, map, 12).state;
+    const { world, state } = strip();
+    const base = order(state, world, 'allied', 'a', at(11, 0));
+    const steady = runSteps(base, world, 12).state;
 
     // Re-issue the same order every step: no faster than leaving it alone.
     let fiddled = base;
     for (let i = 0; i < 12; i++) {
-      fiddled = resolveStep(order(fiddled, map, 'allied', 'a', at(11, 0)), map, rules).state;
+      fiddled = resolveStep(order(fiddled, world, 'allied', 'a', at(11, 0)), world, rules).state;
     }
     expect(unit(fiddled, 'a').pos).toEqual(unit(steady, 'a').pos);
     expect(unit(fiddled, 'a').movement.progress).toBe(unit(steady, 'a').movement.progress);
 
     // Turning round discards progress towards the abandoned hex.
-    let s = runSteps(base, map, 3).state; // 30 min: in hex 1 with 5 min progress
+    let s = runSteps(base, world, 3).state; // 30 min: in hex 1 with 5 min progress
     expect(unit(s, 'a').pos).toEqual(at(1, 0));
-    s = order(s, map, 'allied', 'a', at(0, 0));
+    s = order(s, world, 'allied', 'a', at(0, 0));
     expect(unit(s, 'a').movement.progress).toBe(0);
   });
 });
 
 describe('movement collisions', () => {
   it('makes friendly units wanting the same hex all wait', () => {
-    const { map, state } = tiny({
+    const { world, state } = tiny({
       cols: 3,
       rows: 1,
       units: [unitFile('a', 'allied', [0, 0]), unitFile('b', 'allied', [2, 0])],
     });
-    let s = order(state, map, 'allied', 'a', at(1, 0));
-    s = order(s, map, 'allied', 'b', at(1, 0));
+    let s = order(state, world, 'allied', 'a', at(1, 0));
+    s = order(s, world, 'allied', 'b', at(1, 0));
     expect(findOrderConflicts(s, 'allied')).toEqual([{ kind: 'same-destination', hex: at(1, 0), unitIds: ['a', 'b'] }]);
-    const r = resolveTurn(s, map, rules);
+    const r = resolveTurn(s, world, rules);
     expect(unit(r.state, 'a').pos).toEqual(at(0, 0));
     expect(unit(r.state, 'b').pos).toEqual(at(2, 0));
     const blocked = r.events.filter((e) => e.kind === 'move-blocked');
@@ -129,14 +136,14 @@ describe('movement collisions', () => {
   });
 
   it('lets a unit follow directly into a hex that is being vacated', () => {
-    const { map, state } = tiny({
+    const { world, state } = tiny({
       cols: 4,
       rows: 1,
       units: [unitFile('a', 'allied', [0, 0]), unitFile('b', 'allied', [1, 0])],
     });
-    let s = order(state, map, 'allied', 'a', at(1, 0));
-    s = order(s, map, 'allied', 'b', at(2, 0));
-    const r = runSteps(s, map, 2); // both reach their 15-minute threshold together
+    let s = order(state, world, 'allied', 'a', at(1, 0));
+    s = order(s, world, 'allied', 'b', at(2, 0));
+    const r = runSteps(s, world, 2); // both reach their 15-minute threshold together
     expect(unit(r.state, 'a').pos).toEqual(at(1, 0));
     expect(unit(r.state, 'b').pos).toEqual(at(2, 0));
     const moves = r.events.filter((e) => e.kind === 'unit-moved');
@@ -144,68 +151,68 @@ describe('movement collisions', () => {
   });
 
   it('holds an entire chain behind a stationary unit', () => {
-    const { map, state } = tiny({
+    const { world, state } = tiny({
       cols: 4,
       rows: 1,
       units: [unitFile('a', 'allied', [0, 0]), unitFile('b', 'allied', [1, 0]), unitFile('c', 'allied', [2, 0])],
     });
-    let s = order(state, map, 'allied', 'a', at(1, 0));
-    s = order(s, map, 'allied', 'b', at(2, 0));
-    const r = resolveTurn(s, map, rules);
+    let s = order(state, world, 'allied', 'a', at(1, 0));
+    s = order(s, world, 'allied', 'b', at(2, 0));
+    const r = resolveTurn(s, world, rules);
     expect(r.state.units.map((u) => u.pos)).toEqual([at(0, 0), at(1, 0), at(2, 0)]);
     assertNoStacking(r.state);
   });
 
   it('starts a queue moving as soon as its head can move', () => {
-    const { map, state } = tiny({
+    const { world, state } = tiny({
       cols: 6,
       rows: 1,
       units: [unitFile('a', 'allied', [0, 0]), unitFile('b', 'allied', [1, 0]), unitFile('c', 'allied', [2, 0])],
     });
-    let s = order(state, map, 'allied', 'a', at(3, 0));
-    s = order(s, map, 'allied', 'b', at(4, 0));
-    s = order(s, map, 'allied', 'c', at(5, 0));
-    const r = resolveTurn(s, map, rules);
+    let s = order(state, world, 'allied', 'a', at(3, 0));
+    s = order(s, world, 'allied', 'b', at(4, 0));
+    s = order(s, world, 'allied', 'c', at(5, 0));
+    const r = resolveTurn(s, world, rules);
     expect(r.state.units.map((u) => u.pos)).toEqual([at(3, 0), at(4, 0), at(5, 0)]);
     expect(r.events.some((e) => e.kind === 'move-blocked')).toBe(false);
   });
 
   it('allows friendly units to swap places', () => {
-    const { map, state } = tiny({
+    const { world, state } = tiny({
       cols: 2,
       rows: 1,
       units: [unitFile('a', 'allied', [0, 0]), unitFile('b', 'allied', [1, 0])],
     });
-    let s = order(state, map, 'allied', 'a', at(1, 0));
-    s = order(s, map, 'allied', 'b', at(0, 0));
-    const r = resolveTurn(s, map, rules);
+    let s = order(state, world, 'allied', 'a', at(1, 0));
+    s = order(s, world, 'allied', 'b', at(0, 0));
+    const r = resolveTurn(s, world, rules);
     expect(unit(r.state, 'a').pos).toEqual(at(1, 0));
     expect(unit(r.state, 'b').pos).toEqual(at(0, 0));
   });
 
   it('allows a three-way friendly rotation', () => {
     // (0,0), (1,0) and (0,1) are mutually adjacent.
-    const { map, state } = tiny({
+    const { world, state } = tiny({
       cols: 2,
       rows: 2,
       units: [unitFile('a', 'allied', [0, 0]), unitFile('b', 'allied', [1, 0]), unitFile('c', 'allied', [0, 1])],
     });
-    let s = order(state, map, 'allied', 'a', at(1, 0));
-    s = order(s, map, 'allied', 'b', at(0, 1));
-    s = order(s, map, 'allied', 'c', at(0, 0));
-    const r = resolveTurn(s, map, rules);
+    let s = order(state, world, 'allied', 'a', at(1, 0));
+    s = order(s, world, 'allied', 'b', at(0, 1));
+    s = order(s, world, 'allied', 'c', at(0, 0));
+    const r = resolveTurn(s, world, rules);
     expect(r.state.units.map((u) => u.pos)).toEqual([at(1, 0), at(0, 1), at(0, 0)]);
   });
 
   it('keeps opposing units that try to exchange hexes where they are', () => {
-    const { map, state } = tiny({
+    const { world, state } = tiny({
       cols: 2,
       rows: 1,
       units: [unitFile('a', 'allied', [0, 0]), unitFile('g', 'german', [1, 0])],
     });
-    let s = order(state, map, 'allied', 'a', at(1, 0));
-    s = order(s, map, 'german', 'g', at(0, 0));
-    const r = resolveTurn(s, map, rules);
+    let s = attack(state, world, 'allied', 'a', at(1, 0));
+    s = attack(s, world, 'german', 'g', at(0, 0));
+    const r = resolveTurn(s, world, rules);
     expect(unit(r.state, 'a').pos).toEqual(at(0, 0));
     expect(unit(r.state, 'g').pos).toEqual(at(1, 0));
     expect(r.events.filter((e) => e.kind === 'move-blocked').map((e) => e.kind === 'move-blocked' && e.reason)).toEqual([
@@ -215,28 +222,28 @@ describe('movement collisions', () => {
   });
 
   it('halts opposing units racing for the same empty hex outside it', () => {
-    const { map, state } = tiny({
+    const { world, state } = tiny({
       cols: 3,
       rows: 1,
       units: [unitFile('a', 'allied', [0, 0]), unitFile('g', 'german', [2, 0])],
     });
-    let s = order(state, map, 'allied', 'a', at(1, 0));
-    s = order(s, map, 'german', 'g', at(1, 0));
-    const r = resolveTurn(s, map, rules);
+    let s = attack(state, world, 'allied', 'a', at(1, 0));
+    s = attack(s, world, 'german', 'g', at(1, 0));
+    const r = resolveTurn(s, world, rules);
     expect(unit(r.state, 'a').pos).toEqual(at(0, 0));
     expect(unit(r.state, 'g').pos).toEqual(at(2, 0));
     expect(r.events.every((e) => e.kind !== 'move-blocked' || e.reason === 'contested')).toBe(true);
   });
 
   it('lets the faster of two opposing units take an empty hex first', () => {
-    const { map, state } = tiny({
+    const { world, state } = tiny({
       cols: 3,
       rows: 1,
       units: [unitFile('a', 'allied', [0, 0], 'tracked'), unitFile('g', 'german', [2, 0])],
     });
-    let s = order(state, map, 'allied', 'a', at(1, 0));
-    s = order(s, map, 'german', 'g', at(1, 0));
-    const r = resolveTurn(s, map, rules);
+    let s = attack(state, world, 'allied', 'a', at(1, 0));
+    s = attack(s, world, 'german', 'g', at(1, 0));
+    const r = resolveTurn(s, world, rules);
     expect(unit(r.state, 'a').pos).toEqual(at(1, 0));
     expect(unit(r.state, 'g').pos).toEqual(at(2, 0));
   });
@@ -244,21 +251,21 @@ describe('movement collisions', () => {
 
 describe('orders', () => {
   it('rejects orders for the other side, the wrong turn, or impossible routes without changing state', () => {
-    const { map, state } = tiny({ cols: 3, rows: 3, terrain: ['...', '.w.', '...'], units: [unitFile('a', 'allied', [0, 0])] });
+    const { world, state } = tiny({ cols: 3, rows: 3, terrain: ['...', '.w.', '...'], units: [unitFile('a', 'allied', [0, 0])] });
     const tries = [
-      applyUnitOrder(state, map, rules, 'german', 'a', { kind: 'advance', waypoints: [at(2, 0)] }),
-      applyOrderSet(state, map, rules, { side: 'allied', turn: 5, orders: [{ unitId: 'a', order: { kind: 'advance', waypoints: [at(2, 0)] } }] }),
-      applyUnitOrder(state, map, rules, 'allied', 'a', { kind: 'advance', waypoints: [at(1, 1)] }),
-      applyUnitOrder(state, map, rules, 'allied', 'zz', { kind: 'advance', waypoints: [at(1, 1)] }),
+      applyUnitOrder(state, world, rules, 'german', 'a', { kind: 'advance', waypoints: [at(2, 0)] }),
+      applyOrderSet(state, world, rules, { side: 'allied', turn: 5, orders: [{ unitId: 'a', order: { kind: 'advance', waypoints: [at(2, 0)] } }] }),
+      applyUnitOrder(state, world, rules, 'allied', 'a', { kind: 'advance', waypoints: [at(1, 1)] }),
+      applyUnitOrder(state, world, rules, 'allied', 'zz', { kind: 'advance', waypoints: [at(1, 1)] }),
     ];
     for (const t of tries) expect(t.ok).toBe(false);
     expect(unit(state, 'a').order).toBeNull();
   });
 
   it('clears a standing order with a null order', () => {
-    const { map, state } = tiny({ cols: 3, rows: 1, units: [unitFile('a', 'allied', [0, 0])] });
-    const s = order(state, map, 'allied', 'a', at(2, 0));
-    const r = applyUnitOrder(s, map, rules, 'allied', 'a', null);
+    const { world, state } = tiny({ cols: 3, rows: 1, units: [unitFile('a', 'allied', [0, 0])] });
+    const s = order(state, world, 'allied', 'a', at(2, 0));
+    const r = applyUnitOrder(s, world, rules, 'allied', 'a', null);
     expect(r.ok && unit(r.state, 'a').order).toBeNull();
   });
 });
@@ -270,14 +277,14 @@ describe('determinism', () => {
     return () => ((x = (Math.imul(x, 1664525) + 1013904223) >>> 0) / 2 ** 32);
   }
 
-  function orderEveryone(state: GameState, map: GameMap, seed: number): GameState {
+  function orderEveryone(state: GameState, world: World, seed: number): GameState {
     const rand = lcg(seed);
-    const cells = [...map.cells.values()].filter((c) => c.terrain !== 'water');
+    const cells = [...world.map.cells.values()].filter((c) => c.terrain !== 'water');
     let s = state;
     for (const u of state.units) {
       for (let tries = 0; tries < 20; tries++) {
         const dest = cells[Math.floor(rand() * cells.length)]!.hex;
-        const r = applyUnitOrder(s, map, rules, u.side, u.id, { kind: 'advance', waypoints: [dest] });
+        const r = applyUnitOrder(s, world, rules, u.side, u.id, { kind: 'advance', waypoints: [dest] });
         if (r.ok) {
           s = r.state;
           break;
@@ -287,11 +294,11 @@ describe('determinism', () => {
     return s;
   }
 
-  function play(state: GameState, map: GameMap, turns: number) {
+  function play(state: GameState, world: World, turns: number) {
     const events: GameEvent[] = [];
     for (let t = 0; t < turns; t++) {
       for (let i = 0; i < rules.stepsPerTurn; i++) {
-        const r = resolveStep(state, map, rules);
+        const r = resolveStep(state, world, rules);
         state = r.state;
         events.push(...r.events);
         assertNoStacking(state);
@@ -301,29 +308,29 @@ describe('determinism', () => {
   }
 
   it('produces identical state and events from identical inputs', () => {
-    const { map, state } = loadScenario(syntheticFile(), rules);
-    const ordered = orderEveryone(state, map, 7);
-    expect(play(ordered, map, 3)).toEqual(play(ordered, map, 3));
+    const { world, state } = loadScenario(syntheticFile(), rules);
+    const ordered = orderEveryone(state, world, 7);
+    expect(play(ordered, world, 3)).toEqual(play(ordered, world, 3));
   });
 
   it('does not depend on the order units are stored in', () => {
-    const { map, state } = loadScenario(syntheticFile(), rules);
-    const ordered = orderEveryone(state, map, 11);
+    const { world, state } = loadScenario(syntheticFile(), rules);
+    const ordered = orderEveryone(state, world, 11);
     const shuffled: GameState = { ...ordered, units: [...ordered.units].reverse() as UnitState[] };
-    expect(play(shuffled, map, 3)).toEqual(play(ordered, map, 3));
+    expect(play(shuffled, world, 3)).toEqual(play(ordered, world, 3));
   });
 
   it('never places two counters in one hex under many random order sets', () => {
     const file = syntheticFile();
-    const { map } = loadScenario(file, rules);
-    for (let seed = 1; seed <= 15; seed++) play(orderEveryone(initialState(file, rules), map, seed), map, 2);
+    const { world } = loadScenario(file, rules);
+    for (let seed = 1; seed <= 15; seed++) play(orderEveryone(initialState(file, rules), world, seed), world, 2);
   });
 
   it('does not modify its input state', () => {
-    const { map, state } = loadScenario(syntheticFile(), rules);
-    const ordered = orderEveryone(state, map, 3);
+    const { world, state } = loadScenario(syntheticFile(), rules);
+    const ordered = orderEveryone(state, world, 3);
     const before = JSON.stringify(ordered);
-    resolveTurn(ordered, map, rules);
+    resolveTurn(ordered, world, rules);
     expect(JSON.stringify(ordered)).toBe(before);
   });
 });

@@ -382,3 +382,168 @@ kbd {
   padding: 12px;
   border: 1px solid var(--bad);
 }
+
+/* Stage 2: viewer, side status, actions ------------------------------------ */
+.topbar {
+  flex-wrap: wrap;
+}
+.viewer {
+  display: flex;
+  border: 1px solid #5d5a50;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.viewer button {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #d8d3c4;
+  padding: 4px 11px;
+}
+.viewer button:hover:not(:disabled) {
+  background: #3d3b34;
+}
+.viewer button.active {
+  background: #f2efe6;
+  color: var(--ink);
+  font-weight: 600;
+}
+.sides {
+  display: flex;
+  gap: 6px;
+}
+.side-status {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid #5d5a50;
+  color: #d8d3c4;
+}
+.side-status.ready {
+  border-color: #7fbf8a;
+  color: #b9e6c0;
+}
+.side-status.ready::before {
+  content: '✓ ';
+}
+.actions {
+  display: flex;
+  gap: 6px;
+}
+button.primary {
+  background: #e0b84a;
+  border-color: #b38f2e;
+  color: #1a1a1a;
+  font-weight: 600;
+}
+button.primary:hover:not(:disabled) {
+  background: #ecc95f;
+}
+
+/* Unit panel order controls */
+.mode-row,
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-top: 10px;
+}
+.mode-row button.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.draft-chip {
+  margin-left: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0;
+  color: #8a5a00;
+  background: #fff1c9;
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+.side-contact {
+  background: #6b6458;
+}
+
+/* Replay controls */
+.replay-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: rgb(43 42 37 / 0.92);
+  color: #f2efe6;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 0.25);
+}
+.replay-bar button {
+  min-width: 34px;
+  background: #3d3b34;
+  color: #f2efe6;
+  border-color: #5d5a50;
+}
+.replay-bar button.play {
+  background: #e0b84a;
+  color: #1a1a1a;
+}
+.replay-bar input[type='range'] {
+  width: 180px;
+}
+.replay-time {
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  min-width: 150px;
+}
+.replay-bar select {
+  font: inherit;
+  font-size: 12px;
+}
+
+/* Event log extras */
+.log .ev-fire {
+  color: #8f2a14;
+}
+.log .ev-losses,
+.log .ev-destroyed,
+.log .ev-retreated,
+.log .ev-pinned {
+  font-weight: 600;
+}
+.log .ev-contact-spotted,
+.log .ev-contact-lost,
+.log .ev-contact-cleared {
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* Hot-seat hand-over screen */
+.handover {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #2b2a25;
+  color: #f2efe6;
+  z-index: 10;
+  text-align: center;
+}
+.handover h2 {
+  font-size: 28px;
+  margin: 0 0 8px;
+}
+.handover .muted {
+  color: #bdb6a3;
+}
+.handover button {
+  margin-top: 12px;
+  font-size: 15px;
+  padding: 8px 18px;
+}

@@ -125,6 +125,9 @@ export function validateScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULE
   for (const e of file.equipment) {
     if (equipmentIds.has(e.id)) error('equipment-id-duplicate', `Duplicate equipment id ${e.id}`);
     equipmentIds.add(e.id);
+    if (!(e.combatClass in rules.weapons)) {
+      error('equipment-combat-class', `Equipment ${e.id}: combat class "${e.combatClass}" is not in the rules`);
+    }
   }
 
   const formations = new Map(file.formations.map((f) => [f.id, f]));

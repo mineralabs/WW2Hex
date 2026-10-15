@@ -10,7 +10,6 @@ import {
   type Hex,
   type Point,
   type Side,
-  type UnitState,
   type UnitType,
 } from '@ww2hex/engine';
 import { Application, Container, Graphics, Text } from 'pixi.js';
@@ -34,17 +33,45 @@ export interface PreviewView {
   target: Hex;
   ok: boolean;
   label: string;
+  /** Draw a straight line (bombardment) instead of a route. */
+  straight: boolean;
+}
+
+/** One counter on the map: an own unit, or an enemy contact as the viewer knows it. */
+export interface CounterView {
+  id: string;
+  side: Side;
+  pos: Hex;
+  type: UnitType;
+  label: string;
+  /** Bottom line: personnel for own units, "?" or a last-seen time for contacts. */
+  detail: string;
+  /** null for contacts (unknown). */
+  cohesion: number | null;
+  supplied: boolean;
+  blocked: boolean;
+  formationColor: number | null;
+  /** A last-seen contact, no longer observed. */
+  stale: boolean;
+  selected: boolean;
+}
+
+export interface FireLine {
+  /** null when the firer was not seen. */
+  from: Hex | null;
+  to: Hex;
+  side: Side;
+  mode: 'direct' | 'indirect';
 }
 
 export interface RenderView {
-  units: UnitState[];
-  formationColor: (formationId: string) => number;
-  selectedUnitId: string | null;
+  counters: CounterView[];
   selectedHex: Hex | null;
   hoverHex: Hex | null;
   routes: RouteView[];
   preview: PreviewView | null;
   conflictHexes: Hex[];
+  fireLines: FireLine[];
 }
 
 export interface MapHandlers {
@@ -75,6 +102,7 @@ export class MapRenderer {
   private readonly world = new Container();
   private readonly overlay = new Graphics();
   private readonly overlayLabels = new Container();
+  private readonly fireLayer = new Graphics();
   private readonly unitLayer = new Container();
   private readonly counters = new Map<string, CounterNode>();
   private readonly map: GameMap;
@@ -102,11 +130,22 @@ export class MapRenderer {
     });
     el.appendChild(this.app.canvas);
     this.app.stage.addChild(this.world);
-    this.world.addChild(this.buildStaticMap(), this.buildPlaceLabels(), this.overlay, this.unitLayer, this.overlayLabels);
+    this.world.addChild(this.buildStaticMap(), this.buildPlaceLabels(), this.overlay, this.unitLayer, this.fireLayer, this.overlayLabels);
     this.attachInput();
     this.app.ticker.add(() => this.animate());
     this.mounted = true;
-    this.fitToMap();
+    // The container may not have its final size yet; fit once it has one.
+    let fitted = false;
+    const fitWhenSized = () => {
+      if (fitted || el.clientWidth === 0 || el.clientHeight === 0) return;
+      this.app.renderer.resize(el.clientWidth, el.clientHeight);
+      this.fitToMap();
+      fitted = true;
+    };
+    const observer = new ResizeObserver(fitWhenSized);
+    observer.observe(el);
+    this.cleanup.push(() => observer.disconnect());
+    fitWhenSized();
   }
 
   destroy(): void {
@@ -123,6 +162,7 @@ export class MapRenderer {
     const minY = Math.min(...pts.map((p) => p.y)) - HEX_SIZE;
     const maxY = Math.max(...pts.map((p) => p.y)) + HEX_SIZE;
     const { width, height } = this.app.screen;
+    if (width === 0 || height === 0) return;
     const scale = Math.min(width / (maxX - minX), height / (maxY - minY)) * 0.96;
     this.world.scale.set(scale);
     this.world.position.set(
@@ -258,14 +298,14 @@ export class MapRenderer {
   private updateCounters(view: RenderView): void {
     const now = performance.now();
     const present = new Set<string>();
-    for (const u of view.units) {
+    for (const u of view.counters) {
       present.add(u.id);
-      const selected = u.id === view.selectedUnitId;
-      const key = [u.shortName, u.personnel, u.cohesion, u.supply, u.movement.blocked, selected, u.formationId].join('|');
+      const selected = u.selected;
+      const key = JSON.stringify({ ...u, pos: null });
       const target = hexToPixel(u.pos, HEX_SIZE);
       let c = this.counters.get(u.id);
       if (!c || c.key !== key) {
-        const node = drawCounter(u, selected, view.formationColor(u.formationId));
+        const node = drawCounter(u);
         const at = c ? c.node.position.clone() : target;
         if (c) c.node.destroy({ children: true });
         node.position.set(at.x, at.y);
@@ -324,10 +364,32 @@ export class MapRenderer {
       }
     }
 
+    const fg = this.fireLayer;
+    fg.clear();
+    for (const f of view.fireLines) {
+      const to = hexToPixel(f.to, HEX_SIZE);
+      const color = SIDE_COLOR[f.side].route;
+      if (f.from) {
+        const from = hexToPixel(f.from, HEX_SIZE);
+        const pts = [from, to];
+        if (f.mode === 'indirect') dashed(fg, pts, { width: 2.5, color: COLORS.fire, alpha: 0.85 });
+        else polyline(fg, pts).stroke({ width: 2.5, color: COLORS.fire, alpha: 0.85, cap: 'round' });
+        arrowHead(fg, pts, COLORS.fire, 0.9, 9);
+      }
+      // Impact burst at the target, ringed in the firing side's colour.
+      fg.circle(to.x, to.y, HEX_SIZE * 0.5).stroke({ width: 2.5, color: COLORS.fire, alpha: 0.8 });
+      fg.circle(to.x, to.y, HEX_SIZE * 0.62).stroke({ width: 1.5, color, alpha: 0.6 });
+    }
+
     const pv = view.preview;
     if (pv) {
       const color = pv.ok ? COLORS.previewOk : COLORS.previewBad;
-      if (pv.ok) {
+      if (pv.ok && pv.straight) {
+        const pts = [pv.start, pv.target].map((h) => hexToPixel(h, HEX_SIZE));
+        dashed(g, pts, { width: 3, color: COLORS.fire, alpha: 0.9 });
+        const tp = pts[1]!;
+        g.circle(tp.x, tp.y, HEX_SIZE * 0.55).stroke({ width: 2.5, color: COLORS.fire, alpha: 0.9 });
+      } else if (pv.ok) {
         const pts = [pv.start, ...pv.path].map((h) => hexToPixel(h, HEX_SIZE));
         dashed(g, pts, { width: 3.5, color, alpha: 0.9 });
         arrowHead(g, pts, color, 0.9, 10);
@@ -519,32 +581,34 @@ function hexOutline(g: Graphics, h: Hex, style: { width: number; color: number; 
   g.poly(hexCorners(h, HEX_SIZE).flatMap((p) => [p.x, p.y])).stroke({ alpha: 1, ...style });
 }
 
-function drawCounter(u: UnitState, selected: boolean, formationColor: number): Container {
+function drawCounter(u: CounterView): Container {
   const c = new Container();
   const side = SIDE_COLOR[u.side];
   const w = HEX_SIZE * 1.36;
   const h = HEX_SIZE * 1.08;
   const g = new Graphics();
+  c.alpha = u.stale ? 0.5 : 1;
   g.roundRect(-w / 2 + 1.5, -h / 2 + 2, w, h, 3).fill({ color: 0x000000, alpha: 0.25 }); // shadow
   g.roundRect(-w / 2, -h / 2, w, h, 3).fill({ color: side.fill });
-  g.rect(-w / 2, -h / 2, 4, h).fill({ color: formationColor }); // formation stripe
-  g.roundRect(-w / 2, -h / 2, w, h, 3).stroke({
-    width: selected ? 3 : 1.2,
-    color: selected ? COLORS.selection : 0x2b2b2b,
-  });
+  if (u.formationColor !== null) g.rect(-w / 2, -h / 2, 4, h).fill({ color: u.formationColor }); // formation stripe
+  const outline = { width: u.selected ? 3 : 1.2, color: u.selected ? COLORS.selection : 0x2b2b2b };
+  if (u.stale) dashedRect(g, -w / 2, -h / 2, w, h, outline);
+  else g.roundRect(-w / 2, -h / 2, w, h, 3).stroke(outline);
 
   // Unit-type symbol box (simplified NATO style).
   const sw = w * 0.42;
   const sh = h * 0.32;
   drawSymbol(g, u.type, 2, 0, sw, sh, side.text);
 
-  // Readiness: cohesion colour; hollow when supply is not normal.
-  const rd = readinessColor(u.cohesion);
-  const dot = g.circle(w / 2 - 5.5, -h / 2 + 5.5, 3.2);
-  if (u.supply === 'supplied') dot.fill({ color: rd });
-  else dot.stroke({ width: 1.6, color: rd });
+  // Readiness: cohesion colour; hollow when supply is not normal. Unknown for contacts.
+  if (u.cohesion !== null) {
+    const rd = readinessColor(u.cohesion);
+    const dot = g.circle(w / 2 - 5.5, -h / 2 + 5.5, 3.2);
+    if (u.supplied) dot.fill({ color: rd });
+    else dot.stroke({ width: 1.6, color: rd });
+  }
 
-  if (u.movement.blocked) {
+  if (u.blocked) {
     g.circle(-w / 2 + 10, -h / 2 + 6, 4).fill({ color: COLORS.previewBad });
   }
 
@@ -559,9 +623,13 @@ function drawCounter(u: UnitState, selected: boolean, formationColor: number): C
     c.addChild(t);
   };
   c.addChild(g);
-  label(u.shortName, -h * 0.32, 8.5, '600');
-  label(String(u.personnel), h * 0.33, 8, '400');
+  label(u.label, -h * 0.32, 8.5, '600');
+  label(u.detail, h * 0.33, 8, '400');
   return c;
+}
+
+function dashedRect(g: Graphics, x: number, y: number, w: number, h: number, style: { width: number; color: number }): void {
+  dashed(g, [{ x, y }, { x: x + w, y }, { x: x + w, y: y + h }, { x, y: y + h }, { x, y }], { ...style, alpha: 1 });
 }
 
 function drawSymbol(g: Graphics, type: UnitType, cx: number, cy: number, w: number, h: number, color: number): void {

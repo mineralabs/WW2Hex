@@ -1,55 +1,210 @@
-import { hexKey, type Hex } from './hex.ts';
+import { hexDistance, hexEquals, hexKey, type Hex } from './hex.ts';
+import { applyDamage, cohesionLoss, isDestroyed, planFires, resolveRetreats } from './combat.ts';
 import { moveCost } from './map.ts';
+import { observeStep, playerView, updateContacts } from './observe.ts';
 import { tickMinutes, type Rules } from './rules.ts';
 import { byId, cloneState, elapsedMinutes } from './scenario.ts';
-import type { BlockReason, GameEvent, GameMap, GameState, UnitState } from './types.ts';
+import {
+  SIDES,
+  orderPath,
+  type BlockReason,
+  type GameEvent,
+  type GameMap,
+  type GameState,
+  type ObservedEvent,
+  type Side,
+  type SideView,
+  type UnitState,
+  type World,
+} from './types.ts';
+import { computeSpotting, nearest } from './visibility.ts';
 
 export interface ResolveResult {
   state: GameState;
+  /** Complete authoritative log. Host only; never sent to a player. */
   events: GameEvent[];
+  /** What each side observed. Safe to send to that side. */
+  observed: Record<Side, ObservedEvent[]>;
 }
 
 /**
  * Resolves the next ten-minute step. Pure: the input state is not modified,
  * and identical inputs always give identical output, whatever order the units
- * arrive in.
+ * are stored in. Every phase decides from one shared snapshot:
  *
- * Stage 1 implements the movement phase only. Spotting, fire, losses and
- * supply (steps 3-6 of the brief's per-step sequence) arrive in Stage 2 and
- * slot in after movement here.
+ *   1. Advances halt if the unit sees an enemy close by.
+ *   2. Movement, in one-minute ticks with batch collision resolution.
+ *   3. Spotting at the new positions.
+ *   4. All fire is planned from the same pre-damage snapshot.
+ *   5. Damage, cohesion and destruction are applied together; broken units retreat as a batch.
+ *   6. Spotting again, contact lists and each side's observed events.
  */
-export function resolveStep(state: GameState, map: GameMap, rules: Rules): ResolveResult {
+export function resolveStep(state: GameState, world: World, rules: Rules): ResolveResult {
+  const { map } = world;
   const next = cloneState(state);
   next.units.sort(byId);
   const events: GameEvent[] = [];
   const { turn, step } = next.clock;
-  const stepStart = elapsedMinutes(next, rules);
-  const tick = tickMinutes(rules);
+  const t0 = elapsedMinutes(next, rules);
+  const tEnd = t0 + rules.stepMinutes;
+  const at = (time: number) => ({ time, turn, step });
+  const unitById = () => new Map(next.units.map((u) => [u.id, u]));
 
-  for (let t = 1; t <= rules.movementTicksPerStep; t++) {
-    movementTick(next.units, map, rules, tick, { time: stepStart + t * tick, turn, step }, events);
+  // 1. Halt check -----------------------------------------------------------
+  const spotStart = computeSpotting(map, rules, next.units);
+  const units0 = unitById();
+  for (const u of next.units) {
+    if (u.order?.kind !== 'advance') continue;
+    const close = [...spotStart.byUnit.get(u.id)!]
+      .map((id) => units0.get(id)!)
+      .filter((e) => hexDistance(u.pos, e.pos) <= rules.advanceHaltRadius);
+    const enemy = nearest(u.pos, close);
+    if (!enemy) continue;
+    u.order = null;
+    u.movement = { progress: 0, blocked: null };
+    events.push({ ...at(t0), kind: 'advance-halted', unitId: u.id, side: u.side, at: u.pos, enemyUnitId: enemy.id });
   }
+
+  // 2. Movement ---------------------------------------------------------------
+  const startPos = new Map(next.units.map((u) => [u.id, u.pos]));
+  const tick = tickMinutes(rules);
+  for (let t = 1; t <= rules.movementTicksPerStep; t++) {
+    movementTick(next.units, map, rules, tick, at(t0 + t * tick), events);
+  }
+  for (const u of next.units) u.lastStep.moved = !hexEquals(startPos.get(u.id)!, u.pos);
+
+  // 3. Spotting ---------------------------------------------------------------
+  const spotFire = computeSpotting(map, rules, next.units);
+
+  // 4. Fire -------------------------------------------------------------------
+  const fires = planFires(world, rules, next.units, spotFire);
+
+  // 5. Damage, cohesion, destruction, retreat --------------------------------
+  const damage = new Map<string, number>();
+  for (const f of fires) {
+    damage.set(f.target.id, (damage.get(f.target.id) ?? 0) + f.damage);
+    events.push({
+      ...at(tEnd),
+      kind: 'fire',
+      firerId: f.firer.id,
+      firerSide: f.firer.side,
+      firerPos: f.firer.pos,
+      targetId: f.target.id,
+      targetPos: f.target.pos,
+      mode: f.mode,
+      assault: f.assault,
+      damage: f.damage,
+    });
+  }
+  const fired = new Set(fires.map((f) => f.firer.id));
+  const losses = new Map<string, { lost: number; baseline: number; destroyed: boolean }>();
+  for (const u of next.units) {
+    const dmg = damage.get(u.id) ?? 0;
+    u.lastStep.fired = fired.has(u.id);
+    u.lastStep.hit = dmg > 0;
+    if (dmg === 0) {
+      u.cohesion = Math.min(100, u.cohesion + rules.cohesionRecovery);
+      continue;
+    }
+    const lost = applyDamage(world, rules, u, dmg);
+    u.cohesion = Math.max(0, u.cohesion - cohesionLoss(rules, u, lost.personnel));
+    losses.set(u.id, { lost: lost.personnel, baseline: u.baseline.personnel, destroyed: false });
+    events.push({
+      ...at(tEnd),
+      kind: 'losses',
+      unitId: u.id,
+      side: u.side,
+      personnel: lost.personnel,
+      equipment: lost.equipment,
+      cohesionAfter: u.cohesion,
+    });
+  }
+
+  const destroyedIds = new Set<string>();
+  for (const u of next.units) {
+    if (!isDestroyed(world, rules, u)) continue;
+    destroyedIds.add(u.id);
+    const l = losses.get(u.id);
+    if (l) l.destroyed = true;
+    next.destroyed.push({ unitId: u.id, side: u.side, at: u.pos, time: tEnd });
+    events.push({ ...at(tEnd), kind: 'destroyed', unitId: u.id, side: u.side, at: u.pos });
+  }
+  next.units = next.units.filter((u) => !destroyedIds.has(u.id));
+
+  const broken = next.units.filter((u) => u.lastStep.hit && u.cohesion < rules.breakCohesion);
+  for (const u of broken) {
+    u.order = null;
+    u.movement = { progress: 0, blocked: null };
+  }
+  const threatsFor = (u: UnitState): Hex[] =>
+    next.units.filter((e) => e.side !== u.side && spotFire.bySide[u.side].has(e.id)).map((e) => e.pos);
+  const retreat = resolveRetreats(
+    map,
+    rules,
+    next.units,
+    broken.filter((u) => threatsFor(u).length > 0),
+    threatsFor,
+  );
+  for (const m of retreat.moves) {
+    m.unit.pos = m.to;
+    m.unit.lastStep.moved = true;
+    events.push({ ...at(tEnd), kind: 'retreated', unitId: m.unit.id, side: m.unit.side, from: m.from, to: m.to });
+  }
+  for (const u of retreat.pinned) {
+    u.cohesion = Math.max(0, u.cohesion - rules.pinnedPenalty);
+    events.push({ ...at(tEnd), kind: 'pinned', unitId: u.id, side: u.side, at: u.pos });
+  }
+  for (const u of next.units) u.stationarySteps = u.lastStep.moved ? 0 : u.stationarySteps + 1;
+
+  // 6. Observation ------------------------------------------------------------
+  const spotEnd = computeSpotting(map, rules, next.units);
+  const contacts = updateContacts(next, map, rules, spotEnd, destroyedIds, at(tEnd));
 
   if (step + 1 >= rules.stepsPerTurn) {
     next.clock = { turn: turn + 1, step: 0 };
-    events.push({ kind: 'turn-ended', time: stepStart + rules.stepMinutes, turn, step, endedTurn: turn });
+    events.push({ ...at(tEnd), kind: 'turn-ended', endedTurn: turn });
   } else {
     next.clock = { turn, step: step + 1 };
   }
-  return { state: next, events };
+
+  const ctx = { start: spotStart, fire: spotFire, end: spotEnd, contacts, losses };
+  return {
+    state: next,
+    events,
+    observed: { allied: observeStep(events, 'allied', ctx), german: observeStep(events, 'german', ctx) },
+  };
+}
+
+export interface TurnResult extends ResolveResult {
+  /** Each side's view before the first step and after every step, for replay. */
+  frames: Record<Side, SideView[]>;
+  /** Authoritative state before the first step and after every step. Host only. */
+  snapshots: GameState[];
 }
 
 /** Resolves every remaining step of the current turn. */
-export function resolveTurn(state: GameState, map: GameMap, rules: Rules): ResolveResult {
+export function resolveTurn(state: GameState, world: World, rules: Rules): TurnResult {
   const startTurn = state.clock.turn;
   let cur = state;
-  const events: GameEvent[] = [];
+  const result: TurnResult = {
+    state,
+    events: [],
+    observed: { allied: [], german: [] },
+    frames: { allied: [playerView(state, 'allied', rules)], german: [playerView(state, 'german', rules)] },
+    snapshots: [state],
+  };
   while (cur.clock.turn === startTurn) {
-    const r = resolveStep(cur, map, rules);
+    const r = resolveStep(cur, world, rules);
     cur = r.state;
-    events.push(...r.events);
+    result.events.push(...r.events);
+    result.snapshots.push(cur);
+    for (const side of SIDES) {
+      result.observed[side].push(...r.observed[side]);
+      result.frames[side].push(playerView(cur, side, rules));
+    }
   }
-  return { state: cur, events };
+  result.state = cur;
+  return result;
 }
 
 interface MoveRequest {
@@ -80,7 +235,7 @@ function movementTick(
   const requests = new Map<string, MoveRequest>();
   const outcomes = new Map<string, Outcome>();
   for (const u of units) {
-    const nextHex = u.order?.path[0];
+    const nextHex = orderPath(u.order)[0];
     if (!nextHex) continue;
     const cost = moveCost(map, rules, u.movementClass, u.pos, nextHex);
     if (cost === null) {
@@ -160,13 +315,15 @@ function movementTick(
     const outcome = outcomes.get(u.id)!;
     const base = { time: at.time, turn: at.turn, step: at.step, unitId: u.id, side: u.side };
     if (outcome === 'ok') {
+      const order = u.order as Extract<NonNullable<UnitState['order']>, { path: Hex[] }>;
       u.pos = req.to;
-      u.order!.path.shift();
+      order.path.shift();
       u.movement.progress = 0;
       u.movement.blocked = null;
       events.push({ ...base, kind: 'unit-moved', from: req.from, to: req.to });
-      if (u.order!.path.length === 0) {
-        u.order = null;
+      if (order.path.length === 0) {
+        // An Attack that takes its objective consolidates there.
+        u.order = order.kind === 'attack' ? { kind: 'defend' } : null;
         events.push({ ...base, kind: 'order-completed', at: req.to });
       }
       continue;

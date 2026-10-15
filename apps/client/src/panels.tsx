@@ -1,31 +1,22 @@
 import {
   MOVEMENT_CLASSES,
   cellAt,
-  clockLabel,
   edgeKey,
   hexKey,
   neighbors,
-  type GameEvent,
+  type ContactView,
   type GameMap,
   type Hex,
+  type MatchPhase,
   type OrderConflict,
   type Rules,
   type ScenarioFile,
   type UnitState,
 } from '@ww2hex/engine';
 import { useEffect, useRef } from 'react';
-import { BLOCK_TEXT, describeEvent, fmtDuration, fmtHex } from './format.ts';
+import { BLOCK_TEXT, SIDE_NAME, TYPE_LABEL, describeOrder, fmtDuration, fmtHex, type Names } from './format.ts';
 
-const TYPE_LABEL: Record<UnitState['type'], string> = {
-  infantry: 'Infantry',
-  'airborne-infantry': 'Airborne infantry',
-  armour: 'Armour',
-  recon: 'Reconnaissance',
-  'anti-tank': 'Anti-tank',
-  artillery: 'Artillery',
-  engineer: 'Engineers',
-  headquarters: 'Headquarters',
-};
+export type OrderMode = 'advance' | 'attack' | 'withdraw';
 
 function StatusBadge({ status }: { status: string }) {
   if (status === 'verified') return null;
@@ -35,26 +26,39 @@ function StatusBadge({ status }: { status: string }) {
 export function UnitPanel(props: {
   unit: UnitState;
   file: ScenarioFile;
+  names: Names;
   eta: number[];
   timeLabel: (minutesFromNow: number) => string;
   waypoints: Hex[];
   costToNext: number | null;
-  disabled: boolean;
-  onClearOrder: () => void;
+  preparation: number;
+  isArtillery: boolean;
+  editable: boolean;
+  drafted: boolean;
+  mode: OrderMode;
+  onMode: (m: OrderMode) => void;
+  onDefend: () => void;
+  onHold: () => void;
+  onUndo: () => void;
   onClearWaypoints: () => void;
 }) {
   const { unit: u, file, eta } = props;
   const formations = new Map(file.formations.map((f) => [f.id, f]));
   const chain: string[] = [];
   for (let f = formations.get(u.formationId); f; f = f.parentId ? formations.get(f.parentId) : undefined) chain.push(f.name);
-  const equipmentName = new Map(file.equipment.map((e) => [e.id, e.name]));
   const order = u.order;
+  const path = order && 'path' in order ? order.path : [];
   const arrival = eta[eta.length - 1];
+  const modes: [OrderMode, string, string][] = [
+    ['advance', 'Advance', 'A'],
+    ['attack', props.isArtillery ? 'Bombard' : 'Attack', 'T'],
+    ['withdraw', 'Withdraw', 'W'],
+  ];
 
   return (
     <section className="panel unit-panel">
       <header>
-        <span className={`side-chip side-${u.side}`}>{u.side === 'allied' ? 'Allied' : 'German'}</span>
+        <span className={`side-chip side-${u.side}`}>{SIDE_NAME[u.side]}</span>
         <StatusBadge status={u.dataStatus} />
       </header>
       <h2>{u.name}</h2>
@@ -67,7 +71,10 @@ export function UnitPanel(props: {
         <dt>Position</dt>
         <dd>{fmtHex(u.pos)}</dd>
         <dt>Personnel</dt>
-        <dd>{u.personnel}</dd>
+        <dd>
+          {u.personnel}
+          {u.personnel < u.baseline.personnel && <span className="muted"> of {u.baseline.personnel}</span>}
+        </dd>
         <dt>Cohesion</dt>
         <dd>
           <div className="meter" title={`${u.cohesion} / 100`}>
@@ -77,6 +84,8 @@ export function UnitPanel(props: {
         </dd>
         <dt>Supply</dt>
         <dd className={`supply-${u.supply}`}>{u.supply[0]!.toUpperCase() + u.supply.slice(1)}</dd>
+        <dt>Prepared</dt>
+        <dd>{props.preparation > 0 ? `level ${props.preparation} (−${15 * props.preparation}% damage taken)` : 'no'}</dd>
       </dl>
 
       <details className="equipment">
@@ -85,55 +94,103 @@ export function UnitPanel(props: {
           <tbody>
             {Object.entries(u.equipment).map(([id, n]) => (
               <tr key={id}>
-                <td>{equipmentName.get(id) ?? id}</td>
-                <td className="num">{n}</td>
+                <td>{props.names.equipment(id)}</td>
+                <td className="num">
+                  {n}
+                  {n < (u.baseline.equipment[id] ?? 0) && <span className="muted"> / {u.baseline.equipment[id]}</span>}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </details>
 
-      <h3>Order</h3>
-      {order ? (
-        <div className="order">
-          <div>
-            <strong>Advance</strong> to {fmtHex(order.path[order.path.length - 1]!)} · {order.path.length} hex
-            {order.path.length === 1 ? '' : 'es'} left
+      <h3>
+        Order {props.drafted && <span className="draft-chip">changed this turn</span>}
+      </h3>
+      <div className="order">
+        <div>
+          <strong>{describeOrder(order)}</strong>
+          {path.length > 0 && ` · ${path.length} hex${path.length === 1 ? '' : 'es'}`}
+        </div>
+        {arrival !== undefined && (
+          <div className="muted">
+            Arrives {props.timeLabel(arrival)} ({fmtDuration(arrival)}) if unopposed
           </div>
-          {arrival !== undefined && (
-            <div className="muted">
-              Arrives {props.timeLabel(arrival)} ({fmtDuration(arrival)}) if unobstructed
+        )}
+        {props.costToNext !== null && path[0] && (
+          <div className="progress-line">
+            Next hex {fmtHex(path[0])}: {u.movement.progress}/{props.costToNext} min
+            <div className="meter thin">
+              <div style={{ width: `${(100 * u.movement.progress) / props.costToNext}%` }} className="ok" />
             </div>
-          )}
-          {props.costToNext !== null && (
-            <div className="progress-line">
-              Next hex {fmtHex(order.path[0]!)}: {u.movement.progress}/{props.costToNext} min
-              <div className="meter thin">
-                <div style={{ width: `${(100 * u.movement.progress) / props.costToNext}%` }} className="ok" />
-              </div>
-            </div>
-          )}
-          {u.movement.blocked && <div className="warning">Halted: {BLOCK_TEXT[u.movement.blocked]}</div>}
-          <button onClick={props.onClearOrder} disabled={props.disabled}>
-            Clear order (hold)
-          </button>
-        </div>
-      ) : (
-        <div className="muted">No order. Holding position.</div>
-      )}
+          </div>
+        )}
+        {u.movement.blocked && <div className="warning">Halted: {BLOCK_TEXT[u.movement.blocked]}</div>}
+      </div>
 
-      {props.waypoints.length > 0 && (
-        <div className="waypoints">
-          Waypoints: {props.waypoints.map(fmtHex).join(' → ')}{' '}
-          <button className="link" onClick={props.onClearWaypoints}>
-            clear
-          </button>
-        </div>
+      {props.editable && (
+        <>
+          <div className="mode-row" role="group" aria-label="Right-click gives">
+            <span className="muted small">Right-click gives:</span>
+            {modes.map(([m, label, key]) => (
+              <button key={m} className={props.mode === m ? 'active' : ''} onClick={() => props.onMode(m)} title={`Key ${key}`}>
+                {label}
+              </button>
+            ))}
+          </div>
+          <div className="button-row">
+            <button onClick={props.onDefend} title="Key D">
+              Defend
+            </button>
+            <button onClick={props.onHold}>Hold (no order)</button>
+            {props.drafted && (
+              <button className="link" onClick={props.onUndo}>
+                undo change
+              </button>
+            )}
+          </div>
+          {props.waypoints.length > 0 && (
+            <div className="waypoints">
+              Waypoints: {props.waypoints.map(fmtHex).join(' → ')}{' '}
+              <button className="link" onClick={props.onClearWaypoints}>
+                clear
+              </button>
+            </div>
+          )}
+          <p className="hint">
+            {props.mode === 'attack' && props.isArtillery
+              ? 'Right-click a hex within range to bombard it every step.'
+              : props.mode === 'attack'
+                ? 'Right-click an objective: the unit moves there without halting and assaults whatever holds it.'
+                : props.mode === 'withdraw'
+                  ? 'Right-click a hex to fall back to. Withdrawing units do not stop or fire.'
+                  : 'Right-click a hex to advance there. The advance stops when an enemy is spotted close by.'}{' '}
+            <kbd>Shift</kbd>+<kbd>Right-click</kbd> adds a waypoint.
+          </p>
+        </>
       )}
-      <p className="hint">
-        Hover to preview a route. <kbd>Right-click</kbd> a hex to order an advance; <kbd>Shift</kbd>+
-        <kbd>Right-click</kbd> adds a waypoint first.
-      </p>
+    </section>
+  );
+}
+
+export function ContactPanel(props: { contact: ContactView; time: (t: number) => string }) {
+  const c = props.contact;
+  return (
+    <section className="panel">
+      <header>
+        <span className="side-chip side-contact">Enemy contact {c.contactId}</span>
+      </header>
+      <h2>{TYPE_LABEL[c.apparentType]}</h2>
+      <dl className="facts">
+        <dt>Position</dt>
+        <dd>{fmtHex(c.pos)}</dd>
+        <dt>Status</dt>
+        <dd>{c.live ? 'In sight now' : `Last seen ${props.time(c.observedAt)}`}</dd>
+        <dt>Strength</dt>
+        <dd className="muted">Unknown</dd>
+      </dl>
+      {!c.live && <p className="hint">It may have moved. The marker clears when one of your units looks at this hex again.</p>}
     </section>
   );
 }
@@ -157,7 +214,13 @@ export function HexPanel(props: { hex: Hex; map: GameMap; rules: Rules; place?: 
       </h3>
       <dl className="facts">
         <dt>Terrain</dt>
-        <dd>{cell.terrain}</dd>
+        <dd>
+          {cell.terrain}
+          <span className="muted small">
+            takes {rules.terrainProtection[cell.terrain]}% damage · seen from {rules.concealment[cell.terrain]} hex
+            {rules.concealment[cell.terrain] === 1 ? '' : 'es'}
+          </span>
+        </dd>
         <dt>Elevation</dt>
         <dd>{cell.elevation} m</dd>
         <dt>Road</dt>
@@ -173,7 +236,7 @@ export function HexPanel(props: { hex: Hex; map: GameMap; rules: Rules; place?: 
             const v = rules.terrainCost[c][cell.terrain];
             return `${c} ${v === null ? '—' : `${v} min`}`;
           }).join(' · ')}
-          <div className="muted small">off-road; roads are faster</div>
+          <span className="muted small">off-road; roads are faster</span>
         </dd>
         {props.unit && (
           <>
@@ -186,7 +249,7 @@ export function HexPanel(props: { hex: Hex; map: GameMap; rules: Rules; place?: 
   );
 }
 
-export function ConflictPanel(props: { conflicts: OrderConflict[]; unitsById: ReadonlyMap<string, UnitState> }) {
+export function ConflictPanel(props: { conflicts: OrderConflict[]; name: (id: string) => string }) {
   if (props.conflicts.length === 0) return null;
   return (
     <section className="panel conflicts">
@@ -194,8 +257,7 @@ export function ConflictPanel(props: { conflicts: OrderConflict[]; unitsById: Re
       <ul>
         {props.conflicts.map((c) => (
           <li key={hexKey(c.hex)}>
-            {c.unitIds.map((id) => props.unitsById.get(id)?.shortName ?? id).join(', ')} all end at {fmtHex(c.hex)}. They
-            will block each other.
+            {c.unitIds.map(props.name).join(', ')} all end at {fmtHex(c.hex)}. They will block each other.
           </li>
         ))}
       </ul>
@@ -203,25 +265,28 @@ export function ConflictPanel(props: { conflicts: OrderConflict[]; unitsById: Re
   );
 }
 
-export function EventLog(props: {
-  entries: { seq: number; event: GameEvent }[];
-  unitsById: ReadonlyMap<string, UnitState>;
-  file: ScenarioFile;
-}) {
+export interface LogEntry {
+  key: number;
+  time: number;
+  kind: string;
+  text: string;
+}
+
+export function EventLog(props: { entries: LogEntry[]; time: (t: number) => string; title: string }) {
   const end = useRef<HTMLDivElement>(null);
   useEffect(() => {
     end.current?.scrollIntoView({ block: 'nearest' });
   }, [props.entries.length]);
   return (
     <section className="panel log">
-      <h3>Event log</h3>
+      <h3>{props.title}</h3>
       {props.entries.length === 0 ? (
-        <div className="muted">Nothing has happened yet. Give orders, then step the clock.</div>
+        <div className="muted">Nothing to report yet.</div>
       ) : (
         <ol>
-          {props.entries.map(({ seq, event }) => (
-            <li key={seq} className={`ev-${event.kind}`}>
-              <time>{clockLabel(props.file, event.time).slice(-5)}</time> {describeEvent(event, props.unitsById)}
+          {props.entries.map((e) => (
+            <li key={e.key} className={`ev-${e.kind}`}>
+              <time>{props.time(e.time)}</time> {e.text}
             </li>
           ))}
         </ol>
@@ -231,30 +296,82 @@ export function EventLog(props: {
   );
 }
 
-export function HelpPanel() {
+export function ReplayBar(props: {
+  frame: number;
+  frames: number;
+  time: string;
+  playing: boolean;
+  speed: number;
+  onFrame: (f: number) => void;
+  onPlay: () => void;
+  onSpeed: (s: number) => void;
+}) {
+  const last = props.frames - 1;
+  return (
+    <div className="replay-bar" role="group" aria-label="Replay">
+      <button onClick={() => props.onFrame(0)} disabled={props.frame === 0} title="Start of turn">
+        ⏮
+      </button>
+      <button onClick={() => props.onFrame(Math.max(0, props.frame - 1))} disabled={props.frame === 0} title="Previous step (←)">
+        ◀
+      </button>
+      <button className="play" onClick={props.onPlay} title="Play / pause (space)">
+        {props.playing ? '⏸' : '▶'}
+      </button>
+      <button onClick={() => props.onFrame(Math.min(last, props.frame + 1))} disabled={props.frame === last} title="Next step (→)">
+        ▶|
+      </button>
+      <input
+        type="range"
+        min={0}
+        max={last}
+        value={props.frame}
+        onChange={(e) => props.onFrame(Number(e.target.value))}
+        aria-label="Replay position"
+      />
+      <span className="replay-time">
+        {props.time} · step {props.frame}/{last}
+      </span>
+      <select value={props.speed} onChange={(e) => props.onSpeed(Number(e.target.value))} aria-label="Playback speed">
+        {[0.5, 1, 2, 4].map((s) => (
+          <option key={s} value={s}>
+            {s}×
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
+export function HelpPanel({ phase }: { phase: MatchPhase }) {
   return (
     <section className="panel help">
-      <h3>Controls</h3>
-      <ul>
-        <li>
-          <kbd>Click</kbd> a counter to select it, or a hex to inspect it.
-        </li>
-        <li>
-          <kbd>Drag</kbd> to pan, <kbd>wheel</kbd> to zoom.
-        </li>
-        <li>
-          With a unit selected, hover to preview a route; <kbd>Right-click</kbd> to order an advance.
-        </li>
-        <li>
-          <kbd>Shift</kbd>+<kbd>Right-click</kbd> adds waypoints. <kbd>Esc</kbd> clears them.
-        </li>
-        <li>
-          <kbd>N</kbd> or <em>Step</em> advances the clock ten minutes.
-        </li>
-      </ul>
+      <h3>{phase === 'planning' ? 'Planning' : 'Replay'}</h3>
+      {phase === 'planning' ? (
+        <ul>
+          <li>
+            <kbd>Click</kbd> a counter to select it. <kbd>Drag</kbd> pans, <kbd>wheel</kbd> zooms.
+          </li>
+          <li>
+            Choose <strong>Advance</strong> (<kbd>A</kbd>), <strong>Attack</strong> (<kbd>T</kbd>) or{' '}
+            <strong>Withdraw</strong> (<kbd>W</kbd>), then <kbd>Right-click</kbd> the map. <kbd>D</kbd> defends in place.
+          </li>
+          <li>Orders stand until completed or changed. Units hold and return fire without one.</li>
+          <li>
+            When ready, <strong>Lock orders</strong>. The turn resolves when both sides have locked.
+          </li>
+        </ul>
+      ) : (
+        <ul>
+          <li>Both sides' orders ran at once for two hours, in twelve ten-minute steps.</li>
+          <li>
+            <kbd>Space</kbd> plays or pauses; <kbd>←</kbd> <kbd>→</kbd> step through.
+          </li>
+          <li>You only see what your units saw. Faded counters are last-known enemy positions.</li>
+        </ul>
+      )}
       <p className="muted small">
-        Route arrows show standing orders. A white dot marks where the unit will be at the end of this turn. Dashed
-        routes are halted.
+        Grey-blue counters are German, khaki Allied. Enemy counters show only what has been observed. Red lines are fire.
       </p>
     </section>
   );

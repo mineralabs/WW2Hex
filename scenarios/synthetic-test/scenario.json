@@ -450,6 +450,7 @@
       "id": "ph-rifle-section",
       "name": "Placeholder rifle section",
       "role": "infantry",
+      "combatClass": "rifle-section",
       "researchStatus": "synthetic",
       "sources": []
     },
@@ -457,6 +458,7 @@
       "id": "ph-medium-tank",
       "name": "Placeholder medium tank",
       "role": "tank",
+      "combatClass": "medium-tank",
       "researchStatus": "synthetic",
       "sources": []
     },
@@ -464,6 +466,7 @@
       "id": "ph-armoured-car",
       "name": "Placeholder armoured car",
       "role": "reconnaissance",
+      "combatClass": "armoured-car",
       "researchStatus": "synthetic",
       "sources": []
     },
@@ -471,6 +474,7 @@
       "id": "ph-field-gun",
       "name": "Placeholder field gun",
       "role": "artillery",
+      "combatClass": "field-gun",
       "researchStatus": "synthetic",
       "sources": []
     },
@@ -478,6 +482,7 @@
       "id": "ph-at-gun",
       "name": "Placeholder anti-tank gun",
       "role": "anti-tank",
+      "combatClass": "at-gun",
       "researchStatus": "synthetic",
       "sources": []
     },
@@ -485,6 +490,7 @@
       "id": "ph-truck",
       "name": "Placeholder truck",
       "role": "transport",
+      "combatClass": "transport",
       "researchStatus": "synthetic",
       "sources": []
     }

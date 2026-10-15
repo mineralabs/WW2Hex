@@ -143,7 +143,8 @@ export function pixelToHex(p: Point, size: number): Hex {
   return hexRound(q, r);
 }
 
-function hexRound(fq: number, fr: number): Hex {
+/** Rounds fractional axial coordinates to the nearest hex. */
+export function hexRound(fq: number, fr: number): Hex {
   const fs = -fq - fr;
   let q = Math.round(fq);
   let r = Math.round(fr);

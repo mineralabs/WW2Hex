@@ -26,6 +26,7 @@ export const COLORS = {
   previewOk: 0x1f6f3f,
   previewBad: 0xb3261e,
   conflict: 0xd9822b,
+  fire: 0xd2401f,
 };
 
 export const SIDE_COLOR: Record<Side, { fill: number; text: number; route: number }> = {

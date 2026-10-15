@@ -16,7 +16,7 @@ the right.
 | `dataStatus` | `synthetic`, `provisional` or `verified`. `verified` is rejected while any unit, formation or equipment entry is not verified, or while `provenance.sources` is empty |
 | `start` | `{ day, minuteOfDay }` at the start of turn 1 |
 | `map` | See below |
-| `equipment` | Catalogue: `id`, `name`, `role`, `researchStatus`, `sources[]` |
+| `equipment` | Catalogue: `id`, `name`, `role`, `combatClass`, `researchStatus`, `sources[]`. Historical facts and sources go here. `combatClass` names a weapon profile in the rules, such as `rifle-section` or `medium-tank`. The game numbers live in that profile, never in the catalogue |
 | `formations` | `id`, `side`, `name`, `parentId` (or `null`), `dataStatus`. Parents must exist, be on the same side, and not form a cycle |
 | `units` | One counter each. See below |
 | `events` | Reinforcements, supply arrivals and conditions. Reserved; not read until Stage 4 |

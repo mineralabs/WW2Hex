@@ -7,6 +7,10 @@ import type { EdgeKey, Hex, HexKey } from './hex.ts';
 export type Side = 'allied' | 'german';
 export const SIDES: readonly Side[] = ['allied', 'german'];
 
+export function otherSide(side: Side): Side {
+  return side === 'allied' ? 'german' : 'allied';
+}
+
 export type Terrain = 'clear' | 'polder' | 'woods' | 'town' | 'water';
 export const TERRAINS: readonly Terrain[] = ['clear', 'polder', 'woods', 'town', 'water'];
 
@@ -88,6 +92,8 @@ export interface EquipmentFile {
   id: string;
   name: string;
   role: string;
+  /** Key into the rules' weapon profiles: the gameplay side of this item. */
+  combatClass: string;
   researchStatus: DataStatus;
   sources: string[];
 }
@@ -123,7 +129,7 @@ export interface ProvenanceFile {
 }
 
 // ---------------------------------------------------------------------------
-// Runtime map (static for the whole match; rebuilt from the scenario file)
+// Runtime map and scenario context (static for the whole match)
 // ---------------------------------------------------------------------------
 
 export interface MapCell {
@@ -160,35 +166,45 @@ export interface GameMap {
   places: readonly { name: string; kind: 'town' | 'village' | 'feature'; at: Hex }[];
 }
 
+/** Everything static the rules need besides the state: the map and equipment catalogue. */
+export interface World {
+  map: GameMap;
+  /** Equipment id → combat class. */
+  combatClass: ReadonlyMap<string, string>;
+}
+
 // ---------------------------------------------------------------------------
 // Orders
 // ---------------------------------------------------------------------------
 
-/** The four shared orders. Stage 1 implements Advance only. */
+/** The four shared orders. */
 export type OrderKind = 'advance' | 'attack' | 'defend' | 'withdraw';
 
-/** What a player submits for one unit. The engine derives the route. */
-export interface AdvanceOrderInput {
-  kind: 'advance';
-  /** Hexes the route must pass through, ending at the destination. */
-  waypoints: Hex[];
-}
-
-export type OrderInput = AdvanceOrderInput;
+/** What a player submits for one unit. The engine derives routes. */
+export type OrderInput =
+  | { kind: 'advance'; waypoints: Hex[] }
+  /** Ground units move to `target`; artillery bombards it. */
+  | { kind: 'attack'; target: Hex; waypoints?: Hex[] }
+  | { kind: 'defend' }
+  | { kind: 'withdraw'; waypoints: Hex[] };
 
 /** A standing order held by a unit until completed, interrupted or changed. */
-export interface AdvanceOrder {
-  kind: 'advance';
-  waypoints: Hex[];
-  /** Remaining hexes to enter, in order. The first element is the next hex. */
-  path: Hex[];
+export type Order =
+  | { kind: 'advance'; waypoints: Hex[]; path: Hex[] }
+  | { kind: 'attack'; mode: 'assault' | 'bombard'; target: Hex; waypoints: Hex[]; path: Hex[] }
+  | { kind: 'defend' }
+  | { kind: 'withdraw'; waypoints: Hex[]; path: Hex[] };
+
+/** Orders that move along `path`. */
+export type MovingOrder = Extract<Order, { path: Hex[] }>;
+
+export function orderPath(order: Order | null): Hex[] {
+  return order && 'path' in order ? order.path : [];
 }
 
-export type Order = AdvanceOrder;
-
 /**
- * One side's orders for a turn. In Stage 2 the host freezes this at commitment
- * and resolves both sides' sets together. `order: null` clears a standing order.
+ * One side's orders for a turn. The host freezes this at commitment and
+ * resolves both sides' sets together. `order: null` clears a standing order.
  */
 export interface CommittedOrderSet {
   side: Side;
@@ -223,17 +239,37 @@ export interface UnitState {
   pos: Hex;
   personnel: number;
   equipment: Record<string, number>;
+  /** Strength at the start of the scenario; losses and destruction are measured against it. */
+  baseline: { personnel: number; equipment: Record<string, number> };
   /** 0-100 */
   cohesion: number;
   supply: SupplyStatus;
   dataStatus: DataStatus;
   order: Order | null;
   movement: {
-    /** Minutes of travel accumulated towards order.path[0]. */
+    /** Minutes of travel accumulated towards the next hex of the order's path. */
     progress: number;
     /** Why the last attempt to enter the next hex failed, until it succeeds. */
     blocked: BlockReason | null;
   };
+  /** Consecutive steps without moving; drives defensive preparation. */
+  stationarySteps: number;
+  /** Damage points against armour not yet enough to knock out a vehicle. */
+  damageCarry: number;
+  /** What the unit did in the most recently resolved step (affects spotting). */
+  lastStep: { moved: boolean; fired: boolean; hit: boolean };
+}
+
+/** An enemy unit as one side knows it. `unitId` never leaves the host. */
+export interface ContactRecord {
+  contactId: string;
+  unitId: string;
+  pos: Hex;
+  /** Scenario minutes when last observed. */
+  observedAt: number;
+  /** False once contact is lost: the position is last-seen only. */
+  live: boolean;
+  apparentType: UnitType;
 }
 
 export interface Clock {
@@ -247,12 +283,15 @@ export interface GameState {
   scenarioId: string;
   rulesVersion: string;
   clock: Clock;
-  /** Always sorted by unit id. */
+  /** Always sorted by unit id. Destroyed units are removed. */
   units: UnitState[];
+  contacts: Record<Side, ContactRecord[]>;
+  nextContactNo: Record<Side, number>;
+  destroyed: { unitId: string; side: Side; at: Hex; time: number }[];
 }
 
 // ---------------------------------------------------------------------------
-// Event log (consumed by replay/animation; never drives the rules)
+// Authoritative event log (complete; never sent to players as-is)
 // ---------------------------------------------------------------------------
 
 interface EventBase {
@@ -262,17 +301,96 @@ interface EventBase {
   step: number;
 }
 
+export type FireMode = 'direct' | 'indirect';
+
 export type GameEvent =
   | (EventBase & { kind: 'unit-moved'; unitId: string; side: Side; from: Hex; to: Hex })
+  | (EventBase & { kind: 'move-blocked'; unitId: string; side: Side; at: Hex; target: Hex; reason: BlockReason })
+  | (EventBase & { kind: 'order-completed'; unitId: string; side: Side; at: Hex })
+  | (EventBase & { kind: 'advance-halted'; unitId: string; side: Side; at: Hex; enemyUnitId: string })
   | (EventBase & {
-      kind: 'move-blocked';
+      kind: 'fire';
+      firerId: string;
+      firerSide: Side;
+      firerPos: Hex;
+      targetId: string;
+      targetPos: Hex;
+      mode: FireMode;
+      assault: boolean;
+      damage: number;
+    })
+  | (EventBase & {
+      kind: 'losses';
       unitId: string;
       side: Side;
-      at: Hex;
-      target: Hex;
-      reason: BlockReason;
+      personnel: number;
+      equipment: Record<string, number>;
+      cohesionAfter: number;
     })
-  | (EventBase & { kind: 'order-completed'; unitId: string; side: Side; at: Hex })
+  | (EventBase & { kind: 'destroyed'; unitId: string; side: Side; at: Hex })
+  | (EventBase & { kind: 'retreated'; unitId: string; side: Side; from: Hex; to: Hex })
+  | (EventBase & { kind: 'pinned'; unitId: string; side: Side; at: Hex })
   | (EventBase & { kind: 'turn-ended'; endedTurn: number });
 
 export type GameEventKind = GameEvent['kind'];
+
+// ---------------------------------------------------------------------------
+// What one player may know
+// ---------------------------------------------------------------------------
+
+/** A contact as shown to its side. No unit id, strength or equipment. */
+export interface ContactView {
+  contactId: string;
+  pos: Hex;
+  observedAt: number;
+  live: boolean;
+  apparentType: UnitType;
+}
+
+export interface SideView {
+  side: Side;
+  clock: Clock;
+  /** Scenario minutes elapsed. */
+  time: number;
+  ownUnits: UnitState[];
+  contacts: ContactView[];
+}
+
+/** A unit referred to in an observed event: one of yours, a contact, or unseen. */
+export type UnitRef =
+  | { kind: 'own'; unitId: string }
+  | { kind: 'contact'; contactId: string; apparentType: UnitType }
+  | { kind: 'unseen' };
+
+export type FireResult = 'no-effect' | 'light' | 'moderate' | 'heavy' | 'not-observed';
+
+interface ObservedBase {
+  time: number;
+  turn: number;
+  step: number;
+}
+
+export type ObservedEvent =
+  | (ObservedBase & { kind: 'unit-moved'; unit: UnitRef; from: Hex; to: Hex })
+  | (ObservedBase & { kind: 'move-blocked'; unitId: string; at: Hex; target: Hex; reason: BlockReason })
+  | (ObservedBase & { kind: 'order-completed'; unitId: string; at: Hex })
+  | (ObservedBase & { kind: 'advance-halted'; unitId: string; at: Hex; by: UnitRef })
+  | (ObservedBase & {
+      kind: 'fire';
+      firer: UnitRef;
+      /** Present only when the firer is own or seen. */
+      firerPos: Hex | null;
+      target: UnitRef;
+      targetPos: Hex;
+      mode: FireMode;
+      assault: boolean;
+      result: FireResult;
+    })
+  | (ObservedBase & { kind: 'losses'; unitId: string; personnel: number; equipment: Record<string, number>; cohesionAfter: number })
+  | (ObservedBase & { kind: 'destroyed'; unit: UnitRef; at: Hex })
+  | (ObservedBase & { kind: 'retreated'; unit: UnitRef; from: Hex; to: Hex })
+  | (ObservedBase & { kind: 'pinned'; unitId: string; at: Hex })
+  | (ObservedBase & { kind: 'contact-spotted'; contactId: string; at: Hex; apparentType: UnitType })
+  | (ObservedBase & { kind: 'contact-lost'; contactId: string; lastSeen: Hex })
+  | (ObservedBase & { kind: 'contact-cleared'; contactId: string; at: Hex })
+  | (ObservedBase & { kind: 'turn-ended'; endedTurn: number });
