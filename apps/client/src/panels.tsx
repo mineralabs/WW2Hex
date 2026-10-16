@@ -197,6 +197,10 @@ export function UnitPanel(props: {
               <button className="link" onClick={props.onClearWaypoints}>
                 clear
               </button>
+              <div className="hint">
+                Now <kbd>Right-click</kbd> the final destination <em>without</em> Shift to place the order. A left-click or <kbd>Esc</kbd> drops
+                the waypoints.
+              </div>
             </div>
           )}
           <p className="hint">
