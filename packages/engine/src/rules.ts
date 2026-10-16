@@ -125,7 +125,7 @@ export interface WeaponProfile {
 }
 
 export const DEFAULT_RULES: Rules = {
-  rulesVersion: '0.7.0-provisional',
+  rulesVersion: '0.8.0-provisional',
   stepMinutes: 10,
   stepsPerTurn: 12,
   movementTicksPerStep: 10,
@@ -175,6 +175,8 @@ export const DEFAULT_RULES: Rules = {
     'flak-halftrack': { soft: 4, hard: 2, directRange: 2, indirectRange: 0, fireWhileMoving: 50, armoured: false },
     'pack-howitzer': { soft: 7, hard: 2, directRange: 1, indirectRange: 8, fireWhileMoving: 0, armoured: false },
     'medium-gun': { soft: 16, hard: 3, directRange: 0, indirectRange: 13, fireWhileMoving: 0, armoured: false },
+    // Added for the Market Garden campaign: the Tiger I's 8.8 cm gun outranged and outhit the medium tanks.
+    'heavy-tank': { soft: 7, hard: 14, directRange: 3, indirectRange: 0, fireWhileMoving: 40, armoured: true },
   },
   rangePercent: [0, 100, 60, 40],
   firePointsPerDamage: 30,

@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { EUROPE_GRID, europeHexAt, fromLAEA, fromRD, hexAt, hexCentre, pointInPolygon, segmentsCross, toLAEA, toRD, windowGrid } from './geo.ts';
 import { classify } from './raster.ts';
+import { combineMaps } from './combine-maps.ts';
+import type { MapFile } from '../../packages/engine/src/index.ts';
 
 describe('RD New coordinates', () => {
   it('maps the Amersfoort origin exactly and round-trips to well under a metre', () => {
@@ -81,5 +83,39 @@ describe('reading the 1938-42 forest survey', () => {
     expect(classify(185, 150, 205)).toBe('heath'); // lilac
     expect(classify(245, 238, 210)).toBe('other'); // cream base
     expect(classify(120, 120, 120)).toBe('other'); // grey line work
+  });
+});
+
+describe('joining maps', () => {
+  const part = (id: string, row: number, rows: number, extra: Partial<MapFile> = {}): MapFile => ({
+    id,
+    name: id,
+    geo: { crs: 'EPSG:3035', origin: { x: 0, y: 0 }, orientation: 'odd-r', hexSpacingMeters: 1000, grid: { id: EUROPE_GRID.id, col: 10, row } },
+    cols: 4,
+    rows,
+    terrainLegend: { '.': 'clear' },
+    terrain: Array.from({ length: rows }, () => '....'),
+    elevationStepMeters: 10,
+    elevation: Array.from({ length: rows }, () => '1111'),
+    rivers: [],
+    bridges: [],
+    roads: [],
+    places: [],
+    ...extra,
+  });
+  const grid = { grid: EUROPE_GRID.id, col: 10, row: 100, cols: 4, rows: 6 } as const;
+
+  it('stacks the parts hex for hex and joins a road cut by the seam', () => {
+    const north = part('n', 100, 2, { roads: [{ id: 'a', name: 'A', kind: 'main', hexes: [[1, 0], [1, 1]] }], places: [{ name: 'X', kind: 'town', at: [1, 0] }] });
+    const south = part('s', 102, 4, { roads: [{ id: 'b', name: 'B', kind: 'main', hexes: [[2, 3], [1, 2], [1, 1]] }], places: [{ name: 'Y', kind: 'town', at: [2, 3] }] });
+    const { map } = combineMaps({ id: 'j', name: 'J', grid, parts: [], joins: [{ id: 'ab', name: 'AB', from: 'a', to: 'b' }] }, [north, south]);
+    expect(map.rows).toBe(6);
+    expect(map.places.map((p) => p.at)).toEqual([[1, 0], [2, 5]]);
+    expect(map.roads).toEqual([{ id: 'ab', name: 'AB', kind: 'main', hexes: [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [2, 5]] }]);
+  });
+
+  it('refuses parts that would shift the odd rows or leave a gap', () => {
+    expect(() => combineMaps({ id: 'j', name: 'J', grid, parts: [] }, [part('n', 100, 3), part('s', 103, 3)])).toThrow(/odd number/);
+    expect(() => combineMaps({ id: 'j', name: 'J', grid, parts: [] }, [part('n', 100, 2)])).toThrow(/No part covers/);
   });
 });

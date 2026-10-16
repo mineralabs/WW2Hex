@@ -62,6 +62,7 @@ Victory is checked only at turn boundaries.
 | `holdTurns` | How many consecutive turn ends the side must control all of them |
 | `initialControl` | `allied`, `german` or `null`: who controls the hexes at the start |
 | `requireSupply` | Optional. A supplied bridgehead: at each of those turn ends, a unit of the side standing on one of the hexes must also have a supply route |
+| `fromTurn` | Optional. Turn ends count only from the end of this turn (default 1), for an objective that matters only once, say, the ground forces can arrive |
 | `victory.lastTurn` | The match ends once this turn has resolved |
 | `victory.otherwise` | The winner if no objective has been met by then, or `null` for a draw |
 
@@ -123,7 +124,7 @@ be passable for each.
 
 ## `supplySources`
 
-`id`, `name`, `side`, `at`, `range` (minutes of wheeled travel), optional `fromTurn`,
+`id`, `name`, `side`, `at`, `range` (minutes of wheeled travel), optional `fromTurn` and `toTurn` (the first and last turns it supplies),
 optional `toward` (the place the road leads to off the map, shown as a sign at the map edge, e.g.
 `"Kleve"`), `dataStatus` and `note`. Supply routes are traced from these; see
 [combat-rules.md](combat-rules.md#supply-and-reserves). Each side's players are sent only their

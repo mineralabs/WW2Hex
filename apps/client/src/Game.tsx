@@ -68,7 +68,7 @@ import {
 const RULES = DEFAULT_RULES;
 /** Which of a unit's equipment its 3D model shows: vehicles first, then heavier guns before lighter ones. */
 const MODEL_RANK: Record<string, number> = {
-  'medium-tank': 0, 'tank-17pdr': 0, 'assault-gun': 0, 'tank-destroyer': 0, 'light-tank': 1, 'armoured-car': 1, 'flak-halftrack': 2,
+  'heavy-tank': 0, 'medium-tank': 0, 'tank-17pdr': 0, 'assault-gun': 0, 'tank-destroyer': 0, 'light-tank': 1, 'armoured-car': 1, 'flak-halftrack': 2,
   'medium-gun': 3, 'field-gun': 3, 'heavy-flak': 3, 'pack-howitzer': 4, 'at-gun': 4, 'light-at-gun': 5, 'light-flak': 6,
 };
 const FORMATION_PALETTE = [0x6d3f99, 0x2f7d6d, 0xb0563a, 0x3f5fa8, 0x9a7a2c, 0x8a3a5a];

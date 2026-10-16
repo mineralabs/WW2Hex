@@ -55,7 +55,7 @@ export function buildWorld(file: ScenarioFile, map: GameMap = buildMap(file.map)
     indirectRange: new Map(file.equipment.flatMap((e) => (e.indirectRange !== undefined ? [[e.id, e.indirectRange] as const] : []))),
     objectives: buildObjectives(file),
     victory: file.victory ? { ...file.victory } : null,
-    supplySources: (file.supplySources ?? []).map((s) => ({ id: s.id, name: s.name, side: s.side, at: fromOffset(s.at), range: s.range, fromTurn: s.fromTurn ?? 1, toward: s.toward ?? null })),
+    supplySources: (file.supplySources ?? []).map((s) => ({ id: s.id, name: s.name, side: s.side, at: fromOffset(s.at), range: s.range, fromTurn: s.fromTurn ?? 1, toTurn: s.toTurn ?? null, toward: s.toward ?? null })),
     supplyDrops: file.events.flatMap((e) =>
       e.kind === 'supply-drop' ? [{ id: e.id, side: e.side, turn: e.turn, at: fromOffset(e.at), radius: e.radius, amount: e.amount }] : [],
     ),

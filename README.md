@@ -14,7 +14,7 @@ A two-player, simultaneous-turn WWII operational wargame on hex maps. The design
 - A match ends when a side holds its objective, wipes out the other side, or the turn limit
   passes. Games are saved as you play and survive closing a browser or restarting the host.
 
-Three scenarios:
+Four scenarios:
 
 - **Nijmegen bridges, 19–20 September 1944.** A researched but **provisional** scenario. It
   covers the US 82nd Airborne and the Guards Armoured Division against the Nijmegen garrison and
@@ -26,6 +26,10 @@ Three scenarios:
   von Tettau and the reinforcements gathering from every direction. Its map sits directly north
   of Nijmegen's on the same hex grid. See [docs/arnhem-notes.md](docs/arnhem-notes.md) and
   [docs/research-arnhem](docs/research-arnhem).
+- **Market Garden campaign, 17–20 September 1944.** The two joined: 39 turns on one map from
+  Grave to Arnhem, from the landings to the evening of the Waal crossing, with XXX Corps arriving
+  on the 19th. The Allies must open the whole corridor, holding the Grave, Heumen, Nijmegen and
+  Arnhem bridges at once. See [docs/campaign-notes.md](docs/campaign-notes.md).
 - **Synthetic test map.** Placeholder counters for engine development; nothing in it is
   historical.
 
@@ -164,10 +168,11 @@ The tests cover:
 | `apps/server` | The local game-host program: serves the client, rooms and seats, authoritative turns, saving |
 | `scenarios/nijmegen-1944` | The Nijmegen scenario (`scenario.json`) and the sources it is built from (`source/`) |
 | `scenarios/arnhem-1944` | The Arnhem scenario, built the same way: `npm run build:map:arnhem`, `npm run build:scenario:arnhem` |
+| `scenarios/market-garden-1944` | The campaign, on the two maps joined: `npm run build:map:campaign`, `npm run build:scenario:campaign` |
 | `scenarios/synthetic-test` | The synthetic engine-development scenario |
 | `tools/map-builder` | Builds georeferenced hex maps and scenarios from open data and research: `npm run build:map`, `npm run build:scenario` |
 | `saves` | Saved matches (created by the host; not in git) |
-| `docs` | [Player's guide](docs/players-guide.md), [connection guide](docs/connection-guide.md), [combat rules](docs/combat-rules.md), [research](docs/research), [Arnhem research](docs/research-arnhem), [Arnhem notes](docs/arnhem-notes.md), [Stage 5 notes](docs/stage-5-notes.md), [Stage 4 notes](docs/stage-4-notes.md), [Stage 3 notes](docs/stage-3-notes.md), [Stage 2 notes](docs/stage-2-notes.md), [Stage 1 notes](docs/stage-1-notes.md), [scenario format](docs/scenario-format.md), [Europe grid and 3D view](docs/europe-grid.md) |
+| `docs` | [Player's guide](docs/players-guide.md), [connection guide](docs/connection-guide.md), [combat rules](docs/combat-rules.md), [research](docs/research), [Arnhem research](docs/research-arnhem), [Arnhem notes](docs/arnhem-notes.md), [campaign notes](docs/campaign-notes.md), [Stage 5 notes](docs/stage-5-notes.md), [Stage 4 notes](docs/stage-4-notes.md), [Stage 3 notes](docs/stage-3-notes.md), [Stage 2 notes](docs/stage-2-notes.md), [Stage 1 notes](docs/stage-1-notes.md), [scenario format](docs/scenario-format.md), [Europe grid and 3D view](docs/europe-grid.md) |
 
 ## Next
 

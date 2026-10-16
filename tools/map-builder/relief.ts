@@ -111,12 +111,14 @@ export async function buildRelief(g: HexGrid, spacing: number): Promise<{ relief
 
   const points: LatLon[] = [];
   for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) points.push(fromLAEA({ x: origin.x + c * spacing, y: origin.y - r * spacing }));
-  const box = {
-    south: Math.min(...points.map((p) => p.lat)),
-    north: Math.max(...points.map((p) => p.lat)),
-    west: Math.min(...points.map((p) => p.lon)),
-    east: Math.max(...points.map((p) => p.lon)),
-  };
+  // A loop rather than Math.min(...points): a large window has too many points to spread.
+  const box = { south: Infinity, north: -Infinity, west: Infinity, east: -Infinity };
+  for (const p of points) {
+    box.south = Math.min(box.south, p.lat);
+    box.north = Math.max(box.north, p.lat);
+    box.west = Math.min(box.west, p.lon);
+    box.east = Math.max(box.east, p.lon);
+  }
 
   const patches = new Map<string, Patch | null>();
   for (let lat = Math.floor(box.south); lat <= Math.floor(box.north); lat++) {

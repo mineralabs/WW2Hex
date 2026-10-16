@@ -89,6 +89,8 @@ export interface ObjectiveFile {
    * side's units standing on the objective hexes must have a supply route.
    */
   requireSupply?: boolean;
+  /** Turn ends count towards `holdTurns` only from the end of this turn. Default: 1. */
+  fromTurn?: number;
 }
 
 /** Units that enter the map at the start of a turn, at the first free entry hex. */
@@ -133,6 +135,8 @@ export interface SupplySourceFile {
   range: number;
   /** Supplies flow from the start of this turn. Default: 1. */
   fromTurn?: number;
+  /** Supplies flow up to and including this turn. Default: to the end. */
+  toTurn?: number;
   /** Where the road leads off the map, for the sign at the map edge (e.g. "Kleve"). */
   toward?: string;
   dataStatus: DataStatus;
@@ -333,6 +337,7 @@ export interface SupplySource {
   at: Hex;
   range: number;
   fromTurn: number;
+  toTurn: number | null;
   toward: string | null;
 }
 

@@ -631,7 +631,7 @@ export function ObjectivePanel(props: {
             })}
           </div>
           <div className="muted small">
-            Held at {o.heldFor} of {o.holdTurns} consecutive turn ends needed.
+            Held at {o.heldFor} of {o.holdTurns} consecutive turn ends needed{o.fromTurn > 1 ? `, counting from the end of turn ${o.fromTurn}` : ''}.
           </div>
         </div>
       ))}

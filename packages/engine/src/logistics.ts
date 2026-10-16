@@ -27,7 +27,7 @@ export function supplyStatus(rules: Rules, reserves: number): SupplyStatus {
 
 /** Hexes a supply route reaches for `side`, from the units' current positions. */
 export function traceSupply(world: World, rules: Rules, units: readonly UnitState[], side: Side, turn: number): Set<HexKey> {
-  const sources = world.supplySources.filter((s) => s.side === side && s.fromTurn <= turn);
+  const sources = world.supplySources.filter((s) => s.side === side && s.fromTurn <= turn && (s.toTurn === null || turn <= s.toTurn));
   const enemyAt = new Set(units.filter((u) => u.side !== side).map((u) => hexKey(u.pos)));
   const friendAt = new Set(units.filter((u) => u.side === side).map((u) => hexKey(u.pos)));
   const contested = new Set<HexKey>();

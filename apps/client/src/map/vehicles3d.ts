@@ -19,9 +19,11 @@ export type VehicleId =
   | 'stug-iii'
   | 'stug-jgpz'
   | 'tank-de'
+  | 'tiger-i'
+  | 'tank-fr'
   | 'flak-20-sp'
   | 'ac-de';
-export const VEHICLE_IDS: readonly VehicleId[] = ['sherman-75', 'sherman-firefly', 'stuart', 'cromwell', 'challenger', 'm10-17pdr', 'daimler-ac', 'stug-iii', 'stug-jgpz', 'tank-de', 'flak-20-sp', 'ac-de'];
+export const VEHICLE_IDS: readonly VehicleId[] = ['sherman-75', 'sherman-firefly', 'stuart', 'cromwell', 'challenger', 'm10-17pdr', 'daimler-ac', 'stug-iii', 'stug-jgpz', 'tank-de', 'tiger-i', 'tank-fr', 'flak-20-sp', 'ac-de'];
 
 type P = [number, number];
 
@@ -287,6 +289,42 @@ const BUILD: Record<VehicleId, (p: THREE.Material) => THREE.Group> = {
     g.add(gun(4.35, 0.06, 1.05, 2.38, 0, 0.36));
     hatch(g, p, -1.1, 2.82, 0.42, 0.3, 0.22); // cupola
     for (const s of [-1, 1]) g.add(rod(0.1, 0.7, STEEL(), -3.55, 1.65, s * 0.45, 12).rotateZ(Math.PI / 2 - 0.2)); // exhausts
+    return g;
+  },
+  'tiger-i'(p) {
+    // Tiger I: a slab-sided box of a hull whose superstructure overhangs the wide tracks, eight large
+    // interleaved road wheels a side, the horseshoe turret with its flat mantlet, and the 8.8 cm KwK 36
+    // with its double-baffle muzzle brake.
+    const g = new THREE.Group();
+    g.add(hull([[3.15, 0.55], [3.32, 1.2], [3.18, 1.95], [-3.0, 1.95], [-3.15, 1.72], [-3.1, 0.6]], 1.8, p));
+    g.add(box(6.15, 0.75, 3.45, p, 0.05, 1.58, 0)); // superstructure over the tracks
+    g.add(box(0.1, 0.72, 3.45, p, 3.15, 1.58, 0)); // near-vertical front plate
+    runningGear(g, { z: 1.42, width: 0.72, front: [2.85, 0.95, 0.42], rear: [-2.9, 0.85, 0.4], wheels: [2.3, 1.6, 0.9, 0.2, -0.5, -1.2, -1.9, -2.5], wheelR: 0.4, stagger: 0.15 }, p);
+    const turret = mesh(new THREE.CylinderGeometry(1.05, 1.1, 0.85, 24), p);
+    turret.scale.set(1.1, 1, 0.92);
+    turret.position.set(-0.45, 2.38, 0);
+    g.add(turret);
+    g.add(box(0.35, 0.78, 1.6, p, 0.72, 2.38, 0)); // mantlet
+    g.add(gun(4.3, 0.06, 0.9, 2.42, 0, 0.42));
+    hatch(g, p, -1.05, 2.8, -0.55, 0.32, 0.25); // commander's cupola
+    hatch(g, p, -0.8, 2.8, 0.45, 0.28, 0.06); // loader's hatch
+    for (const s of [-1, 1]) g.add(rod(0.1, 0.6, STEEL(), -3.22, 2.2, s * 0.5, 12).rotateZ(Math.PI / 2)); // exhausts on the rear plate
+    return g;
+  },
+  'tank-fr'(p) {
+    // Captured French tanks, shown as a Char B1 bis: a tall, long hull with the tracks running right round
+    // its sides under armoured skirts, the short 75 mm gun low in the hull front, and the small APX turret.
+    const g = new THREE.Group();
+    g.add(hull([[3.1, 0.45], [3.2, 1.25], [2.6, 1.85], [-2.9, 1.85], [-3.15, 1.5], [-3.1, 0.5]], 1.5, p));
+    runningGear(g, { z: 1.05, width: 0.5, front: [2.6, 1.15, 0.62], rear: [-2.75, 0.85, 0.5], wheels: [1.9, 1.45, 1.0, 0.55, 0.1, -0.35, -0.8, -1.25, -1.7, -2.15], wheelR: 0.2 }, p);
+    for (const s of [-1, 1]) g.add(box(4.6, 0.9, 0.06, p, -0.2, 1.05, s * 1.32)); // armoured skirts over the running gear
+    g.add(box(1.0, 0.8, 0.5, p, 2.55, 1.05, -0.45)); // hull gun mounting
+    g.add(gun(0.45, 0.06, 3.05, 1.05, -0.45));
+    const turret = mesh(new THREE.CylinderGeometry(0.48, 0.58, 0.72, 8), p);
+    turret.position.set(0.6, 2.21, 0);
+    g.add(turret);
+    hatch(g, p, 0.55, 2.57, 0, 0.3, 0.12);
+    g.add(gun(0.9, 0.035, 1.05, 2.25, 0));
     return g;
   },
   'flak-20-sp'(p) {

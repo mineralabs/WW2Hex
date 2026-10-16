@@ -288,6 +288,23 @@ may also open a crossing or a supply source on a set turn, or drop supplies on t
 - The night of 17/18 September is dark from about 19:20 to 06:20: see section 6.
 - If neither side has won by the end of turn 15, the German side wins.
 
+## 12b. The Market Garden campaign in brief
+
+15:00 on 17 September to 21:00 on 20 September 1944: 39 turns, on one map from Grave to Arnhem.
+
+- **Allied:** both airborne divisions start as the separate scenarios begin, the 82nd just off
+  its zones round Groesbeek and Overasselt. XXX Corps arrives from Uden on the morning of the
+  19th (turn 21). Win by holding **both ends of the Grave, Heumen, Nijmegen and Arnhem road
+  bridges at once**, at the end of turn 21 or later, with a supplied unit on one of them.
+- **German:** the Arnhem defence as in the Arnhem scenario. At Nijmegen there is only Henke's
+  garrison at first. Korps Feldt attacks the landing zones at dawn on the 18th. Euling, the SS
+  pioneers and Reinhold cross the **Pannerden ferry** that morning; it is the only way into the
+  Betuwe from the east. Tigers, assault guns and Tettau's reinforcements reach Arnhem on the 19th
+  and 20th. Win by holding both ends of the **Grave bridge** at the end of turn 21 or later, or
+  of the **Heumen lock bridge** at the end of turn 23 or later.
+- If neither side has won by the end of turn 39, the German side wins.
+- See [campaign-notes.md](campaign-notes.md) for every arrival and drop.
+
 ## 13. What the game tells you, and what it hides
 
 You get exact figures for your own units: losses, cohesion, halts, retreats, and the reasons

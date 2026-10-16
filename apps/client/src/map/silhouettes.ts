@@ -89,7 +89,7 @@ export function genericPicture(type: UnitType): Picture {
   }
 }
 
-const VEHICLE_CLASSES = new Set(['medium-tank', 'tank-17pdr', 'light-tank', 'assault-gun', 'tank-destroyer', 'armoured-car']);
+const VEHICLE_CLASSES = new Set(['heavy-tank', 'medium-tank', 'tank-17pdr', 'light-tank', 'assault-gun', 'tank-destroyer', 'armoured-car']);
 const GUN_PICTURES: Record<string, Picture | undefined> = {
   'heavy-flak': 'heavy-flak',
   'light-flak': 'light-flak',

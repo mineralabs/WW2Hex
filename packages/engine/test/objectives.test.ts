@@ -97,6 +97,17 @@ describe('objective control', () => {
     expect(objectiveStatus(s, world)[0]).toMatchObject({ control: ['allied'], heldFor: 2 });
   });
 
+  it('counts turn ends only from its first turn', () => {
+    const { world, state } = setup([hold({ fromTurn: 3, initialControl: 'allied' })]);
+    let s = state;
+    const held: number[] = [];
+    for (let t = 0; t < 4; t++) {
+      s = resolveTurn(s, world, rules).state;
+      held.push(objectiveStatus(s, world)[0]!.heldFor);
+    }
+    expect(held).toEqual([0, 0, 1, 2]);
+  });
+
   it('needs every hex of the objective, and resets the count when one is lost', () => {
     const { world, state } = setup([hold({ hexes: [[3, 0], [8, 0]] })]);
     let s = resolveTurn(give(state, world, 'allied', 'a', { kind: 'advance', waypoints: [at(3, 0)] }), world, rules).state;

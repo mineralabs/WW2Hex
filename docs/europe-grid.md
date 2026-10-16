@@ -20,7 +20,17 @@ anything.
   window in `map.geo.grid`, so the engine can keep working in local coordinates.
 
 A neighbouring scenario picks its own window, and any hex in both maps has the same global
-coordinates. For example, Arnhem would be a window a few dozen rows north of Nijmegen's.
+coordinates. Arnhem's window is the 26 rows directly north of Nijmegen's.
+
+**Joining maps.** [`combine-maps.ts`](../tools/map-builder/combine-maps.ts) stacks generated maps
+that share columns into one window, hex for hex, and moves each part's rows into place.
+- **Seam roads:** it joins the roads the seam cuts.
+- **Seam rivers:** it traces again any river that runs from one part into another, since each
+  part only knows the edges between its own hexes. The Nederrijn becomes the Pannerdensch Kanaal.
+- **New crossings:** it adds crossings on those rivers.
+- **Relief:** it fetches the relief again over the whole window.
+
+The Market Garden campaign is built this way ([campaign-notes.md](campaign-notes.md)).
 
 ## Data sources
 
@@ -108,4 +118,5 @@ airborne), never which unit it is.
 
 ## Next steps
 
-- **Formation orders:** give a division or regiment one order, as larger maps will need.
+- **More windows:** extend the strip south along the corridor (Eindhoven, Veghel) and join it the
+  same way.

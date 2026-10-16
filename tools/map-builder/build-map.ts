@@ -370,7 +370,7 @@ function nearestOnSegment(p: XY, a: XY, b: XY): XY {
  * follows the shortest route between the two ends that lie furthest apart.
  * Twin channels round islands and weirs collapse to one, and side arms drop out.
  */
-function mainLine(ways: XY[][]): XY[] {
+export function mainLine(ways: XY[][]): XY[] {
   const k = (p: XY) => `${Math.round(p.x)},${Math.round(p.y)}`;
   const adj = new Map<string, { to: string; way: XY[]; len: number }[]>();
   const pos = new Map<string, XY>();

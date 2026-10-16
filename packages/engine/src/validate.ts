@@ -260,6 +260,7 @@ export function validateScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULE
     else if (cell.terrain === 'water') error('supply-source-on-water', `Supply source ${s.id} at ${fmt(s.at)} is water`);
     if (!Number.isInteger(s.range) || s.range < 1) error('supply-source-range', `Supply source ${s.id}: range must be a whole number of minutes, at least 1`);
     if (s.fromTurn !== undefined && (!Number.isInteger(s.fromTurn) || s.fromTurn < 1)) error('supply-source-from-turn', `Supply source ${s.id}: fromTurn must be a whole number of at least 1`);
+    if (s.toTurn !== undefined && (!Number.isInteger(s.toTurn) || s.toTurn < (s.fromTurn ?? 1))) error('supply-source-to-turn', `Supply source ${s.id}: toTurn must be a whole number no earlier than fromTurn`);
     if (s.toward !== undefined && (typeof s.toward !== 'string' || s.toward.trim() === '')) error('supply-source-toward', `Supply source ${s.id}: toward must be a place name`);
   }
 
@@ -274,6 +275,7 @@ export function validateScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULE
       error('objective-initial-control', `Objective ${o.id}: initialControl must be allied, german or null`);
     }
     if (!Number.isInteger(o.holdTurns) || o.holdTurns < 1) error('objective-hold-turns', `Objective ${o.id}: holdTurns must be a whole number of at least 1`);
+    if (o.fromTurn !== undefined && (!Number.isInteger(o.fromTurn) || o.fromTurn < 1)) error('objective-from-turn', `Objective ${o.id}: fromTurn must be a whole number of at least 1`);
     if (o.hexes.length === 0) error('objective-empty', `Objective ${o.id} has no hexes`);
     const keys = new Set<string>();
     for (const at of o.hexes) {
@@ -303,7 +305,7 @@ export function validateScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULE
       error('victory-otherwise', 'victory.otherwise must be allied, german or null (a draw)');
     }
     for (const o of file.objectives) {
-      if (o.holdTurns > v.lastTurn) warn('objective-unreachable', `Objective ${o.id} needs ${o.holdTurns} turns but the scenario lasts ${v.lastTurn}`);
+      if ((o.fromTurn ?? 1) + o.holdTurns - 1 > v.lastTurn) warn('objective-unreachable', `Objective ${o.id} needs ${o.holdTurns} turns but the scenario lasts ${v.lastTurn}`);
     }
   } else if (file.objectives.length > 0) {
     warn('victory-missing', 'Scenario has objectives but no victory block, so it has no time limit');

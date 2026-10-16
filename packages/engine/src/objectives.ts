@@ -27,6 +27,7 @@ export interface Objective {
   hexes: Hex[];
   holdTurns: number;
   requireSupply: boolean;
+  fromTurn: number;
 }
 
 export interface Victory {
@@ -60,6 +61,8 @@ export interface ObjectiveStatus {
   heldFor: number;
   /** Whether a supplied unit must also stand on the objective. */
   requireSupply: boolean;
+  /** The first turn whose end counts. */
+  fromTurn: number;
 }
 
 export function buildObjectives(file: ScenarioFile): Objective[] {
@@ -72,6 +75,7 @@ export function buildObjectives(file: ScenarioFile): Objective[] {
     hexes: o.hexes.map(fromOffset),
     holdTurns: o.holdTurns,
     requireSupply: o.requireSupply ?? false,
+    fromTurn: o.fromTurn ?? 1,
   }));
 }
 
@@ -110,7 +114,8 @@ export function updateObjectives(
     const keys = new Set(o.hexes.map(hexKey));
     const controlled = o.hexes.every((h) => state.objectives.control[hexKey(h)] === o.side);
     const supplied = !o.requireSupply || state.units.some((u) => u.side === o.side && u.inSupply && keys.has(hexKey(u.pos)));
-    state.objectives.heldFor[o.id] = controlled && supplied ? (state.objectives.heldFor[o.id] ?? 0) + 1 : 0;
+    const counts = at.turn >= o.fromTurn;
+    state.objectives.heldFor[o.id] = counts && controlled && supplied ? (state.objectives.heldFor[o.id] ?? 0) + 1 : 0;
   }
   return events;
 }
@@ -159,5 +164,6 @@ export function objectiveStatus(state: GameState, world: World): ObjectiveStatus
     holdTurns: o.holdTurns,
     heldFor: state.objectives.heldFor[o.id] ?? 0,
     requireSupply: o.requireSupply,
+    fromTurn: o.fromTurn,
   }));
 }

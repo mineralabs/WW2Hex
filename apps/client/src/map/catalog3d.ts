@@ -29,6 +29,8 @@ export const MODELS = {
   'stug-iii': { paint: 'de', kind: 'armour' },
   'stug-jgpz': { paint: 'de', kind: 'armour' },
   'tank-de': { paint: 'de', kind: 'armour' },
+  'tiger-i': { paint: 'de', kind: 'armour' },
+  'tank-fr': { paint: 'de', kind: 'armour' },
   'flak-20-sp': { paint: 'de', kind: 'car' },
   'ac-de': { paint: 'de', kind: 'car' },
 } as const satisfies Record<string, { paint: 'us' | 'uk' | 'de' | 'su'; kind: 'artillery' | 'anti-tank' | 'flak' | 'armour' | 'car' }>;

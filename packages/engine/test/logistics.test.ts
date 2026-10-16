@@ -42,6 +42,13 @@ describe('supply routes', () => {
     expect(reached(road).has(hexKey(at(15, 0)))).toBe(true);
   });
 
+  it('flow only between their first and last turns', () => {
+    const s = tiny({ cols: 6, rows: 1, supplySources: [source({ fromTurn: 3, toTurn: 5 })] });
+    const on = (turn: number) => traceSupply(s.world, rules, s.state.units, 'allied', turn).has(hexKey(at(1, 0)));
+    expect([2, 3, 5, 6].map(on)).toEqual([false, true, true, false]);
+    expect(validateScenario(tinyFile({ cols: 6, rows: 1, supplySources: [source({ fromTurn: 4, toTurn: 3 })] }), rules).some((i) => i.code === 'supply-source-to-turn')).toBe(true);
+  });
+
   it('cannot pass an enemy unit, or an empty hex next to one, but can pass a hex a friendly unit holds', () => {
     const road = (units: ReturnType<typeof unitFile>[]) =>
       tiny({

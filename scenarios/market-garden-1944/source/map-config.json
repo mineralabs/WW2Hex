@@ -1,0 +1,58 @@
+{
+  "id": "market-garden-1944",
+  "name": "Market Garden: Grave to Arnhem, 17-20 September 1944",
+  "grid": {
+    "grid": "europe-laea-1km",
+    "col": 2023,
+    "row": 2734,
+    "cols": 30,
+    "rows": 58
+  },
+  "parts": [
+    "../../arnhem-1944/source/map.generated.json",
+    "../../nijmegen-1944/source/map.generated.json"
+  ],
+  "joins": [
+    {
+      "id": "arnhem-elst-nijmegen",
+      "name": "Arnhem-Elst-Nijmegen main road (Club Route)",
+      "from": "arnhem-elst",
+      "to": "nijmegen-arnhem"
+    }
+  ],
+  "retrace": [
+    {
+      "id": "nederrijn",
+      "osmNames": [
+        "Nederrijn",
+        "Neder-Rijn",
+        "Rijn",
+        "Pannerdensch Kanaal"
+      ],
+      "osmWaterway": "river"
+    }
+  ],
+  "bridges": [
+    {
+      "id": "pannerden-ferry",
+      "name": "Pannerden ferry (Doornenburg-Pannerden)",
+      "river": "nederrijn",
+      "at": {
+        "lat": 51.892,
+        "lon": 6.02
+      },
+      "movementClasses": [
+        "foot",
+        "wheeled"
+      ],
+      "source": "research/german-forces.md: Euling, Baumgärtel and Reinhold crossed the Pannerdensch Kanaal by ferry at Pannerden on 18 September"
+    }
+  ],
+  "bridgeChanges": {
+    "waal-assault-boats": {
+      "fromTurn": 37,
+      "source": "The assault crossing began at about 15:00 on 20 September (A time): turn 37 of the campaign, turn 14 of the Nijmegen scenario"
+    }
+  },
+  "reliefSpacingMeters": 100
+}

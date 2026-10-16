@@ -1,0 +1,4664 @@
+{
+  "id": "market-garden-1944",
+  "name": "Market Garden: Grave to Arnhem, 17-20 September 1944",
+  "dataStatus": "provisional",
+  "description": "From 15:00 on 17 September to 21:00 on 20 September 1944 (Allied \"A\" time, GMT+1), on one map from Grave to Arnhem. The 82nd Airborne has landed round Groesbeek and Overasselt and the 1st British Airborne west of Arnhem; XXX Corps reaches Grave on the morning of the 19th. The Allied side must open the road: hold both ends of the Grave, Heumen, Nijmegen and Arnhem bridges at once, once XXX Corps can arrive. The German side wins by holding the Grave or Heumen bridge once XXX Corps arrives, or by stopping them until the end. Built from the Arnhem and Nijmegen scenarios and their research; provisional throughout.",
+  "start": {
+    "day": 17,
+    "minuteOfDay": 900,
+    "date": "1944-09-17",
+    "utcOffsetMinutes": 60
+  },
+  "equipment": [
+    {
+      "id": "uk-rifle-section",
+      "name": "British rifle section (Bren)",
+      "role": "infantry",
+      "combatClass": "rifle-section",
+      "researchStatus": "provisional",
+      "sources": [
+        "research-arnhem/allied-forces.md 2.1 (airborne establishments)",
+        "research/allied-forces.md 3.1 (WE II/233/2 and II/231/3)"
+      ]
+    },
+    {
+      "id": "recce-jeep",
+      "name": "Armed jeep (twin Vickers K)",
+      "role": "reconnaissance",
+      "combatClass": "rifle-section",
+      "researchStatus": "provisional",
+      "sources": [
+        "allied-forces.md 3.2: jeeps with Vickers K, five men a jeep"
+      ]
+    },
+    {
+      "id": "six-pdr",
+      "name": "6-pdr anti-tank gun",
+      "role": "anti-tank gun",
+      "combatClass": "at-gun",
+      "researchStatus": "provisional",
+      "sources": [
+        "research-arnhem/allied-forces.md 2.1",
+        "research/allied-forces.md 3.1"
+      ]
+    },
+    {
+      "id": "towed-17pdr",
+      "name": "17-pdr anti-tank gun (towed)",
+      "role": "anti-tank gun",
+      "combatClass": "at-gun",
+      "researchStatus": "provisional",
+      "sources": [
+        "research-arnhem/allied-forces.md 2.1, 3.1",
+        "research/allied-forces.md 3.2"
+      ]
+    },
+    {
+      "id": "pack-75",
+      "name": "75 mm pack howitzer M1A1",
+      "role": "howitzer",
+      "combatClass": "pack-howitzer",
+      "researchStatus": "provisional",
+      "sources": [
+        "research-arnhem/allied-forces.md 3.5 (1st Airlanding Light Regt)",
+        "research/allied-forces.md 2.5"
+      ]
+    },
+    {
+      "id": "de-rifle-group",
+      "name": "German rifle group (MG 34/42)",
+      "role": "infantry",
+      "combatClass": "rifle-section",
+      "researchStatus": "provisional",
+      "sources": [
+        "research-arnhem/german-forces.md",
+        "research/german-forces.md 2-4"
+      ]
+    },
+    {
+      "id": "pak-light",
+      "name": "3.7, 4.7 and 5 cm anti-tank guns",
+      "role": "anti-tank gun",
+      "combatClass": "light-at-gun",
+      "researchStatus": "provisional",
+      "sources": [
+        "research-arnhem/german-forces.md 2 (Krafft)",
+        "research/german-forces.md 2.2 (82nd G-2 sitrep 19 Sep)"
+      ]
+    },
+    {
+      "id": "flak-20",
+      "name": "2 cm Flak 30/38",
+      "role": "light flak",
+      "combatClass": "light-flak",
+      "researchStatus": "provisional",
+      "sources": [
+        "research-arnhem/german-forces.md",
+        "research/german-forces.md 2.1, 4.2"
+      ]
+    },
+    {
+      "id": "flak-88",
+      "name": "8.8 cm Flak in ground role",
+      "role": "heavy flak",
+      "combatClass": "heavy-flak",
+      "researchStatus": "provisional",
+      "sources": [
+        "research-arnhem/german-forces.md 3 (Gropp)",
+        "research/german-forces.md 2.1 (MacDonald ch.VIII; Saunders)"
+      ]
+    },
+    {
+      "id": "flak-20-sp",
+      "name": "2 cm Flak on halftrack",
+      "role": "self-propelled flak",
+      "combatClass": "flak-halftrack",
+      "researchStatus": "provisional",
+      "sources": [
+        "research-arnhem/german-forces.md 3 (SP flak company)",
+        "research/german-forces.md 4.1 (von Fürstenberg)"
+      ]
+    },
+    {
+      "id": "ac-de",
+      "name": "Armoured cars and half-tracks",
+      "role": "armoured car",
+      "combatClass": "armoured-car",
+      "researchStatus": "provisional",
+      "sources": [
+        "research-arnhem/german-forces.md 3-4 (Graebner, Brinkmann)",
+        "research/german-forces.md 4.1 (Saunders)"
+      ]
+    },
+    {
+      "id": "stug-jgpz",
+      "name": "StuG III or Jagdpanzer IV (type disputed)",
+      "role": "assault gun",
+      "combatClass": "assault-gun",
+      "researchStatus": "provisional",
+      "sources": [
+        "research-arnhem/german-forces.md 3 (Allwoerden: 2 x Jagdpanzer IV)",
+        "research/german-forces.md 2.2 (Nafziger: Jagdpanzer IV/70; Saunders: assault guns)"
+      ]
+    },
+    {
+      "id": "pz-iii-iv",
+      "name": "Panzer III and IV (training company)",
+      "role": "medium tank",
+      "combatClass": "medium-tank",
+      "researchStatus": "provisional",
+      "sources": [
+        "german-forces.md 4 (Mielke: 2 Pz IV, 6 Pz III)"
+      ]
+    },
+    {
+      "id": "tank-de",
+      "name": "Panther (with KG Harder and KG Hermann; type uncertain)",
+      "role": "medium tank",
+      "combatClass": "medium-tank",
+      "researchStatus": "provisional",
+      "sources": [
+        "research-arnhem/german-forces.md 3 (Harder: up to 3)",
+        "research/german-forces.md 4.2"
+      ]
+    },
+    {
+      "id": "lefh-18",
+      "name": "10.5 cm leFH 18",
+      "role": "howitzer",
+      "combatClass": "field-gun",
+      "researchStatus": "provisional",
+      "sources": [
+        "research-arnhem/german-forces.md 4 (10th SS battery)",
+        "research/german-forces.md 2.3 (numbers estimated)"
+      ]
+    },
+    {
+      "id": "us-rifle-squad",
+      "name": "US parachute rifle squad (LMG, mortar and bazooka support folded in)",
+      "role": "infantry",
+      "combatClass": "rifle-section",
+      "researchStatus": "provisional",
+      "sources": [
+        "allied-forces.md 2.1 (T/O 7-36/7-37, 1942 with change of Feb 1944)"
+      ]
+    },
+    {
+      "id": "sherman-75",
+      "name": "Sherman V (75 mm)",
+      "role": "medium tank",
+      "combatClass": "medium-tank",
+      "researchStatus": "provisional",
+      "sources": [
+        "allied-forces.md 3.1"
+      ]
+    },
+    {
+      "id": "sherman-firefly",
+      "name": "Sherman VC Firefly (17-pdr)",
+      "role": "medium tank",
+      "combatClass": "tank-17pdr",
+      "researchStatus": "provisional",
+      "sources": [
+        "allied-forces.md 3.1"
+      ]
+    },
+    {
+      "id": "stuart",
+      "name": "M5 Stuart (recce troop)",
+      "role": "light tank",
+      "combatClass": "light-tank",
+      "researchStatus": "provisional",
+      "sources": [
+        "allied-forces.md 3.1"
+      ]
+    },
+    {
+      "id": "cromwell",
+      "name": "Cromwell",
+      "role": "cruiser tank",
+      "combatClass": "medium-tank",
+      "researchStatus": "provisional",
+      "sources": [
+        "allied-forces.md 3.1 (2nd Welsh Guards)"
+      ]
+    },
+    {
+      "id": "challenger",
+      "name": "A30 Challenger (17-pdr)",
+      "role": "cruiser tank",
+      "combatClass": "tank-17pdr",
+      "researchStatus": "provisional",
+      "sources": [
+        "allied-forces.md 3.1"
+      ]
+    },
+    {
+      "id": "daimler-ac",
+      "name": "Daimler armoured car (2-pdr)",
+      "role": "armoured car",
+      "combatClass": "armoured-car",
+      "researchStatus": "provisional",
+      "sources": [
+        "allied-forces.md 3.2 (2nd Household Cavalry)"
+      ]
+    },
+    {
+      "id": "m10-17pdr",
+      "name": "M10 Achilles (17-pdr)",
+      "role": "tank destroyer",
+      "combatClass": "tank-destroyer",
+      "researchStatus": "provisional",
+      "sources": [
+        "allied-forces.md 3.2 (21st Anti-Tank Regt)"
+      ]
+    },
+    {
+      "id": "us-57mm",
+      "name": "57 mm M1 anti-tank gun (80th Airborne AA Bn)",
+      "role": "anti-tank gun",
+      "combatClass": "at-gun",
+      "researchStatus": "provisional",
+      "sources": [
+        "allied-forces.md 2.1, 2.4 (Warren 1956)"
+      ]
+    },
+    {
+      "id": "m3-105",
+      "name": "105 mm howitzer M3",
+      "role": "howitzer",
+      "combatClass": "field-gun",
+      "indirectRange": 7,
+      "researchStatus": "provisional",
+      "sources": [
+        "Range: maximum about 7.6 km (general reference figure, not yet in the research), rounded down to 7 hexes.",
+        "allied-forces.md 2.5 (type disputed)"
+      ]
+    },
+    {
+      "id": "gun-25pdr",
+      "name": "25-pdr field gun (towed)",
+      "role": "field gun",
+      "combatClass": "field-gun",
+      "indirectRange": 12,
+      "researchStatus": "provisional",
+      "sources": [
+        "Range: maximum about 12.3 km with charge super (general reference figure, not yet in the research), rounded down to 12 hexes.",
+        "allied-forces.md 3.2 (55th Field Regt)"
+      ]
+    },
+    {
+      "id": "sexton",
+      "name": "Sexton self-propelled 25-pdr",
+      "role": "field gun",
+      "combatClass": "field-gun",
+      "indirectRange": 12,
+      "researchStatus": "provisional",
+      "sources": [
+        "Range: the 25-pounder, about 12.3 km (general reference figure, not yet in the research), rounded down to 12 hexes.",
+        "allied-forces.md 3.2 (153rd Field Regt)"
+      ]
+    },
+    {
+      "id": "transport",
+      "name": "Carriers, jeeps and lorries",
+      "role": "transport",
+      "combatClass": "transport",
+      "researchStatus": "provisional",
+      "sources": [
+        "allied-forces.md 3.1"
+      ]
+    },
+    {
+      "id": "stug-iii",
+      "name": "StuG III",
+      "role": "assault gun",
+      "combatClass": "assault-gun",
+      "researchStatus": "provisional",
+      "sources": [
+        "german-forces.md 3 (Saunders ch.9)"
+      ]
+    },
+    {
+      "id": "sfh-18",
+      "name": "15 cm sFH 18",
+      "role": "heavy howitzer",
+      "combatClass": "medium-gun",
+      "researchStatus": "provisional",
+      "sources": [
+        "german-forces.md 2.3 (numbers estimated)"
+      ]
+    },
+    {
+      "id": "ml-20",
+      "name": "Captured Soviet 152 mm gun-howitzer",
+      "role": "heavy howitzer",
+      "combatClass": "medium-gun",
+      "indirectRange": 17,
+      "researchStatus": "provisional",
+      "sources": [
+        "Range: maximum about 17.2 km (general reference figure, not yet in the research), rounded down to 17 hexes.",
+        "german-forces.md 4.1 (Nafziger)"
+      ]
+    },
+    {
+      "id": "tiger-i",
+      "name": "Tiger I",
+      "role": "heavy tank",
+      "combatClass": "heavy-tank",
+      "researchStatus": "provisional",
+      "sources": [
+        "research-arnhem/sept-19-20.md 5.1 (s.Pz.Kp. Hummel)"
+      ]
+    },
+    {
+      "id": "tank-fr",
+      "name": "Captured French tanks (Char B1 bis, some with flame-throwers; Renault, Hotchkiss, Somua)",
+      "role": "light tank",
+      "combatClass": "light-tank",
+      "researchStatus": "provisional",
+      "sources": [
+        "research-arnhem/sept-19-20.md 5.1 (Pz.Kp. 224)"
+      ]
+    }
+  ],
+  "formations": [
+    {
+      "id": "a-i-abn-corps",
+      "side": "allied",
+      "name": "I Airborne Corps",
+      "parentId": null,
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "IAC"
+    },
+    {
+      "id": "a-82",
+      "side": "allied",
+      "name": "82nd Airborne Division (US)",
+      "parentId": "a-i-abn-corps",
+      "dataStatus": "provisional",
+      "nation": "us",
+      "badge": "82"
+    },
+    {
+      "id": "a-504",
+      "side": "allied",
+      "name": "504th Parachute Infantry Regiment",
+      "parentId": "a-82",
+      "dataStatus": "provisional",
+      "nation": "us",
+      "badge": "504"
+    },
+    {
+      "id": "a-505",
+      "side": "allied",
+      "name": "505th Parachute Infantry Regiment",
+      "parentId": "a-82",
+      "dataStatus": "provisional",
+      "nation": "us",
+      "badge": "505"
+    },
+    {
+      "id": "a-508",
+      "side": "allied",
+      "name": "508th Parachute Infantry Regiment",
+      "parentId": "a-82",
+      "dataStatus": "provisional",
+      "nation": "us",
+      "badge": "508"
+    },
+    {
+      "id": "a-82-arty",
+      "side": "allied",
+      "name": "82nd Airborne Division Artillery",
+      "parentId": "a-82",
+      "dataStatus": "provisional",
+      "nation": "us",
+      "badge": "82A"
+    },
+    {
+      "id": "a-82-troops",
+      "side": "allied",
+      "name": "82nd Airborne divisional troops",
+      "parentId": "a-82",
+      "dataStatus": "provisional",
+      "nation": "us",
+      "badge": "82"
+    },
+    {
+      "id": "a-xxx",
+      "side": "allied",
+      "name": "XXX Corps",
+      "parentId": null,
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "XXX"
+    },
+    {
+      "id": "a-xxx-troops",
+      "side": "allied",
+      "name": "XXX Corps troops",
+      "parentId": "a-xxx",
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "XXX"
+    },
+    {
+      "id": "a-gds",
+      "side": "allied",
+      "name": "Guards Armoured Division",
+      "parentId": "a-xxx",
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "GAD"
+    },
+    {
+      "id": "a-5gab",
+      "side": "allied",
+      "name": "5th Guards Armoured Brigade",
+      "parentId": "a-gds",
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "GAD"
+    },
+    {
+      "id": "a-32gb",
+      "side": "allied",
+      "name": "32nd Guards Brigade",
+      "parentId": "a-gds",
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "GAD"
+    },
+    {
+      "id": "a-gds-ra",
+      "side": "allied",
+      "name": "Guards Armoured Division Royal Artillery",
+      "parentId": "a-gds",
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "GAD"
+    },
+    {
+      "id": "a-gds-troops",
+      "side": "allied",
+      "name": "Guards Armoured divisional troops",
+      "parentId": "a-gds",
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "GAD"
+    },
+    {
+      "id": "a-8ab",
+      "side": "allied",
+      "name": "8th Armoured Brigade",
+      "parentId": "a-xxx",
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "8AB"
+    },
+    {
+      "id": "a-1abn",
+      "side": "allied",
+      "name": "1st British Airborne Division",
+      "parentId": "a-i-abn-corps",
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "1A"
+    },
+    {
+      "id": "a-1pb",
+      "side": "allied",
+      "name": "1st Parachute Brigade",
+      "parentId": "a-1abn",
+      "dataStatus": "provisional"
+    },
+    {
+      "id": "a-1alb",
+      "side": "allied",
+      "name": "1st Airlanding Brigade",
+      "parentId": "a-1abn",
+      "dataStatus": "provisional"
+    },
+    {
+      "id": "a-4pb",
+      "side": "allied",
+      "name": "4th Parachute Brigade",
+      "parentId": "a-1abn",
+      "dataStatus": "provisional"
+    },
+    {
+      "id": "a-1abn-troops",
+      "side": "allied",
+      "name": "1st Airborne divisional troops",
+      "parentId": "a-1abn",
+      "dataStatus": "provisional"
+    },
+    {
+      "id": "a-1polish",
+      "side": "allied",
+      "name": "1st Independent Polish Parachute Brigade Group",
+      "parentId": "a-i-abn-corps",
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "PL"
+    },
+    {
+      "id": "g-iissk",
+      "side": "german",
+      "name": "II. SS-Panzerkorps",
+      "parentId": null,
+      "dataStatus": "provisional",
+      "nation": "de",
+      "badge": "SS"
+    },
+    {
+      "id": "g-10ss",
+      "side": "german",
+      "name": "10. SS-Panzer-Division Frundsberg",
+      "parentId": "g-iissk",
+      "dataStatus": "provisional",
+      "nation": "de",
+      "badge": "10SS"
+    },
+    {
+      "id": "g-kg-henke",
+      "side": "german",
+      "name": "Kampfgruppe Henke",
+      "parentId": "g-10ss",
+      "dataStatus": "provisional",
+      "nation": "de",
+      "badge": "Hen"
+    },
+    {
+      "id": "g-korps-feldt",
+      "side": "german",
+      "name": "Korps Feldt",
+      "parentId": null,
+      "dataStatus": "provisional",
+      "nation": "de",
+      "badge": "Fdt"
+    },
+    {
+      "id": "g-406",
+      "side": "german",
+      "name": "406. Division z.b.V.",
+      "parentId": "g-korps-feldt",
+      "dataStatus": "provisional",
+      "nation": "de",
+      "badge": "406"
+    },
+    {
+      "id": "g-kg-greschick",
+      "side": "german",
+      "name": "Kampfgruppe Greschick",
+      "parentId": "g-korps-feldt",
+      "dataStatus": "provisional",
+      "nation": "de",
+      "badge": "Gre"
+    },
+    {
+      "id": "g-iifjk",
+      "side": "german",
+      "name": "II. Fallschirmkorps",
+      "parentId": null,
+      "dataStatus": "provisional",
+      "nation": "de",
+      "badge": "FJ"
+    },
+    {
+      "id": "g-kg-becker",
+      "side": "german",
+      "name": "Kampfgruppe Becker",
+      "parentId": "g-iifjk",
+      "dataStatus": "provisional",
+      "nation": "de",
+      "badge": "Bec"
+    },
+    {
+      "id": "g-kg-hermann",
+      "side": "german",
+      "name": "Kampfgruppe Hermann",
+      "parentId": "g-iifjk",
+      "dataStatus": "provisional",
+      "nation": "de",
+      "badge": "Her"
+    },
+    {
+      "id": "g-9ss",
+      "side": "german",
+      "name": "9. SS-Panzer-Division Hohenstaufen",
+      "parentId": "g-iissk",
+      "dataStatus": "provisional"
+    },
+    {
+      "id": "g-spindler",
+      "side": "german",
+      "name": "Sperrverband Spindler (9. SS)",
+      "parentId": "g-9ss",
+      "dataStatus": "provisional"
+    },
+    {
+      "id": "g-tettau",
+      "side": "german",
+      "name": "Division von Tettau",
+      "parentId": null,
+      "dataStatus": "provisional",
+      "nation": "de"
+    },
+    {
+      "id": "g-wk6",
+      "side": "german",
+      "name": "Wehrkreis VI reinforcements",
+      "parentId": null,
+      "dataStatus": "provisional",
+      "nation": "de"
+    },
+    {
+      "id": "g-arnhem",
+      "side": "german",
+      "name": "Arnhem garrison and local units",
+      "parentId": null,
+      "dataStatus": "provisional",
+      "nation": "de"
+    }
+  ],
+  "units": [
+    {
+      "id": "a-1para",
+      "side": "allied",
+      "name": "1st Parachute Bn",
+      "shortName": "1 Para",
+      "formationId": "a-1pb",
+      "type": "airborne-infantry",
+      "movementClass": "foot",
+      "personnel": 548,
+      "equipment": {
+        "uk-rifle-section": 27,
+        "six-pdr": 4
+      },
+      "cohesion": 95,
+      "supply": "supplied",
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.1: 548 went in; A Troop 1 A/Tk Bty (4 x 6-pdr) with it.",
+      "at": {
+        "lat": 51.992,
+        "lon": 5.762,
+        "place": "DZ X RV"
+      }
+    },
+    {
+      "id": "a-2para",
+      "side": "allied",
+      "name": "2nd Parachute Bn (Frost)",
+      "shortName": "2 Para",
+      "formationId": "a-1pb",
+      "type": "airborne-infantry",
+      "movementClass": "foot",
+      "personnel": 525,
+      "equipment": {
+        "uk-rifle-section": 27,
+        "six-pdr": 4
+      },
+      "cohesion": 95,
+      "supply": "supplied",
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.1: 481-525 went in (conflict); B Troop 1 A/Tk Bty (4 x 6-pdr).",
+      "at": {
+        "lat": 51.988,
+        "lon": 5.76,
+        "place": "DZ X RV at X-tracks 643783"
+      }
+    },
+    {
+      "id": "a-3para",
+      "side": "allied",
+      "name": "3rd Parachute Bn",
+      "shortName": "3 Para",
+      "formationId": "a-1pb",
+      "type": "airborne-infantry",
+      "movementClass": "foot",
+      "personnel": 588,
+      "equipment": {
+        "uk-rifle-section": 27,
+        "six-pdr": 4
+      },
+      "cohesion": 95,
+      "supply": "supplied",
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.1: 588 went in; C Troop 1 A/Tk Bty (4 x 6-pdr).",
+      "at": {
+        "lat": 51.989,
+        "lon": 5.766,
+        "place": "DZ X"
+      }
+    },
+    {
+      "id": "a-1pb-re",
+      "side": "allied",
+      "name": "1st Para Bde HQ and 1st Para Sqn RE",
+      "shortName": "1 PB RE",
+      "formationId": "a-1pb",
+      "type": "engineer",
+      "movementClass": "foot",
+      "personnel": 225,
+      "equipment": {
+        "uk-rifle-section": 9
+      },
+      "cohesion": 90,
+      "supply": "supplied",
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.1: Bde HQ 82 and 1st Para Sqn RE 143 (flame-throwers).",
+      "at": {
+        "lat": 51.99,
+        "lon": 5.754,
+        "place": "DZ X"
+      }
+    },
+    {
+      "id": "a-recce",
+      "side": "allied",
+      "name": "1st Airborne Reconnaissance Sqn",
+      "shortName": "Recce",
+      "formationId": "a-1abn-troops",
+      "type": "recon",
+      "movementClass": "wheeled",
+      "personnel": 181,
+      "equipment": {
+        "recce-jeep": 28
+      },
+      "cohesion": 90,
+      "supply": "supplied",
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.2: 181 went in; about 28 armed jeeps (estimate).",
+      "at": {
+        "lat": 52.0,
+        "lon": 5.776,
+        "place": "LZ Z"
+      }
+    },
+    {
+      "id": "a-kosb",
+      "side": "allied",
+      "name": "7th (Galloway) Bn KOSB",
+      "shortName": "7 KOSB",
+      "formationId": "a-1alb",
+      "type": "infantry",
+      "movementClass": "foot",
+      "personnel": 680,
+      "equipment": {
+        "uk-rifle-section": 40,
+        "six-pdr": 5
+      },
+      "cohesion": 95,
+      "supply": "supplied",
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.3: about 680 on 17 Sep (estimate); 4-5 serviceable 6-pdrs.",
+      "at": {
+        "lat": 52.016,
+        "lon": 5.778,
+        "place": "LZ S"
+      }
+    },
+    {
+      "id": "a-staffs",
+      "side": "allied",
+      "name": "2nd South Staffords (first lift)",
+      "shortName": "2 Staffs",
+      "formationId": "a-1alb",
+      "type": "infantry",
+      "movementClass": "foot",
+      "personnel": 400,
+      "equipment": {
+        "uk-rifle-section": 20,
+        "six-pdr": 2
+      },
+      "cohesion": 95,
+      "supply": "supplied",
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.3: BHQ, B and D Coys, about 400 (estimate); 6-pdr count unknown, 2 assumed.",
+      "at": {
+        "lat": 52.017,
+        "lon": 5.79,
+        "place": "Reijers-Camp"
+      }
+    },
+    {
+      "id": "a-border",
+      "side": "allied",
+      "name": "1st Bn The Border Regt",
+      "shortName": "1 Border",
+      "formationId": "a-1alb",
+      "type": "infantry",
+      "movementClass": "foot",
+      "personnel": 700,
+      "equipment": {
+        "uk-rifle-section": 40,
+        "six-pdr": 8
+      },
+      "cohesion": 95,
+      "supply": "supplied",
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.3: about 700 on 17 Sep (estimate); airlanding establishment 8 x 6-pdr.",
+      "at": {
+        "lat": 52.009,
+        "lon": 5.782,
+        "place": "LZ S"
+      }
+    },
+    {
+      "id": "a-ltregt",
+      "side": "allied",
+      "name": "1st Airlanding Light Regt RA (1 and 3 Btys)",
+      "shortName": "Lt Regt",
+      "formationId": "a-1abn-troops",
+      "type": "artillery",
+      "movementClass": "wheeled",
+      "personnel": 260,
+      "equipment": {
+        "pack-75": 16
+      },
+      "cohesion": 90,
+      "supply": "supplied",
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.5: 15-16 guns in action on 17 Sep (estimate).",
+      "at": {
+        "lat": 51.997,
+        "lon": 5.789,
+        "place": "east edge of LZ Z by Wolfheze"
+      }
+    },
+    {
+      "id": "a-atk",
+      "side": "allied",
+      "name": "Divisional anti-tank guns (17-pdr troops and Z Troop)",
+      "shortName": "A/Tk",
+      "formationId": "a-1abn-troops",
+      "type": "anti-tank",
+      "movementClass": "wheeled",
+      "personnel": 120,
+      "equipment": {
+        "towed-17pdr": 6,
+        "six-pdr": 3
+      },
+      "cohesion": 90,
+      "supply": "supplied",
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.1: probably 6 x 17-pdr and Z Troop (3 x 6-pdr) under the CRA.",
+      "at": {
+        "lat": 52.001,
+        "lon": 5.77,
+        "place": "LZ Z"
+      }
+    },
+    {
+      "id": "a-divhq",
+      "side": "allied",
+      "name": "1st Airborne Division HQ and Signals",
+      "shortName": "Div HQ",
+      "formationId": "a-1abn-troops",
+      "type": "headquarters",
+      "movementClass": "wheeled",
+      "personnel": 490,
+      "equipment": {
+        "uk-rifle-section": 4
+      },
+      "cohesion": 90,
+      "supply": "supplied",
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.5: Div HQ 142 and Signals 348.",
+      "at": {
+        "lat": 52.002,
+        "lon": 5.781,
+        "place": "Div HQ 657799, edge of LZ Z"
+      }
+    },
+    {
+      "id": "a-gpr",
+      "side": "allied",
+      "name": "The Glider Pilot Regiment (1st lift)",
+      "shortName": "GPR",
+      "formationId": "a-1abn-troops",
+      "type": "infantry",
+      "movementClass": "foot",
+      "personnel": 570,
+      "equipment": {
+        "uk-rifle-section": 20
+      },
+      "cohesion": 85,
+      "supply": "supplied",
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.5: about 570 on 17 Sep (2 per glider, estimate); fought as light infantry.",
+      "at": {
+        "lat": 52.006,
+        "lon": 5.795,
+        "place": "Wolfheze"
+      }
+    },
+    {
+      "id": "a-9fd",
+      "side": "allied",
+      "name": "9th (Airborne) Field Coy RE",
+      "shortName": "9 Fd RE",
+      "formationId": "a-1abn-troops",
+      "type": "engineer",
+      "movementClass": "foot",
+      "personnel": 194,
+      "equipment": {
+        "uk-rifle-section": 6
+      },
+      "cohesion": 90,
+      "supply": "supplied",
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.5: 194 went in.",
+      "at": {
+        "lat": 52.0,
+        "lon": 5.773,
+        "place": "LZ Z"
+      }
+    },
+    {
+      "id": "g-krafft",
+      "side": "german",
+      "name": "SS-Pz.Gren.Ausb.u.Ers.Btl. 16 (Krafft)",
+      "shortName": "Krafft",
+      "formationId": "g-9ss",
+      "type": "infantry",
+      "movementClass": "foot",
+      "personnel": 400,
+      "equipment": {
+        "de-rifle-group": 14,
+        "pak-light": 3,
+        "flak-20": 2
+      },
+      "cohesion": 85,
+      "supply": "supplied",
+      "dataStatus": "provisional",
+      "note": "german-forces.md 2: 306 at the start rising to 435 by 15:30; 3 AT guns, 8 mortars, a light flak section.",
+      "at": {
+        "lat": 51.994,
+        "lon": 5.803,
+        "place": "Hotel Wolfheze"
+      }
+    },
+    {
+      "id": "g-bridge-guard",
+      "side": "german",
+      "name": "Arnhem road bridge guard (Feldkommandantur 642)",
+      "shortName": "Bridge guard",
+      "formationId": "g-arnhem",
+      "type": "infantry",
+      "movementClass": "foot",
+      "personnel": 40,
+      "equipment": {
+        "de-rifle-group": 2
+      },
+      "cohesion": 45,
+      "supply": "supplied",
+      "dataStatus": "provisional",
+      "note": "german-forces.md 2: platoon-sized guard of elderly soldiers (estimate 20-40).",
+      "at": {
+        "lat": 51.9742,
+        "lon": 5.9229,
+        "place": "north end of the road bridge (in the hex model the bridge's north-bank hex)"
+      }
+    },
+    {
+      "id": "g-weber",
+      "side": "german",
+      "name": "KG Weber (Luftwaffe signals and radar school)",
+      "shortName": "Weber",
+      "formationId": "g-arnhem",
+      "type": "infantry",
+      "movementClass": "foot",
+      "personnel": 90,
+      "equipment": {
+        "de-rifle-group": 4
+      },
+      "cohesion": 55,
+      "supply": "supplied",
+      "dataStatus": "provisional",
+      "note": "german-forces.md 2: about 90 men.",
+      "at": {
+        "lat": 52.058,
+        "lon": 5.882,
+        "place": "Deelen airfield"
+      }
+    },
+    {
+      "id": "g-alarm",
+      "side": "german",
+      "name": "Arnhem alarm company (rear troops, RAD)",
+      "shortName": "Alarm",
+      "formationId": "g-arnhem",
+      "type": "infantry",
+      "movementClass": "foot",
+      "personnel": 100,
+      "equipment": {
+        "de-rifle-group": 4
+      },
+      "cohesion": 50,
+      "supply": "supplied",
+      "dataStatus": "provisional",
+      "note": "german-forces.md 3: about 100 men, absorbed by Spindler. Placed on the railway north-west of the centre, in the western blocking line it was absorbed into, not in the old town 2 Para passed through.",
+      "at": {
+        "lat": 51.996,
+        "lon": 5.884,
+        "place": "railway north-west of the centre (Spindler's sector)"
+      }
+    },
+    {
+      "id": "g-grabner",
+      "side": "german",
+      "name": "SS-Pz.Aufkl.Abt. 9 (Graebner)",
+      "shortName": "AA 9",
+      "formationId": "g-9ss",
+      "type": "recon",
+      "movementClass": "wheeled",
+      "personnel": 400,
+      "equipment": {
+        "ac-de": 30,
+        "de-rifle-group": 6
+      },
+      "cohesion": 90,
+      "supply": "supplied",
+      "dataStatus": "provisional",
+      "note": "german-forces.md 3: about 400 men and 30 armoured cars and half-tracks; historically crossed the bridge southbound at about 17:00 (British time) and attacked back north at 09:00 on 18 Sep.",
+      "at": {
+        "lat": 52.112,
+        "lon": 5.876,
+        "place": "Hoenderloo"
+      }
+    },
+    {
+      "id": "a-1-504",
+      "side": "allied",
+      "name": "1st Bn, 504th Parachute Infantry",
+      "shortName": "1/504",
+      "formationId": "a-504",
+      "type": "airborne-infantry",
+      "movementClass": "foot",
+      "personnel": 590,
+      "equipment": {
+        "us-rifle-squad": 25
+      },
+      "cohesion": 95,
+      "supply": "supplied",
+      "reserves": 90,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.1: on the east part of DZ O at 15:00; 590 (estimate).",
+      "at": {
+        "lat": 51.776,
+        "lon": 5.83,
+        "place": "DZ O east, moving on the canal bridges"
+      }
+    },
+    {
+      "id": "a-2-504",
+      "side": "allied",
+      "name": "2nd Bn, 504th Parachute Infantry",
+      "shortName": "2/504",
+      "formationId": "a-504",
+      "type": "airborne-infantry",
+      "movementClass": "foot",
+      "personnel": 590,
+      "equipment": {
+        "us-rifle-squad": 25
+      },
+      "cohesion": 95,
+      "supply": "supplied",
+      "reserves": 90,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.1: E Company dropped south of the Maas and is folded in.",
+      "at": {
+        "lat": 51.772,
+        "lon": 5.752,
+        "place": "DZ O west, moving on the Grave bridge"
+      }
+    },
+    {
+      "id": "a-3-504",
+      "side": "allied",
+      "name": "3rd Bn, 504th Parachute Infantry",
+      "shortName": "3/504",
+      "formationId": "a-504",
+      "type": "airborne-infantry",
+      "movementClass": "foot",
+      "personnel": 600,
+      "equipment": {
+        "us-rifle-squad": 25
+      },
+      "cohesion": 95,
+      "supply": "supplied",
+      "reserves": 90,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.1: 600 (estimate).",
+      "at": {
+        "lat": 51.772,
+        "lon": 5.775,
+        "place": "DZ O west"
+      }
+    },
+    {
+      "id": "a-1-505",
+      "side": "allied",
+      "name": "1st Bn, 505th Parachute Infantry",
+      "shortName": "1/505",
+      "formationId": "a-505",
+      "type": "airborne-infantry",
+      "movementClass": "foot",
+      "personnel": 657,
+      "equipment": {
+        "us-rifle-squad": 27
+      },
+      "cohesion": 95,
+      "supply": "supplied",
+      "reserves": 90,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.1: 657 jumped (verified).",
+      "at": {
+        "lat": 51.755,
+        "lon": 5.915,
+        "place": "south end of the Groesbeek ridge, moving on Mook and Riethorst"
+      }
+    },
+    {
+      "id": "a-2-505",
+      "side": "allied",
+      "name": "2nd Bn, 505th Parachute Infantry",
+      "shortName": "2/505",
+      "formationId": "a-505",
+      "type": "airborne-infantry",
+      "movementClass": "foot",
+      "personnel": 594,
+      "equipment": {
+        "us-rifle-squad": 25
+      },
+      "cohesion": 95,
+      "supply": "supplied",
+      "reserves": 90,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.1: 594 jumped (verified).",
+      "at": {
+        "lat": 51.782,
+        "lon": 5.933,
+        "place": "north edge of Groesbeek, moving from Kamp"
+      }
+    },
+    {
+      "id": "a-3-505",
+      "side": "allied",
+      "name": "3rd Bn, 505th Parachute Infantry",
+      "shortName": "3/505",
+      "formationId": "a-505",
+      "type": "airborne-infantry",
+      "movementClass": "foot",
+      "personnel": 632,
+      "equipment": {
+        "us-rifle-squad": 26
+      },
+      "cohesion": 95,
+      "supply": "supplied",
+      "reserves": 90,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.1: 632 jumped (verified); Groesbeek taken about 15:00.",
+      "at": {
+        "lat": 51.774,
+        "lon": 5.93,
+        "place": "Groesbeek"
+      }
+    },
+    {
+      "id": "a-1-508",
+      "side": "allied",
+      "name": "1st Bn, 508th Parachute Infantry",
+      "shortName": "1/508",
+      "formationId": "a-508",
+      "type": "airborne-infantry",
+      "movementClass": "foot",
+      "personnel": 580,
+      "equipment": {
+        "us-rifle-squad": 24
+      },
+      "cohesion": 95,
+      "supply": "supplied",
+      "reserves": 90,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.1: 580 (estimate).",
+      "at": {
+        "lat": 51.806,
+        "lon": 5.94,
+        "place": "north edge of DZ T"
+      }
+    },
+    {
+      "id": "a-2-508",
+      "side": "allied",
+      "name": "2nd Bn, 508th Parachute Infantry",
+      "shortName": "2/508",
+      "formationId": "a-508",
+      "type": "airborne-infantry",
+      "movementClass": "foot",
+      "personnel": 580,
+      "equipment": {
+        "us-rifle-squad": 24
+      },
+      "cohesion": 95,
+      "supply": "supplied",
+      "reserves": 90,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.1: 580 (estimate); D Company on LZ T is folded in.",
+      "at": {
+        "lat": 51.806,
+        "lon": 5.948,
+        "place": "north edge of DZ T"
+      }
+    },
+    {
+      "id": "a-3-508",
+      "side": "allied",
+      "name": "3rd Bn, 508th Parachute Infantry",
+      "shortName": "3/508",
+      "formationId": "a-508",
+      "type": "airborne-infantry",
+      "movementClass": "foot",
+      "personnel": 580,
+      "equipment": {
+        "us-rifle-squad": 24
+      },
+      "cohesion": 95,
+      "supply": "supplied",
+      "reserves": 90,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.1: 580 (estimate).",
+      "at": {
+        "lat": 51.8,
+        "lon": 5.955,
+        "place": "east end of DZ T"
+      }
+    },
+    {
+      "id": "a-307-eng",
+      "side": "allied",
+      "name": "307th Airborne Engineer Bn",
+      "shortName": "307 Eng",
+      "formationId": "a-82-troops",
+      "type": "engineer",
+      "movementClass": "foot",
+      "personnel": 388,
+      "equipment": {
+        "us-rifle-squad": 10
+      },
+      "cohesion": 95,
+      "supply": "supplied",
+      "reserves": 90,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.1: 388 (verified); C Company with the 504th is folded in.",
+      "at": {
+        "lat": 51.765,
+        "lon": 5.925,
+        "place": "DZ N"
+      }
+    },
+    {
+      "id": "a-376-pfab",
+      "side": "allied",
+      "name": "376th Parachute Field Artillery Bn",
+      "shortName": "376 FA",
+      "formationId": "a-82-arty",
+      "type": "artillery",
+      "movementClass": "wheeled",
+      "personnel": 544,
+      "equipment": {
+        "pack-75": 10
+      },
+      "cohesion": 95,
+      "supply": "supplied",
+      "reserves": 90,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.1: 10 of 12 howitzers in action on 17 Sep; no prime movers until the evening of 18 Sep.",
+      "at": {
+        "lat": 51.768,
+        "lon": 5.917,
+        "place": "Colonjes, west edge of DZ N"
+      }
+    },
+    {
+      "id": "a-80-aa-a",
+      "side": "allied",
+      "name": "Battery A, 80th Airborne AA (AT) Bn",
+      "shortName": "A/80",
+      "formationId": "a-82-troops",
+      "type": "anti-tank",
+      "movementClass": "wheeled",
+      "at": {
+        "lat": 51.765,
+        "lon": 5.922,
+        "place": "west of LZ N"
+      },
+      "personnel": 86,
+      "equipment": {
+        "us-57mm": 8,
+        "transport": 9
+      },
+      "cohesion": 95,
+      "supply": "supplied",
+      "reserves": 90,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.1: landed with the first lift; the Nijmegen scenario attaches these guns to the battalions."
+    },
+    {
+      "id": "g-henke-2",
+      "side": "german",
+      "name": "KG Henke mixed battalion (NCO school, railway guards, Landesschützen)",
+      "shortName": "Henke II",
+      "formationId": "g-kg-henke",
+      "type": "infantry",
+      "movementClass": "foot",
+      "at": {
+        "lat": 51.843,
+        "lon": 5.853,
+        "place": "Nijmegen station and ring road"
+      },
+      "personnel": 350,
+      "equipment": {
+        "de-rifle-group": 25
+      },
+      "cohesion": 50,
+      "supply": "supplied",
+      "reserves": 85,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.2 and german-forces.md: the garrison at 15:00 on 17 Sep."
+    },
+    {
+      "id": "g-henke-fort",
+      "side": "german",
+      "name": "Fort Hof van Holland garrison (Stab KG Henke)",
+      "shortName": "Fort",
+      "formationId": "g-kg-henke",
+      "type": "infantry",
+      "movementClass": "foot",
+      "personnel": 130,
+      "equipment": {
+        "de-rifle-group": 8,
+        "flak-88": 1
+      },
+      "cohesion": 75,
+      "supply": "supplied",
+      "reserves": 85,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.2 and german-forces.md: Henke's staff and the fort garrison.",
+      "at": {
+        "lat": 51.862,
+        "lon": 5.852,
+        "place": "Fort Hof van Holland"
+      }
+    },
+    {
+      "id": "g-flak-s",
+      "side": "german",
+      "name": "4./schwere Flak-Abteilung 572 (south bank guns)",
+      "shortName": "Flak S",
+      "formationId": "g-kg-henke",
+      "type": "anti-tank",
+      "movementClass": "wheeled",
+      "personnel": 70,
+      "equipment": {
+        "flak-88": 2,
+        "flak-20": 4
+      },
+      "cohesion": 80,
+      "supply": "supplied",
+      "reserves": 85,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.2 and german-forces.md: 4./s.Flak-Abt. 572.",
+      "at": {
+        "lat": 51.845,
+        "lon": 5.874,
+        "place": "Keizer Lodewijkplein"
+      }
+    },
+    {
+      "id": "g-flak-n",
+      "side": "german",
+      "name": "Flak on the railway bridge and at Lent",
+      "shortName": "Flak N",
+      "formationId": "g-kg-henke",
+      "type": "anti-tank",
+      "movementClass": "wheeled",
+      "personnel": 90,
+      "equipment": {
+        "flak-88": 3,
+        "flak-20": 4
+      },
+      "cohesion": 80,
+      "supply": "supplied",
+      "reserves": 85,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.2 and german-forces.md: flak on the railway bridge and at Lent.",
+      "at": {
+        "lat": 51.856,
+        "lon": 5.86,
+        "place": "north end of the railway bridge"
+      }
+    },
+    {
+      "id": "g-art-s",
+      "side": "german",
+      "name": "SS-Artillerie-Ausbildungs- und Ersatz-Regiment (Schwappacher)",
+      "shortName": "SS Art",
+      "formationId": "g-10ss",
+      "type": "artillery",
+      "movementClass": "wheeled",
+      "personnel": 200,
+      "equipment": {
+        "lefh-18": 4,
+        "sfh-18": 4
+      },
+      "cohesion": 80,
+      "supply": "supplied",
+      "reserves": 80,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.2 and german-forces.md: Schwappacher's SS artillery.",
+      "at": {
+        "lat": 51.877,
+        "lon": 5.827,
+        "place": "Oosterhout"
+      }
+    },
+    {
+      "id": "g-grave",
+      "side": "german",
+      "name": "Grave town and bridge troops",
+      "shortName": "Grave",
+      "formationId": "g-kg-henke",
+      "type": "infantry",
+      "movementClass": "foot",
+      "at": {
+        "lat": 51.76,
+        "lon": 5.738,
+        "place": "Grave and the bridge"
+      },
+      "personnel": 250,
+      "equipment": {
+        "de-rifle-group": 12,
+        "flak-20": 4
+      },
+      "cohesion": 45,
+      "supply": "supplied",
+      "reserves": 70,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.2: \"several hundred\" (estimate 250), with the bridge flak towers."
+    },
+    {
+      "id": "g-canal",
+      "side": "german",
+      "name": "Maas-Waal canal bridge guards",
+      "shortName": "Canal",
+      "formationId": "g-kg-henke",
+      "type": "infantry",
+      "movementClass": "foot",
+      "at": {
+        "lat": 51.826,
+        "lon": 5.808,
+        "place": "Honinghutje bridge"
+      },
+      "personnel": 120,
+      "equipment": {
+        "de-rifle-group": 6,
+        "pak-light": 1
+      },
+      "cohesion": 45,
+      "supply": "supplied",
+      "reserves": 70,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.2: one weak counter at the Honinghutje bridge; the detachments at bridges 7-9 are left out."
+    },
+    {
+      "id": "g-mook",
+      "side": "german",
+      "name": "Local troops, Mook and Riethorst",
+      "shortName": "Mook",
+      "formationId": "g-406",
+      "type": "infantry",
+      "movementClass": "foot",
+      "at": {
+        "lat": 51.753,
+        "lon": 5.884,
+        "place": "Mook"
+      },
+      "personnel": 200,
+      "equipment": {
+        "de-rifle-group": 12
+      },
+      "cohesion": 45,
+      "supply": "supplied",
+      "reserves": 70,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.2: about 50 in Mook and 150 more on the Gennep road, as one counter (estimate)."
+    }
+  ],
+  "events": [
+    {
+      "kind": "reinforcement",
+      "id": "second-lift-paras",
+      "side": "allied",
+      "turn": 12,
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 2.2: the second lift was due at 10:00 and arrived between 14:00 and 15:15 because of fog: the 13:00-15:00 turn of 18 Sep (turn 12).",
+      "entry": [
+        {
+          "lat": 52.036,
+          "lon": 5.733,
+          "place": "DZ Y, Ginkel Heath"
+        },
+        {
+          "lat": 52.032,
+          "lon": 5.727
+        },
+        {
+          "lat": 52.04,
+          "lon": 5.738
+        },
+        {
+          "lat": 52.037,
+          "lon": 5.722
+        },
+        {
+          "lat": 52.031,
+          "lon": 5.74
+        }
+      ],
+      "units": [
+        {
+          "id": "a-156",
+          "name": "156th Parachute Bn",
+          "shortName": "156 Para",
+          "formationId": "a-4pb",
+          "type": "airborne-infantry",
+          "movementClass": "foot",
+          "personnel": 525,
+          "equipment": {
+            "uk-rifle-section": 25,
+            "six-pdr": 4
+          },
+          "cohesion": 95,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "allied-forces.md 3.4: 621-625 went in, less about 100 casualties and stragglers at the RV; H Troop 2 A/Tk Bty."
+        },
+        {
+          "id": "a-10para",
+          "name": "10th Parachute Bn",
+          "shortName": "10 Para",
+          "formationId": "a-4pb",
+          "type": "airborne-infantry",
+          "movementClass": "foot",
+          "personnel": 560,
+          "equipment": {
+            "uk-rifle-section": 26,
+            "six-pdr": 4
+          },
+          "cohesion": 95,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "allied-forces.md 3.4: 582 went in; G Troop 2 A/Tk Bty."
+        },
+        {
+          "id": "a-11para",
+          "name": "11th Parachute Bn",
+          "shortName": "11 Para",
+          "formationId": "a-4pb",
+          "type": "airborne-infantry",
+          "movementClass": "foot",
+          "personnel": 550,
+          "equipment": {
+            "uk-rifle-section": 26,
+            "six-pdr": 4
+          },
+          "cohesion": 95,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "allied-forces.md 3.4: 571 went in; E Troop 2 A/Tk Bty."
+        },
+        {
+          "id": "a-4pb-re",
+          "name": "4th Para Bde HQ and 4th Para Sqn RE",
+          "shortName": "4 PB RE",
+          "formationId": "a-4pb",
+          "type": "engineer",
+          "movementClass": "foot",
+          "personnel": 240,
+          "equipment": {
+            "uk-rifle-section": 8
+          },
+          "cohesion": 90,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "allied-forces.md 3.4: Bde HQ 86 and 4th Para Sqn RE 155."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "second-lift-gliders-x",
+      "side": "allied",
+      "turn": 12,
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 2.2: 204 gliders on LZ X, 18 Sep.",
+      "entry": [
+        {
+          "lat": 51.991,
+          "lon": 5.758,
+          "place": "LZ X, Renkum Heath"
+        },
+        {
+          "lat": 51.995,
+          "lon": 5.762
+        },
+        {
+          "lat": 51.988,
+          "lon": 5.752
+        }
+      ],
+      "units": [
+        {
+          "id": "a-ltregt-2",
+          "name": "1st Airlanding Light Regt RA (2 Bty)",
+          "shortName": "2 Bty",
+          "formationId": "a-1abn-troops",
+          "type": "artillery",
+          "movementClass": "wheeled",
+          "personnel": 110,
+          "equipment": {
+            "pack-75": 7
+          },
+          "cohesion": 90,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "allied-forces.md 3.5: 2 Bty, 33 gliders, adds 7 guns."
+        },
+        {
+          "id": "a-atk-2",
+          "name": "2nd (Oban) Airlanding A/Tk Bty (17-pdr troops)",
+          "shortName": "Oban 17pr",
+          "formationId": "a-1abn-troops",
+          "type": "anti-tank",
+          "movementClass": "wheeled",
+          "personnel": 80,
+          "equipment": {
+            "towed-17pdr": 5
+          },
+          "cohesion": 90,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "allied-forces.md 3.4: about 5 x 17-pdr landed (estimate); the 6-pdr troops went with the battalions."
+        },
+        {
+          "id": "a-gpr-2",
+          "name": "The Glider Pilot Regiment (2nd lift)",
+          "shortName": "GPR 2",
+          "formationId": "a-1abn-troops",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 540,
+          "equipment": {
+            "uk-rifle-section": 18
+          },
+          "cohesion": 85,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "allied-forces.md 3.5: about 540 more on 18 Sep (estimate)."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "second-lift-gliders-s",
+      "side": "allied",
+      "turn": 12,
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 2.2: 69 gliders on LZ S, 18 Sep.",
+      "entry": [
+        {
+          "lat": 52.013,
+          "lon": 5.785,
+          "place": "LZ S"
+        },
+        {
+          "lat": 52.016,
+          "lon": 5.78
+        }
+      ],
+      "units": [
+        {
+          "id": "a-staffs-2",
+          "name": "2nd South Staffords (second lift)",
+          "shortName": "2 Staffs B",
+          "formationId": "a-1alb",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 360,
+          "equipment": {
+            "uk-rifle-section": 16,
+            "six-pdr": 8
+          },
+          "cohesion": 95,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "allied-forces.md 3.3: Rear BHQ, A and C Coys, two A/Tk platoons; about 360 (estimate)."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "allwoerden",
+      "side": "german",
+      "turn": 1,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 9.1: from the north (Hoenderloo).",
+      "entry": [
+        {
+          "lat": 52.11,
+          "lon": 5.876,
+          "place": "Hoenderloo road"
+        },
+        {
+          "lat": 52.105,
+          "lon": 5.88
+        },
+        {
+          "lat": 52.112,
+          "lon": 5.866
+        }
+      ],
+      "units": [
+        {
+          "id": "g-allwoerden",
+          "name": "KG von Allwoerden (SS-Pz.Jg.Abt. 9)",
+          "shortName": "Allwoerden",
+          "formationId": "g-spindler",
+          "type": "anti-tank",
+          "movementClass": "tracked",
+          "personnel": 120,
+          "equipment": {
+            "stug-jgpz": 2,
+            "pak-light": 1,
+            "de-rifle-group": 3
+          },
+          "cohesion": 80,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 3: at the Ede road / Dreijenseweg junction by about 15:00; 2 Jagdpanzer IV."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "moeller",
+      "side": "german",
+      "turn": 1,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 9.1: Velp road.",
+      "entry": [
+        {
+          "lat": 52.02,
+          "lon": 6.06,
+          "place": "Velp-Zutphen road, De Steeg"
+        },
+        {
+          "lat": 52.015,
+          "lon": 6.055
+        },
+        {
+          "lat": 52.025,
+          "lon": 6.055
+        }
+      ],
+      "units": [
+        {
+          "id": "g-moeller",
+          "name": "KG Moeller (SS-Pz.Pi.Btl. 9)",
+          "shortName": "Moeller",
+          "formationId": "g-spindler",
+          "type": "engineer",
+          "movementClass": "wheeled",
+          "personnel": 80,
+          "equipment": {
+            "de-rifle-group": 4,
+            "flak-20-sp": 2
+          },
+          "cohesion": 80,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 3: 60-80 men, 2 half-tracks, flame-throwers; in Arnhem at 16:30."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "spindler",
+      "side": "german",
+      "turn": 2,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 9.1: ordered west from Dieren in the late afternoon.",
+      "entry": [
+        {
+          "lat": 52.02,
+          "lon": 6.06,
+          "place": "Velp-Zutphen road, De Steeg"
+        },
+        {
+          "lat": 52.015,
+          "lon": 6.055
+        },
+        {
+          "lat": 52.025,
+          "lon": 6.055
+        }
+      ],
+      "units": [
+        {
+          "id": "g-spindler-kg",
+          "name": "KG Spindler (SS-Pz.Art.Rgt. 9 as infantry)",
+          "shortName": "Spindler",
+          "formationId": "g-spindler",
+          "type": "infantry",
+          "movementClass": "wheeled",
+          "personnel": 200,
+          "equipment": {
+            "de-rifle-group": 8
+          },
+          "cohesion": 80,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 3: 120-240 gunners without guns."
+        },
+        {
+          "id": "g-gropp",
+          "name": "SS-Flak-Abt. 9 battery (Gropp)",
+          "shortName": "Gropp",
+          "formationId": "g-spindler",
+          "type": "anti-tank",
+          "movementClass": "wheeled",
+          "personnel": 87,
+          "equipment": {
+            "flak-88": 1,
+            "flak-20": 1
+          },
+          "cohesion": 75,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 3: 87 men, 1 x 88 mm, 1 x 20 mm."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "helle",
+      "side": "german",
+      "turn": 2,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 5: first elements at the Ginkel Heath about 17:00; the rest overnight.",
+      "entry": [
+        {
+          "lat": 52.043,
+          "lon": 5.672,
+          "place": "Ede road"
+        },
+        {
+          "lat": 52.04,
+          "lon": 5.68
+        },
+        {
+          "lat": 52.048,
+          "lon": 5.678
+        }
+      ],
+      "units": [
+        {
+          "id": "g-helle",
+          "name": "SS-Wachbataillon 3 (Helle)",
+          "shortName": "Helle",
+          "formationId": "g-tettau",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 600,
+          "equipment": {
+            "de-rifle-group": 22,
+            "flak-20": 2
+          },
+          "cohesion": 50,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 5: about 600, mostly Dutch SS; poor quality."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "brinkmann",
+      "side": "german",
+      "turn": 3,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 9.1: from the east.",
+      "entry": [
+        {
+          "lat": 52.02,
+          "lon": 6.06,
+          "place": "Velp-Zutphen road, De Steeg"
+        },
+        {
+          "lat": 52.015,
+          "lon": 6.055
+        },
+        {
+          "lat": 52.025,
+          "lon": 6.055
+        }
+      ],
+      "units": [
+        {
+          "id": "g-brinkmann",
+          "name": "KG Brinkmann (SS-Pz.Aufkl.Abt. 10)",
+          "shortName": "Brinkmann",
+          "formationId": "g-10ss",
+          "type": "recon",
+          "movementClass": "wheeled",
+          "personnel": 300,
+          "equipment": {
+            "ac-de": 12,
+            "de-rifle-group": 6
+          },
+          "cohesion": 85,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 4: reported the bridge in Allied hands about 19:00; strength unknown (estimate 250-400)."
+        },
+        {
+          "id": "g-pgr21",
+          "name": "3./SS-Pz.Gren.Rgt. 21",
+          "shortName": "3./21",
+          "formationId": "g-10ss",
+          "type": "infantry",
+          "movementClass": "wheeled",
+          "personnel": 100,
+          "equipment": {
+            "de-rifle-group": 4
+          },
+          "cohesion": 80,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 4: about 20:00 near the church by the bridge (estimate 80-120)."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "mattusch",
+      "side": "german",
+      "turn": 3,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 5.",
+      "entry": [
+        {
+          "lat": 51.969,
+          "lon": 5.668,
+          "place": "Wageningen"
+        },
+        {
+          "lat": 51.974,
+          "lon": 5.672
+        },
+        {
+          "lat": 51.966,
+          "lon": 5.676
+        }
+      ],
+      "units": [
+        {
+          "id": "g-mattusch",
+          "name": "SS-Btl. Mattusch",
+          "shortName": "Mattusch",
+          "formationId": "g-tettau",
+          "type": "infantry",
+          "movementClass": "wheeled",
+          "personnel": 400,
+          "equipment": {
+            "de-rifle-group": 14
+          },
+          "cohesion": 70,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 5: reached Wageningen about 18:00 (German time); estimate 300-500."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "naval-south",
+      "side": "german",
+      "turn": 4,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 9.1: south bank, from Elst. In the campaign they enter at Elst itself, which is on the map.",
+      "entry": [
+        {
+          "lat": 51.919,
+          "lon": 5.85,
+          "place": "Elst"
+        },
+        {
+          "lat": 51.922,
+          "lon": 5.858
+        },
+        {
+          "lat": 51.915,
+          "lon": 5.845
+        }
+      ],
+      "units": [
+        {
+          "id": "g-navs",
+          "name": "2. and 3./14. Schiffsstammabteilung",
+          "shortName": "Navy S",
+          "formationId": "g-arnhem",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 220,
+          "equipment": {
+            "de-rifle-group": 8
+          },
+          "cohesion": 55,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 4: sent to the south end of the road bridge on 17 Sep (estimate 200-250)."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "naval-10",
+      "side": "german",
+      "turn": 4,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 5.",
+      "entry": [
+        {
+          "lat": 51.969,
+          "lon": 5.668,
+          "place": "Wageningen"
+        },
+        {
+          "lat": 51.974,
+          "lon": 5.672
+        },
+        {
+          "lat": 51.966,
+          "lon": 5.676
+        }
+      ],
+      "units": [
+        {
+          "id": "g-sst10",
+          "name": "10. Schiffsstammabteilung",
+          "shortName": "10 SStA",
+          "formationId": "g-tettau",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 600,
+          "equipment": {
+            "de-rifle-group": 20,
+            "pak-light": 2,
+            "flak-20": 1
+          },
+          "cohesion": 55,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 5: 5 companies E of Wageningen before midnight; 600."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "lippert",
+      "side": "german",
+      "turn": 6,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 5: by bicycle, not before midnight.",
+      "entry": [
+        {
+          "lat": 51.969,
+          "lon": 5.668,
+          "place": "Wageningen"
+        },
+        {
+          "lat": 51.974,
+          "lon": 5.672
+        },
+        {
+          "lat": 51.966,
+          "lon": 5.676
+        }
+      ],
+      "units": [
+        {
+          "id": "g-lippert",
+          "name": "SS-Unterfuehrerschule Arnheim (Lippert)",
+          "shortName": "Lippert",
+          "formationId": "g-tettau",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 800,
+          "equipment": {
+            "de-rifle-group": 30
+          },
+          "cohesion": 80,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 5: 1-2 battalions in action on 18 Sep (estimate 600-1,200); good quality, no transport."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "knaust",
+      "side": "german",
+      "turn": 7,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 9.1: via Zevenaar and Westervoort.",
+      "entry": [
+        {
+          "lat": 51.95,
+          "lon": 6.024,
+          "place": "Zevenaar road, Duiven"
+        },
+        {
+          "lat": 51.955,
+          "lon": 6.02
+        },
+        {
+          "lat": 51.945,
+          "lon": 6.03
+        }
+      ],
+      "units": [
+        {
+          "id": "g-knaust",
+          "name": "KG Knaust (Pz.Gren.Ausb.u.Ers.Btl. 64)",
+          "shortName": "Knaust",
+          "formationId": "g-wk6",
+          "type": "infantry",
+          "movementClass": "wheeled",
+          "personnel": 250,
+          "equipment": {
+            "de-rifle-group": 10
+          },
+          "cohesion": 60,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 4: about 04:00 on 18 Sep; 200-300 convalescents and recruits."
+        },
+        {
+          "id": "g-mielke",
+          "name": "Panzer-Kompanie Mielke",
+          "shortName": "Mielke",
+          "formationId": "g-wk6",
+          "type": "armour",
+          "movementClass": "tracked",
+          "personnel": 60,
+          "equipment": {
+            "pz-iii-iv": 8
+          },
+          "cohesion": 60,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 4: 2 Pz IV and 6 Pz III via the Westervoort IJssel bridge; untrained crews."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "west-dawn",
+      "side": "german",
+      "turn": 8,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 5: in attack by dawn of 18 Sep.",
+      "entry": [
+        {
+          "lat": 52.043,
+          "lon": 5.672,
+          "place": "Ede road"
+        },
+        {
+          "lat": 52.04,
+          "lon": 5.68
+        },
+        {
+          "lat": 52.048,
+          "lon": 5.678
+        }
+      ],
+      "units": [
+        {
+          "id": "g-eberwein",
+          "name": "SS-Btl. Eberwein",
+          "shortName": "Eberwein",
+          "formationId": "g-tettau",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 550,
+          "equipment": {
+            "de-rifle-group": 20
+          },
+          "cohesion": 70,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 5: full-strength battalion (estimate 500-600), along the railway."
+        },
+        {
+          "id": "g-fliegerhorst",
+          "name": "Fliegerhorst battalion",
+          "shortName": "Fl.Horst",
+          "formationId": "g-tettau",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 400,
+          "equipment": {
+            "de-rifle-group": 12
+          },
+          "cohesion": 45,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 5: Luftwaffe airfield troops, weak."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "art10",
+      "side": "german",
+      "turn": 10,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 4: 18 Sep, time not given.",
+      "entry": [
+        {
+          "lat": 52.02,
+          "lon": 6.06,
+          "place": "Velp-Zutphen road, De Steeg"
+        },
+        {
+          "lat": 52.015,
+          "lon": 6.055
+        },
+        {
+          "lat": 52.025,
+          "lon": 6.055
+        }
+      ],
+      "units": [
+        {
+          "id": "g-art10",
+          "name": "Battery, SS-Pz.Art.Rgt. 10",
+          "shortName": "Art 10",
+          "formationId": "g-10ss",
+          "type": "artillery",
+          "movementClass": "wheeled",
+          "personnel": 80,
+          "equipment": {
+            "lefh-18": 4
+          },
+          "cohesion": 80,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 4: ordered in by Harmel for direct fire on the bridge houses; 4 guns (estimate)."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "harder",
+      "side": "german",
+      "turn": 11,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 3.",
+      "entry": [
+        {
+          "lat": 52.02,
+          "lon": 6.06,
+          "place": "Velp-Zutphen road, De Steeg"
+        },
+        {
+          "lat": 52.015,
+          "lon": 6.055
+        },
+        {
+          "lat": 52.025,
+          "lon": 6.055
+        }
+      ],
+      "units": [
+        {
+          "id": "g-harder",
+          "name": "KG Harder (SS-Pz.Rgt. 9 crews as infantry)",
+          "shortName": "Harder",
+          "formationId": "g-spindler",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 460,
+          "equipment": {
+            "de-rifle-group": 16,
+            "tank-de": 3
+          },
+          "cohesion": 75,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 3: 460 men and up to 3 tanks; arrival time unknown, afternoon assumed."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "pgr-19-20",
+      "side": "german",
+      "turn": 12,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 3: from Zutphen and Enschede.",
+      "entry": [
+        {
+          "lat": 52.02,
+          "lon": 6.06,
+          "place": "Velp-Zutphen road, De Steeg"
+        },
+        {
+          "lat": 52.015,
+          "lon": 6.055
+        },
+        {
+          "lat": 52.025,
+          "lon": 6.055
+        }
+      ],
+      "units": [
+        {
+          "id": "g-pgr1920",
+          "name": "Alarm companies, SS-Pz.Gren.Rgt. 19 and 20",
+          "shortName": "PGR 19/20",
+          "formationId": "g-9ss",
+          "type": "infantry",
+          "movementClass": "wheeled",
+          "personnel": 400,
+          "equipment": {
+            "de-rifle-group": 14
+          },
+          "cohesion": 75,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 3: estimate 300-500 arriving on 18 Sep."
+        },
+        {
+          "id": "g-flak-sp",
+          "name": "SS self-propelled flak company",
+          "shortName": "SP Flak",
+          "formationId": "g-9ss",
+          "type": "anti-tank",
+          "movementClass": "tracked",
+          "personnel": 120,
+          "equipment": {
+            "flak-20-sp": 10
+          },
+          "cohesion": 75,
+          "supply": "supplied",
+          "dataStatus": "provisional",
+          "note": "german-forces.md 3: at least 10 half-tracks with 20 and 37 mm."
+        }
+      ]
+    },
+    {
+      "kind": "supply-drop",
+      "id": "resupply-18-sep",
+      "side": "allied",
+      "turn": 14,
+      "at": {
+        "lat": 51.991,
+        "lon": 5.758,
+        "place": "DZ X"
+      },
+      "radius": 3,
+      "amount": 8,
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 5.1: 33 Stirlings at about 15:15-15:30 dropped 87 tons, of which about 12 (14%) was collected. The Div HQ log puts it on DZ X; Pegasus and Wikipedia say LZ L (conflict). Counted from the first turn starting after it."
+    },
+    {
+      "kind": "reinforcement",
+      "id": "henke-ersatz",
+      "side": "german",
+      "turn": 3,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 5.1.",
+      "entry": [
+        {
+          "lat": 51.79,
+          "lon": 6.007,
+          "place": "Kranenburg-Wyler road"
+        },
+        {
+          "lat": 51.785,
+          "lon": 5.99
+        },
+        {
+          "lat": 51.795,
+          "lon": 5.998
+        },
+        {
+          "lat": 51.78,
+          "lon": 6.0
+        }
+      ],
+      "units": [
+        {
+          "id": "g-henke-1",
+          "side": "german",
+          "name": "Ersatz-Bataillon 6 (Kampfgruppe Henke)",
+          "shortName": "Ers 6",
+          "formationId": "g-kg-henke",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 350,
+          "equipment": {
+            "de-rifle-group": 28
+          },
+          "cohesion": 65,
+          "supply": "supplied",
+          "reserves": 85,
+          "dataStatus": "provisional",
+          "note": "research/sept-17-18.md 7.2: Ersatz-Btl. 6 reached Nijmegen by late evening on 17 Sep; route not found (estimate: from Kleve)."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "baumgaertel",
+      "side": "german",
+      "turn": 8,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 5.3: at the bridge on the morning of 18 Sep.",
+      "entry": [
+        {
+          "lat": 51.895,
+          "lon": 6.08,
+          "place": "Pannerden ferry road"
+        },
+        {
+          "lat": 51.89,
+          "lon": 6.075
+        },
+        {
+          "lat": 51.9,
+          "lon": 6.07
+        }
+      ],
+      "units": [
+        {
+          "id": "g-pio-baum",
+          "side": "german",
+          "name": "1./SS-Pz.Pi.Btl. 10 (Baumgärtel)",
+          "shortName": "Pi Baum",
+          "formationId": "g-10ss",
+          "type": "engineer",
+          "movementClass": "wheeled",
+          "personnel": 120,
+          "equipment": {
+            "de-rifle-group": 9
+          },
+          "cohesion": 90,
+          "supply": "supplied",
+          "reserves": 85,
+          "dataStatus": "provisional",
+          "note": "research/sept-17-18.md 7.2: prepared both Waal bridges for demolition; crossed at Pannerden."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "euling",
+      "side": "german",
+      "turn": 9,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 5.3: across the Pannerden ferry; on foot the road to the bridge takes about two turns, so he is there at about 11:00 as in 1944.",
+      "entry": [
+        {
+          "lat": 51.895,
+          "lon": 6.08,
+          "place": "Pannerden ferry road"
+        },
+        {
+          "lat": 51.89,
+          "lon": 6.075
+        },
+        {
+          "lat": 51.9,
+          "lon": 6.07
+        }
+      ],
+      "units": [
+        {
+          "id": "g-euling",
+          "side": "german",
+          "name": "Kampfgruppe Euling (SS-Panzergrenadiers, SS pioneers, assault guns)",
+          "shortName": "KG Euling",
+          "formationId": "g-10ss",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 380,
+          "equipment": {
+            "de-rifle-group": 28,
+            "pak-light": 5,
+            "stug-jgpz": 4
+          },
+          "cohesion": 95,
+          "supply": "supplied",
+          "reserves": 85,
+          "dataStatus": "provisional",
+          "note": "research/sept-17-18.md 7.2: about 380 without the pioneers; at the bridge by about 11:00 on 18 Sep."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "korps-feldt-north",
+      "side": "german",
+      "turn": 8,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 5.4: the attack on the landing zones from about 08:00 on 18 Sep.",
+      "entry": [
+        {
+          "lat": 51.79,
+          "lon": 6.007,
+          "place": "Kranenburg-Wyler road"
+        },
+        {
+          "lat": 51.785,
+          "lon": 5.99
+        },
+        {
+          "lat": 51.795,
+          "lon": 5.998
+        },
+        {
+          "lat": 51.78,
+          "lon": 6.0
+        }
+      ],
+      "units": [
+        {
+          "id": "g-406-1",
+          "side": "german",
+          "name": "406th Division holding troops, Wyler",
+          "shortName": "406 W",
+          "formationId": "g-406",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 600,
+          "equipment": {
+            "de-rifle-group": 40,
+            "flak-20": 8
+          },
+          "cohesion": 50,
+          "supply": "supplied",
+          "reserves": 80,
+          "dataStatus": "provisional",
+          "note": "research/sept-17-18.md 7.2: about 600 on 18 Sep (estimate), attacked LZ T."
+        },
+        {
+          "id": "g-fst",
+          "side": "german",
+          "name": "Halftrack company von Fürstenberg",
+          "shortName": "Fürst",
+          "formationId": "g-406",
+          "type": "recon",
+          "movementClass": "wheeled",
+          "personnel": 150,
+          "equipment": {
+            "flak-20-sp": 3,
+            "ac-de": 5
+          },
+          "cohesion": 70,
+          "supply": "supplied",
+          "reserves": 80,
+          "dataStatus": "provisional",
+          "note": "research/sept-17-18.md 7.2: half-track company von Fürstenberg; about 150."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "korps-feldt-centre",
+      "side": "german",
+      "turn": 8,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 5.4.",
+      "entry": [
+        {
+          "lat": 51.765,
+          "lon": 5.975,
+          "place": "Reichswald, De Horst"
+        },
+        {
+          "lat": 51.772,
+          "lon": 5.98
+        },
+        {
+          "lat": 51.76,
+          "lon": 5.985
+        },
+        {
+          "lat": 51.768,
+          "lon": 5.99
+        }
+      ],
+      "units": [
+        {
+          "id": "g-406-2",
+          "side": "german",
+          "name": "406th Division holding troops, Den Heuvel",
+          "shortName": "406 H",
+          "formationId": "g-406",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 600,
+          "equipment": {
+            "de-rifle-group": 40
+          },
+          "cohesion": 50,
+          "supply": "supplied",
+          "reserves": 80,
+          "dataStatus": "provisional",
+          "note": "research/sept-17-18.md 7.2: about 600 (estimate), attacked DZ/LZ N."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "korps-feldt-south",
+      "side": "german",
+      "turn": 8,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 5.4.",
+      "entry": [
+        {
+          "lat": 51.705,
+          "lon": 5.965,
+          "place": "Gennep road"
+        },
+        {
+          "lat": 51.73,
+          "lon": 5.935
+        },
+        {
+          "lat": 51.728,
+          "lon": 5.95
+        },
+        {
+          "lat": 51.735,
+          "lon": 5.96
+        }
+      ],
+      "units": [
+        {
+          "id": "g-406-s",
+          "side": "german",
+          "name": "Kampfgruppe Göbel (406th Division)",
+          "shortName": "Göbel",
+          "formationId": "g-406",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 500,
+          "equipment": {
+            "de-rifle-group": 32
+          },
+          "cohesion": 50,
+          "supply": "supplied",
+          "reserves": 80,
+          "dataStatus": "provisional",
+          "note": "research/sept-17-18.md 7.2: KG Göbel, about 500 (estimate)."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "feldt-artillery",
+      "side": "german",
+      "turn": 9,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 5.4.",
+      "entry": [
+        {
+          "lat": 51.765,
+          "lon": 5.975,
+          "place": "Reichswald, De Horst"
+        },
+        {
+          "lat": 51.772,
+          "lon": 5.98
+        },
+        {
+          "lat": 51.76,
+          "lon": 5.985
+        },
+        {
+          "lat": 51.768,
+          "lon": 5.99
+        }
+      ],
+      "units": [
+        {
+          "id": "g-art-f",
+          "side": "german",
+          "name": "Korps Feldt artillery (captured 152 mm)",
+          "shortName": "Art F",
+          "formationId": "g-korps-feldt",
+          "type": "artillery",
+          "movementClass": "wheeled",
+          "personnel": 250,
+          "equipment": {
+            "ml-20": 9
+          },
+          "cohesion": 75,
+          "supply": "supplied",
+          "reserves": 50,
+          "dataStatus": "provisional",
+          "note": "research/sept-17-18.md 7.2: captured 152 mm battalion, arrived 17/18 Sep (Nafziger)."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "reinhold",
+      "side": "german",
+      "turn": 11,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 5.3.",
+      "entry": [
+        {
+          "lat": 51.895,
+          "lon": 6.08,
+          "place": "Pannerden ferry road"
+        },
+        {
+          "lat": 51.89,
+          "lon": 6.075
+        },
+        {
+          "lat": 51.9,
+          "lon": 6.07
+        }
+      ],
+      "units": [
+        {
+          "id": "g-reinhold",
+          "side": "german",
+          "name": "Kampfgruppe Reinhold (II./SS-Panzer-Regiment 10 as infantry)",
+          "shortName": "KG Rein",
+          "formationId": "g-10ss",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 220,
+          "equipment": {
+            "de-rifle-group": 14
+          },
+          "cohesion": 80,
+          "supply": "supplied",
+          "reserves": 80,
+          "dataStatus": "provisional",
+          "note": "research/sept-17-18.md 7.2: II./SS-Pz.Rgt. 10 as infantry; Lent by the afternoon of 18 Sep."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "art-10",
+      "side": "german",
+      "turn": 12,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 5.3.",
+      "entry": [
+        {
+          "lat": 51.895,
+          "lon": 6.08,
+          "place": "Pannerden ferry road"
+        },
+        {
+          "lat": 51.89,
+          "lon": 6.075
+        },
+        {
+          "lat": 51.9,
+          "lon": 6.07
+        }
+      ],
+      "units": [
+        {
+          "id": "g-art-10",
+          "side": "german",
+          "name": "Battery, SS-Panzer-Artillerie-Regiment 10",
+          "shortName": "Art 10",
+          "formationId": "g-10ss",
+          "type": "artillery",
+          "movementClass": "wheeled",
+          "personnel": 100,
+          "equipment": {
+            "lefh-18": 4
+          },
+          "cohesion": 80,
+          "supply": "supplied",
+          "reserves": 80,
+          "dataStatus": "provisional",
+          "note": "research/sept-17-18.md 7.2: a battery of SS-Pz.Art.Rgt. 10 (uncertain)."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "ib-526",
+      "side": "german",
+      "turn": 18,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 5.4.",
+      "entry": [
+        {
+          "lat": 51.79,
+          "lon": 6.007,
+          "place": "Kranenburg-Wyler road"
+        },
+        {
+          "lat": 51.785,
+          "lon": 5.99
+        },
+        {
+          "lat": 51.795,
+          "lon": 5.998
+        },
+        {
+          "lat": 51.78,
+          "lon": 6.0
+        }
+      ],
+      "units": [
+        {
+          "id": "g-526",
+          "side": "german",
+          "name": "Infanterie-Bataillon 526",
+          "shortName": "IB 526",
+          "formationId": "g-406",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 350,
+          "equipment": {
+            "de-rifle-group": 24
+          },
+          "cohesion": 55,
+          "supply": "supplied",
+          "reserves": 55,
+          "dataStatus": "provisional",
+          "note": "research/sept-17-18.md 7.2: Inf.Btl. 526, 350 on paper, arrived during the night of 18/19 Sep."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "glider-lift-82",
+      "side": "allied",
+      "turn": 13,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 4.5: the 18 Sep glider lift landed from 14:31; counted from the first turn starting after it.",
+      "entry": [
+        {
+          "lat": 51.785,
+          "lon": 5.94,
+          "place": "LZ T and LZ N"
+        },
+        {
+          "lat": 51.78,
+          "lon": 5.935
+        },
+        {
+          "lat": 51.775,
+          "lon": 5.93
+        },
+        {
+          "lat": 51.79,
+          "lon": 5.945
+        }
+      ],
+      "units": [
+        {
+          "id": "a-319-gfab",
+          "side": "allied",
+          "name": "319th Glider Field Artillery Bn",
+          "shortName": "319 FA",
+          "formationId": "a-82-arty",
+          "type": "artillery",
+          "movementClass": "wheeled",
+          "personnel": 355,
+          "equipment": {
+            "pack-75": 11
+          },
+          "cohesion": 90,
+          "supply": "supplied",
+          "reserves": 90,
+          "dataStatus": "provisional",
+          "note": "research/sept-17-18.md 4.5: landed from 14:31 on 18 Sep; lost about 45 men."
+        },
+        {
+          "id": "a-320-gfab",
+          "side": "allied",
+          "name": "320th Glider Field Artillery Bn",
+          "shortName": "320 FA",
+          "formationId": "a-82-arty",
+          "type": "artillery",
+          "movementClass": "wheeled",
+          "personnel": 360,
+          "equipment": {
+            "m3-105": 10
+          },
+          "cohesion": 85,
+          "supply": "supplied",
+          "reserves": 90,
+          "dataStatus": "provisional",
+          "note": "research/sept-17-18.md 4.5: one battery serial lost in Germany; the groups that came in from Gennep and Wyler are folded in."
+        },
+        {
+          "id": "a-456-pfab",
+          "side": "allied",
+          "name": "456th Parachute Field Artillery Bn",
+          "shortName": "456 FA",
+          "formationId": "a-82-arty",
+          "type": "artillery",
+          "movementClass": "wheeled",
+          "personnel": 450,
+          "equipment": {
+            "pack-75": 11
+          },
+          "cohesion": 90,
+          "supply": "supplied",
+          "reserves": 90,
+          "dataStatus": "provisional",
+          "note": "research/sept-17-18.md 4.5: about 450 (estimate)."
+        },
+        {
+          "id": "a-80-aa-b",
+          "side": "allied",
+          "name": "Battery B, 80th Airborne AA (AT) Bn",
+          "shortName": "B/80",
+          "formationId": "a-82-troops",
+          "type": "anti-tank",
+          "movementClass": "wheeled",
+          "personnel": 86,
+          "equipment": {
+            "us-57mm": 8,
+            "transport": 9
+          },
+          "cohesion": 95,
+          "supply": "supplied",
+          "reserves": 90,
+          "dataStatus": "provisional",
+          "note": "research/sept-17-18.md 4.5 (estimate)."
+        }
+      ]
+    },
+    {
+      "kind": "supply-drop",
+      "id": "b24-18-sep",
+      "side": "allied",
+      "turn": 14,
+      "at": {
+        "lat": 51.762,
+        "lon": 5.935,
+        "place": "DZ N"
+      },
+      "radius": 3,
+      "amount": 24,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 4.6: the B-24 drop at about 15:57-16:30; 258 tons, about 80% recovered."
+    },
+    {
+      "kind": "reinforcement",
+      "id": "household-cavalry",
+      "side": "allied",
+      "turn": 21,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.1.",
+      "entry": [
+        {
+          "lat": 51.7,
+          "lon": 5.735,
+          "place": "Uden road"
+        },
+        {
+          "lat": 51.705,
+          "lon": 5.745
+        },
+        {
+          "lat": 51.705,
+          "lon": 5.725
+        },
+        {
+          "lat": 51.712,
+          "lon": 5.738
+        }
+      ],
+      "units": [
+        {
+          "id": "a-2hcr",
+          "side": "allied",
+          "name": "2nd Household Cavalry Regiment (B Sqn)",
+          "shortName": "2 HCR",
+          "formationId": "a-xxx-troops",
+          "type": "recon",
+          "movementClass": "wheeled",
+          "personnel": 150,
+          "equipment": {
+            "daimler-ac": 12
+          },
+          "cohesion": 95,
+          "supply": "supplied",
+          "reserves": 85,
+          "dataStatus": "provisional",
+          "note": "research/sept-17-18.md 7.1: B Squadron at the Grave bridge at 08:20 on 19 Sep."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "grenadier-group",
+      "side": "allied",
+      "turn": 22,
+      "dataStatus": "provisional",
+      "note": "research/sept-17-18.md 7.1.",
+      "entry": [
+        {
+          "lat": 51.7,
+          "lon": 5.735,
+          "place": "Uden road"
+        },
+        {
+          "lat": 51.705,
+          "lon": 5.745
+        },
+        {
+          "lat": 51.705,
+          "lon": 5.725
+        },
+        {
+          "lat": 51.712,
+          "lon": 5.738
+        }
+      ],
+      "units": [
+        {
+          "id": "a-2-gg",
+          "side": "allied",
+          "name": "2nd (Armoured) Bn Grenadier Guards",
+          "shortName": "2 GG",
+          "formationId": "a-5gab",
+          "type": "armour",
+          "movementClass": "tracked",
+          "personnel": 600,
+          "equipment": {
+            "sherman-75": 31,
+            "sherman-firefly": 9,
+            "stuart": 6
+          },
+          "cohesion": 95,
+          "supply": "supplied",
+          "reserves": 85,
+          "dataStatus": "provisional",
+          "note": "research/sept-17-18.md 7.1: at Grave about 10:00 on 19 Sep."
+        },
+        {
+          "id": "a-1-gg",
+          "side": "allied",
+          "name": "1st (Motor) Bn Grenadier Guards",
+          "shortName": "1 GG",
+          "formationId": "a-5gab",
+          "type": "infantry",
+          "movementClass": "wheeled",
+          "personnel": 800,
+          "equipment": {
+            "uk-rifle-section": 27,
+            "six-pdr": 12,
+            "transport": 60
+          },
+          "cohesion": 95,
+          "supply": "supplied",
+          "reserves": 85,
+          "dataStatus": "provisional",
+          "note": "research/sept-17-18.md 7.1: with 2 GG."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "coldstream-group",
+      "side": "allied",
+      "turn": 25,
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.2: behind the Grenadiers on 19 Sep; arrival time not found, afternoon assumed. Nijmegen scenario turn moved to campaign turn 25 (research/sept-17-18.md 8.3).",
+      "entry": [
+        {
+          "lat": 51.7,
+          "lon": 5.735
+        },
+        {
+          "lat": 51.705,
+          "lon": 5.745
+        },
+        {
+          "lat": 51.705,
+          "lon": 5.725
+        },
+        {
+          "lat": 51.712,
+          "lon": 5.738
+        }
+      ],
+      "units": [
+        {
+          "id": "a-1-cg",
+          "name": "1st (Armoured) Bn Coldstream Guards",
+          "shortName": "1 CG",
+          "formationId": "a-32gb",
+          "type": "armour",
+          "movementClass": "tracked",
+          "personnel": 600,
+          "equipment": {
+            "sherman-75": 40,
+            "sherman-firefly": 12,
+            "stuart": 8
+          },
+          "cohesion": 95,
+          "supply": "supplied",
+          "reserves": 90,
+          "dataStatus": "provisional",
+          "note": "Establishment estimate."
+        },
+        {
+          "id": "a-5-cg",
+          "name": "5th Bn Coldstream Guards",
+          "shortName": "5 CG",
+          "formationId": "a-32gb",
+          "type": "infantry",
+          "movementClass": "wheeled",
+          "personnel": 800,
+          "equipment": {
+            "uk-rifle-section": 36,
+            "six-pdr": 6,
+            "transport": 30
+          },
+          "cohesion": 95,
+          "supply": "supplied",
+          "reserves": 90,
+          "dataStatus": "provisional",
+          "note": "Establishment 845; lorried."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "guards-artillery",
+      "side": "allied",
+      "turn": 25,
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.2: divisional 25-pdrs ready for action at Nijmegen on the evening of 19 Sep. Nijmegen scenario turn moved to campaign turn 25 (research/sept-17-18.md 8.3).",
+      "entry": [
+        {
+          "lat": 51.7,
+          "lon": 5.735
+        },
+        {
+          "lat": 51.705,
+          "lon": 5.745
+        },
+        {
+          "lat": 51.705,
+          "lon": 5.725
+        },
+        {
+          "lat": 51.712,
+          "lon": 5.738
+        }
+      ],
+      "units": [
+        {
+          "id": "a-55-fd",
+          "name": "55th (West Somerset Yeomanry) Field Regt RA",
+          "shortName": "55 Fd",
+          "formationId": "a-gds-ra",
+          "type": "artillery",
+          "movementClass": "wheeled",
+          "personnel": 600,
+          "equipment": {
+            "gun-25pdr": 24
+          },
+          "cohesion": 95,
+          "supply": "supplied",
+          "reserves": 80,
+          "dataStatus": "provisional",
+          "note": "Establishment 24 guns."
+        },
+        {
+          "id": "a-153-fd",
+          "name": "153rd (Leicestershire Yeomanry) Field Regt RA",
+          "shortName": "153 Fd",
+          "formationId": "a-gds-ra",
+          "type": "artillery",
+          "movementClass": "tracked",
+          "personnel": 600,
+          "equipment": {
+            "sexton": 24
+          },
+          "cohesion": 95,
+          "supply": "supplied",
+          "reserves": 80,
+          "dataStatus": "provisional",
+          "note": "24 Sextons; fired for the Waal crossing."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "irish-group",
+      "side": "allied",
+      "turn": 26,
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.2: harboured at Malden on the evening of 19 Sep (war diary). Nijmegen scenario turn moved to campaign turn 26 (research/sept-17-18.md 8.3).",
+      "entry": [
+        {
+          "lat": 51.7,
+          "lon": 5.735
+        },
+        {
+          "lat": 51.705,
+          "lon": 5.745
+        },
+        {
+          "lat": 51.705,
+          "lon": 5.725
+        },
+        {
+          "lat": 51.712,
+          "lon": 5.738
+        }
+      ],
+      "units": [
+        {
+          "id": "a-2-ig",
+          "name": "2nd (Armoured) Bn Irish Guards",
+          "shortName": "2 IG",
+          "formationId": "a-5gab",
+          "type": "armour",
+          "movementClass": "tracked",
+          "personnel": 550,
+          "equipment": {
+            "sherman-75": 34,
+            "sherman-firefly": 10,
+            "stuart": 6
+          },
+          "cohesion": 90,
+          "supply": "supplied",
+          "reserves": 85,
+          "dataStatus": "provisional",
+          "note": "Lost about 9-10 tanks on 17 Sep; establishment less losses."
+        },
+        {
+          "id": "a-3-ig",
+          "name": "3rd Bn Irish Guards",
+          "shortName": "3 IG",
+          "formationId": "a-32gb",
+          "type": "infantry",
+          "movementClass": "wheeled",
+          "personnel": 800,
+          "equipment": {
+            "uk-rifle-section": 36,
+            "six-pdr": 6,
+            "transport": 30
+          },
+          "cohesion": 90,
+          "supply": "supplied",
+          "reserves": 85,
+          "dataStatus": "provisional",
+          "note": "Establishment 845."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "guards-anti-tank",
+      "side": "allied",
+      "turn": 26,
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.2: with the column; counts unknown (part of the regiment). Nijmegen scenario turn moved to campaign turn 26 (research/sept-17-18.md 8.3).",
+      "entry": [
+        {
+          "lat": 51.7,
+          "lon": 5.735
+        },
+        {
+          "lat": 51.705,
+          "lon": 5.745
+        },
+        {
+          "lat": 51.705,
+          "lon": 5.725
+        },
+        {
+          "lat": 51.712,
+          "lon": 5.738
+        }
+      ],
+      "units": [
+        {
+          "id": "a-21-at",
+          "name": "21st Anti-Tank Regt RA (part)",
+          "shortName": "21 AT",
+          "formationId": "a-gds-ra",
+          "type": "anti-tank",
+          "movementClass": "tracked",
+          "personnel": 300,
+          "equipment": {
+            "m10-17pdr": 12,
+            "towed-17pdr": 6
+          },
+          "cohesion": 90,
+          "supply": "supplied",
+          "reserves": 85,
+          "dataStatus": "provisional",
+          "note": "Gun counts estimated."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "welsh-group",
+      "side": "allied",
+      "turn": 28,
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.2: south-west of Nijmegen for the night of 19/20 Sep; arrival time unknown. Nijmegen scenario turn moved to campaign turn 28 (research/sept-17-18.md 8.3).",
+      "entry": [
+        {
+          "lat": 51.7,
+          "lon": 5.735
+        },
+        {
+          "lat": 51.705,
+          "lon": 5.745
+        },
+        {
+          "lat": 51.705,
+          "lon": 5.725
+        },
+        {
+          "lat": 51.712,
+          "lon": 5.738
+        }
+      ],
+      "units": [
+        {
+          "id": "a-2-wg",
+          "name": "2nd (Armoured Reconnaissance) Bn Welsh Guards",
+          "shortName": "2 WG",
+          "formationId": "a-gds-troops",
+          "type": "armour",
+          "movementClass": "tracked",
+          "personnel": 600,
+          "equipment": {
+            "cromwell": 40,
+            "challenger": 6,
+            "stuart": 8
+          },
+          "cohesion": 90,
+          "supply": "supplied",
+          "reserves": 85,
+          "dataStatus": "provisional",
+          "note": "Establishment estimate; vehicle counts unknown."
+        },
+        {
+          "id": "a-1-wg",
+          "name": "1st Bn Welsh Guards",
+          "shortName": "1 WG",
+          "formationId": "a-32gb",
+          "type": "infantry",
+          "movementClass": "wheeled",
+          "personnel": 800,
+          "equipment": {
+            "uk-rifle-section": 36,
+            "six-pdr": 6,
+            "transport": 30
+          },
+          "cohesion": 90,
+          "supply": "supplied",
+          "reserves": 85,
+          "dataStatus": "provisional",
+          "note": "Establishment 845."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "sherwood-rangers",
+      "side": "allied",
+      "turn": 33,
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.2: reached Grave on 20 Sep and came under 82nd command (Saunders only); time unknown. Nijmegen scenario turn moved to campaign turn 33 (research/sept-17-18.md 8.3).",
+      "entry": [
+        {
+          "lat": 51.7,
+          "lon": 5.735
+        },
+        {
+          "lat": 51.705,
+          "lon": 5.745
+        },
+        {
+          "lat": 51.705,
+          "lon": 5.725
+        },
+        {
+          "lat": 51.712,
+          "lon": 5.738
+        }
+      ],
+      "units": [
+        {
+          "id": "a-sry",
+          "name": "Sherwood Rangers Yeomanry",
+          "shortName": "SRY",
+          "formationId": "a-8ab",
+          "type": "armour",
+          "movementClass": "tracked",
+          "personnel": 600,
+          "equipment": {
+            "sherman-75": 45,
+            "sherman-firefly": 12
+          },
+          "cohesion": 90,
+          "supply": "supplied",
+          "reserves": 85,
+          "dataStatus": "provisional",
+          "note": "Establishment estimate."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "kg-becker",
+      "side": "german",
+      "turn": 31,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 4.2: arrived night 19/20 Sep in the Wyler/Zyfflich border area; strengths estimated. Nijmegen scenario turn moved to campaign turn 31 (research/sept-17-18.md 8.3).",
+      "entry": [
+        {
+          "lat": 51.824,
+          "lon": 5.974
+        },
+        {
+          "lat": 51.818,
+          "lon": 5.99
+        },
+        {
+          "lat": 51.826,
+          "lon": 6.019
+        },
+        {
+          "lat": 51.812,
+          "lon": 6.005
+        },
+        {
+          "lat": 51.83,
+          "lon": 6.0
+        },
+        {
+          "lat": 51.818,
+          "lon": 6.02
+        }
+      ],
+      "units": [
+        {
+          "id": "g-becker-1",
+          "name": "KG Becker, Fallschirmjäger-Regiment 5 remnant",
+          "shortName": "FJR 5",
+          "formationId": "g-kg-becker",
+          "type": "airborne-infantry",
+          "movementClass": "foot",
+          "personnel": 280,
+          "equipment": {
+            "de-rifle-group": 22
+          },
+          "cohesion": 75,
+          "supply": "supplied",
+          "reserves": 70,
+          "dataStatus": "provisional"
+        },
+        {
+          "id": "g-becker-2",
+          "name": "KG Becker, Fallschirmjäger-Regiment 8 remnant",
+          "shortName": "FJR 8",
+          "formationId": "g-kg-becker",
+          "type": "airborne-infantry",
+          "movementClass": "foot",
+          "personnel": 280,
+          "equipment": {
+            "de-rifle-group": 22
+          },
+          "cohesion": 75,
+          "supply": "supplied",
+          "reserves": 70,
+          "dataStatus": "provisional"
+        },
+        {
+          "id": "g-becker-3",
+          "name": "KG Becker, Fallschirmjäger-Regiment 9 remnant",
+          "shortName": "FJR 9",
+          "formationId": "g-kg-becker",
+          "type": "airborne-infantry",
+          "movementClass": "foot",
+          "personnel": 280,
+          "equipment": {
+            "de-rifle-group": 22
+          },
+          "cohesion": 75,
+          "supply": "supplied",
+          "reserves": 70,
+          "dataStatus": "provisional"
+        },
+        {
+          "id": "g-isphording",
+          "name": "Bataillon Isphording",
+          "shortName": "Isph",
+          "formationId": "g-kg-becker",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 280,
+          "equipment": {
+            "de-rifle-group": 22
+          },
+          "cohesion": 65,
+          "supply": "supplied",
+          "reserves": 70,
+          "dataStatus": "provisional"
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "kg-greschick",
+      "side": "german",
+      "turn": 31,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 4.2: three battalions of untrained conscripts with 14 x 20 mm; axis not sourced (Wyler-Horst assumed). Nijmegen scenario turn moved to campaign turn 31 (research/sept-17-18.md 8.3).",
+      "entry": [
+        {
+          "lat": 51.785,
+          "lon": 5.99
+        },
+        {
+          "lat": 51.79,
+          "lon": 6.002
+        },
+        {
+          "lat": 51.78,
+          "lon": 6.0
+        },
+        {
+          "lat": 51.775,
+          "lon": 6.008
+        },
+        {
+          "lat": 51.795,
+          "lon": 5.998
+        },
+        {
+          "lat": 51.785,
+          "lon": 6.012
+        }
+      ],
+      "units": [
+        {
+          "id": "g-greschick-1",
+          "name": "KG Greschick, 1st battalion",
+          "shortName": "Gre 1",
+          "formationId": "g-kg-greschick",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 300,
+          "equipment": {
+            "de-rifle-group": 22,
+            "flak-20": 5
+          },
+          "cohesion": 50,
+          "supply": "supplied",
+          "reserves": 65,
+          "dataStatus": "provisional"
+        },
+        {
+          "id": "g-greschick-2",
+          "name": "KG Greschick, 2nd battalion",
+          "shortName": "Gre 2",
+          "formationId": "g-kg-greschick",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 300,
+          "equipment": {
+            "de-rifle-group": 22,
+            "flak-20": 5
+          },
+          "cohesion": 50,
+          "supply": "supplied",
+          "reserves": 65,
+          "dataStatus": "provisional"
+        },
+        {
+          "id": "g-greschick-3",
+          "name": "KG Greschick, 3rd battalion",
+          "shortName": "Gre 3",
+          "formationId": "g-kg-greschick",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 300,
+          "equipment": {
+            "de-rifle-group": 22,
+            "flak-20": 4
+          },
+          "cohesion": 50,
+          "supply": "supplied",
+          "reserves": 65,
+          "dataStatus": "provisional"
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "kg-hermann",
+      "side": "german",
+      "turn": 31,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 4.2: over a thousand men assembling south and east of Riethorst; 1-3 tanks; attack began about 10:00-11:00 on 20 Sep. Nijmegen scenario turn moved to campaign turn 31 (research/sept-17-18.md 8.3).",
+      "entry": [
+        {
+          "lat": 51.73,
+          "lon": 5.935
+        },
+        {
+          "lat": 51.728,
+          "lon": 5.95
+        },
+        {
+          "lat": 51.735,
+          "lon": 5.96
+        },
+        {
+          "lat": 51.74,
+          "lon": 5.97
+        },
+        {
+          "lat": 51.725,
+          "lon": 5.965
+        },
+        {
+          "lat": 51.745,
+          "lon": 5.98
+        },
+        {
+          "lat": 51.733,
+          "lon": 5.975
+        }
+      ],
+      "units": [
+        {
+          "id": "g-hermann-1",
+          "name": "KG Hermann, 1st battalion (5. Fallschirmjäger-Division remnant)",
+          "shortName": "Her 1",
+          "formationId": "g-kg-hermann",
+          "type": "airborne-infantry",
+          "movementClass": "foot",
+          "personnel": 350,
+          "equipment": {
+            "de-rifle-group": 26,
+            "flak-88": 1,
+            "flak-20": 3
+          },
+          "cohesion": 75,
+          "supply": "supplied",
+          "reserves": 70,
+          "dataStatus": "provisional"
+        },
+        {
+          "id": "g-hermann-2",
+          "name": "KG Hermann, 2nd battalion",
+          "shortName": "Her 2",
+          "formationId": "g-kg-hermann",
+          "type": "airborne-infantry",
+          "movementClass": "foot",
+          "personnel": 350,
+          "equipment": {
+            "de-rifle-group": 26
+          },
+          "cohesion": 75,
+          "supply": "supplied",
+          "reserves": 70,
+          "dataStatus": "provisional"
+        },
+        {
+          "id": "g-hermann-3",
+          "name": "KG Hermann, 3rd battalion",
+          "shortName": "Her 3",
+          "formationId": "g-kg-hermann",
+          "type": "airborne-infantry",
+          "movementClass": "foot",
+          "personnel": 350,
+          "equipment": {
+            "de-rifle-group": 26
+          },
+          "cohesion": 75,
+          "supply": "supplied",
+          "reserves": 70,
+          "dataStatus": "provisional"
+        },
+        {
+          "id": "g-hermann-pz",
+          "name": "Tanks with KG Hermann",
+          "shortName": "Pz",
+          "formationId": "g-kg-hermann",
+          "type": "armour",
+          "movementClass": "tracked",
+          "personnel": 15,
+          "equipment": {
+            "tank-de": 3
+          },
+          "cohesion": 80,
+          "supply": "supplied",
+          "reserves": 70,
+          "dataStatus": "provisional",
+          "note": "Three Panthers per Saunders; one tank per MacDonald."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "kg-budde",
+      "side": "german",
+      "turn": 37,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 4.2: late-afternoon reinforcement on 20 Sep; strength unknown. KG Molzer and KG Lewin are left out (unknown). Nijmegen scenario turn moved to campaign turn 37 (research/sept-17-18.md 8.3).",
+      "entry": [
+        {
+          "lat": 51.73,
+          "lon": 5.935
+        },
+        {
+          "lat": 51.728,
+          "lon": 5.95
+        },
+        {
+          "lat": 51.735,
+          "lon": 5.96
+        },
+        {
+          "lat": 51.74,
+          "lon": 5.97
+        }
+      ],
+      "units": [
+        {
+          "id": "g-budde",
+          "name": "Kampfgruppe Budde (Fallschirmjäger battalion)",
+          "shortName": "Budde",
+          "formationId": "g-kg-hermann",
+          "type": "airborne-infantry",
+          "movementClass": "foot",
+          "personnel": 250,
+          "equipment": {
+            "de-rifle-group": 20
+          },
+          "cohesion": 70,
+          "supply": "supplied",
+          "reserves": 75,
+          "dataStatus": "provisional"
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "frundsberg-stug",
+      "side": "german",
+      "turn": 38,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 3: at least one StuG in Lent on the evening of 20 Sep, ferried at Pannerden. The Panzer IVs that crossed after nightfall and SS-Pz.Gren.Rgt.22 arrive after the scenario ends and are left out. Nijmegen scenario turn moved to campaign turn 38 (research/sept-17-18.md 8.3).",
+      "entry": [
+        {
+          "lat": 51.895,
+          "lon": 6.08
+        },
+        {
+          "lat": 51.89,
+          "lon": 6.075
+        },
+        {
+          "lat": 51.9,
+          "lon": 6.07
+        }
+      ],
+      "units": [
+        {
+          "id": "g-stug",
+          "name": "Frundsberg Sturmgeschütze",
+          "shortName": "StuG",
+          "formationId": "g-10ss",
+          "type": "armour",
+          "movementClass": "tracked",
+          "personnel": 20,
+          "equipment": {
+            "stug-iii": 2
+          },
+          "cohesion": 85,
+          "supply": "supplied",
+          "reserves": 85,
+          "dataStatus": "provisional"
+        }
+      ]
+    },
+    {
+      "kind": "supply-drop",
+      "id": "airdrop-19-sep",
+      "side": "allied",
+      "turn": 25,
+      "at": {
+        "lat": 51.765,
+        "lon": 5.79,
+        "place": "DZ O, Overasselt"
+      },
+      "radius": 3,
+      "amount": 5,
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 5.1: 15:30 on 19 Sep, 32 aircraft reached DZ O, about 20% recovered (Warren). Drop zone position estimated. Nijmegen scenario turn moved to campaign turn 25 (research/sept-17-18.md 8.3)."
+    },
+    {
+      "kind": "supply-drop",
+      "id": "airdrop-20-sep",
+      "side": "allied",
+      "turn": 38,
+      "at": {
+        "lat": 51.765,
+        "lon": 5.79,
+        "place": "DZ O, Overasselt"
+      },
+      "radius": 5,
+      "amount": 35,
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 5.1: 16:48-17:49 on 20 Sep, 310 aircraft, 441 tons mostly ammunition, about 60% recovered over a 2 x 6 mile pattern (Warren). Nijmegen scenario turn moved to campaign turn 38 (research/sept-17-18.md 8.3)."
+    },
+    {
+      "kind": "reinforcement",
+      "id": "third-lift-polish-gliders",
+      "side": "allied",
+      "turn": 25,
+      "dataStatus": "provisional",
+      "note": "research-arnhem/sept-19-20.md 2.4: the Polish gliders landed on LZ L about 15:00-16:00 on 19 Sep, under fire.",
+      "entry": [
+        {
+          "lat": 52.007,
+          "lon": 5.821,
+          "place": "LZ L"
+        },
+        {
+          "lat": 52.005,
+          "lon": 5.815
+        },
+        {
+          "lat": 52.008,
+          "lon": 5.83
+        }
+      ],
+      "units": [
+        {
+          "id": "a-polish-atk",
+          "side": "allied",
+          "name": "Polish anti-tank detachment (1st Indep Para Bde)",
+          "shortName": "Pol A/Tk",
+          "formationId": "a-1polish",
+          "type": "anti-tank",
+          "movementClass": "wheeled",
+          "personnel": 40,
+          "equipment": {
+            "six-pdr": 2,
+            "transport": 4
+          },
+          "cohesion": 80,
+          "supply": "supplied",
+          "reserves": 90,
+          "dataStatus": "provisional",
+          "note": "research-arnhem/sept-19-20.md 2.4: 2 of 10 guns reached Oosterbeek with about 4 jeeps."
+        }
+      ]
+    },
+    {
+      "kind": "supply-drop",
+      "id": "resupply-19-sep",
+      "side": "allied",
+      "turn": 26,
+      "at": {
+        "lat": 51.998,
+        "lon": 5.865,
+        "place": "SDP V"
+      },
+      "radius": 2,
+      "amount": 8,
+      "dataStatus": "provisional",
+      "note": "research-arnhem/sept-19-20.md 4.1: 388 tons dropped about 16:00 on SDP V, which the Germans held; about 12 tons collected."
+    },
+    {
+      "kind": "supply-drop",
+      "id": "resupply-20-sep-a",
+      "side": "allied",
+      "turn": 37,
+      "at": {
+        "lat": 51.988,
+        "lon": 5.833,
+        "place": "Hartenstein"
+      },
+      "radius": 1,
+      "amount": 6,
+      "dataStatus": "provisional",
+      "note": "research-arnhem/sept-19-20.md 4.1: first wave 14:06 on 20 Sep; 21 tons collected in all (division return; Pegasus says about half)."
+    },
+    {
+      "kind": "supply-drop",
+      "id": "resupply-20-sep-b",
+      "side": "allied",
+      "turn": 38,
+      "at": {
+        "lat": 51.988,
+        "lon": 5.833,
+        "place": "Hartenstein"
+      },
+      "radius": 1,
+      "amount": 8,
+      "dataStatus": "provisional",
+      "note": "research-arnhem/sept-19-20.md 4.1: second wave about 17:00 on 20 Sep."
+    },
+    {
+      "kind": "reinforcement",
+      "id": "stug-280",
+      "side": "german",
+      "turn": 21,
+      "dataStatus": "provisional",
+      "note": "research-arnhem/sept-19-20.md 5.1.",
+      "entry": [
+        {
+          "lat": 52.11,
+          "lon": 5.876,
+          "place": "Hoenderloo road"
+        },
+        {
+          "lat": 52.105,
+          "lon": 5.88
+        },
+        {
+          "lat": 52.112,
+          "lon": 5.866
+        }
+      ],
+      "units": [
+        {
+          "id": "g-stug280",
+          "side": "german",
+          "name": "StuG-Brigade 280 (part)",
+          "shortName": "StuG 280",
+          "formationId": "g-spindler",
+          "type": "armour",
+          "movementClass": "tracked",
+          "personnel": 70,
+          "equipment": {
+            "stug-iii": 10
+          },
+          "cohesion": 90,
+          "supply": "supplied",
+          "reserves": 85,
+          "dataStatus": "provisional",
+          "note": "research-arnhem/sept-19-20.md 8: 7 StuG III and 3 StuH 42 (verified strength; entry estimated)."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "knoche-224",
+      "side": "german",
+      "turn": 21,
+      "dataStatus": "provisional",
+      "note": "research-arnhem/sept-19-20.md 5.2: on the Ginkel Heath on the 19th (estimate).",
+      "entry": [
+        {
+          "lat": 52.043,
+          "lon": 5.672,
+          "place": "Ede road"
+        },
+        {
+          "lat": 52.04,
+          "lon": 5.68
+        },
+        {
+          "lat": 52.048,
+          "lon": 5.678
+        }
+      ],
+      "units": [
+        {
+          "id": "g-knoche",
+          "side": "german",
+          "name": "KG Knoche (Sich.Rgt. 26, Fest.MG-Btl. 30)",
+          "shortName": "KG Knoche",
+          "formationId": "g-tettau",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 1000,
+          "equipment": {
+            "de-rifle-group": 36,
+            "flak-20": 6
+          },
+          "cohesion": 55,
+          "supply": "supplied",
+          "reserves": 80,
+          "dataStatus": "provisional",
+          "note": "research-arnhem/sept-19-20.md 8: about 1,000 (paper 1,290); two 3.7 cm flak folded into the 2 cm."
+        },
+        {
+          "id": "g-pz224",
+          "side": "german",
+          "name": "Panzer-Kompanie 224",
+          "shortName": "Pz.Kp. 224",
+          "formationId": "g-tettau",
+          "type": "armour",
+          "movementClass": "tracked",
+          "personnel": 50,
+          "equipment": {
+            "tank-fr": 11
+          },
+          "cohesion": 70,
+          "supply": "supplied",
+          "reserves": 80,
+          "dataStatus": "provisional",
+          "note": "research-arnhem/sept-19-20.md 8: 10-17 captured French tanks, some flame-throwers; 11 after the 18 Sep losses near Renkum."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "swoboda",
+      "side": "german",
+      "turn": 21,
+      "dataStatus": "provisional",
+      "note": "research-arnhem/sept-19-20.md 5.2.",
+      "entry": [
+        {
+          "lat": 52.02,
+          "lon": 6.06,
+          "place": "Velp-Zutphen road, De Steeg"
+        },
+        {
+          "lat": 52.015,
+          "lon": 6.055
+        },
+        {
+          "lat": 52.025,
+          "lon": 6.055
+        }
+      ],
+      "units": [
+        {
+          "id": "g-swoboda",
+          "side": "german",
+          "name": "Flak-Brigade Swoboda (batteries in the ground role)",
+          "shortName": "Flak Swoboda",
+          "formationId": "g-9ss",
+          "type": "anti-tank",
+          "movementClass": "wheeled",
+          "personnel": 250,
+          "equipment": {
+            "flak-88": 8,
+            "flak-20": 12
+          },
+          "cohesion": 85,
+          "supply": "supplied",
+          "reserves": 85,
+          "dataStatus": "provisional",
+          "note": "research-arnhem/sept-19-20.md 8: the brigade had about 33 × 88 mm and 37 lighter guns, mostly sited against aircraft; the game has no air war, so only about a quarter appear, in the ground role (designer's choice)."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "krafft-navy",
+      "side": "german",
+      "turn": 23,
+      "dataStatus": "provisional",
+      "note": "research-arnhem/sept-19-20.md 5.2: to attack LZ L at about 15:00 on 19 Sep.",
+      "entry": [
+        {
+          "lat": 52.11,
+          "lon": 5.876,
+          "place": "Hoenderloo road"
+        },
+        {
+          "lat": 52.105,
+          "lon": 5.88
+        },
+        {
+          "lat": 52.112,
+          "lon": 5.866
+        }
+      ],
+      "units": [
+        {
+          "id": "g-krafft-navy",
+          "side": "german",
+          "name": "Naval and police troops with KG Krafft (Marine-Rgt. 642 and others)",
+          "shortName": "Navy (Krafft)",
+          "formationId": "g-spindler",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 600,
+          "equipment": {
+            "de-rifle-group": 20
+          },
+          "cohesion": 50,
+          "supply": "supplied",
+          "reserves": 80,
+          "dataStatus": "provisional",
+          "note": "research-arnhem/sept-19-20.md 8: about 600 (estimate)."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "hummel-1",
+      "side": "german",
+      "turn": 27,
+      "dataStatus": "provisional",
+      "note": "research-arnhem/sept-19-20.md 5.1.",
+      "entry": [
+        {
+          "lat": 51.95,
+          "lon": 6.024,
+          "place": "Zevenaar road, Duiven"
+        },
+        {
+          "lat": 51.955,
+          "lon": 6.02
+        },
+        {
+          "lat": 51.945,
+          "lon": 6.03
+        }
+      ],
+      "units": [
+        {
+          "id": "g-hummel-1",
+          "side": "german",
+          "name": "s.Pz.Kp. Hummel, first platoon",
+          "shortName": "Tiger 1",
+          "formationId": "g-wk6",
+          "type": "armour",
+          "movementClass": "tracked",
+          "personnel": 10,
+          "equipment": {
+            "tiger-i": 2
+          },
+          "cohesion": 90,
+          "supply": "supplied",
+          "reserves": 85,
+          "dataStatus": "provisional",
+          "note": "research-arnhem/sept-19-20.md 8: 2 Tigers on the evening of 19 Sep (verified time)."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "wossowski",
+      "side": "german",
+      "turn": 29,
+      "dataStatus": "provisional",
+      "note": "research-arnhem/sept-19-20.md 5.2.",
+      "entry": [
+        {
+          "lat": 52.043,
+          "lon": 5.672,
+          "place": "Ede road"
+        },
+        {
+          "lat": 52.04,
+          "lon": 5.68
+        },
+        {
+          "lat": 52.048,
+          "lon": 5.678
+        }
+      ],
+      "units": [
+        {
+          "id": "g-wossowski",
+          "side": "german",
+          "name": "Btl. Wossowski (Hermann Göring Ersatz-Rgt.)",
+          "shortName": "Wossowski",
+          "formationId": "g-tettau",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 600,
+          "equipment": {
+            "de-rifle-group": 22
+          },
+          "cohesion": 65,
+          "supply": "supplied",
+          "reserves": 80,
+          "dataStatus": "provisional",
+          "note": "research-arnhem/sept-19-20.md 8: about 600, on bicycles."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "bruhn",
+      "side": "german",
+      "turn": 31,
+      "dataStatus": "provisional",
+      "note": "research-arnhem/sept-19-20.md 5.2.",
+      "entry": [
+        {
+          "lat": 52.11,
+          "lon": 5.876,
+          "place": "Hoenderloo road"
+        },
+        {
+          "lat": 52.105,
+          "lon": 5.88
+        },
+        {
+          "lat": 52.112,
+          "lon": 5.866
+        }
+      ],
+      "units": [
+        {
+          "id": "g-bruhn",
+          "side": "german",
+          "name": "KG Bruhn (Pz.Gren.A.u.E.Btl. 361)",
+          "shortName": "KG Bruhn",
+          "formationId": "g-spindler",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 525,
+          "equipment": {
+            "de-rifle-group": 18
+          },
+          "cohesion": 60,
+          "supply": "supplied",
+          "reserves": 80,
+          "dataStatus": "provisional",
+          "note": "research-arnhem/sept-19-20.md 8: 525 in eight companies; arrival \"19-20 Sep\" (estimate)."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "hummel-2",
+      "side": "german",
+      "turn": 33,
+      "dataStatus": "provisional",
+      "note": "research-arnhem/sept-19-20.md 5.1.",
+      "entry": [
+        {
+          "lat": 51.95,
+          "lon": 6.024,
+          "place": "Zevenaar road, Duiven"
+        },
+        {
+          "lat": 51.955,
+          "lon": 6.02
+        },
+        {
+          "lat": 51.945,
+          "lon": 6.03
+        }
+      ],
+      "units": [
+        {
+          "id": "g-hummel-2",
+          "side": "german",
+          "name": "s.Pz.Kp. Hummel, remainder",
+          "shortName": "Tiger 2",
+          "formationId": "g-wk6",
+          "type": "armour",
+          "movementClass": "tracked",
+          "personnel": 60,
+          "equipment": {
+            "tiger-i": 10
+          },
+          "cohesion": 90,
+          "supply": "supplied",
+          "reserves": 85,
+          "dataStatus": "provisional",
+          "note": "research-arnhem/sept-19-20.md 8: 10-12 Tigers on 20 Sep; arrival time not found (turns 31-37 defensible)."
+        }
+      ]
+    },
+    {
+      "kind": "reinforcement",
+      "id": "landstorm",
+      "side": "german",
+      "turn": 39,
+      "dataStatus": "provisional",
+      "note": "research-arnhem/sept-19-20.md 5.2.",
+      "entry": [
+        {
+          "lat": 52.11,
+          "lon": 5.876,
+          "place": "Hoenderloo road"
+        },
+        {
+          "lat": 52.105,
+          "lon": 5.88
+        },
+        {
+          "lat": 52.112,
+          "lon": 5.866
+        }
+      ],
+      "units": [
+        {
+          "id": "g-landstorm",
+          "side": "german",
+          "name": "III./SS-Gren.Rgt. 1 \"Landstorm Nederland\"",
+          "shortName": "Landstorm",
+          "formationId": "g-9ss",
+          "type": "infantry",
+          "movementClass": "foot",
+          "personnel": 600,
+          "equipment": {
+            "de-rifle-group": 22
+          },
+          "cohesion": 65,
+          "supply": "supplied",
+          "reserves": 85,
+          "dataStatus": "provisional",
+          "note": "research-arnhem/sept-19-20.md 8: about 600 (800-850 per Pegasus)."
+        }
+      ]
+    }
+  ],
+  "supplySources": [
+    {
+      "id": "div-area",
+      "name": "Divisional area, LZ Z",
+      "side": "allied",
+      "at": {
+        "lat": 52.002,
+        "lon": 5.781
+      },
+      "range": 180,
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 5.2: units carried 2-4 days of supply; the division's dump and RASC jeeps were with Div HQ. The division left the landing zones on 19 Sep (research-arnhem/sept-19-20.md 8): supplies from LZ Z end with turn 22.",
+      "toTurn": 22
+    },
+    {
+      "id": "hartenstein",
+      "name": "Divisional maintenance area, Hartenstein",
+      "side": "allied",
+      "at": {
+        "lat": 51.988,
+        "lon": 5.833
+      },
+      "range": 180,
+      "fromTurn": 13,
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 3.5: DMA at the Hartenstein from about 15:30 on 18 Sep."
+    },
+    {
+      "id": "apeldoorn-road",
+      "name": "Apeldoorn road",
+      "toward": "Apeldoorn",
+      "side": "german",
+      "at": {
+        "lat": 52.1,
+        "lon": 5.953,
+        "place": "Apeldoorn road"
+      },
+      "range": 300,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 9.2: 9th SS support units at Apeldoorn."
+    },
+    {
+      "id": "velp-road",
+      "name": "Velp-Zutphen road",
+      "toward": "Zutphen",
+      "side": "german",
+      "at": {
+        "lat": 52.02,
+        "lon": 6.06,
+        "place": "Velp-Zutphen road, De Steeg"
+      },
+      "range": 300,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 9.2: 9th SS support units at Velp."
+    },
+    {
+      "id": "zevenaar-road",
+      "name": "Zevenaar road",
+      "toward": "Zevenaar",
+      "side": "german",
+      "at": {
+        "lat": 51.95,
+        "lon": 6.024,
+        "place": "Zevenaar road, Duiven"
+      },
+      "range": 300,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 9.2: railhead at Zevenaar; 10th SS column at Didam."
+    },
+    {
+      "id": "ede-road",
+      "name": "Ede road",
+      "toward": "Ede",
+      "side": "german",
+      "at": {
+        "lat": 52.043,
+        "lon": 5.672,
+        "place": "Ede road"
+      },
+      "range": 240,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 9.2: Tettau drew on the WBN area in the west."
+    },
+    {
+      "id": "wageningen-road",
+      "name": "Wageningen road",
+      "toward": "Wageningen",
+      "side": "german",
+      "at": {
+        "lat": 51.969,
+        "lon": 5.668,
+        "place": "Wageningen"
+      },
+      "range": 240,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 9.2."
+    },
+    {
+      "id": "corridor",
+      "name": "XXX Corps corridor road from Uden",
+      "toward": "Uden",
+      "side": "allied",
+      "at": {
+        "lat": 51.7,
+        "lon": 5.735
+      },
+      "range": 360,
+      "fromTurn": 32,
+      "dataStatus": "provisional",
+      "note": "allied-forces.md 5.2: nothing reached the 82nd by road by 20 Sep (Warren); road supply assumed from 06:00 on 20 Sep. British units carried their own echelons. Campaign turn 32 (05:00 20 Sep)."
+    },
+    {
+      "id": "kleve-road",
+      "name": "Kleve road",
+      "toward": "Kleve",
+      "side": "german",
+      "at": {
+        "lat": 51.787,
+        "lon": 6.08
+      },
+      "range": 300,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 7: rail to Kleve and Bedburg-Hau, then forward."
+    },
+    {
+      "id": "pannerden-ferry",
+      "name": "Pannerden ferry road",
+      "toward": "Pannerden",
+      "side": "german",
+      "at": {
+        "lat": 51.895,
+        "lon": 6.08
+      },
+      "range": 300,
+      "dataStatus": "provisional",
+      "note": "german-forces.md 3, 7: the north bank and the bridge garrison were supplied over the Pannerden ferry."
+    },
+    {
+      "id": "gennep-road",
+      "name": "Gennep road",
+      "toward": "Gennep",
+      "side": "german",
+      "at": {
+        "lat": 51.698,
+        "lon": 5.97
+      },
+      "range": 240,
+      "dataStatus": "provisional",
+      "note": "Gennep was German-held; supply from Goch via Gennep assumed."
+    }
+  ],
+  "objectives": [
+    {
+      "id": "corridor-to-arnhem",
+      "name": "Open the road to Arnhem",
+      "description": "Hold both ends of the Grave, Heumen, Nijmegen and Arnhem road bridges at the end of turn 21 (07:00 on 19 September, when XXX Corps can arrive) or later, with a unit on one of them that has a supply route: the corridor of Market Garden, open from the Maas to the Rhine.",
+      "side": "allied",
+      "kind": "hold",
+      "hexes": [
+        "bridge:grave-bridge",
+        "bridge:heumen-lock-bridge",
+        "bridge:waal-road-bridge",
+        "bridge:arnhem-road-bridge"
+      ],
+      "holdTurns": 1,
+      "initialControl": "german",
+      "requireSupply": true,
+      "fromTurn": 21
+    },
+    {
+      "id": "hold-grave",
+      "name": "Hold the Grave bridge",
+      "description": "Hold both ends of the Grave bridge over the Maas at the end of turn 21 (07:00 on 19 September, when XXX Corps arrives) or later: the corridor never crosses the Maas.",
+      "side": "german",
+      "kind": "hold",
+      "hexes": [
+        "bridge:grave-bridge"
+      ],
+      "holdTurns": 1,
+      "initialControl": "german",
+      "fromTurn": 21
+    },
+    {
+      "id": "cut-corridor",
+      "name": "Cut the corridor at Heumen",
+      "description": "Hold both ends of the Heumen lock bridge, the only canal crossing that could take tanks, at the end of turn 23 (11:00 on 19 September) or later.",
+      "side": "german",
+      "kind": "hold",
+      "hexes": [
+        "bridge:heumen-lock-bridge"
+      ],
+      "holdTurns": 1,
+      "initialControl": "german",
+      "fromTurn": 23
+    }
+  ],
+  "victory": {
+    "lastTurn": 39,
+    "otherwise": "german"
+  },
+  "provenance": {
+    "status": "provisional",
+    "sources": [
+      {
+        "title": "The Pegasus Archive: 1st Airborne Division war diaries and Report on Operation Market",
+        "url": "https://www.pegasusarchive.org/arnhem/war.htm",
+        "reuse": "Transcriptions of Crown-copyright records; cited for facts"
+      },
+      {
+        "title": "M. Middlebrook, Arnhem 1944: The Airborne Battle (online copy and extracts)",
+        "url": "https://www.pegasusarchive.org/arnhem/main.htm",
+        "reuse": "Copyrighted; cited for facts only"
+      },
+      {
+        "title": "OpenStreetMap",
+        "url": "https://www.openstreetmap.org",
+        "reuse": "ODbL 1.0"
+      },
+      {
+        "title": "Copernicus DEM GLO-30 and EU-DEM",
+        "url": "https://dataspace.copernicus.eu",
+        "reuse": "Free use with attribution"
+      },
+      {
+        "title": "C. B. MacDonald, The Siegfried Line Campaign (US Army CMH), chapters VII-VIII, via HyperWar",
+        "url": "https://www.ibiblio.org/hyperwar/USA/USA-E-Siegfried/USA-E-Siegfried-8.html",
+        "reuse": "US government work, public domain"
+      },
+      {
+        "title": "T. Saunders, Nijmegen: US 82nd Airborne Division 1944 (Battleground Europe), online copy",
+        "url": "https://erenow.org/ww/nijmegen-us-82nd-airborne-division-1944/",
+        "reuse": "Copyrighted; cited for facts only"
+      },
+      {
+        "title": "J. C. Warren, Airborne Operations in World War II, European Theater (USAF Historical Study 97, 1956)",
+        "url": "https://www.afhra.af.mil/",
+        "reuse": "US government work, public domain"
+      },
+      {
+        "title": "OpenStreetMap: rivers, canals and woodland in Germany",
+        "url": "https://www.openstreetmap.org/copyright",
+        "reuse": "ODbL 1.0; © OpenStreetMap contributors"
+      },
+      {
+        "title": "EU-DEM 25 m elevation, via OpenTopoData",
+        "url": "https://www.opentopodata.org/datasets/eudem/",
+        "reuse": "Copernicus Land Monitoring Service, free reuse with attribution"
+      },
+      {
+        "title": "1e Bosstatistiek 1938-42 (RCE historical maps WMS, layer BOSSTATISTIEK1)",
+        "url": "https://geoserver-bigdata.nieuwland.nl/RCE/wms",
+        "reuse": "No use restrictions; attribution: Staatsbosbeheer, Stichting Bosdata, Rijksdienst voor het Cultureel Erfgoed"
+      },
+      {
+        "title": "Research notes for this scenario",
+        "url": "docs/research/",
+        "reuse": "Project documentation"
+      }
+    ],
+    "notes": [
+      "All of it is provisional: see docs/research, docs/research-arnhem and docs/campaign-notes.md.",
+      "Times are Allied \"A\" time (GMT+1); German-clock times were moved one hour earlier.",
+      "The map joins the Arnhem and Nijmegen maps hex for hex; the Nederrijn is traced on as the Pannerdensch Kanaal to the Waal, with the Pannerden ferry.",
+      "Nijmegen-scenario events are moved to campaign turns: Nijmegen turn n is campaign turn n + 22, starting an hour earlier (research/sept-17-18.md 8.3)."
+    ]
+  }
+}
