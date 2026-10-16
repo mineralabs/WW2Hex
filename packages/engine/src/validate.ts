@@ -249,6 +249,21 @@ export function validateScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULE
     }
   }
 
+  // War diary ------------------------------------------------------------------------
+  let lastDiary = 0;
+  for (const [i, d] of (file.diary ?? []).entries()) {
+    const what = `Diary entry ${i + 1} (${d.title})`;
+    if (!Number.isInteger(d.turn) || d.turn < 1) error('diary-turn', `${what}: turn must be a whole number of at least 1`);
+    if (d.turn < lastDiary) error('diary-order', `${what}: entries must be in turn order`);
+    lastDiary = d.turn;
+    if (d.side !== null && d.side !== 'allied' && d.side !== 'german') error('diary-side', `${what}: side must be allied, german or null`);
+    if (d.kind !== 'event' && d.kind !== 'plan') error('diary-kind', `${what}: kind must be event or plan`);
+    if (!/^\d\d:\d\d$/.test(d.time)) error('diary-time', `${what}: time must be HH:MM`);
+    if (!d.title?.trim() || !d.text?.trim()) error('diary-text', `${what}: needs a title and text`);
+    if (d.at && !cellAt(map, fromOffset(d.at))) error('diary-off-map', `${what}: ${fmt(d.at)} is off the map`);
+    if (file.victory && d.turn > file.victory.lastTurn) warn('diary-after-end', `${what} is after the last turn`);
+  }
+
   // Supply sources ---------------------------------------------------------------
   const sourceIds = new Set<string>();
   for (const s of file.supplySources ?? []) {

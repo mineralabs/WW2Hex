@@ -253,6 +253,15 @@ points; if all are occupied they wait and you are told. The Reinforcements panel
 side's arrivals, turn and place. You learn nothing of the enemy's until you see them. Scenarios
 may also open a crossing or a supply source on a set turn, or drop supplies on the airborne.
 
+## 11a. The war diary
+
+The **War diary** panel in the sidebar shows what happened at this hour in the real battle, and
+what your side's commanders planned (marked *Plan*), from the research. It is history, not
+orders: your game can go quite differently. You see only your own side's diary, plus things both
+sides would know, such as sunset. Click a place name to centre the map on it, and open *Earlier
+entries* to read back. The Arnhem, Nijmegen and campaign scenarios share one diary, so each
+entry falls on the turn its hour belongs to.
+
 ## 12. Nijmegen in brief
 
 12:00 on 19 September to 20:00 on 20 September 1944: sixteen turns.

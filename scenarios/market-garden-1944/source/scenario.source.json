@@ -4595,6 +4595,9 @@
     "lastTurn": 39,
     "otherwise": "german"
   },
+  "diary": {
+    "file": "../../shared/market-garden-diary.json"
+  },
   "provenance": {
     "status": "provisional",
     "sources": [

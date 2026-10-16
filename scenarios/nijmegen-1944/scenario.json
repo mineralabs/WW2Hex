@@ -5342,6 +5342,698 @@
     "lastTurn": 16,
     "otherwise": "german"
   },
+  "diary": [
+    {
+      "turn": 1,
+      "time": "12:00",
+      "day": 19,
+      "side": "allied",
+      "kind": "event",
+      "title": "The story so far",
+      "text": "17 Sep: the 82nd landed round Groesbeek, took the Grave and Heumen bridges intact but saw the Malden, Hatert and Mook bridges blown, and 1/508's night attack was stopped at the Keizer Karelplein. 18 Sep: Korps Feldt overran the landing zones and was thrown off just as the gliders came in, while the Honinghutje bridge was taken damaged and the SS reached the Waal bridge. This morning the Household Cavalry met the 504th at Grave at 0820 and the Grenadier Guards are south of Nijmegen; at Arnhem 2 Para still holds the north end of the bridge but the rest of 1st Airborne is held in the west of the town.",
+      "at": [
+        4,
+        20
+      ],
+      "place": "Grave bridge",
+      "source": "research/sept-17-18.md 6; research/allied-forces.md 4"
+    },
+    {
+      "turn": 1,
+      "time": "12:00",
+      "day": 19,
+      "side": "german",
+      "kind": "event",
+      "title": "The story so far",
+      "text": "17 Sep: Henke's weak garrison was alone in Nijmegen while the Americans took the Grave and Heumen bridges; Gräbner's reconnaissance battalion passed through and turned back for Arnhem. 18 Sep: with the Arnhem bridge blocked, Euling's battalion, Baumgärtel's pioneers and Reinhold came round by the Pannerden ferry and dug in at Hunner Park, the Valkhof and Lent, while Korps Feldt's attack on the landing zones failed, leaving the 406th about 500 effectives. Model still forbids blowing the Waal bridges; this morning British armour reached Grave.",
+      "at": [
+        14,
+        10
+      ],
+      "place": "Hunner Park",
+      "source": "research/sept-17-18.md 5, 6; research/german-forces.md 5"
+    },
+    {
+      "turn": 1,
+      "time": "13:00",
+      "day": 19,
+      "side": "allied",
+      "kind": "plan",
+      "title": "Molenhoek conference: the bridges",
+      "text": "Midday to early afternoon. Browning, Horrocks, Gavin and Adair confer at Molenhoek. Plan: 2/505 with the Grenadier group against the Nijmegen bridges this afternoon; the British offer assault boats for a crossing.",
+      "at": [
+        13,
+        20
+      ],
+      "place": "Molenhoek",
+      "source": "research/allied-forces.md 4"
+    },
+    {
+      "turn": 2,
+      "time": "15:30",
+      "day": 19,
+      "side": "allied",
+      "kind": "event",
+      "title": "19 Sep drop fails",
+      "text": "1530. Only 32 aircraft of the 61st TCG reach DZ O out of 167 planned. Dropped high and fast; recovery negligible, about 20 per cent officially. Division critically short of food and ammunition.",
+      "at": [
+        7,
+        19
+      ],
+      "place": "DZ O, Overasselt",
+      "source": "research/allied-forces.md 4; research/allied-forces.md 5.1"
+    },
+    {
+      "turn": 2,
+      "time": "15:30",
+      "day": 19,
+      "side": "allied",
+      "kind": "plan",
+      "title": "Three columns into Nijmegen",
+      "text": "Attack plan: one troop of No. 3 Sqn with a Grenadier platoon and D/505 for the railway bridge; three troops with No. 2 Coy and E and F/505 for the road bridge; four tanks of No. 1 Sqn with No. 3 Coy and a 505th platoon for the post office.",
+      "at": [
+        14,
+        14
+      ],
+      "place": "Sionshof",
+      "source": "research/allied-forces.md 3.2"
+    },
+    {
+      "turn": 3,
+      "time": "16:00",
+      "day": 19,
+      "side": "allied",
+      "kind": "event",
+      "title": "Grenadiers and 2/505 into Nijmegen",
+      "text": "1600-1700 (times differ). Grenadiers and 2/505 attack from Sionshof in three columns: railway bridge, road bridge and post office. E and F/505 stopped at the Hunner Park traffic circle.",
+      "at": [
+        14,
+        10
+      ],
+      "place": "Keizer Lodewijkplein traffic circle",
+      "source": "research/allied-forces.md 4"
+    },
+    {
+      "turn": 3,
+      "time": "16:00",
+      "day": 19,
+      "side": "allied",
+      "kind": "event",
+      "title": "A/508 retakes Devil's Hill",
+      "text": "1600-1800. A/508 retakes the crest of Devil's Hill, losing 10 killed and 7 wounded; B/508 takes Wyler, held by about one company.",
+      "at": [
+        19,
+        14
+      ],
+      "place": "Devil's Hill",
+      "source": "research/allied-forces.md 4; research/allied-forces.md 2.3"
+    },
+    {
+      "turn": 3,
+      "time": "16:30",
+      "day": 19,
+      "side": "german",
+      "kind": "event",
+      "title": "Attack on the bridges stopped",
+      "text": "Afternoon. The western force is stopped at the railway embankment, its lead tank hit by the pre-registered north-bank battery, as two SP guns come out of the embankment tunnel. The eastern force stopped at the Keizer Lodewijkplein by the 88 and the anti-tank guns.",
+      "at": [
+        14,
+        10
+      ],
+      "place": "Keizer Lodewijkplein traffic circle",
+      "source": "research/german-forces.md 5"
+    },
+    {
+      "turn": 3,
+      "time": "17:30",
+      "day": 19,
+      "side": "allied",
+      "kind": "event",
+      "title": "Post office taken",
+      "text": "About 1730. Thorne's column takes the post office; it holds no bridge detonators.",
+      "at": [
+        13,
+        11
+      ],
+      "place": "Nijmegen main post office",
+      "source": "research/allied-forces.md 4"
+    },
+    {
+      "turn": 4,
+      "time": "19:00",
+      "day": 19,
+      "side": "allied",
+      "kind": "event",
+      "title": "Stopped 400 yards from both bridges",
+      "text": "Nightfall. Grenadier diary: heavy opposition encountered 400 yards from both bridges; consolidated for the night at Hunner Park and the Kronenburgerpark.",
+      "at": [
+        14,
+        10
+      ],
+      "place": "Keizer Lodewijkplein traffic circle",
+      "source": "research/allied-forces.md 4"
+    },
+    {
+      "turn": 4,
+      "time": "19:00",
+      "day": 19,
+      "side": "german",
+      "kind": "event",
+      "title": "Diversion at Oosterhout",
+      "text": "About 1900. Schwappacher's gunners make a diversionary counter-attack at Oosterhout.",
+      "at": [
+        11,
+        6
+      ],
+      "place": "Oosterhout",
+      "source": "research/german-forces.md 5"
+    },
+    {
+      "turn": 5,
+      "time": "21:00",
+      "day": 19,
+      "side": "allied",
+      "kind": "plan",
+      "title": "Plan for the 20th: clear the south bank",
+      "text": "For tomorrow: clear western Nijmegen and the south bank round the power station for a boat crossing; 3/504 brought up from reserve. H-hour first set for 0800.",
+      "at": [
+        10,
+        9
+      ],
+      "place": "Waal bank by the PGEM power station",
+      "source": "research/allied-forces.md 4"
+    },
+    {
+      "turn": 5,
+      "time": "21:15",
+      "day": 19,
+      "side": "allied",
+      "kind": "event",
+      "title": "3/504 at Jonkerbos",
+      "text": "2115. 3/504 crosses the Heumen bridge and harbours at Jonkerbos.",
+      "at": [
+        10,
+        14
+      ],
+      "place": "Jonkerbos",
+      "source": "research/allied-forces.md 4"
+    },
+    {
+      "turn": 6,
+      "time": "22:45",
+      "day": 19,
+      "side": "german",
+      "kind": "plan",
+      "title": "A Gp B: anti-tank weapons to Nijmegen",
+      "text": "About 2245 (from the A Gp B war diary). Heeresgruppe B orders more troops and all available anti-tank weapons to Nijmegen by the Huissen ferry. A dawn counter-attack is planned.",
+      "at": [
+        13,
+        8
+      ],
+      "place": "Lent",
+      "source": "research/german-forces.md 5"
+    },
+    {
+      "turn": 6,
+      "time": "23:00",
+      "day": 19,
+      "side": "german",
+      "kind": "event",
+      "title": "II Fallschirmkorps in the Reichswald",
+      "text": "Night. Meindl's II. Fallschirmkorps arrives in the Reichswald with a Luftwaffe battalion and six mixed battalions. KG Becker, Greschick and Hermann assembling on the east edge.",
+      "at": [
+        20,
+        20
+      ],
+      "place": "Reichswald edge",
+      "source": "research/german-forces.md 1, 4.2, 5"
+    },
+    {
+      "turn": 6,
+      "time": "23:00",
+      "day": 19,
+      "side": "german",
+      "kind": "plan",
+      "title": "Concentric attack on Groesbeek",
+      "text": "Plan for the 20th: two concentric attacks converging on Groesbeek. Korps Feldt (KG Becker) from the north-east on Beek, Berg en Dal and Wyler; II. FJ-Korps (KG Hermann) from the south-east through Riethorst on Mook. Saunders gives the goal as the Maas-Waal canal.",
+      "at": [
+        17,
+        20
+      ],
+      "place": "Groesbeek",
+      "source": "research/german-forces.md 4.2"
+    },
+    {
+      "turn": 6,
+      "time": "23:00",
+      "day": 19,
+      "side": "allied",
+      "kind": "plan",
+      "title": "Dawn attack on the road bridge",
+      "text": "2/505 to attack again toward the road bridge at 0530; western Nijmegen to be cleared from first light.",
+      "at": [
+        14,
+        10
+      ],
+      "place": "Keizer Lodewijkplein traffic circle",
+      "source": "research/allied-forces.md 4"
+    },
+    {
+      "turn": 8,
+      "time": "03:00",
+      "day": 20,
+      "side": "german",
+      "kind": "plan",
+      "title": "Kampfgruppen to attack at dawn",
+      "text": "Night. KG Becker (FJR 5, 8 and 9) assembling at the Wyler-Zyfflich border, KG Hermann south and east of Riethorst, KG Greschick's conscripts toward Wyler and Den Heuvel. H-hour set for 0630 (reportedly).",
+      "at": [
+        20,
+        16
+      ],
+      "place": "Wyler",
+      "source": "research/german-forces.md 4.2"
+    },
+    {
+      "turn": 9,
+      "time": "05:30",
+      "day": 20,
+      "side": "allied",
+      "kind": "event",
+      "title": "2/505 dawn attack fails",
+      "text": "0530. 2/505's attack toward the road bridge fails.",
+      "at": [
+        14,
+        10
+      ],
+      "place": "Keizer Lodewijkplein traffic circle",
+      "source": "research/allied-forces.md 4"
+    },
+    {
+      "turn": 11,
+      "time": "08:00",
+      "day": 20,
+      "side": "allied",
+      "kind": "event",
+      "title": "Clearing western Nijmegen",
+      "text": "From 0800. 1st Grenadiers and the 504th, with two tank squadrons, clear western Nijmegen and the south bank round the crossing site. Lt Prescott's tank lost.",
+      "at": [
+        12,
+        10
+      ],
+      "place": "Kronenburgerpark",
+      "source": "research/allied-forces.md 4; research/allied-forces.md 3.2"
+    },
+    {
+      "turn": 11,
+      "time": "08:00",
+      "day": 20,
+      "side": "allied",
+      "kind": "plan",
+      "title": "Crossing H-hour slips",
+      "text": "Crossing H-hour put back from 0800 to 1100, then 1330, then 1500: the boats have not come up.",
+      "at": [
+        10,
+        9
+      ],
+      "place": "Waal bank by the PGEM power station",
+      "source": "research/allied-forces.md 4"
+    },
+    {
+      "turn": 11,
+      "time": "08:00",
+      "day": 20,
+      "side": "german",
+      "kind": "event",
+      "title": "Inf.Btl. 526 attacks Groesbeek",
+      "text": "0800. Inf.Btl. 526 attacks through De Horst toward Groesbeek, two companies up; broken up by American MG fire.",
+      "at": [
+        20,
+        20
+      ],
+      "place": "De Horst",
+      "source": "research/german-forces.md 4.1, 5"
+    },
+    {
+      "turn": 11,
+      "time": "09:00",
+      "day": 20,
+      "side": "allied",
+      "kind": "plan",
+      "title": "3/504 warned for the crossing",
+      "text": "0900. Warning order to 3/504: cross the Waal by assault boat west of the city and take the north ends of the bridges.",
+      "at": [
+        10,
+        9
+      ],
+      "place": "Waal bank by the PGEM power station",
+      "source": "research/allied-forces.md 2.3"
+    },
+    {
+      "turn": 11,
+      "time": "09:00",
+      "day": 20,
+      "side": "german",
+      "kind": "plan",
+      "title": "Becker: Beek, then the canal",
+      "text": "KG Becker to take Beek and the hills, then push west to the Maas-Waal canal. Mortar fire on Devil's Hill opens the attack in the Beek sector this morning.",
+      "at": [
+        17,
+        13
+      ],
+      "place": "Beek",
+      "source": "research/german-forces.md 4.2, 5"
+    },
+    {
+      "turn": 11,
+      "time": "09:00",
+      "day": 20,
+      "side": "german",
+      "kind": "plan",
+      "title": "The bridges are not to be blown",
+      "text": "Model's prohibition stands: the Waal bridges are to be held, not blown; he wants them for the counter-attack. The pioneers' charges on the road bridge are ready.",
+      "at": [
+        14,
+        10
+      ],
+      "place": "Waal road bridge, south end",
+      "source": "research/german-forces.md 6"
+    },
+    {
+      "turn": 11,
+      "time": "09:50",
+      "day": 20,
+      "side": "allied",
+      "kind": "event",
+      "title": "Wyler attacked",
+      "text": "0930-0950. Artillery on Wyler from 0930; a two-company attack at 0950 broken up, then a battalion-strength attack. A dawn attack on Devil's Hill repulsed.",
+      "at": [
+        20,
+        16
+      ],
+      "place": "Wyler",
+      "source": "research/allied-forces.md 2.3"
+    },
+    {
+      "turn": 12,
+      "time": "10:00",
+      "day": 20,
+      "side": "german",
+      "kind": "event",
+      "title": "KG Hermann attacks Riethorst",
+      "text": "About 1000 (barrage about 1100 by another account). KG Hermann's attack on Riethorst and Mook begins, some hours late; three tanks with one battalion.",
+      "at": [
+        16,
+        24
+      ],
+      "place": "Riethorst",
+      "source": "research/german-forces.md 4.2"
+    },
+    {
+      "turn": 12,
+      "time": "11:00",
+      "day": 20,
+      "side": "allied",
+      "kind": "event",
+      "title": "Mook front attacked",
+      "text": "About 1100. Barrage on Riethorst and Mook. Riethorst held at first with ten 75-mm in support.",
+      "at": [
+        16,
+        24
+      ],
+      "place": "Riethorst",
+      "source": "research/allied-forces.md 2.3"
+    },
+    {
+      "turn": 14,
+      "time": "14:00",
+      "day": 20,
+      "side": "allied",
+      "kind": "plan",
+      "title": "Gavin to the Mook front",
+      "text": "Gavin leaves the crossing to deal with Mook. 1/505's reserve platoons and No. 3 Sqn of the 1st Coldstream to retake Mook; the 5th Coldstream to push the Germans back toward Riethorst.",
+      "at": [
+        14,
+        22
+      ],
+      "place": "Mook",
+      "source": "research/allied-forces.md 2.7, 3.2"
+    },
+    {
+      "turn": 14,
+      "time": "14:10",
+      "day": 20,
+      "side": "german",
+      "kind": "event",
+      "title": "Mook nearly taken",
+      "text": "1410. Mook almost in German hands; the 505th's outposts overrun by 1500.",
+      "at": [
+        14,
+        22
+      ],
+      "place": "Mook",
+      "source": "research/german-forces.md 5"
+    },
+    {
+      "turn": 14,
+      "time": "14:30",
+      "day": 20,
+      "side": "allied",
+      "kind": "event",
+      "title": "Boats arrive; tanks to the bank",
+      "text": "1430-1440. 26 canvas assault boats arrive, of 32 or 33 promised. Two squadrons of 2nd Irish Guards move up to the embankment by the power station to give fire.",
+      "at": [
+        10,
+        9
+      ],
+      "place": "Waal bank by the PGEM power station",
+      "source": "research/allied-forces.md 4"
+    },
+    {
+      "turn": 14,
+      "time": "14:30",
+      "day": 20,
+      "side": "allied",
+      "kind": "plan",
+      "title": "Typhoons, then smoke",
+      "text": "Fire plan for the crossing: Typhoon strike 1445-1455, smoke on the far bank, about 100 field guns and the Irish Guards' tanks firing from the bank on Fort Hof van Holland and the dyke.",
+      "at": [
+        12,
+        8
+      ],
+      "place": "Fort Hof van Holland",
+      "source": "research/allied-forces.md 4; research/allied-forces.md 3.2"
+    },
+    {
+      "turn": 14,
+      "time": "15:00",
+      "day": 20,
+      "side": "allied",
+      "kind": "event",
+      "title": "H-hour: 3/504 crosses the Waal",
+      "text": "1457 first wave launched, H-hour 1500: H and I Cos 3/504 with the battalion command group, C/307th Engineers paddling. Half the first-wave boats lost; 11 boats make six crossings.",
+      "at": [
+        10,
+        9
+      ],
+      "place": "Waal bank by the PGEM power station",
+      "source": "research/allied-forces.md 4"
+    },
+    {
+      "turn": 14,
+      "time": "15:00",
+      "day": 20,
+      "side": "german",
+      "kind": "event",
+      "title": "Boats on the river",
+      "text": "1500. Assault boats crossing the Waal about 2 km west of the road bridge. Fired on by 20-mm, MGs, mortars and artillery; most 88s cannot depress and engage the tanks on the bank. A Spitfire shot down.",
+      "at": [
+        10,
+        9
+      ],
+      "place": "Waal bank by the PGEM power station",
+      "source": "research/german-forces.md 5; research/german-forces.md 2.1"
+    },
+    {
+      "turn": 15,
+      "time": "16:00",
+      "day": 20,
+      "side": "allied",
+      "kind": "event",
+      "title": "504th on the north bank",
+      "text": "About 1600. H/504 platoons on the railway embankment north of the river; a platoon takes Fort Hof van Holland. Germans start to retreat across the railway bridge.",
+      "at": [
+        12,
+        8
+      ],
+      "place": "Fort Hof van Holland",
+      "source": "research/allied-forces.md 4"
+    },
+    {
+      "turn": 15,
+      "time": "16:00",
+      "day": 20,
+      "side": "german",
+      "kind": "event",
+      "title": "Wyler retaken; railway bridge lost",
+      "text": "Afternoon. A battalion attack retakes Wyler; two American platoons pull out. In Nijmegen the south end of the railway bridge is lost and Fort Hof van Holland falls.",
+      "at": [
+        20,
+        16
+      ],
+      "place": "Wyler",
+      "source": "research/german-forces.md 5"
+    },
+    {
+      "turn": 15,
+      "time": "16:20",
+      "day": 20,
+      "side": "allied",
+      "kind": "event",
+      "title": "Hunner Park taken",
+      "text": "1620. Traffic circle and Hunner Park taken by the Grenadiers and 2/505.",
+      "at": [
+        14,
+        10
+      ],
+      "place": "Hunner Park",
+      "source": "research/allied-forces.md 4"
+    },
+    {
+      "turn": 15,
+      "time": "17:00",
+      "day": 20,
+      "side": "allied",
+      "kind": "event",
+      "title": "Big drop on DZ O",
+      "text": "1648-1749. 310 aircraft drop 441 tons, mostly ammunition, on DZ O, spread over about 2 x 6 miles. Division recovers 60 per cent with Dutch help.",
+      "at": [
+        7,
+        19
+      ],
+      "place": "DZ O, Overasselt",
+      "source": "research/allied-forces.md 4"
+    },
+    {
+      "turn": 16,
+      "time": "18:00",
+      "day": 20,
+      "side": "allied",
+      "kind": "event",
+      "title": "South end cleared",
+      "text": "About 1800. South end of the road bridge cleared. US flag seen on the north end of the railway bridge.",
+      "at": [
+        14,
+        10
+      ],
+      "place": "Waal road bridge, south end",
+      "source": "research/allied-forces.md 4; research/german-forces.md 5"
+    },
+    {
+      "turn": 16,
+      "time": "18:00",
+      "day": 20,
+      "side": "german",
+      "kind": "event",
+      "title": "Beek taken",
+      "text": "Early evening. A battalion of KG Becker forces two American platoons out of Beek toward Hotel Berg en Dal.",
+      "at": [
+        17,
+        13
+      ],
+      "place": "Beek",
+      "source": "research/german-forces.md 4.2, 5"
+    },
+    {
+      "turn": 16,
+      "time": "18:13",
+      "day": 20,
+      "side": "allied",
+      "kind": "plan",
+      "title": "Orders: a troop to rush the bridge",
+      "text": "About 1800-1813. A troop of No. 1 Sqn 2nd Grenadier Guards (Sgt Robinson) to rush the road bridge; Lt Jones's sappers of 14th Fd Sqn RE ordered forward to follow and cut the demolition leads.",
+      "at": [
+        14,
+        10
+      ],
+      "place": "Waal road bridge, south end",
+      "source": "research/allied-forces.md 4; research/allied-forces.md 3.2"
+    },
+    {
+      "turn": 16,
+      "time": "18:15",
+      "day": 20,
+      "side": "allied",
+      "kind": "event",
+      "title": "Mook retaken",
+      "text": "From about 1815. 1/505's reserve platoons with about six Coldstream tanks retake Mook by nightfall.",
+      "at": [
+        14,
+        22
+      ],
+      "place": "Mook",
+      "source": "research/allied-forces.md 4"
+    },
+    {
+      "turn": 16,
+      "time": "19:00",
+      "day": 20,
+      "side": "allied",
+      "kind": "event",
+      "title": "Tanks across the Waal bridge",
+      "text": "About 1900 (1830-1910 by different accounts). A troop of Grenadier tanks rushed across the road bridge, losing two; link-up with 3/504 at the north end about 1910-1915.",
+      "at": [
+        13,
+        8
+      ],
+      "place": "Lent",
+      "source": "research/allied-forces.md 4"
+    },
+    {
+      "turn": 16,
+      "time": "19:10",
+      "day": 20,
+      "side": "german",
+      "kind": "event",
+      "title": "Harmel: blow it",
+      "text": "About 1910. Watching from his bunker at Lent, Harmel says he ordered the road bridge blown as the tanks crossed. Nothing happens; he blames a cable cut by shellfire.",
+      "at": [
+        13,
+        8
+      ],
+      "place": "Lent",
+      "source": "research/german-forces.md 5; research/german-forces.md 6"
+    },
+    {
+      "turn": 16,
+      "time": "19:20",
+      "day": 20,
+      "side": "allied",
+      "kind": "event",
+      "title": "Demolition wires cut",
+      "text": "Evening. Lt Jones's sappers follow the tanks over, cutting leads and removing igniters; TNT charges found in green boxes on a pier at the north end.",
+      "at": [
+        14,
+        10
+      ],
+      "place": "Waal road bridge, south end",
+      "source": "research/allied-forces.md 3.2; research/german-forces.md 6"
+    },
+    {
+      "turn": 16,
+      "time": "19:45",
+      "day": 20,
+      "side": "german",
+      "kind": "event",
+      "title": "Surrenders on the railway bridge",
+      "text": "Dusk. 200-300 men surrender from the middle of the railway bridge. 267 German dead later counted on it.",
+      "at": [
+        12,
+        9
+      ],
+      "place": "Waal railway bridge",
+      "source": "research/german-forces.md 5; research/allied-forces.md 4"
+    }
+  ],
   "provenance": {
     "status": "provisional",
     "sources": [

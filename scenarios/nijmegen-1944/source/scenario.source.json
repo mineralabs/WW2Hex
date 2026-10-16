@@ -3,7 +3,12 @@
   "name": "Nijmegen bridges, 19–20 September 1944 (provisional)",
   "dataStatus": "provisional",
   "description": "From 12:00 on 19 September to 20:00 on 20 September 1944. The Guards Armoured Division has reached the US 82nd Airborne Division south of Nijmegen. The Allied side must seize the Waal road bridge and hold a supplied bridgehead on both ends of it by the end. The German side must deny that, or cut the corridor at the Heumen lock bridge. Researched from published histories but provisional: strengths, positions and equipment are estimates where the sources are silent. See docs/research.",
-  "start": { "day": 19, "minuteOfDay": 720, "date": "1944-09-19", "utcOffsetMinutes": 60 },
+  "start": {
+    "day": 19,
+    "minuteOfDay": 720,
+    "date": "1944-09-19",
+    "utcOffsetMinutes": 60
+  },
   "equipment": [
     {
       "id": "us-rifle-squad",
@@ -2121,6 +2126,12 @@
   "victory": {
     "lastTurn": 16,
     "otherwise": "german"
+  },
+  "diary": {
+    "file": "../../shared/market-garden-diary.json",
+    "sectors": [
+      "nijmegen"
+    ]
   },
   "provenance": {
     "status": "provisional",

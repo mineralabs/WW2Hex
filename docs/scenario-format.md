@@ -130,6 +130,27 @@ optional `toward` (the place the road leads to off the map, shown as a sign at t
 [combat-rules.md](combat-rules.md#supply-and-reserves). Each side's players are sent only their
 own side's sources, and only their own side's supply drops, which their map shows as drop zones.
 
+## `diary`
+
+Optional historical context, shown to the players turn by turn in a **War diary** panel: what
+happened at that hour in the real battle, and what each side planned. It is history, not
+orders; the game does not follow it. Each entry has:
+- `turn`, `time` ("HH:MM") and `day` (day of the month);
+- `side`: `allied`, `german`, or `null` for something both would know;
+- `kind`: `event` (what happened) or `plan` (orders and intentions);
+- `title`, `text` and `source`;
+- optionally `at` (a hex) and `place`, which give a link in the panel that centres the map there.
+
+Each side's players are sent only their own side's entries and the shared ones.
+
+In a scenario source, `"diary": { "file": "...", "sectors": [...] }` names a shared diary file
+of entries with a date and time (`"when": "1944-09-18T09:00"`, on the scenario's clock), a
+`sector`, and a position as latitude and longitude. `build-scenario.ts` keeps the entries that
+fall inside the scenario's hours and sectors, and gives each the turn its time falls in. So the
+Arnhem, Nijmegen and campaign scenarios share one diary,
+[`scenarios/shared/market-garden-diary.json`](../scenarios/shared/market-garden-diary.json).
+An entry with `scenarios: [ids]` appears only in those scenarios.
+
 ## Building a historical scenario
 
 The Nijmegen scenario is not written by hand. It is assembled from research by two scripts:

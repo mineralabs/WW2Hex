@@ -58,4 +58,20 @@ describe('the Market Garden campaign', () => {
     const xxx = file.events.find((e) => e.kind === 'reinforcement' && e.id === 'household-cavalry')!;
     expect(xxx.turn).toBe(21);
   });
+
+  it('shares one war diary with the separate scenarios, each entry on the turn its hour falls in', () => {
+    for (const f of [file, a, n]) {
+      const d = f.diary ?? [];
+      expect(d.length).toBeGreaterThan(30);
+      for (const side of ['allied', 'german'] as const) expect(d.some((e) => e.side === side)).toBe(true);
+      expect(d.every((e) => e.turn >= 1 && e.turn <= f.victory!.lastTurn)).toBe(true);
+      for (const e of d) {
+        const minutes = (e.day - f.start.day) * 1440 + Number(e.time.slice(0, 2)) * 60 + Number(e.time.slice(3)) - f.start.minuteOfDay;
+        expect(Math.floor(minutes / 120) + 1).toBe(e.turn);
+      }
+    }
+    // The separate Nijmegen game opens with the story so far; the campaign has played it.
+    expect(n.diary!.filter((e) => e.turn === 1 && /story so far/i.test(e.title)).length).toBe(2);
+    expect(file.diary!.some((e) => /story so far/i.test(e.title))).toBe(false);
+  });
 });

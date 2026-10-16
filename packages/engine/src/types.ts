@@ -68,7 +68,32 @@ export interface ScenarioFile {
   objectives: ObjectiveFile[];
   /** Scenario length and the result if no objective is met. Omit for an open-ended test map. */
   victory?: VictoryFile;
+  /** Historical context shown turn by turn: what happened in the real battle, and what each side planned. */
+  diary?: DiaryEntryFile[];
   provenance: ProvenanceFile;
+}
+
+/**
+ * One war-diary entry. It is history, not an order: the players see what happened at that hour in
+ * the real battle, whatever is happening in their game. Each side is sent only its own entries and
+ * the shared ones.
+ */
+export interface DiaryEntryFile {
+  /** The turn whose diary it appears in. */
+  turn: number;
+  /** The clock time it records, "HH:MM" on the scenario's clock, and the day of the month. */
+  time: string;
+  day: number;
+  /** Whose diary it is; null for something both sides would know. */
+  side: Side | null;
+  /** "event": what happened in the real battle. "plan": orders and intentions. */
+  kind: 'event' | 'plan';
+  title: string;
+  text: string;
+  /** The hex it is about, if any, and its name. */
+  at?: OffsetTuple;
+  place?: string;
+  source: string;
 }
 
 export interface ObjectiveFile {

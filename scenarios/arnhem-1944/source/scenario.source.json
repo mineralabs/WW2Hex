@@ -1703,6 +1703,12 @@
     "lastTurn": 15,
     "otherwise": "german"
   },
+  "diary": {
+    "file": "../../shared/market-garden-diary.json",
+    "sectors": [
+      "arnhem"
+    ]
+  },
   "provenance": {
     "status": "provisional",
     "sources": [

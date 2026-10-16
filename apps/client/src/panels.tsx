@@ -3,9 +3,11 @@ import {
   MOVEMENT_CLASSES,
   cellAt,
   edgeKey,
+  fromOffset,
   hexKey,
   neighbors,
   type ContactView,
+  type DiaryEntryFile,
   type GameMap,
   type Hex,
   type MatchPhase,
@@ -797,6 +799,55 @@ export function ReinforcementPanel(props: {
           </li>
         ))}
       </ul>
+    </section>
+  );
+}
+
+/**
+ * The war diary: what happened at this hour in the real battle and what each side planned, for
+ * context. Each side is sent only its own entries and the shared ones.
+ */
+export function DiaryPanel(props: { entries: DiaryEntryFile[]; turn: number; month: string; onShow: (hex: Hex) => void }) {
+  const now = props.entries.filter((e) => e.turn === props.turn);
+  const earlier = props.entries.filter((e) => e.turn < props.turn).reverse();
+  if (props.entries.length === 0) return null;
+  const item = (e: DiaryEntryFile, i: number) => (
+    <li key={`${e.turn}-${i}-${e.title}`} className={`diary-${e.kind}`}>
+      <div>
+        <time>
+          {e.day} {props.month} {e.time}
+        </time>{' '}
+        <span className="diary-tag">{e.kind === 'plan' ? 'Plan' : 'In 1944'}</span> <strong>{e.title}</strong>
+      </div>
+      <div className="diary-text">{e.text}</div>
+      <div className="muted small">
+        {e.at && (
+          <>
+            <button className="link" onClick={() => props.onShow(fromOffset(e.at!))}>
+              {e.place ?? 'Show on map'}
+            </button>
+            {' · '}
+          </>
+        )}
+        {e.source}
+      </div>
+    </li>
+  );
+  return (
+    <section className="panel diary">
+      <details open>
+        <summary>
+          <h3>War diary</h3>
+        </summary>
+        <p className="muted small">History, not orders: what happened at this hour in 1944.</p>
+        {now.length ? <ol>{now.map(item)}</ol> : <div className="muted small">Nothing recorded for this turn.</div>}
+        {earlier.length > 0 && (
+          <details className="diary-earlier">
+            <summary className="muted small">Earlier entries ({earlier.length})</summary>
+            <ol>{earlier.map(item)}</ol>
+          </details>
+        )}
+      </details>
     </section>
   );
 }

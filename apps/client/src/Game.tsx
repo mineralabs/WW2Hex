@@ -51,6 +51,7 @@ import { RulesDialog } from './RulesDialog.tsx';
 import {
   ConflictPanel,
   ContactPanel,
+  DiaryPanel,
   EventLog,
   HelpPanel,
   HexPanel,
@@ -1095,6 +1096,15 @@ export function Game(props: {
           <HelpPanel phase={phase} />
         )}
         {selectedHex && <HexPanel hex={selectedHex} map={map} rules={RULES} place={placeAt(selectedHex)} unit={unitAtSelectedHex} />}
+        <DiaryPanel
+          entries={file.diary ?? []}
+          turn={watching && replay ? replay.turn : turn}
+          month={file.start.date ? new Date(`${file.start.date}T12:00:00Z`).toLocaleString('en-GB', { month: 'short', timeZone: 'UTC' }) : ''}
+          onShow={(hex) => {
+            setSelectedHex(hex);
+            setFocus({ hex, nonce: Date.now() });
+          }}
+        />
         <ObjectivePanel objectives={view.objectives} victory={world.victory} turn={turn} place={placeAt} lastTurnEnds={lastTurnEnds} />
         <ReinforcementPanel
           pending={view.ownReinforcements}

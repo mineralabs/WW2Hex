@@ -3981,6 +3981,728 @@
     "lastTurn": 15,
     "otherwise": "german"
   },
+  "diary": [
+    {
+      "turn": 1,
+      "time": "15:00",
+      "day": 17,
+      "side": "allied",
+      "kind": "event",
+      "title": "1st Para Bde moves off for the bridge",
+      "text": "1500. 2 PARA moves off from the RV on DZ X by LION, the river road through Heelsum and Heveadorp; 3 PARA by TIGER along the Utrechtseweg. Opposition light so far.",
+      "at": [
+        7,
+        18
+      ],
+      "place": "2 Para RV, DZ X",
+      "source": "research-arnhem/allied-forces.md 3.1, 6"
+    },
+    {
+      "turn": 1,
+      "time": "15:00",
+      "day": 17,
+      "side": "allied",
+      "kind": "plan",
+      "title": "Brigade orders: the road bridge first",
+      "text": "1st Para Bde to take and hold the road bridge (first priority) and the pontoon bridge, and put one company on the south bank. Routes LION (2 Para), TIGER (3 Para), LEOPARD (1 Para); Recce Sqn to try a jeep coup de main. 1st Airlanding Bde to hold the zones for tomorrow's second lift.",
+      "at": [
+        7,
+        18
+      ],
+      "place": "2 Para RV, DZ X",
+      "source": "research-arnhem/allied-forces.md 1, 7.1"
+    },
+    {
+      "turn": 1,
+      "time": "15:30",
+      "day": 17,
+      "side": "german",
+      "kind": "event",
+      "title": "Krafft's line closes at Wolfheze",
+      "text": "1530. Btl. Krafft's blocking line complete from the railway at Wolfheze south to the Utrechtseweg, HQ at the Hotel Wolfheze; 9. Kp up from Arnhem. It does not cover the Amsterdamseweg or the river road.",
+      "at": [
+        9,
+        17
+      ],
+      "place": "Hotel Wolfheze",
+      "source": "research-arnhem/german-forces.md 8.1, 10"
+    },
+    {
+      "turn": 1,
+      "time": "16:00",
+      "day": 17,
+      "side": "allied",
+      "kind": "event",
+      "title": "Recce Sqn ambushed; coup de main off",
+      "text": "About 1600. C Troop ambushed on the Johannahoeveweg just east of Wolfheze; 2 jeeps lost, about 7 killed and 4 captured. Squadron withdraws; the coup de main is abandoned.",
+      "at": [
+        9,
+        15
+      ],
+      "place": "Johannahoeveweg, east of Wolfheze",
+      "source": "research-arnhem/allied-forces.md 3.2, 6"
+    },
+    {
+      "turn": 1,
+      "time": "16:30",
+      "day": 17,
+      "side": "german",
+      "kind": "event",
+      "title": "KG Möller deploys at Den Brink",
+      "text": "1630. KG Möller (SS-Pz.Pi.Btl. 9, 60-80 men, 2 half-tracks, flamethrowers) reaches Arnhem, comes under fire on the Utrechtseweg east of Den Brink and deploys there.",
+      "at": [
+        15,
+        18
+      ],
+      "place": "Den Brink",
+      "source": "research-arnhem/german-forces.md 3, 10"
+    },
+    {
+      "turn": 2,
+      "time": "17:00",
+      "day": 17,
+      "side": "german",
+      "kind": "plan",
+      "title": "Spindler: block west of Arnhem",
+      "text": "About 1700. Spindler ordered west from Dieren with his gunners of SS-Pz.Art.Rgt. 9, fighting as infantry, to block the British west of the town and take over the 9th SS units there.",
+      "source": "research-arnhem/german-forces.md 10"
+    },
+    {
+      "turn": 2,
+      "time": "17:00",
+      "day": 17,
+      "side": "german",
+      "kind": "event",
+      "title": "Gräbner across the Arnhem bridge",
+      "text": "About 1700 (1800 German time). SS-Pz.Aufkl.Abt. 9, about 30 armoured cars and half-tracks, crosses the Arnhem road bridge southbound for Nijmegen. No British yet at the bridge.",
+      "at": [
+        17,
+        20
+      ],
+      "place": "Arnhem road bridge, north end",
+      "source": "research-arnhem/german-forces.md 3; research/sept-17-18.md 5.2"
+    },
+    {
+      "turn": 2,
+      "time": "17:15",
+      "day": 17,
+      "side": "allied",
+      "kind": "event",
+      "title": "3 Para held at the Bilderberg",
+      "text": "1630-1715. B Coy 3 PARA shoots up a German staff car at the Wolfhezerweg crossroads; the general in it is killed. Leading 6-pdr knocked out by an SP gun; battalion held in the Bilderberg woods by Krafft's men.",
+      "at": [
+        11,
+        18
+      ],
+      "place": "Bilderberg woods",
+      "source": "research-arnhem/allied-forces.md 4.2, 6"
+    },
+    {
+      "turn": 2,
+      "time": "17:15",
+      "day": 17,
+      "side": "german",
+      "kind": "event",
+      "title": "Generalmajor Kussin killed",
+      "text": "About 1715. Genmaj. Kussin, Feldkommandant Arnhem, visits Krafft at the Hotel Wolfheze and is killed minutes later at the Utrechtseweg junction. Local command disrupted.",
+      "at": [
+        10,
+        17
+      ],
+      "place": "Utrechtseweg / Wolfhezerweg crossroads",
+      "source": "research-arnhem/german-forces.md 10"
+    },
+    {
+      "turn": 2,
+      "time": "17:30",
+      "day": 17,
+      "side": "german",
+      "kind": "plan",
+      "title": "Bittrich: 9th SS to take Arnhem",
+      "text": "1730. Bittrich orders the 9th SS to occupy Arnhem and destroy the airborne force west of it; Model confirms. Harzer's alarm units to block the British from the north and east.",
+      "source": "research-arnhem/german-forces.md 10"
+    },
+    {
+      "turn": 2,
+      "time": "17:30",
+      "day": 17,
+      "side": "allied",
+      "kind": "event",
+      "title": "1 Para blocked on the Amsterdamseweg",
+      "text": "1700-1800. R Coy 1 PARA hit at 675820 and loses about half. Battalion blocked from the Amsterdamseweg by '5 tanks and approx 15 half-tracks' moving west.",
+      "at": [
+        10,
+        13
+      ],
+      "place": "Grid 675820, north of Wolfheze",
+      "source": "research-arnhem/allied-forces.md 3.1, 4.3"
+    },
+    {
+      "turn": 2,
+      "time": "18:00",
+      "day": 17,
+      "side": null,
+      "kind": "event",
+      "title": "Oosterbeek railway bridge blown",
+      "text": "About 1800. The centre span of the railway bridge at Oosterbeek goes up as C Coy 2 PARA closes on it.",
+      "at": [
+        13,
+        20
+      ],
+      "place": "Oosterbeek railway bridge",
+      "source": "research-arnhem/allied-forces.md 3.1, 6; research-arnhem/german-forces.md 2"
+    },
+    {
+      "turn": 2,
+      "time": "18:45",
+      "day": 17,
+      "side": null,
+      "kind": "event",
+      "title": "Sunset",
+      "text": "1847 sunset; last light 1941. New moon; the moon sets at 1913. Dark until about 0520.",
+      "source": "research-arnhem/allied-forces.md 0"
+    },
+    {
+      "turn": 3,
+      "time": "19:00",
+      "day": 17,
+      "side": "german",
+      "kind": "plan",
+      "title": "Bridge to be held for the counter-attack",
+      "text": "The road bridge is not to be blown; Model wants the bridges for a counter-attack. No unit has been ordered to the bridge in time.",
+      "at": [
+        17,
+        20
+      ],
+      "place": "Arnhem road bridge, north end",
+      "source": "research-arnhem/german-forces.md 1, 2"
+    },
+    {
+      "turn": 3,
+      "time": "20:00",
+      "day": 17,
+      "side": "allied",
+      "kind": "event",
+      "title": "2 Para at the bridge",
+      "text": "About 2000. A Coy 2 PARA reaches the north end of the Arnhem road bridge (times given range 1930-2030). B Coy cleared Den Brink; C Coy trapped in the town.",
+      "at": [
+        17,
+        20
+      ],
+      "place": "Arnhem road bridge, north end",
+      "source": "research-arnhem/allied-forces.md 3.1, 6"
+    },
+    {
+      "turn": 3,
+      "time": "20:00",
+      "day": 17,
+      "side": "german",
+      "kind": "event",
+      "title": "British at the north ramp",
+      "text": "About 2000. The few bridge guards in the bunker at the north end open fire and are silenced by PIAT and flamethrower. 3./SS-PGR 21 arrives near the Eusebius church and makes first contact.",
+      "at": [
+        17,
+        19
+      ],
+      "place": "Eusebius church",
+      "source": "research-arnhem/german-forces.md 2, 4, 10"
+    },
+    {
+      "turn": 3,
+      "time": "20:45",
+      "day": 17,
+      "side": "allied",
+      "kind": "event",
+      "title": "Grayburn's attack on the south end fails",
+      "text": "2045. Lt Grayburn's platoon tries to rush the bridge to the south end and is driven back.",
+      "at": [
+        17,
+        20
+      ],
+      "place": "Arnhem road bridge, north end",
+      "source": "research-arnhem/allied-forces.md 4.5, 6"
+    },
+    {
+      "turn": 4,
+      "time": "21:00",
+      "day": 17,
+      "side": "german",
+      "kind": "plan",
+      "title": "Harzer: destroy the British north of the Rhine",
+      "text": "About 2100. Harzer is ordered to destroy all British forces north of the Nederrijn.",
+      "source": "research-arnhem/german-forces.md 1, 10"
+    },
+    {
+      "turn": 4,
+      "time": "21:30",
+      "day": 17,
+      "side": "allied",
+      "kind": "plan",
+      "title": "Frost: hold the north end",
+      "text": "Bridge force to hold the north end facing west and north-west, and try to get a party over to the south end to complete the brigade task.",
+      "at": [
+        17,
+        20
+      ],
+      "place": "Arnhem road bridge, north end",
+      "source": "research-arnhem/allied-forces.md 7.1, 4.5"
+    },
+    {
+      "turn": 4,
+      "time": "22:00",
+      "day": 17,
+      "side": "allied",
+      "kind": "event",
+      "title": "Pillbox burned; north end held",
+      "text": "2200-2300. Flame-thrower attack on the pillbox at the ramp sets an ammunition store ablaze. North end reported captured about 2230-2300. A boat crossing to the south bank fails: no barges.",
+      "at": [
+        17,
+        20
+      ],
+      "place": "Arnhem road bridge, north end",
+      "source": "research-arnhem/allied-forces.md 4.5, 6"
+    },
+    {
+      "turn": 4,
+      "time": "22:30",
+      "day": 17,
+      "side": "german",
+      "kind": "plan",
+      "title": "Krafft to cover the north",
+      "text": "2230-2245. Krafft, now under Spindler and the 9th SS, to go on to Schaarsbergen and cover the northern and north-western approaches.",
+      "at": [
+        13,
+        16
+      ],
+      "place": "De Leeren Doedel, Amsterdamseweg",
+      "source": "research-arnhem/german-forces.md 10"
+    },
+    {
+      "turn": 5,
+      "time": "23:00",
+      "day": 17,
+      "side": "german",
+      "kind": "plan",
+      "title": "Model divides the defence",
+      "text": "Before midnight. Model issues orders splitting the defence into three sectors: 1. Fallschirm-Armee, Wehrkreis VI, and the WBN under von Tettau in the west. Model forbids demolition of the bridges; he wants them for the counter-attack.",
+      "source": "research-arnhem/german-forces.md 1, 10"
+    },
+    {
+      "turn": 5,
+      "time": "23:00",
+      "day": 17,
+      "side": "german",
+      "kind": "event",
+      "title": "Tettau's units gathering in the west",
+      "text": "Night. Btl. Mattusch fighting near Heelsum; five companies of 10. Schiffsstammabteilung on the east edge of the woods east of Wageningen; Lippert's NCO-school companies cycling in, due about midnight.",
+      "at": [
+        0,
+        20
+      ],
+      "place": "Wageningen",
+      "source": "research-arnhem/german-forces.md 8.3"
+    },
+    {
+      "turn": 6,
+      "time": "01:00",
+      "day": 18,
+      "side": "allied",
+      "kind": "plan",
+      "title": "1 Para: south to the river road",
+      "text": "0100. 1 PARA, less R Coy, to break south off the Amsterdamseweg and come into Arnhem by the river road to reinforce Frost. At 0530 Frost's call for help reaches it through the FOO net.",
+      "at": [
+        10,
+        13
+      ],
+      "place": "Grid 675820, north of Wolfheze",
+      "source": "research-arnhem/allied-forces.md 6"
+    },
+    {
+      "turn": 6,
+      "time": "01:00",
+      "day": 18,
+      "side": "german",
+      "kind": "plan",
+      "title": "Spindler: a line from the road to the Rhine",
+      "text": "Night. Spindler to build a blocking line from the Amsterdamseweg down the Dreijenseweg to the Rhine and close the river-road gap; an inner line to be started about 800 m from the bridge.",
+      "at": [
+        15,
+        18
+      ],
+      "place": "Den Brink",
+      "source": "research-arnhem/german-forces.md 8.2, 10"
+    },
+    {
+      "turn": 7,
+      "time": "03:00",
+      "day": 18,
+      "side": "german",
+      "kind": "plan",
+      "title": "WBN promises reinforcements",
+      "text": "About 0300 (0400 German time). WBN promises Tettau more units: SS-KG Eberwein, KG Knoche, Flak-Abt. 184, a Fliegerhorst battalion, Pz.Kp. 224 with 17 French tanks and a Hermann Göring battalion.",
+      "source": "research-arnhem/german-forces.md 5"
+    },
+    {
+      "turn": 7,
+      "time": "04:00",
+      "day": 18,
+      "side": "german",
+      "kind": "event",
+      "title": "KG Knaust arrives; Harmel at Velp",
+      "text": "About 0400. KG Knaust (Pz.Gren.Ausb.u.Ers.Btl. 64, convalescents and recruits) arrives at the north-east edge of Arnhem and goes under Brinkmann. Harmel, back from Berlin, reaches his forward CP at Velp.",
+      "at": [
+        21,
+        17
+      ],
+      "place": "Velp",
+      "source": "research-arnhem/german-forces.md 4, 10"
+    },
+    {
+      "turn": 8,
+      "time": "05:00",
+      "day": 18,
+      "side": "allied",
+      "kind": "event",
+      "title": "B Coy 2 Para reaches the bridge",
+      "text": "About 0500. B Coy 2 PARA, about 70 men, joins at the bridge. About 740 men there in all. At first light Maj Murray finds the bridge not prepared for demolition.",
+      "at": [
+        17,
+        20
+      ],
+      "place": "Arnhem road bridge, north end",
+      "source": "research-arnhem/allied-forces.md 3.1, 4.6, 6"
+    },
+    {
+      "turn": 8,
+      "time": "05:00",
+      "day": 18,
+      "side": "german",
+      "kind": "event",
+      "title": "Helle attacks across Ginkel Heath",
+      "text": "About 0500. SS-Wachbataillon 3 (Helle), mostly Dutch SS, attacks the KOSB across Ginkel Heath with four companies up; a KOSB platoon taken.",
+      "at": [
+        5,
+        11
+      ],
+      "place": "DZ Y, Ginkel Heath",
+      "source": "research-arnhem/german-forces.md 5, 10"
+    },
+    {
+      "turn": 9,
+      "time": "07:00",
+      "day": 18,
+      "side": "german",
+      "kind": "event",
+      "title": "Knaust takes over from Euling",
+      "text": "Early morning. Euling's company group stops a British push north of the bridge, is relieved squad for squad by Knaust, and leaves for Pannerden. Mielke's Pz III and IV probe the perimeter from the east.",
+      "at": [
+        17,
+        20
+      ],
+      "place": "Arnhem road bridge, north end",
+      "source": "research-arnhem/german-forces.md 4, 10"
+    },
+    {
+      "turn": 9,
+      "time": "08:00",
+      "day": 18,
+      "side": "allied",
+      "kind": "event",
+      "title": "LION blocked at Den Brink",
+      "text": "About 0800. 1 PARA in contact at the railway near 715780 and Den Brink. Route blocked by infantry, armoured cars, a tank and 20-mm flak firing from the south bank. Recce Sqn under fire at 708782.",
+      "at": [
+        15,
+        18
+      ],
+      "place": "Den Brink",
+      "source": "research-arnhem/allied-forces.md 4.1, 6"
+    },
+    {
+      "turn": 10,
+      "time": "09:00",
+      "day": 18,
+      "side": "german",
+      "kind": "plan",
+      "title": "Gräbner: break through to the north",
+      "text": "Gräbner's battalion, back from the Betuwe, to rush the bridge from the south and break through to the town.",
+      "at": [
+        17,
+        21
+      ],
+      "place": "Arnhem road bridge, south end",
+      "source": "research-arnhem/german-forces.md 3"
+    },
+    {
+      "turn": 10,
+      "time": "09:15",
+      "day": 18,
+      "side": "allied",
+      "kind": "plan",
+      "title": "Hicks takes command; Staffords to Arnhem",
+      "text": "0915. Brig Hicks takes command of the division; the GOC is missing. 0930-1000: 2 S Staffords (first-lift half) ordered to reinforce 1 Para Bde in Arnhem. Second lift due 1000, delayed by fog.",
+      "at": [
+        9,
+        14
+      ],
+      "place": "LZ S",
+      "source": "research-arnhem/allied-forces.md 3.3, 6"
+    },
+    {
+      "turn": 11,
+      "time": "11:30",
+      "day": 18,
+      "side": "allied",
+      "kind": "event",
+      "title": "Gräbner's attack beaten off",
+      "text": "About 1130. After about 2 hours the attack on the bridge is beaten off; 10-12 vehicles knocked out on the ramp, six by 6-pdr and four by PIAT. Bridge force losses light.",
+      "at": [
+        17,
+        20
+      ],
+      "place": "Arnhem road bridge, north end",
+      "source": "research-arnhem/allied-forces.md 4.6, 6"
+    },
+    {
+      "turn": 11,
+      "time": "11:30",
+      "day": 18,
+      "side": "german",
+      "kind": "event",
+      "title": "Gräbner killed on the ramp",
+      "text": "About 1130. The attack over the bridge has failed: 10-12 vehicles lost and about 70 men killed, Gräbner among them. Survivors hold the south approach facing north.",
+      "at": [
+        17,
+        21
+      ],
+      "place": "Arnhem road bridge, south end",
+      "source": "research-arnhem/german-forces.md 3, 10"
+    },
+    {
+      "turn": 12,
+      "time": "14:00",
+      "day": 18,
+      "side": "allied",
+      "kind": "event",
+      "title": "Second lift: 4th Para Bde drops",
+      "text": "1400-1515. Second lift arrives four hours late: 4th Para Bde, 1,914 men, on DZ Y under fire; 156 Bn jumps 1400, Bde HQ 1420, 11 Bn about 1430. Gliders on LZ S (69) and LZ X (204).",
+      "at": [
+        5,
+        11
+      ],
+      "place": "DZ Y, Ginkel Heath",
+      "source": "research-arnhem/allied-forces.md 2.2, 6"
+    },
+    {
+      "turn": 12,
+      "time": "14:00",
+      "day": 18,
+      "side": "german",
+      "kind": "event",
+      "title": "Renkum taken",
+      "text": "After 1400. The British company leaves Renkum along the river; Lippert's NCO school and the naval battalion occupy it and push on toward Heelsum. Lippert's HQ at Heelsum.",
+      "at": [
+        5,
+        20
+      ],
+      "place": "Renkum",
+      "source": "research-arnhem/german-forces.md 10"
+    },
+    {
+      "turn": 12,
+      "time": "14:30",
+      "day": 18,
+      "side": "german",
+      "kind": "event",
+      "title": "Paratroops drop on Helle",
+      "text": "About 1430 (about 1500 by German accounts). The second lift drops on and behind Helle's battalion on Ginkel Heath. The KOSB counter-attack and the battalion breaks: one company captured intact, another destroyed.",
+      "at": [
+        5,
+        11
+      ],
+      "place": "DZ Y, Ginkel Heath",
+      "source": "research-arnhem/german-forces.md 5, 10"
+    },
+    {
+      "turn": 13,
+      "time": "15:15",
+      "day": 18,
+      "side": "allied",
+      "kind": "plan",
+      "title": "11 Bn taken from Hackett",
+      "text": "1515. Hackett is told on landing that 11 Bn is to go into Arnhem under 1 Para Bde. He objects, then agrees, and asks for 7 KOSB in exchange; Hicks agrees.",
+      "at": [
+        5,
+        11
+      ],
+      "place": "DZ Y, Ginkel Heath",
+      "source": "research-arnhem/allied-forces.md 3.4, 6"
+    },
+    {
+      "turn": 13,
+      "time": "15:25",
+      "day": 18,
+      "side": "allied",
+      "kind": "event",
+      "title": "Stirling resupply scattered",
+      "text": "1515-1530. 33 Stirlings drop 87 tons; Div log 1525 'somewhat scattered'. About 12 tons collected, and 14 tons from three bulk-loaded Hamilcars. Two aircraft lost.",
+      "at": [
+        8,
+        16
+      ],
+      "place": "LZ Z",
+      "source": "research-arnhem/allied-forces.md 5.1"
+    },
+    {
+      "turn": 13,
+      "time": "15:30",
+      "day": 18,
+      "side": "allied",
+      "kind": "event",
+      "title": "GOC and Brigadier cut off",
+      "text": "Afternoon. Urquhart and Lathbury break away from 3 PARA; Lathbury wounded. Urquhart hides in a house near the hospital. Frost now commands the whole bridge force.",
+      "at": [
+        15,
+        19
+      ],
+      "place": "St Elisabeth Hospital",
+      "source": "research-arnhem/allied-forces.md 3.1, 3.5, 6"
+    },
+    {
+      "turn": 13,
+      "time": "16:00",
+      "day": 18,
+      "side": "allied",
+      "kind": "event",
+      "title": "Div HQ to the Hartenstein",
+      "text": "1600-1700. Div HQ moves to the Hartenstein Hotel; the divisional dump set up there. 3 Bty in action by Oosterbeek church; 1 and 2 Btys move north of the Utrechtseweg.",
+      "at": [
+        12,
+        18
+      ],
+      "place": "Hartenstein Hotel",
+      "source": "research-arnhem/allied-forces.md 3.5, 6"
+    },
+    {
+      "turn": 13,
+      "time": "16:00",
+      "day": 18,
+      "side": "german",
+      "kind": "event",
+      "title": "Second British attack repulsed",
+      "text": "Afternoon. A co-ordinated British attack in west Arnhem is repulsed. Möller falls back to stronger positions on the Utrechtseweg just east of the St Elisabeth Gasthuis.",
+      "at": [
+        15,
+        19
+      ],
+      "place": "St Elisabeth Hospital",
+      "source": "research-arnhem/german-forces.md 3, 8.4, 10"
+    },
+    {
+      "turn": 13,
+      "time": "16:00",
+      "day": 18,
+      "side": "german",
+      "kind": "plan",
+      "title": "Harmel: guns into the bridge houses",
+      "text": "Afternoon. Harmel orders a 10th SS light howitzer battery into the gardens on the bridge approach to fire over open sights into the British-held houses.",
+      "at": [
+        17,
+        20
+      ],
+      "place": "Arnhem road bridge, north end",
+      "source": "research-arnhem/german-forces.md 4, 10"
+    },
+    {
+      "turn": 14,
+      "time": "17:00",
+      "day": 18,
+      "side": "german",
+      "kind": "event",
+      "title": "Tanks knocked out under the ramp",
+      "text": "Late afternoon. An attack from the east by infantry and two tanks under the ramp is beaten off; both tanks knocked out, at least one by a 6-pdr. Two buildings on the east side of the perimeter taken.",
+      "at": [
+        17,
+        20
+      ],
+      "place": "Arnhem road bridge, north end",
+      "source": "research-arnhem/german-forces.md 4, 10"
+    },
+    {
+      "turn": 14,
+      "time": "17:30",
+      "day": 18,
+      "side": "allied",
+      "kind": "plan",
+      "title": "11 Bn to the bridge",
+      "text": "About 1730. 11 Bn to march for the bridge under 1 Para Bde via Wolfheze and Oosterbeek, picking up its transport and E Troop's 6-pdrs on the way.",
+      "at": [
+        5,
+        11
+      ],
+      "place": "DZ Y, Ginkel Heath",
+      "source": "research-arnhem/allied-forces.md 3.4, 6"
+    },
+    {
+      "turn": 14,
+      "time": "18:30",
+      "day": 18,
+      "side": "allied",
+      "kind": "event",
+      "title": "1 Para down to 100 men",
+      "text": "1830. 1 PARA about 100 men left, almost out of ammunition, just west of the hospital. T Coy down to 22.",
+      "at": [
+        15,
+        19
+      ],
+      "place": "St Elisabeth Hospital",
+      "source": "research-arnhem/allied-forces.md 3.1, 6"
+    },
+    {
+      "turn": 15,
+      "time": "19:00",
+      "day": 18,
+      "side": "allied",
+      "kind": "plan",
+      "title": "Airlanding Bde to Oosterbeek",
+      "text": "1900. Zones abandoned now the second lift is in. 1 Border to Phase II positions on the west side of Oosterbeek, 1 AL Bde HQ to the Bilderberg, 7 KOSB to Johannahoeve to hold LZ L for the Poles.",
+      "at": [
+        11,
+        18
+      ],
+      "place": "Bilderberg woods",
+      "source": "research-arnhem/allied-forces.md 3.3, 6"
+    },
+    {
+      "turn": 15,
+      "time": "19:00",
+      "day": 18,
+      "side": "german",
+      "kind": "event",
+      "title": "Siege at the bridge",
+      "text": "Evening. The bridge settles into a siege: general shelling and mortaring of the British houses. No German traffic can use the bridge; the 10th SS goes round by Pannerden.",
+      "at": [
+        17,
+        20
+      ],
+      "place": "Arnhem road bridge, north end",
+      "source": "research-arnhem/german-forces.md 10, 11"
+    },
+    {
+      "turn": 15,
+      "time": "19:30",
+      "day": 18,
+      "side": "allied",
+      "kind": "event",
+      "title": "Staffords meet 1 and 3 Para",
+      "text": "1900-2000. First-lift half of 2 S Staffords meets the remnants of 1 and 3 PARA at 726776 and resupplies 1 Para with ammunition. R Coy 1 Para, about 40, rejoins.",
+      "at": [
+        15,
+        19
+      ],
+      "place": "St Elisabeth Hospital",
+      "source": "research-arnhem/allied-forces.md 3.1, 3.3, 6"
+    }
+  ],
   "provenance": {
     "status": "provisional",
     "sources": [

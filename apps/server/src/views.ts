@@ -11,7 +11,8 @@ import type { PlayerView, PublicScenario } from '@ww2hex/protocol';
  * The scenario minus anything about the other side: no units, no enemy
  * formations, no reinforcement events (each side learns its own from its
  * view), only this side's supply drops and supply sources, and no crossings
- * reserved for the other side (such as an assault-boat site).
+ * reserved for the other side (such as an assault-boat site), and only this
+ * side's war-diary entries and the shared ones.
  */
 export function publicScenario(file: ScenarioFile, side: Side): PublicScenario {
   const copy = JSON.parse(JSON.stringify(file)) as ScenarioFile;
@@ -22,6 +23,7 @@ export function publicScenario(file: ScenarioFile, side: Side): PublicScenario {
     events: copy.events.filter((e) => e.kind === 'supply-drop' && e.side === side),
     supplySources: (copy.supplySources ?? []).filter((s) => s.side === side),
     map: { ...copy.map, bridges: copy.map.bridges.filter((b) => b.side === undefined || b.side === side) },
+    ...(copy.diary ? { diary: copy.diary.filter((d) => d.side === null || d.side === side) } : {}),
   };
 }
 

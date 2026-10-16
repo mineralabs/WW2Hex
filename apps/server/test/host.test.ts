@@ -536,3 +536,17 @@ describe('the Nijmegen scenario over the network', () => {
     }
   });
 });
+
+describe('the scenario each side is sent', () => {
+  it('carries only that side\'s war-diary entries and the shared ones', async () => {
+    const { publicScenario } = await import('../src/views.ts');
+    const file = JSON.parse(readFileSync(join(import.meta.dirname, '../../../scenarios/market-garden-1944/scenario.json'), 'utf8'));
+    file.diary = [
+      { turn: 1, time: '15:00', day: 17, side: 'allied', kind: 'plan', title: 'A', text: 'a', source: 's' },
+      { turn: 1, time: '15:00', day: 17, side: 'german', kind: 'plan', title: 'G', text: 'g', source: 's' },
+      { turn: 1, time: '18:40', day: 17, side: null, kind: 'event', title: 'Sunset', text: 'n', source: 's' },
+    ];
+    expect(publicScenario(file, 'allied').diary!.map((d) => d.title)).toEqual(['A', 'Sunset']);
+    expect(publicScenario(file, 'german').diary!.map((d) => d.title)).toEqual(['G', 'Sunset']);
+  });
+});

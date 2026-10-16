@@ -1,0 +1,3048 @@
+[
+  {
+    "when": "1944-09-17T15:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "82nd Airborne down; battalions moving off",
+    "text": "1500. First lift of 82nd Abn Div landed 1308-1400: about 7,250 parachutists, the 376th's pack howitzers and A/80th AA with 8 x 57-mm. 508 PIR 90 per cent assembled on DZ T and moving off; opposition light.",
+    "at": {
+      "lat": 51.798,
+      "lon": 5.952,
+      "place": "DZ T"
+    },
+    "source": "research/sept-17-18.md 3.1, 6"
+  },
+  {
+    "when": "1944-09-17T15:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Division plan: bridges, heights, landing zones",
+    "text": "Orders stand: 504th to take the Grave bridge and the Maas-Waal canal bridges; 505th to hold Groesbeek and the Mook-Riethorst line facing the Reichswald; 508th to take the heights at Berg en Dal and De Ploeg and hold LZ T for tomorrow's gliders. The Nijmegen road bridge to be tried once the high ground is secure.",
+    "at": {
+      "lat": 51.774,
+      "lon": 5.917,
+      "place": "82nd Div CP west of Groesbeek"
+    },
+    "source": "research/sept-17-18.md 3.2"
+  },
+  {
+    "when": "1944-09-17T15:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Henke alarms the Nijmegen garrison",
+    "text": "Oberst Henke has alarmed every ground unit in Nijmegen: a weak NCO-school company, about three Landesschützen companies, railway-guard and police-reservist companies, and 4./s.Flak-Abt. 572 round the bridges. HG company Runge is passing through the city this afternoon.",
+    "at": {
+      "lat": 51.849,
+      "lon": 5.87,
+      "place": "Waal road bridge, south end"
+    },
+    "source": "research/sept-17-18.md 5.1"
+  },
+  {
+    "when": "1944-09-17T15:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Henke: close defence of the bridges",
+    "text": "Henke's plan: close defence round the south ends of both Waal bridges, strongpoints at the Keizer Karelplein and the Keizer Lodewijkplein, and an outpost screen in front.",
+    "at": {
+      "lat": 51.845,
+      "lon": 5.874,
+      "place": "Keizer Lodewijkplein traffic circle"
+    },
+    "source": "research/sept-17-18.md 5.1"
+  },
+  {
+    "when": "1944-09-17T15:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "1st Para Bde moves off for the bridge",
+    "text": "1500. 2 PARA moves off from the RV on DZ X by LION, the river road through Heelsum and Heveadorp; 3 PARA by TIGER along the Utrechtseweg. Opposition light so far.",
+    "at": {
+      "lat": 51.988,
+      "lon": 5.76,
+      "place": "2 Para RV, DZ X"
+    },
+    "source": "research-arnhem/allied-forces.md 3.1, 6"
+  },
+  {
+    "when": "1944-09-17T15:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Brigade orders: the road bridge first",
+    "text": "1st Para Bde to take and hold the road bridge (first priority) and the pontoon bridge, and put one company on the south bank. Routes LION (2 Para), TIGER (3 Para), LEOPARD (1 Para); Recce Sqn to try a jeep coup de main. 1st Airlanding Bde to hold the zones for tomorrow's second lift.",
+    "at": {
+      "lat": 51.988,
+      "lon": 5.76,
+      "place": "2 Para RV, DZ X"
+    },
+    "source": "research-arnhem/allied-forces.md 1, 7.1"
+  },
+  {
+    "when": "1944-09-17T15:30",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "E/504 fights for the south end at Grave",
+    "text": "Afternoon. Lt Thompson's platoon of E/504 works down the drainage ditches, knocks out the south-west flak tower with a bazooka and turns its 20-mm on the far tower. Demolition wires cut.",
+    "at": {
+      "lat": 51.769,
+      "lon": 5.737,
+      "place": "Grave bridge"
+    },
+    "source": "research/sept-17-18.md 3.3"
+  },
+  {
+    "when": "1944-09-17T15:30",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Krafft's line closes at Wolfheze",
+    "text": "1530. Btl. Krafft's blocking line complete from the railway at Wolfheze south to the Utrechtseweg, HQ at the Hotel Wolfheze; 9. Kp up from Arnhem. It does not cover the Amsterdamseweg or the river road.",
+    "at": {
+      "lat": 51.994,
+      "lon": 5.803,
+      "place": "Hotel Wolfheze"
+    },
+    "source": "research-arnhem/german-forces.md 8.1, 10"
+  },
+  {
+    "when": "1944-09-17T15:30",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "504th: Grave from both ends, canal bridges",
+    "text": "504 PIR to take the Grave bridge from both ends, E Co from the south bank; 1/504's companies to seize the canal bridges at Heumen, Malden and Hatert; 3/504 in regimental reserve on DZ O.",
+    "at": {
+      "lat": 51.769,
+      "lon": 5.737,
+      "place": "Grave bridge"
+    },
+    "source": "research/sept-17-18.md 3.2"
+  },
+  {
+    "when": "1944-09-17T16:00",
+    "side": null,
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Mook railway bridge blown",
+    "text": "Afternoon. The railway bridge over the Maas at Mook goes up moments before an American patrol reaches it.",
+    "at": {
+      "lat": 51.753,
+      "lon": 5.884,
+      "place": "Mook"
+    },
+    "source": "research/sept-17-18.md 3.3"
+  },
+  {
+    "when": "1944-09-17T16:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Bittrich: Frundsberg to Nijmegen",
+    "text": "About 1600. II SS-Panzerkorps orders the 10th SS to Nijmegen by way of Arnhem. SS-Pz.Aufkl.Abt. 9 (Gräbner) attached and sent ahead to reconnoitre to Nijmegen.",
+    "source": "research-arnhem/german-forces.md 10; research/sept-17-18.md 5.2"
+  },
+  {
+    "when": "1944-09-17T16:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Recce Sqn ambushed; coup de main off",
+    "text": "About 1600. C Troop ambushed on the Johannahoeveweg just east of Wolfheze; 2 jeeps lost, about 7 killed and 4 captured. Squadron withdraws; the coup de main is abandoned.",
+    "at": {
+      "lat": 52.006,
+      "lon": 5.8,
+      "place": "Johannahoeveweg, east of Wolfheze"
+    },
+    "source": "research-arnhem/allied-forces.md 3.2, 6"
+  },
+  {
+    "when": "1944-09-17T16:15",
+    "side": null,
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Malden canal bridge blown",
+    "text": "About 1615 (time uncertain). The Malden bridge over the Maas-Waal canal is blown as a 1/504 company comes in sight.",
+    "at": {
+      "lat": 51.785,
+      "lon": 5.84,
+      "place": "Malden bridge"
+    },
+    "source": "research/sept-17-18.md 3.3"
+  },
+  {
+    "when": "1944-09-17T16:30",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "KG Möller deploys at Den Brink",
+    "text": "1630. KG Möller (SS-Pz.Pi.Btl. 9, 60-80 men, 2 half-tracks, flamethrowers) reaches Arnhem, comes under fire on the Utrechtseweg east of Den Brink and deploys there.",
+    "at": {
+      "lat": 51.987,
+      "lon": 5.876,
+      "place": "Den Brink"
+    },
+    "source": "research-arnhem/german-forces.md 3, 10"
+  },
+  {
+    "when": "1944-09-17T16:50",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "'Bridge 11 is ours'",
+    "text": "1650. 2/504 reports the Grave bridge held at both ends; the north end was taken easily. The Maas crossing for XXX Corps is secure.",
+    "at": {
+      "lat": 51.769,
+      "lon": 5.737,
+      "place": "Grave bridge"
+    },
+    "source": "research/sept-17-18.md 3.3, 6"
+  },
+  {
+    "when": "1944-09-17T17:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Spindler: block west of Arnhem",
+    "text": "About 1700. Spindler ordered west from Dieren with his gunners of SS-Pz.Art.Rgt. 9, fighting as infantry, to block the British west of the town and take over the 9th SS units there.",
+    "source": "research-arnhem/german-forces.md 10"
+  },
+  {
+    "when": "1944-09-17T17:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Gräbner across the Arnhem bridge",
+    "text": "About 1700 (1800 German time). SS-Pz.Aufkl.Abt. 9, about 30 armoured cars and half-tracks, crosses the Arnhem road bridge southbound for Nijmegen. No British yet at the bridge.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/german-forces.md 3; research/sept-17-18.md 5.2"
+  },
+  {
+    "when": "1944-09-17T17:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Model: Feldt to hold Nijmegen",
+    "text": "Model orders Gen.d.Kav. Feldt (Korps Feldt, Wehrkreis VI) to hold Nijmegen. 406. Division z.b.V. is being mobilised from a static HQ in about six hours.",
+    "at": {
+      "lat": 51.79,
+      "lon": 6.007,
+      "place": "Kranenburg"
+    },
+    "source": "research/sept-17-18.md 5.4"
+  },
+  {
+    "when": "1944-09-17T17:15",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "3 Para held at the Bilderberg",
+    "text": "1630-1715. B Coy 3 PARA shoots up a German staff car at the Wolfhezerweg crossroads; the general in it is killed. Leading 6-pdr knocked out by an SP gun; battalion held in the Bilderberg woods by Krafft's men.",
+    "at": {
+      "lat": 51.99,
+      "lon": 5.818,
+      "place": "Bilderberg woods"
+    },
+    "source": "research-arnhem/allied-forces.md 4.2, 6"
+  },
+  {
+    "when": "1944-09-17T17:15",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Generalmajor Kussin killed",
+    "text": "About 1715. Genmaj. Kussin, Feldkommandant Arnhem, visits Krafft at the Hotel Wolfheze and is killed minutes later at the Utrechtseweg junction. Local command disrupted.",
+    "at": {
+      "lat": 51.991,
+      "lon": 5.806,
+      "place": "Utrechtseweg / Wolfhezerweg crossroads"
+    },
+    "source": "research-arnhem/german-forces.md 10"
+  },
+  {
+    "when": "1944-09-17T17:30",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Bittrich: 9th SS to take Arnhem",
+    "text": "1730. Bittrich orders the 9th SS to occupy Arnhem and destroy the airborne force west of it; Model confirms. Harzer's alarm units to block the British from the north and east.",
+    "source": "research-arnhem/german-forces.md 10"
+  },
+  {
+    "when": "1944-09-17T17:30",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "1 Para blocked on the Amsterdamseweg",
+    "text": "1700-1800. R Coy 1 PARA hit at 675820 and loses about half. Battalion blocked from the Amsterdamseweg by '5 tanks and approx 15 half-tracks' moving west.",
+    "at": {
+      "lat": 52.021,
+      "lon": 5.807,
+      "place": "Grid 675820, north of Wolfheze"
+    },
+    "source": "research-arnhem/allied-forces.md 3.1, 4.3"
+  },
+  {
+    "when": "1944-09-17T18:00",
+    "side": null,
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Oosterbeek railway bridge blown",
+    "text": "About 1800. The centre span of the railway bridge at Oosterbeek goes up as C Coy 2 PARA closes on it.",
+    "at": {
+      "lat": 51.971,
+      "lon": 5.853,
+      "place": "Oosterbeek railway bridge"
+    },
+    "source": "research-arnhem/allied-forces.md 3.1, 6; research-arnhem/german-forces.md 2"
+  },
+  {
+    "when": "1944-09-17T18:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Heumen lock bridge taken intact",
+    "text": "About 1800. B/1/504 keeps the Heumen lock bridge under fire so it cannot be blown; the island garrison and its old Soviet 75-mm overcome. Bridge taken intact.",
+    "at": {
+      "lat": 51.77,
+      "lon": 5.855,
+      "place": "Heumen lock bridge"
+    },
+    "source": "research/sept-17-18.md 3.3"
+  },
+  {
+    "when": "1944-09-17T18:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Gavin: 1/508 into Nijmegen tonight",
+    "text": "About 1800. Gavin finds 1/508 has not yet moved on Nijmegen and orders an attack on the road bridge tonight.",
+    "at": {
+      "lat": 51.817,
+      "lon": 5.885,
+      "place": "De Ploeg"
+    },
+    "source": "research/sept-17-18.md 3.4"
+  },
+  {
+    "when": "1944-09-17T18:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Riethorst attack fails",
+    "text": "Evening. A force of somewhat more than company strength attacks the Americans at Riethorst and is beaten off by nightfall with heavy losses. Oberstleutnant Harnisch of the Wehrkreis VI pioneers killed in his staff car at Plasmolen.",
+    "at": {
+      "lat": 51.736,
+      "lon": 5.918,
+      "place": "Riethorst"
+    },
+    "source": "research/sept-17-18.md 3.5"
+  },
+  {
+    "when": "1944-09-17T18:45",
+    "side": null,
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Sunset",
+    "text": "1847 sunset; last light 1941. New moon; the moon sets at 1913. Dark until about 0520.",
+    "source": "research-arnhem/allied-forces.md 0"
+  },
+  {
+    "when": "1944-09-17T19:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Ersatz-Btl. 6 arriving",
+    "text": "Evening. Three companies of trainees of Ersatz-Bataillon 6, sent from Wehrkreis VI on Model's orders, arriving in Nijmegen. By late evening about 1,000 men in the city (Tieke: about 750 older men plus flak).",
+    "at": {
+      "lat": 51.846,
+      "lon": 5.85,
+      "place": "Kronenburgerpark"
+    },
+    "source": "research/sept-17-18.md 5.1"
+  },
+  {
+    "when": "1944-09-17T19:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Bridge to be held for the counter-attack",
+    "text": "The road bridge is not to be blown; Model wants the bridges for a counter-attack. No unit has been ordered to the bridge in time.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/german-forces.md 1, 2"
+  },
+  {
+    "when": "1944-09-17T19:40",
+    "side": null,
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Hatert canal bridge blown",
+    "text": "1940. The Hatert bridge over the Maas-Waal canal is blown as a 1/504 company arrives after a 3-mile march. West side seized.",
+    "at": {
+      "lat": 51.806,
+      "lon": 5.816,
+      "place": "Hatert bridge"
+    },
+    "source": "research/sept-17-18.md 3.3"
+  },
+  {
+    "when": "1944-09-17T20:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "1/508 sets off for the road bridge",
+    "text": "2000-2030. A and B Cos 1/508 leave De Ploeg for Nijmegen; C Co stays. A platoon of C Co and the S-2 section went in earlier by another route. 2/508 on objective at De Hut 2030.",
+    "at": {
+      "lat": 51.817,
+      "lon": 5.885,
+      "place": "De Ploeg"
+    },
+    "source": "research/sept-17-18.md 3.4, 6"
+  },
+  {
+    "when": "1944-09-17T20:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Gräbner: the danger is at Arnhem",
+    "text": "Evening. Gräbner's scouts report Nijmegen and both Waal bridges in German hands. Gräbner judges the bigger threat lies at Arnhem and takes the battalion back, leaving a few armoured cars at the Waal bridge and some cars and men at Elst.",
+    "at": {
+      "lat": 51.849,
+      "lon": 5.87,
+      "place": "Waal road bridge, south end"
+    },
+    "source": "research/sept-17-18.md 5.2"
+  },
+  {
+    "when": "1944-09-17T20:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "2 Para at the bridge",
+    "text": "About 2000. A Coy 2 PARA reaches the north end of the Arnhem road bridge (times given range 1930-2030). B Coy cleared Den Brink; C Coy trapped in the town.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/allied-forces.md 3.1, 6"
+  },
+  {
+    "when": "1944-09-17T20:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "British at the north ramp",
+    "text": "About 2000. The few bridge guards in the bunker at the north end open fire and are silenced by PIAT and flamethrower. 3./SS-PGR 21 arrives near the Eusebius church and makes first contact.",
+    "at": {
+      "lat": 51.979,
+      "lon": 5.911,
+      "place": "Eusebius church"
+    },
+    "source": "research-arnhem/german-forces.md 2, 4, 10"
+  },
+  {
+    "when": "1944-09-17T20:45",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Grayburn's attack on the south end fails",
+    "text": "2045. Lt Grayburn's platoon tries to rush the bridge to the south end and is driven back.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/allied-forces.md 4.5, 6"
+  },
+  {
+    "when": "1944-09-17T21:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Harzer: destroy the British north of the Rhine",
+    "text": "About 2100. Harzer is ordered to destroy all British forces north of the Nederrijn.",
+    "source": "research-arnhem/german-forces.md 1, 10"
+  },
+  {
+    "when": "1944-09-17T21:30",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Frost: hold the north end",
+    "text": "Bridge force to hold the north end facing west and north-west, and try to get a party over to the south end to complete the brigade task.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/allied-forces.md 7.1, 4.5"
+  },
+  {
+    "when": "1944-09-17T22:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Pillbox burned; north end held",
+    "text": "2200-2300. Flame-thrower attack on the pillbox at the ramp sets an ammunition store ablaze. North end reported captured about 2230-2300. A boat crossing to the south bank fails: no barges.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/allied-forces.md 4.5, 6"
+  },
+  {
+    "when": "1944-09-17T22:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "1/508 stopped at the Keizer Karelplein",
+    "text": "About 2200. 1/508 meets fire at the Keizer Karelplein; an SS convoy of half-tracks and trucks arrives and counter-attacks. Parties reach the Oranjesingel parkway toward the Hunner Park.",
+    "at": {
+      "lat": 51.842,
+      "lon": 5.86,
+      "place": "Keizer Karelplein"
+    },
+    "source": "research/sept-17-18.md 3.4, 6"
+  },
+  {
+    "when": "1944-09-17T22:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "SS convoy throws back Americans",
+    "text": "About 2200. Americans attack into the city from the south. SS half-tracks and trucks, probably Gräbner's advance guard, counter-attack at the Keizer Karelplein and hold them.",
+    "at": {
+      "lat": 51.842,
+      "lon": 5.86,
+      "place": "Keizer Karelplein"
+    },
+    "source": "research/sept-17-18.md 3.4, 5.2"
+  },
+  {
+    "when": "1944-09-17T22:30",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Krafft to cover the north",
+    "text": "2230-2245. Krafft, now under Spindler and the 9th SS, to go on to Schaarsbergen and cover the northern and north-western approaches.",
+    "at": {
+      "lat": 52.007,
+      "lon": 5.845,
+      "place": "De Leeren Doedel, Amsterdamseweg"
+    },
+    "source": "research-arnhem/german-forces.md 10"
+  },
+  {
+    "when": "1944-09-17T23:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Model divides the defence",
+    "text": "Before midnight. Model issues orders splitting the defence into three sectors: 1. Fallschirm-Armee, Wehrkreis VI, and the WBN under von Tettau in the west. Model forbids demolition of the bridges; he wants them for the counter-attack.",
+    "source": "research-arnhem/german-forces.md 1, 10"
+  },
+  {
+    "when": "1944-09-17T23:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Tettau's units gathering in the west",
+    "text": "Night. Btl. Mattusch fighting near Heelsum; five companies of 10. Schiffsstammabteilung on the east edge of the woods east of Wageningen; Lippert's NCO-school companies cycling in, due about midnight.",
+    "at": {
+      "lat": 51.966,
+      "lon": 5.666,
+      "place": "Wageningen"
+    },
+    "source": "research-arnhem/german-forces.md 8.3"
+  },
+  {
+    "when": "1944-09-17T23:30",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Adams's platoon in the post office",
+    "text": "Night. Capt Adams with a platoon of A/508 seizes the main post office and destroys what is believed to be the bridge demolition control room. They are cut off there.",
+    "at": {
+      "lat": 51.843,
+      "lon": 5.866,
+      "place": "Nijmegen main post office"
+    },
+    "source": "research/sept-17-18.md 3.4"
+  },
+  {
+    "when": "1944-09-18T00:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Frundsberg to cross at Pannerden",
+    "text": "About midnight. With the Arnhem road bridge blocked, II SS-Panzerkorps reroutes the 10th SS south-east of Arnhem over the Nederrijn by the Pannerden ferry.",
+    "at": {
+      "lat": 51.891,
+      "lon": 6.037,
+      "place": "Pannerden ferry"
+    },
+    "source": "research-arnhem/german-forces.md 6; research/sept-17-18.md 5.3"
+  },
+  {
+    "when": "1944-09-18T01:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "1 Para: south to the river road",
+    "text": "0100. 1 PARA, less R Coy, to break south off the Amsterdamseweg and come into Arnhem by the river road to reinforce Frost. At 0530 Frost's call for help reaches it through the FOO net.",
+    "at": {
+      "lat": 52.021,
+      "lon": 5.807,
+      "place": "Grid 675820, north of Wolfheze"
+    },
+    "source": "research-arnhem/allied-forces.md 6"
+  },
+  {
+    "when": "1944-09-18T01:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Spindler: a line from the road to the Rhine",
+    "text": "Night. Spindler to build a blocking line from the Amsterdamseweg down the Dreijenseweg to the Rhine and close the river-road gap; an inner line to be started about 800 m from the bridge.",
+    "at": {
+      "lat": 51.987,
+      "lon": 5.876,
+      "place": "Den Brink"
+    },
+    "source": "research-arnhem/german-forces.md 8.2, 10"
+  },
+  {
+    "when": "1944-09-18T03:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Pioneers and Euling over the ferry",
+    "text": "Early morning. Baumgärtel's 1./SS-Pz.Pi.Btl. 10 and Btl. Euling cross at Pannerden by ferry and rubber boats, then on by Doornenburg, Bemmel and Ressen toward the road bridge (time not recorded).",
+    "at": {
+      "lat": 51.891,
+      "lon": 6.037,
+      "place": "Pannerden ferry"
+    },
+    "source": "research/sept-17-18.md 5.3"
+  },
+  {
+    "when": "1944-09-18T03:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Korps Feldt: attack the landing zones",
+    "text": "Feldt's four weak Kampfgruppen (Stargaard, Fürstenberg, Greschick, Göbel; 2,300-3,400 men) to attack at about 0530 (0630 German time): from Wyler onto LZ T, out of the Reichswald onto DZ/LZ N, and KG Göbel on Riethorst.",
+    "at": {
+      "lat": 51.8085,
+      "lon": 5.965,
+      "place": "Wyler"
+    },
+    "source": "research/sept-17-18.md 5.4"
+  },
+  {
+    "when": "1944-09-18T03:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "WBN promises reinforcements",
+    "text": "About 0300 (0400 German time). WBN promises Tettau more units: SS-KG Eberwein, KG Knoche, Flak-Abt. 184, a Fliegerhorst battalion, Pz.Kp. 224 with 17 French tanks and a Hermann Göring battalion.",
+    "source": "research-arnhem/german-forces.md 5"
+  },
+  {
+    "when": "1944-09-18T04:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "KG Knaust arrives; Harmel at Velp",
+    "text": "About 0400. KG Knaust (Pz.Gren.Ausb.u.Ers.Btl. 64, convalescents and recruits) arrives at the north-east edge of Arnhem and goes under Brinkmann. Harmel, back from Berlin, reaches his forward CP at Velp.",
+    "at": {
+      "lat": 51.996,
+      "lon": 5.975,
+      "place": "Velp"
+    },
+    "source": "research-arnhem/german-forces.md 4, 10"
+  },
+  {
+    "when": "1944-09-18T05:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "B Coy 2 Para reaches the bridge",
+    "text": "About 0500. B Coy 2 PARA, about 70 men, joins at the bridge. About 740 men there in all. At first light Maj Murray finds the bridge not prepared for demolition.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/allied-forces.md 3.1, 4.6, 6"
+  },
+  {
+    "when": "1944-09-18T05:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Helle attacks across Ginkel Heath",
+    "text": "About 0500. SS-Wachbataillon 3 (Helle), mostly Dutch SS, attacks the KOSB across Ginkel Heath with four companies up; a KOSB platoon taken.",
+    "at": {
+      "lat": 52.036,
+      "lon": 5.733,
+      "place": "DZ Y, Ginkel Heath"
+    },
+    "source": "research-arnhem/german-forces.md 5, 10"
+  },
+  {
+    "when": "1944-09-18T05:30",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Feldt's H-hour",
+    "text": "About 0530 (0630 German time). Planned H-hour for Korps Feldt's attack on the Groesbeek landing zones.",
+    "at": {
+      "lat": 51.77,
+      "lon": 5.975,
+      "place": "Reichswald edge"
+    },
+    "source": "research/sept-17-18.md 6"
+  },
+  {
+    "when": "1944-09-18T07:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Knaust takes over from Euling",
+    "text": "Early morning. Euling's company group stops a British push north of the bridge, is relieved squad for squad by Knaust, and leaves for Pannerden. Mielke's Pz III and IV probe the perimeter from the east.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/german-forces.md 4, 10"
+  },
+  {
+    "when": "1944-09-18T07:45",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Mendez sends G/508 for the bridge",
+    "text": "0745. G/508 (Capt Novak) to go for the road bridge again by an easterly route round the city, clearing outposts.",
+    "at": {
+      "lat": 51.837,
+      "lon": 5.895,
+      "place": "Hill 64"
+    },
+    "source": "research/sept-17-18.md 4.2"
+  },
+  {
+    "when": "1944-09-18T08:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "LION blocked at Den Brink",
+    "text": "About 0800. 1 PARA in contact at the railway near 715780 and Den Brink. Route blocked by infantry, armoured cars, a tank and 20-mm flak firing from the south bank. Recce Sqn under fire at 708782.",
+    "at": {
+      "lat": 51.987,
+      "lon": 5.876,
+      "place": "Den Brink"
+    },
+    "source": "research-arnhem/allied-forces.md 4.1, 6"
+  },
+  {
+    "when": "1944-09-18T08:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Germans overrun the landing zones",
+    "text": "0800-1000. Germans surge down the road from Wyler, push back D/508 on LZ T and seize an ammunition dump; others come out of the Reichswald onto DZ N. Gavin puts his only reserve, two companies of the 307th Engineers, into the gap.",
+    "at": {
+      "lat": 51.798,
+      "lon": 5.952,
+      "place": "DZ T"
+    },
+    "source": "research/sept-17-18.md 4.3"
+  },
+  {
+    "when": "1944-09-18T08:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "1/508 back to clear LZ T",
+    "text": "0800. 1/508 ordered back from Nijmegen to clear the landing zone; C Co to Groote Veierenberg to secure a line of departure.",
+    "at": {
+      "lat": 51.808,
+      "lon": 5.917,
+      "place": "Groote Veierenberg"
+    },
+    "source": "research/sept-17-18.md 4.3"
+  },
+  {
+    "when": "1944-09-18T08:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Feldt's groups on the zones",
+    "text": "Morning. Korps Feldt's groups push down from Wyler onto the landing zone north-east of Groesbeek and out of the Reichswald onto the zone south of it; an American ammunition dump taken. Progress slow everywhere.",
+    "at": {
+      "lat": 51.8085,
+      "lon": 5.965,
+      "place": "Wyler"
+    },
+    "source": "research/sept-17-18.md 4.3, 5.4"
+  },
+  {
+    "when": "1944-09-18T08:40",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Gliders put back: zones clear by 1400",
+    "text": "0840. Division told the glider lift is postponed to about 1400. LZ T and LZ N must be cleared of the enemy before then.",
+    "at": {
+      "lat": 51.762,
+      "lon": 5.935,
+      "place": "DZ N"
+    },
+    "source": "research/sept-17-18.md 4.3, 4.5"
+  },
+  {
+    "when": "1944-09-18T09:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Gräbner: break through to the north",
+    "text": "Gräbner's battalion, back from the Betuwe, to rush the bridge from the south and break through to the town.",
+    "at": {
+      "lat": 51.969,
+      "lon": 5.912,
+      "place": "Arnhem road bridge, south end"
+    },
+    "source": "research-arnhem/german-forces.md 3"
+  },
+  {
+    "when": "1944-09-18T09:15",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Hicks takes command; Staffords to Arnhem",
+    "text": "0915. Brig Hicks takes command of the division; the GOC is missing. 0930-1000: 2 S Staffords (first-lift half) ordered to reinforce 1 Para Bde in Arnhem. Second lift due 1000, delayed by fog.",
+    "at": {
+      "lat": 52.013,
+      "lon": 5.785,
+      "place": "LZ S"
+    },
+    "source": "research-arnhem/allied-forces.md 3.3, 6"
+  },
+  {
+    "when": "1944-09-18T09:30",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Feldt advancing; Göbel on Riethorst",
+    "text": "About 0930 (1030 German time). Feldt's force advancing between Groesbeek and Beek. KG Göbel attacks Riethorst, short of strength, cohesion and fire support; its armour caught by bazookas in the low ground.",
+    "at": {
+      "lat": 51.736,
+      "lon": 5.918,
+      "place": "Riethorst"
+    },
+    "source": "research/sept-17-18.md 5.4"
+  },
+  {
+    "when": "1944-09-18T10:30",
+    "side": null,
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Honinghutje bridges blown",
+    "text": "1030. Charges fired at Honinghutje: the railway bridge is destroyed and the road bridge damaged.",
+    "at": {
+      "lat": 51.826,
+      "lon": 5.808,
+      "place": "Honinghutje bridge"
+    },
+    "source": "research/sept-17-18.md 4.1"
+  },
+  {
+    "when": "1944-09-18T11:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "G/508 stopped near the Belvedere",
+    "text": "About 1100. G/508 gets to about a block from the traffic circle (100-400 yd from the bridge by different accounts) and is stopped by the defenders round the Belvedere. D/508 surrounded on LZ T.",
+    "at": {
+      "lat": 51.845,
+      "lon": 5.874,
+      "place": "Keizer Lodewijkplein traffic circle"
+    },
+    "source": "research/sept-17-18.md 4.2, 4.3"
+  },
+  {
+    "when": "1944-09-18T11:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Bridge 10 taken, damaged",
+    "text": "1100. 81-mm mortars come up at Honinghutje; the Germans withdraw and the position is overrun. About noon a 504th platoon moves onto the west end.",
+    "at": {
+      "lat": 51.826,
+      "lon": 5.808,
+      "place": "Honinghutje bridge"
+    },
+    "source": "research/sept-17-18.md 4.1"
+  },
+  {
+    "when": "1944-09-18T11:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Euling and Reinhold at the Waal bridge",
+    "text": "About 1100 (midday German time). Euling's battalion reaches the road bridge, the half-track company rolling over at full speed; HQ in Hunner Park. Major Ahlborn's local troops placed under him. Reinforced SS infantry retake the northern roundabouts from the Americans.",
+    "at": {
+      "lat": 51.8465,
+      "lon": 5.873,
+      "place": "Hunner Park"
+    },
+    "source": "research/sept-17-18.md 5.3, 4.2"
+  },
+  {
+    "when": "1944-09-18T11:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Euling to hold the south end",
+    "text": "Euling's battalion to dig in round Hunner Park and the Valkhof and hold the south end of the road bridge. Baumgärtel's pioneers to prepare both Waal bridges for demolition. Model has forbidden demolition.",
+    "at": {
+      "lat": 51.8465,
+      "lon": 5.873,
+      "place": "Hunner Park"
+    },
+    "source": "research/sept-17-18.md 5.3; research/german-forces.md 2.2, 6"
+  },
+  {
+    "when": "1944-09-18T11:30",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Gräbner's attack beaten off",
+    "text": "About 1130. After about 2 hours the attack on the bridge is beaten off; 10-12 vehicles knocked out on the ramp, six by 6-pdr and four by PIAT. Bridge force losses light.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/allied-forces.md 4.6, 6"
+  },
+  {
+    "when": "1944-09-18T11:30",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Gräbner killed on the ramp",
+    "text": "About 1130. The attack over the bridge has failed: 10-12 vehicles lost and about 70 men killed, Gräbner among them. Survivors hold the south approach facing north.",
+    "at": {
+      "lat": 51.969,
+      "lon": 5.912,
+      "place": "Arnhem road bridge, south end"
+    },
+    "source": "research-arnhem/german-forces.md 3, 10"
+  },
+  {
+    "when": "1944-09-18T14:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "LZ T cleared: 149 prisoners",
+    "text": "1400. 1/508 on its objective as the gliders come in: about 50 Germans killed, 149 captured and 16 x 20-mm guns taken, for 2 killed and 9 wounded. C/505 cleared LZ N at 1350; Capt Stefanich killed. G/508 ordered back from Nijmegen.",
+    "at": {
+      "lat": 51.798,
+      "lon": 5.952,
+      "place": "DZ T"
+    },
+    "source": "research/sept-17-18.md 4.3, 4.2"
+  },
+  {
+    "when": "1944-09-18T14:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Thrown off the landing zones",
+    "text": "About 1400. Feldt's northern group thrown back off the zone north-east of Groesbeek with heavy loss in prisoners and 20-mm guns; the Reichswald group off the zone south of Groesbeek. Gliders coming in overhead.",
+    "at": {
+      "lat": 51.8085,
+      "lon": 5.965,
+      "place": "Wyler"
+    },
+    "source": "research/sept-17-18.md 5.4"
+  },
+  {
+    "when": "1944-09-18T14:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Second lift: 4th Para Bde drops",
+    "text": "1400-1515. Second lift arrives four hours late: 4th Para Bde, 1,914 men, on DZ Y under fire; 156 Bn jumps 1400, Bde HQ 1420, 11 Bn about 1430. Gliders on LZ S (69) and LZ X (204).",
+    "at": {
+      "lat": 52.036,
+      "lon": 5.733,
+      "place": "DZ Y, Ginkel Heath"
+    },
+    "source": "research-arnhem/allied-forces.md 2.2, 6"
+  },
+  {
+    "when": "1944-09-18T14:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Renkum taken",
+    "text": "After 1400. The British company leaves Renkum along the river; Lippert's NCO school and the naval battalion occupy it and push on toward Heelsum. Lippert's HQ at Heelsum.",
+    "at": {
+      "lat": 51.972,
+      "lon": 5.734,
+      "place": "Renkum"
+    },
+    "source": "research-arnhem/german-forces.md 10"
+  },
+  {
+    "when": "1944-09-18T14:30",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Paratroops drop on Helle",
+    "text": "About 1430 (about 1500 by German accounts). The second lift drops on and behind Helle's battalion on Ginkel Heath. The KOSB counter-attack and the battalion breaks: one company captured intact, another destroyed.",
+    "at": {
+      "lat": 52.036,
+      "lon": 5.733,
+      "place": "DZ Y, Ginkel Heath"
+    },
+    "source": "research-arnhem/german-forces.md 5, 10"
+  },
+  {
+    "when": "1944-09-18T15:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Gliders lost beyond Wyler",
+    "text": "Afternoon. 385 of 454 gliders inside the lines. 19 came down in German ground north-east of LZ T; 8 of the 319th's beyond Wyler (45 men lost); a 320th serial released over Germany and not one man got back.",
+    "at": {
+      "lat": 51.8085,
+      "lon": 5.965,
+      "place": "Wyler"
+    },
+    "source": "research/sept-17-18.md 4.5"
+  },
+  {
+    "when": "1944-09-18T15:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Browning cancels the bridge envelopment",
+    "text": "Mid-afternoon. Browning approves, then cancels, Gavin's plan for a 504th battalion and the 508th to envelop the road bridge, because of XXX Corps's situation. No further attack on the bridge until the 19th.",
+    "at": {
+      "lat": 51.762,
+      "lon": 5.914,
+      "place": "I Airborne Corps HQ, wood 745533"
+    },
+    "source": "research/sept-17-18.md 4.2"
+  },
+  {
+    "when": "1944-09-18T15:15",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "11 Bn taken from Hackett",
+    "text": "1515. Hackett is told on landing that 11 Bn is to go into Arnhem under 1 Para Bde. He objects, then agrees, and asks for 7 KOSB in exchange; Hicks agrees.",
+    "at": {
+      "lat": 52.036,
+      "lon": 5.733,
+      "place": "DZ Y, Ginkel Heath"
+    },
+    "source": "research-arnhem/allied-forces.md 3.4, 6"
+  },
+  {
+    "when": "1944-09-18T15:25",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Stirling resupply scattered",
+    "text": "1515-1530. 33 Stirlings drop 87 tons; Div log 1525 'somewhat scattered'. About 12 tons collected, and 14 tons from three bulk-loaded Hamilcars. Two aircraft lost.",
+    "at": {
+      "lat": 52,
+      "lon": 5.772,
+      "place": "LZ Z"
+    },
+    "source": "research-arnhem/allied-forces.md 5.1"
+  },
+  {
+    "when": "1944-09-18T15:30",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "GOC and Brigadier cut off",
+    "text": "Afternoon. Urquhart and Lathbury break away from 3 PARA; Lathbury wounded. Urquhart hides in a house near the hospital. Frost now commands the whole bridge force.",
+    "at": {
+      "lat": 51.984,
+      "lon": 5.885,
+      "place": "St Elisabeth Hospital"
+    },
+    "source": "research-arnhem/allied-forces.md 3.1, 3.5, 6"
+  },
+  {
+    "when": "1944-09-18T15:57",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "B-24 resupply on DZ N",
+    "text": "1557. 131 B-24s drop on DZ N, loads spread up to 3,000 yd; the 448th Group drops near DZ O at 1630. About 80 per cent of 258 tons recovered.",
+    "at": {
+      "lat": 51.762,
+      "lon": 5.935,
+      "place": "DZ N"
+    },
+    "source": "research/sept-17-18.md 4.6"
+  },
+  {
+    "when": "1944-09-18T16:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Div HQ to the Hartenstein",
+    "text": "1600-1700. Div HQ moves to the Hartenstein Hotel; the divisional dump set up there. 3 Bty in action by Oosterbeek church; 1 and 2 Btys move north of the Utrechtseweg.",
+    "at": {
+      "lat": 51.988,
+      "lon": 5.833,
+      "place": "Hartenstein Hotel"
+    },
+    "source": "research-arnhem/allied-forces.md 3.5, 6"
+  },
+  {
+    "when": "1944-09-18T16:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Second British attack repulsed",
+    "text": "Afternoon. A co-ordinated British attack in west Arnhem is repulsed. Möller falls back to stronger positions on the Utrechtseweg just east of the St Elisabeth Gasthuis.",
+    "at": {
+      "lat": 51.984,
+      "lon": 5.885,
+      "place": "St Elisabeth Hospital"
+    },
+    "source": "research-arnhem/german-forces.md 3, 8.4, 10"
+  },
+  {
+    "when": "1944-09-18T16:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Harmel: guns into the bridge houses",
+    "text": "Afternoon. Harmel orders a 10th SS light howitzer battery into the gardens on the bridge approach to fire over open sights into the British-held houses.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/german-forces.md 4, 10"
+  },
+  {
+    "when": "1944-09-18T16:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Reinhold co-ordinates the bridgehead",
+    "text": "Afternoon. Reinhold takes over co-ordination of the Nijmegen defence from his CP on the north bank. KG Reinhold short of heavy weapons because of the limited ferry.",
+    "at": {
+      "lat": 51.862,
+      "lon": 5.866,
+      "place": "Lent"
+    },
+    "source": "research/sept-17-18.md 5.3; research/german-forces.md 2.3"
+  },
+  {
+    "when": "1944-09-18T17:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Tanks knocked out under the ramp",
+    "text": "Late afternoon. An attack from the east by infantry and two tanks under the ramp is beaten off; both tanks knocked out, at least one by a 6-pdr. Two buildings on the east side of the perimeter taken.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/german-forces.md 4, 10"
+  },
+  {
+    "when": "1944-09-18T17:00",
+    "side": null,
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Fighter-bombers over the Reichswald",
+    "text": "Late afternoon. 97 Spitfires and Mustangs of 2nd TAF bomb and strafe the Reichswald at Gavin's request.",
+    "at": {
+      "lat": 51.77,
+      "lon": 5.975,
+      "place": "Reichswald edge"
+    },
+    "source": "research/sept-17-18.md 4.3"
+  },
+  {
+    "when": "1944-09-18T17:30",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "11 Bn to the bridge",
+    "text": "About 1730. 11 Bn to march for the bridge under 1 Para Bde via Wolfheze and Oosterbeek, picking up its transport and E Troop's 6-pdrs on the way.",
+    "at": {
+      "lat": 52.036,
+      "lon": 5.733,
+      "place": "DZ Y, Ginkel Heath"
+    },
+    "source": "research-arnhem/allied-forces.md 3.4, 6"
+  },
+  {
+    "when": "1944-09-18T17:30",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Polette relieved at Bridge 10",
+    "text": "1730. A 504th company takes over Bridge 10 and Polette is recalled. The damaged bridge is later judged unfit for armour.",
+    "at": {
+      "lat": 51.826,
+      "lon": 5.808,
+      "place": "Honinghutje bridge"
+    },
+    "source": "research/sept-17-18.md 4.1"
+  },
+  {
+    "when": "1944-09-18T18:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Jagdpanzer platoon in Hunner Park",
+    "text": "Evening (time not recorded). A Panzerjäger platoon of four self-propelled anti-tank guns in Hunner Park with Euling; Henke's companies in the Kronenburgerpark and at the station.",
+    "at": {
+      "lat": 51.8465,
+      "lon": 5.873,
+      "place": "Hunner Park"
+    },
+    "source": "research/sept-17-18.md 5.3, 5.5"
+  },
+  {
+    "when": "1944-09-18T18:30",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "1 Para down to 100 men",
+    "text": "1830. 1 PARA about 100 men left, almost out of ammunition, just west of the hospital. T Coy down to 22.",
+    "at": {
+      "lat": 51.984,
+      "lon": 5.885,
+      "place": "St Elisabeth Hospital"
+    },
+    "source": "research-arnhem/allied-forces.md 3.1, 6"
+  },
+  {
+    "when": "1944-09-18T19:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Airlanding Bde to Oosterbeek",
+    "text": "1900. Zones abandoned now the second lift is in. 1 Border to Phase II positions on the west side of Oosterbeek, 1 AL Bde HQ to the Bilderberg, 7 KOSB to Johannahoeve to hold LZ L for the Poles.",
+    "at": {
+      "lat": 51.99,
+      "lon": 5.818,
+      "place": "Bilderberg woods"
+    },
+    "source": "research-arnhem/allied-forces.md 3.3, 6"
+  },
+  {
+    "when": "1944-09-18T19:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Siege at the bridge",
+    "text": "Evening. The bridge settles into a siege: general shelling and mortaring of the British houses. No German traffic can use the bridge; the 10th SS goes round by Pannerden.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/german-forces.md 10, 11"
+  },
+  {
+    "when": "1944-09-18T19:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Reinhold: hold both bridges",
+    "text": "Reinhold to co-ordinate the defence of both Waal bridges from Lent: Euling at the road bridge, Henke at the railway bridge, outposts and fire trenches in the north-bank dyke.",
+    "at": {
+      "lat": 51.862,
+      "lon": 5.866,
+      "place": "Lent"
+    },
+    "source": "research/german-forces.md 1, 2.3"
+  },
+  {
+    "when": "1944-09-18T19:30",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Staffords meet 1 and 3 Para",
+    "text": "1900-2000. First-lift half of 2 S Staffords meets the remnants of 1 and 3 PARA at 726776 and resupplies 1 Para with ammunition. R Coy 1 Para, about 40, rejoins.",
+    "at": {
+      "lat": 51.984,
+      "lon": 5.885,
+      "place": "St Elisabeth Hospital"
+    },
+    "source": "research-arnhem/allied-forces.md 3.1, 3.3, 6"
+  },
+  {
+    "when": "1944-09-18T21:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "156 Bn hits the Spindler line",
+    "text": "2100. C Coy 156 Bn ambushed at 696794 on the Dreijenseweg line. Battalion forms a firm base for the night in wood 678802, short of LZ L.",
+    "at": {
+      "lat": 51.998,
+      "lon": 5.837,
+      "place": "Grid 696794 on the Dreijenseweg line"
+    },
+    "source": "research-arnhem/allied-forces.md 6"
+  },
+  {
+    "when": "1944-09-18T21:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "British stopped on the Dreijenseweg",
+    "text": "2100. A British battalion coming east along the railway runs into Spindler's line on the Dreijenseweg and halts.",
+    "at": {
+      "lat": 51.999,
+      "lon": 5.844,
+      "place": "Dreijenseweg"
+    },
+    "source": "research-arnhem/german-forces.md 4.4"
+  },
+  {
+    "when": "1944-09-18T21:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Inf.Btl. 526 marching up",
+    "text": "Night. Infanterie-Bataillon 526, 350 men on paper, detrained at Bedburg-Hau today and marches to positions west of Kranenburg.",
+    "at": {
+      "lat": 51.79,
+      "lon": 6.007,
+      "place": "Kranenburg"
+    },
+    "source": "research/sept-17-18.md 5.4"
+  },
+  {
+    "when": "1944-09-18T22:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "XXX Corps expected tomorrow",
+    "text": "Night. First word that XXX Corps should reach the division tomorrow morning; the Grave bridge is ready for it.",
+    "at": {
+      "lat": 51.769,
+      "lon": 5.737,
+      "place": "Grave bridge"
+    },
+    "source": "research/sept-17-18.md 6"
+  },
+  {
+    "when": "1944-09-18T23:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "4th Para Bde plan for the 19th",
+    "text": "Plan for tomorrow: 156 Bn to take the Koepel; 10 Bn a firm base at 693811; 7 KOSB under command from 0800 to protect LZ L for the Polish gliders.",
+    "at": {
+      "lat": 52.007,
+      "lon": 5.821,
+      "place": "LZ L"
+    },
+    "source": "research-arnhem/sept-19-20.md 2.2"
+  },
+  {
+    "when": "1944-09-19T02:30",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Dawn attack on the bridge",
+    "text": "0230. New plan: 1 and 3 PARA to attack along the river road (Onderlangs), 2 S Staffords along the Utrechtseweg toward the Monastery, 11 Bn following. Start about 0400.",
+    "at": {
+      "lat": 51.984,
+      "lon": 5.885,
+      "place": "St Elisabeth Hospital"
+    },
+    "source": "research-arnhem/sept-19-20.md 2.1"
+  },
+  {
+    "when": "1944-09-19T03:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Reinhold's dispositions",
+    "text": "Euling at Hunner Park and the Valkhof with the pioneers and SP guns; Henke's companies in the Kronenburgerpark and on the railway embankment; 88s at the Keizer Lodewijkplein; outposts and fire trenches in the north-bank dyke; Schwappacher's guns at Oosterhout.",
+    "at": {
+      "lat": 51.8465,
+      "lon": 5.873,
+      "place": "Hunner Park"
+    },
+    "source": "research/german-forces.md 2, 8"
+  },
+  {
+    "when": "1944-09-19T04:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Dawn attack goes in",
+    "text": "0400-0445. 1 PARA crosses the start line on the river road, 3 PARA behind; 2 S Staffords advance on the Utrechtseweg in the order D, B, A Coy; 11 Bn following.",
+    "at": {
+      "lat": 51.984,
+      "lon": 5.885,
+      "place": "St Elisabeth Hospital"
+    },
+    "source": "research-arnhem/sept-19-20.md 7"
+  },
+  {
+    "when": "1944-09-19T05:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "1 Para hit by tanks",
+    "text": "0430-0500. 1 PARA under heavy fire on the river road; tanks at 0500. By 0600 R Coy 6, S Coy 15, T Coy 8 and about 10 of Bn HQ left.",
+    "at": {
+      "lat": 51.984,
+      "lon": 5.885,
+      "place": "St Elisabeth Hospital"
+    },
+    "source": "research-arnhem/sept-19-20.md 2.1"
+  },
+  {
+    "when": "1944-09-19T05:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "River-bank companies pushed back",
+    "text": "0500. British attack along the river bank; the PGR 20 companies pushed back, then hold with tanks and 20-mm fire from the south bank at Meinerswijk.",
+    "at": {
+      "lat": 51.975,
+      "lon": 5.884,
+      "place": "Meinerswijk"
+    },
+    "source": "research-arnhem/sept-19-20.md 7; research-arnhem/sept-19-20.md 6.3"
+  },
+  {
+    "when": "1944-09-19T06:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "3/508 attacks Beek",
+    "text": "Dawn. 3/508 attacks Beek. A G/508 platoon on Devil's Hill driven off three times in the morning.",
+    "at": {
+      "lat": 51.829,
+      "lon": 5.925,
+      "place": "Beek"
+    },
+    "source": "research/sept-17-18.md 8.1"
+  },
+  {
+    "when": "1944-09-19T07:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "StuG 280 split among the Kampfgruppen",
+    "text": "Morning (time estimated). StuG-Brigade 280, 7 StuG III and 3 StuH 42, arrives through Willemsplein. Spindler gives three guns each to Harder, Möller and Allwörden.",
+    "at": {
+      "lat": 51.983,
+      "lon": 5.906,
+      "place": "Willemsplein"
+    },
+    "source": "research-arnhem/sept-19-20.md 5.1, 7"
+  },
+  {
+    "when": "1944-09-19T07:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Probes at Wyler and Devil's Hill",
+    "text": "Morning. Feldt's troops drive the American platoon off Devil's Hill three times. A truck lost to a 57-mm at Wyler at dawn.",
+    "at": {
+      "lat": 51.819,
+      "lon": 5.946,
+      "place": "Devil's Hill"
+    },
+    "source": "research/german-forces.md 4.1; research/allied-forces.md 2.3"
+  },
+  {
+    "when": "1944-09-19T07:30",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Dobie captured; Fitch killed",
+    "text": "0730. Dobie's party of 1 PARA captured; 39 men were still able to fight at 0630. 3 PARA under heavy MG and 20-mm fire; withdrawal ordered and Lt Col Fitch killed.",
+    "at": {
+      "lat": 51.984,
+      "lon": 5.885,
+      "place": "St Elisabeth Hospital"
+    },
+    "source": "research-arnhem/sept-19-20.md 2.1"
+  },
+  {
+    "when": "1944-09-19T08:20",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Household Cavalry at Grave",
+    "text": "0820. B Sqn 2nd HCR armoured cars reach the Grave bridge and link up with the 504th. XXX Corps has arrived.",
+    "at": {
+      "lat": 51.769,
+      "lon": 5.737,
+      "place": "Grave bridge"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-19T08:30",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "156 Bn on the Dreijenseweg",
+    "text": "0830-0930. 156 Bn's A Coy, then B Coy, attack the Dreijenseweg; A Coy loses all its officers. 10 Bn held at 690810 from north and east.",
+    "at": {
+      "lat": 51.999,
+      "lon": 5.844,
+      "place": "Dreijenseweg"
+    },
+    "source": "research-arnhem/sept-19-20.md 2.2"
+  },
+  {
+    "when": "1944-09-19T08:30",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Hold the Dreijenseweg",
+    "text": "Sperrverband Spindler to hold the Dreijenseweg with armoured cars, SP guns and dual-purpose flak against the new British brigade coming from the west.",
+    "at": {
+      "lat": 51.999,
+      "lon": 5.844,
+      "place": "Dreijenseweg"
+    },
+    "source": "research-arnhem/sept-19-20.md 6.3"
+  },
+  {
+    "when": "1944-09-19T09:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Assault guns stop the British",
+    "text": "About 0900-1000 (clock uncertain). Möller's men with assault guns stop the British attack on the Utrechtseweg; SP guns and tanks close on the British at the museum.",
+    "at": {
+      "lat": 51.985,
+      "lon": 5.892,
+      "place": "Monastery / Arnhem Museum"
+    },
+    "source": "research-arnhem/sept-19-20.md 5.1"
+  },
+  {
+    "when": "1944-09-19T09:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "GOC: 11 Bn to halt",
+    "text": "0900. Urquhart, back at Div HQ, has 11 Bn halted. Staffords on the defensive since 0800 with SP guns and tanks closing.",
+    "at": {
+      "lat": 51.985,
+      "lon": 5.892,
+      "place": "Monastery / Arnhem Museum"
+    },
+    "source": "research-arnhem/sept-19-20.md 7"
+  },
+  {
+    "when": "1944-09-19T10:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Grenadiers at Grave",
+    "text": "About 1000. Leading Grenadier Guards tanks at Grave; diverted via Overasselt and the Heumen lock bridge, as the Honinghutje bridge will not take tanks. The 325th's glider lift cancelled for weather.",
+    "at": {
+      "lat": 51.769,
+      "lon": 5.737,
+      "place": "Grave bridge"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-19T10:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Column broken up at Riethorst",
+    "text": "During the day. About 500 Germans moving on Mook and Riethorst from the south-west are broken up by American artillery.",
+    "at": {
+      "lat": 51.736,
+      "lon": 5.918,
+      "place": "Riethorst"
+    },
+    "source": "research/german-forces.md 5"
+  },
+  {
+    "when": "1944-09-19T10:50",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Staffords overrun at the museum",
+    "text": "About 1050. PIAT ammunition gone at the Monastery. By about 1100 B Coy overrun by tanks and infantry; A Coy lost entire; CO and 2IC captured.",
+    "at": {
+      "lat": 51.985,
+      "lon": 5.892,
+      "place": "Monastery / Arnhem Museum"
+    },
+    "source": "research-arnhem/sept-19-20.md 7"
+  },
+  {
+    "when": "1944-09-19T11:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Möller retakes the museum",
+    "text": "About 1100. Tanks, assault guns and Möller's infantry overrun the British at the museum on the Utrechtseweg.",
+    "at": {
+      "lat": 51.985,
+      "lon": 5.892,
+      "place": "Monastery / Arnhem Museum"
+    },
+    "source": "research-arnhem/sept-19-20.md 5.1, 6.3"
+  },
+  {
+    "when": "1944-09-19T11:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "11 Bn to take Heijenoord",
+    "text": "1100. 11 Bn ordered to take the Heijenoord - Diependal high ground as a pivot. Lt Fraser has about 120 men of all 1 Para Bde units at 723783.",
+    "at": {
+      "lat": 51.987,
+      "lon": 5.876,
+      "place": "Den Brink"
+    },
+    "source": "research-arnhem/sept-19-20.md 2.1"
+  },
+  {
+    "when": "1944-09-19T12:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "The story so far",
+    "text": "17 Sep: the 82nd landed round Groesbeek, took the Grave and Heumen bridges intact but saw the Malden, Hatert and Mook bridges blown, and 1/508's night attack was stopped at the Keizer Karelplein. 18 Sep: Korps Feldt overran the landing zones and was thrown off just as the gliders came in, while the Honinghutje bridge was taken damaged and the SS reached the Waal bridge. This morning the Household Cavalry met the 504th at Grave at 0820 and the Grenadier Guards are south of Nijmegen; at Arnhem 2 Para still holds the north end of the bridge but the rest of 1st Airborne is held in the west of the town.",
+    "at": {
+      "lat": 51.769,
+      "lon": 5.737,
+      "place": "Grave bridge"
+    },
+    "source": "research/sept-17-18.md 6; research/allied-forces.md 4",
+    "scenarios": [
+      "nijmegen-1944-bridges"
+    ]
+  },
+  {
+    "when": "1944-09-19T12:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "The story so far",
+    "text": "17 Sep: Henke's weak garrison was alone in Nijmegen while the Americans took the Grave and Heumen bridges; Gräbner's reconnaissance battalion passed through and turned back for Arnhem. 18 Sep: with the Arnhem bridge blocked, Euling's battalion, Baumgärtel's pioneers and Reinhold came round by the Pannerden ferry and dug in at Hunner Park, the Valkhof and Lent, while Korps Feldt's attack on the landing zones failed, leaving the 406th about 500 effectives. Model still forbids blowing the Waal bridges; this morning British armour reached Grave.",
+    "at": {
+      "lat": 51.8465,
+      "lon": 5.873,
+      "place": "Hunner Park"
+    },
+    "source": "research/sept-17-18.md 5, 6; research/german-forces.md 5",
+    "scenarios": [
+      "nijmegen-1944-bridges"
+    ]
+  },
+  {
+    "when": "1944-09-19T12:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Krafft to attack into LZ L",
+    "text": "KG Krafft, reinforced with Marine-Rgt. 642, 1. Schiffsstamm-Rgt. and police, to attack south across the Amsterdamseweg this afternoon toward the railway and LZ L.",
+    "at": {
+      "lat": 52.007,
+      "lon": 5.821,
+      "place": "LZ L"
+    },
+    "source": "research-arnhem/sept-19-20.md 5.2"
+  },
+  {
+    "when": "1944-09-19T13:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Molenhoek conference: the bridges",
+    "text": "Midday to early afternoon. Browning, Horrocks, Gavin and Adair confer at Molenhoek. Plan: 2/505 with the Grenadier group against the Nijmegen bridges this afternoon; the British offer assault boats for a crossing.",
+    "at": {
+      "lat": 51.766,
+      "lon": 5.872,
+      "place": "Molenhoek"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-19T13:30",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "11 Bn caught forming up",
+    "text": "1330-1430. 11 Bn caught forming up by mortars and tanks; A Coy cut off and surrenders; Lt Col Lea wounded and captured. Cain's Staffords abandon Den Brink about 1330.",
+    "at": {
+      "lat": 51.987,
+      "lon": 5.876,
+      "place": "Den Brink"
+    },
+    "source": "research-arnhem/sept-19-20.md 7"
+  },
+  {
+    "when": "1944-09-19T13:30",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "British broken in west Arnhem",
+    "text": "Early afternoon. The last British battalion attempting a flank attack is caught forming up. The remnants fall back west toward Oosterbeek; assault guns pursue from about midday.",
+    "at": {
+      "lat": 51.987,
+      "lon": 5.876,
+      "place": "Den Brink"
+    },
+    "source": "research-arnhem/sept-19-20.md 5.1, 6.3"
+  },
+  {
+    "when": "1944-09-19T13:30",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Pursue toward Oosterbeek",
+    "text": "From about midday the assault guns and Möller's men to follow the beaten British west along the Utrechtseweg toward Oosterbeek.",
+    "at": {
+      "lat": 51.98,
+      "lon": 5.85,
+      "place": "Road junction 705774, Oosterbeek-Laag"
+    },
+    "source": "research-arnhem/sept-19-20.md 5.1"
+  },
+  {
+    "when": "1944-09-19T14:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Urquhart: 4th Para Bde south of the railway",
+    "text": "1400-1420. Urquhart at 4th Para Bde HQ orders the brigade to disengage and form the eastern flank along the railway crossings 712784-715780-712774. 156 Bn has lost about half.",
+    "at": {
+      "lat": 52.001,
+      "lon": 5.837,
+      "place": "Pt 56.5"
+    },
+    "source": "research-arnhem/sept-19-20.md 2.2, 7"
+  },
+  {
+    "when": "1944-09-19T14:30",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Thompson Force at Oosterbeek-Laag",
+    "text": "About 1430. About 300 survivors of 1, 3, 11 Para and the Staffords reach road junction 705774. Lt Col Thompson of the Light Regt deploys them to cover the road from Arnhem.",
+    "at": {
+      "lat": 51.98,
+      "lon": 5.85,
+      "place": "Road junction 705774, Oosterbeek-Laag"
+    },
+    "source": "research-arnhem/sept-19-20.md 2.1"
+  },
+  {
+    "when": "1944-09-19T15:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Polish gliders land on LZ L",
+    "text": "About 1500-1600 (times vary). About 30 Polish gliders land on LZ L in the middle of 4th Para Bde's withdrawal; exchanges of fire with the KOSB. Two 6-pdrs and about 4 jeeps reach Oosterbeek; 9 Poles killed.",
+    "at": {
+      "lat": 52.007,
+      "lon": 5.821,
+      "place": "LZ L"
+    },
+    "source": "research-arnhem/sept-19-20.md 2.4"
+  },
+  {
+    "when": "1944-09-19T15:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Krafft attacks into the glider landing",
+    "text": "About 1500 (1600 German time). KG Krafft attacks south over the Amsterdamseweg into LZ L as gliders are landing; 9. Kp's commander Leiteritz killed. By night Krafft has closed up to Tettau's left.",
+    "at": {
+      "lat": 52.007,
+      "lon": 5.821,
+      "place": "LZ L"
+    },
+    "source": "research-arnhem/sept-19-20.md 5.2"
+  },
+  {
+    "when": "1944-09-19T15:30",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "19 Sep drop fails",
+    "text": "1530. Only 32 aircraft of the 61st TCG reach DZ O out of 167 planned. Dropped high and fast; recovery negligible, about 20 per cent officially. Division critically short of food and ammunition.",
+    "at": {
+      "lat": 51.77,
+      "lon": 5.79,
+      "place": "DZ O, Overasselt"
+    },
+    "source": "research/allied-forces.md 4; research/allied-forces.md 5.1"
+  },
+  {
+    "when": "1944-09-19T15:30",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Three columns into Nijmegen",
+    "text": "Attack plan: one troop of No. 3 Sqn with a Grenadier platoon and D/505 for the railway bridge; three troops with No. 2 Coy and E and F/505 for the road bridge; four tanks of No. 1 Sqn with No. 3 Coy and a 505th platoon for the post office.",
+    "at": {
+      "lat": 51.818,
+      "lon": 5.882,
+      "place": "Sionshof"
+    },
+    "source": "research/allied-forces.md 3.2"
+  },
+  {
+    "when": "1944-09-19T16:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Resupply falls to the enemy",
+    "text": "About 1600. 163 aircraft drop 388 tons on SDP V, in German hands; Eureka, smoke and panels at Div HQ have little effect. About 12 tons collected. 13 aircraft shot down; Flt Lt Lord's Dakota lost.",
+    "at": {
+      "lat": 51.998,
+      "lon": 5.865,
+      "place": "SDP V, north of Oosterbeek-Hoog"
+    },
+    "source": "research-arnhem/sept-19-20.md 4.1"
+  },
+  {
+    "when": "1944-09-19T16:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Grenadiers and 2/505 into Nijmegen",
+    "text": "1600-1700 (times differ). Grenadiers and 2/505 attack from Sionshof in three columns: railway bridge, road bridge and post office. E and F/505 stopped at the Hunner Park traffic circle.",
+    "at": {
+      "lat": 51.845,
+      "lon": 5.874,
+      "place": "Keizer Lodewijkplein traffic circle"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-19T16:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "A/508 retakes Devil's Hill",
+    "text": "1600-1800. A/508 retakes the crest of Devil's Hill, losing 10 killed and 7 wounded; B/508 takes Wyler, held by about one company.",
+    "at": {
+      "lat": 51.819,
+      "lon": 5.946,
+      "place": "Devil's Hill"
+    },
+    "source": "research/allied-forces.md 4; research/allied-forces.md 2.3"
+  },
+  {
+    "when": "1944-09-19T16:30",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Attack on the bridges stopped",
+    "text": "Afternoon. The western force is stopped at the railway embankment, its lead tank hit by the pre-registered north-bank battery, as two SP guns come out of the embankment tunnel. The eastern force stopped at the Keizer Lodewijkplein by the 88 and the anti-tank guns.",
+    "at": {
+      "lat": 51.845,
+      "lon": 5.874,
+      "place": "Keizer Lodewijkplein traffic circle"
+    },
+    "source": "research/german-forces.md 5"
+  },
+  {
+    "when": "1944-09-19T17:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "10 Bn at the Wolfheze crossing",
+    "text": "1700-1800. 10 Bn reaches the Wolfheze level crossing, finds it partly held and digs in 200 yd south. Vehicles through the culvert; many vehicles and A/Tk guns lost.",
+    "at": {
+      "lat": 52.007,
+      "lon": 5.792,
+      "place": "Wolfheze crossing"
+    },
+    "source": "research-arnhem/sept-19-20.md 2.2, 7"
+  },
+  {
+    "when": "1944-09-19T17:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Sperrlinie moves west",
+    "text": "Afternoon. The line follows the retreating British west toward Oosterbeek; a StuG on the Utrechtseweg at the Wilhelminastraat by late afternoon.",
+    "at": {
+      "lat": 51.98,
+      "lon": 5.85,
+      "place": "Road junction 705774, Oosterbeek-Laag"
+    },
+    "source": "research-arnhem/sept-19-20.md 5.1, 6.3"
+  },
+  {
+    "when": "1944-09-19T17:30",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Post office taken",
+    "text": "About 1730. Thorne's column takes the post office; it holds no bridge detonators.",
+    "at": {
+      "lat": 51.843,
+      "lon": 5.866,
+      "place": "Nijmegen main post office"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-19T19:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Stopped 400 yards from both bridges",
+    "text": "Nightfall. Grenadier diary: heavy opposition encountered 400 yards from both bridges; consolidated for the night at Hunner Park and the Kronenburgerpark.",
+    "at": {
+      "lat": 51.845,
+      "lon": 5.874,
+      "place": "Keizer Lodewijkplein traffic circle"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-19T19:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Diversion at Oosterhout",
+    "text": "About 1900. Schwappacher's gunners make a diversionary counter-attack at Oosterhout.",
+    "at": {
+      "lat": 51.877,
+      "lon": 5.827,
+      "place": "Oosterhout"
+    },
+    "source": "research/german-forces.md 5"
+  },
+  {
+    "when": "1944-09-19T19:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Thompson to hold the south-east",
+    "text": "1900. Defence of the south-east put under Lt Col Thompson of the Light Regt, HQ at Oosterbeek church, with the survivors from Arnhem. Border companies attacked lightly.",
+    "at": {
+      "lat": 51.978,
+      "lon": 5.838,
+      "place": "Oosterbeek Oude Kerk"
+    },
+    "source": "research-arnhem/sept-19-20.md 7"
+  },
+  {
+    "when": "1944-09-19T19:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Two Tigers at the bridge",
+    "text": "About 1900 (2000 German time). The first two Tigers of Kp. Hummel on the bridge ramp; they shell the houses on the Eusebiusbuitensingel. Knaack's Tiger hit on turret and gun by a 6-pdr.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/sept-19-20.md 5.1, 7"
+  },
+  {
+    "when": "1944-09-19T19:30",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "KOSB into the White House",
+    "text": "1900-2400. 7 KOSB reaches the Div HQ area and by midnight holds the woods and houses at 696791, the White House and the Ommershof.",
+    "at": {
+      "lat": 51.994,
+      "lon": 5.836,
+      "place": "White House (Hotel Dreyeroord)"
+    },
+    "source": "research-arnhem/sept-19-20.md 2.2"
+  },
+  {
+    "when": "1944-09-19T20:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Bridge houses burning",
+    "text": "Evening. At least five houses at the bridge burned down, including a key one east of the ramp. Up to 150 wounded in the cellars; ammunition acute.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/sept-19-20.md 2.5"
+  },
+  {
+    "when": "1944-09-19T21:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Plan for the 20th: clear the south bank",
+    "text": "For tomorrow: clear western Nijmegen and the south bank round the power station for a boat crossing; 3/504 brought up from reserve. H-hour first set for 0800.",
+    "at": {
+      "lat": 51.855,
+      "lon": 5.83,
+      "place": "Waal bank by the PGEM power station"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-19T21:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "4th Para Bde: into the perimeter",
+    "text": "Night. 4th Para Bde, outside the divisional area near Wolfheze, to come into the perimeter at first light.",
+    "at": {
+      "lat": 52.005,
+      "lon": 5.811,
+      "place": "Wood 678802"
+    },
+    "source": "research-arnhem/sept-19-20.md 2.2"
+  },
+  {
+    "when": "1944-09-19T21:15",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "3/504 at Jonkerbos",
+    "text": "2115. 3/504 crosses the Heumen bridge and harbours at Jonkerbos.",
+    "at": {
+      "lat": 51.814,
+      "lon": 5.828,
+      "place": "Jonkerbos"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-19T22:45",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "A Gp B: anti-tank weapons to Nijmegen",
+    "text": "About 2245 (from the A Gp B war diary). Heeresgruppe B orders more troops and all available anti-tank weapons to Nijmegen by the Huissen ferry. A dawn counter-attack is planned.",
+    "at": {
+      "lat": 51.862,
+      "lon": 5.866,
+      "place": "Lent"
+    },
+    "source": "research/german-forces.md 5"
+  },
+  {
+    "when": "1944-09-19T23:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "II Fallschirmkorps in the Reichswald",
+    "text": "Night. Meindl's II. Fallschirmkorps arrives in the Reichswald with a Luftwaffe battalion and six mixed battalions. KG Becker, Greschick and Hermann assembling on the east edge.",
+    "at": {
+      "lat": 51.77,
+      "lon": 5.975,
+      "place": "Reichswald edge"
+    },
+    "source": "research/german-forces.md 1, 4.2, 5"
+  },
+  {
+    "when": "1944-09-19T23:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Concentric attack on Groesbeek",
+    "text": "Plan for the 20th: two concentric attacks converging on Groesbeek. Korps Feldt (KG Becker) from the north-east on Beek, Berg en Dal and Wyler; II. FJ-Korps (KG Hermann) from the south-east through Riethorst on Mook. Saunders gives the goal as the Maas-Waal canal.",
+    "at": {
+      "lat": 51.774,
+      "lon": 5.93,
+      "place": "Groesbeek"
+    },
+    "source": "research/german-forces.md 4.2"
+  },
+  {
+    "when": "1944-09-19T23:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "The ring closes in the north",
+    "text": "Night. KG Knoche links up with Krafft's right flank, closing the north side of the pocket. Btl. Wossowski spends the night on the Ede road.",
+    "at": {
+      "lat": 52.008,
+      "lon": 5.837,
+      "place": "Johannahoeve"
+    },
+    "source": "research-arnhem/sept-19-20.md 5.2, 7"
+  },
+  {
+    "when": "1944-09-19T23:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Dawn attack on the road bridge",
+    "text": "2/505 to attack again toward the road bridge at 0530; western Nijmegen to be cleared from first light.",
+    "at": {
+      "lat": 51.845,
+      "lon": 5.874,
+      "place": "Keizer Lodewijkplein traffic circle"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-19T23:15",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Thompson Force: about 440 men",
+    "text": "2315. Return: S Staffords 100, 1 PARA 116, 3 PARA 40, 11 PARA 150, glider pilots 30, FOOs 2. About 438, with four 6-pdrs and a 17-pdr.",
+    "at": {
+      "lat": 51.978,
+      "lon": 5.838,
+      "place": "Oosterbeek Oude Kerk"
+    },
+    "source": "research-arnhem/sept-19-20.md 2.1"
+  },
+  {
+    "when": "1944-09-20T03:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Kampfgruppen to attack at dawn",
+    "text": "Night. KG Becker (FJR 5, 8 and 9) assembling at the Wyler-Zyfflich border, KG Hermann south and east of Riethorst, KG Greschick's conscripts toward Wyler and Den Heuvel. H-hour set for 0630 (reportedly).",
+    "at": {
+      "lat": 51.8085,
+      "lon": 5.965,
+      "place": "Wyler"
+    },
+    "source": "research/german-forces.md 4.2"
+  },
+  {
+    "when": "1944-09-20T05:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "British pushed south of the railway",
+    "text": "About 0500 (0600 German time). KG Krafft has driven the British south over the railway.",
+    "at": {
+      "lat": 52.007,
+      "lon": 5.792,
+      "place": "Wolfheze crossing"
+    },
+    "source": "research-arnhem/sept-19-20.md 5.2"
+  },
+  {
+    "when": "1944-09-20T05:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Hackett: into the divisional area",
+    "text": "4th Para Bde to break into the divisional area: from Pt 232 by the track at 677794, the Breedelaan and road junction 683785; order of march 156, Bde HQ, 10 Bn.",
+    "at": {
+      "lat": 51.991,
+      "lon": 5.823,
+      "place": "Hackett's hollow, 686787"
+    },
+    "source": "research-arnhem/sept-19-20.md 3.1"
+  },
+  {
+    "when": "1944-09-20T05:30",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "2/505 dawn attack fails",
+    "text": "0530. 2/505's attack toward the road bridge fails.",
+    "at": {
+      "lat": 51.845,
+      "lon": 5.874,
+      "place": "Keizer Lodewijkplein traffic circle"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-20T07:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Wossowski: sweep the woods",
+    "text": "Btl. Wossowski, about 600 on bicycles, to sweep the woods by Ginkel Heath, then cycle on to Wolfheze.",
+    "at": {
+      "lat": 52.036,
+      "lon": 5.733,
+      "place": "DZ Y, Ginkel Heath"
+    },
+    "source": "research-arnhem/sept-19-20.md 5.2"
+  },
+  {
+    "when": "1944-09-20T07:30",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Tettau's units through Krafft",
+    "text": "About 0730 (0830 German time). Tettau's units pass through Krafft's line west of Oosterbeek.",
+    "at": {
+      "lat": 52.007,
+      "lon": 5.792,
+      "place": "Wolfheze crossing"
+    },
+    "source": "research-arnhem/sept-19-20.md 5.2, 7"
+  },
+  {
+    "when": "1944-09-20T08:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Clearing western Nijmegen",
+    "text": "From 0800. 1st Grenadiers and the 504th, with two tank squadrons, clear western Nijmegen and the south bank round the crossing site. Lt Prescott's tank lost.",
+    "at": {
+      "lat": 51.846,
+      "lon": 5.85,
+      "place": "Kronenburgerpark"
+    },
+    "source": "research/allied-forces.md 4; research/allied-forces.md 3.2"
+  },
+  {
+    "when": "1944-09-20T08:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Crossing H-hour slips",
+    "text": "Crossing H-hour put back from 0800 to 1100, then 1330, then 1500: the boats have not come up.",
+    "at": {
+      "lat": 51.855,
+      "lon": 5.83,
+      "place": "Waal bank by the PGEM power station"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-20T08:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Inf.Btl. 526 attacks Groesbeek",
+    "text": "0800. Inf.Btl. 526 attacks through De Horst toward Groesbeek, two companies up; broken up by American MG fire.",
+    "at": {
+      "lat": 51.774,
+      "lon": 5.97,
+      "place": "De Horst"
+    },
+    "source": "research/german-forces.md 4.1, 5"
+  },
+  {
+    "when": "1944-09-20T08:20",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Bridge: north end held",
+    "text": "0820. 1 Para Bde reports the north end held and the bridge intact; asks for reinforcements and a surgical team. The 6-pdrs cannot be manned under direct fire.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/sept-19-20.md 3.4"
+  },
+  {
+    "when": "1944-09-20T09:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "3/504 warned for the crossing",
+    "text": "0900. Warning order to 3/504: cross the Waal by assault boat west of the city and take the north ends of the bridges.",
+    "at": {
+      "lat": 51.855,
+      "lon": 5.83,
+      "place": "Waal bank by the PGEM power station"
+    },
+    "source": "research/allied-forces.md 2.3"
+  },
+  {
+    "when": "1944-09-20T09:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Becker: Beek, then the canal",
+    "text": "KG Becker to take Beek and the hills, then push west to the Maas-Waal canal. Mortar fire on Devil's Hill opens the attack in the Beek sector this morning.",
+    "at": {
+      "lat": 51.829,
+      "lon": 5.925,
+      "place": "Beek"
+    },
+    "source": "research/german-forces.md 4.2, 5"
+  },
+  {
+    "when": "1944-09-20T09:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "More Tigers arrive",
+    "text": "20 Sep (time not recorded). The rest of Kp. Hummel's Tigers, about 12, reach Arnhem and go to KG Knaust at the bridge.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/sept-19-20.md 5.1"
+  },
+  {
+    "when": "1944-09-20T09:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "The bridges are not to be blown",
+    "text": "Model's prohibition stands: the Waal bridges are to be held, not blown; he wants them for the counter-attack. The pioneers' charges on the road bridge are ready.",
+    "at": {
+      "lat": 51.849,
+      "lon": 5.87,
+      "place": "Waal road bridge, south end"
+    },
+    "source": "research/german-forces.md 6"
+  },
+  {
+    "when": "1944-09-20T09:50",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Wyler attacked",
+    "text": "0930-0950. Artillery on Wyler from 0930; a two-company attack at 0950 broken up, then a battalion-strength attack. A dawn attack on Devil's Hill repulsed.",
+    "at": {
+      "lat": 51.8085,
+      "lon": 5.965,
+      "place": "Wyler"
+    },
+    "source": "research/allied-forces.md 2.3"
+  },
+  {
+    "when": "1944-09-20T10:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "156 down to 91 men",
+    "text": "1000. 156 Bn at 682786: HQ Coy 30, A Coy 15, B Coy 6, C Coy 40. Border's A Coy attacked by infantry and an SP gun.",
+    "at": {
+      "lat": 51.991,
+      "lon": 5.823,
+      "place": "Hackett's hollow, 686787"
+    },
+    "source": "research-arnhem/sept-19-20.md 3.1"
+  },
+  {
+    "when": "1944-09-20T10:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Möller's assault groups",
+    "text": "Morning. Möller leads assault groups down the Utrechtseweg with RAD, naval and Luftwaffe reinforcements and assault-gun support.",
+    "at": {
+      "lat": 51.988,
+      "lon": 5.85,
+      "place": "Utrechtseweg / Stationsweg crossroads"
+    },
+    "source": "research-arnhem/sept-19-20.md 6.3"
+  },
+  {
+    "when": "1944-09-20T10:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "KG Hermann attacks Riethorst",
+    "text": "About 1000 (barrage about 1100 by another account). KG Hermann's attack on Riethorst and Mook begins, some hours late; three tanks with one battalion.",
+    "at": {
+      "lat": 51.736,
+      "lon": 5.918,
+      "place": "Riethorst"
+    },
+    "source": "research/german-forces.md 4.2"
+  },
+  {
+    "when": "1944-09-20T11:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Mook front attacked",
+    "text": "About 1100. Barrage on Riethorst and Mook. Riethorst held at first with ten 75-mm in support.",
+    "at": {
+      "lat": 51.736,
+      "lon": 5.918,
+      "place": "Riethorst"
+    },
+    "source": "research/allied-forces.md 2.3"
+  },
+  {
+    "when": "1944-09-20T11:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Schoonoord crossroads taken",
+    "text": "About 1100. The British dressing stations at the Schoonoord crossroads fall into German hands.",
+    "at": {
+      "lat": 51.989,
+      "lon": 5.837,
+      "place": "Schoonoord crossroads"
+    },
+    "source": "research-arnhem/sept-19-20.md 3.3, 7"
+  },
+  {
+    "when": "1944-09-20T12:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Drop inside the perimeter",
+    "text": "Division asks for today's drop inside the perimeter round the Hartenstein, not on the pre-planned point, which is in German hands.",
+    "at": {
+      "lat": 51.988,
+      "lon": 5.833,
+      "place": "Hartenstein Hotel"
+    },
+    "source": "research-arnhem/sept-19-20.md 4.1"
+  },
+  {
+    "when": "1944-09-20T12:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Tettau under Bittrich: close the ring",
+    "text": "20 Sep. Von Tettau placed under II SS-Panzerkorps. The 9th SS to press the pocket from east and north-east, Krafft and Knoche on the north, Tettau from the west; the ferry and the Westerbouwing are the next objectives.",
+    "at": {
+      "lat": 51.976,
+      "lon": 5.821,
+      "place": "Westerbouwing"
+    },
+    "source": "research-arnhem/sept-19-20.md 6.2, 6.4"
+  },
+  {
+    "when": "1944-09-20T12:15",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Hackett's hollow",
+    "text": "About 1215. Tanks hit 4th Para Bde HQ; IO killed, Brigade Major mortally wounded. About 150 men hold a hollow at 686787 for the rest of the day.",
+    "at": {
+      "lat": 51.991,
+      "lon": 5.823,
+      "place": "Hackett's hollow, 686787"
+    },
+    "source": "research-arnhem/sept-19-20.md 3.1"
+  },
+  {
+    "when": "1944-09-20T13:10",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "10 Bn reaches Div HQ",
+    "text": "1310. 10 Bn reaches Div HQ with about 60 men, its whole effective strength; sent to hold crossroads 705783 facing east.",
+    "at": {
+      "lat": 51.988,
+      "lon": 5.85,
+      "place": "Utrechtseweg / Stationsweg crossroads"
+    },
+    "source": "research-arnhem/sept-19-20.md 3.1"
+  },
+  {
+    "when": "1944-09-20T13:30",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Frost wounded",
+    "text": "About 1330 (reported 1545). Lt Col Frost wounded by a mortar bomb; Maj Gough takes command at the bridge. Gough: the party can hold out till tomorrow.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/sept-19-20.md 3.4"
+  },
+  {
+    "when": "1944-09-20T14:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Gavin to the Mook front",
+    "text": "Gavin leaves the crossing to deal with Mook. 1/505's reserve platoons and No. 3 Sqn of the 1st Coldstream to retake Mook; the 5th Coldstream to push the Germans back toward Riethorst.",
+    "at": {
+      "lat": 51.753,
+      "lon": 5.884,
+      "place": "Mook"
+    },
+    "source": "research/allied-forces.md 2.7, 3.2"
+  },
+  {
+    "when": "1944-09-20T14:06",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "First resupply wave",
+    "text": "1406. First resupply wave, about 70 aircraft, over the perimeter. Many loads fall outside; 33 aircraft drop on LZ Z.",
+    "at": {
+      "lat": 51.988,
+      "lon": 5.833,
+      "place": "Hartenstein Hotel"
+    },
+    "source": "research-arnhem/sept-19-20.md 4.1"
+  },
+  {
+    "when": "1944-09-20T14:10",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Mook nearly taken",
+    "text": "1410. Mook almost in German hands; the 505th's outposts overrun by 1500.",
+    "at": {
+      "lat": 51.753,
+      "lon": 5.884,
+      "place": "Mook"
+    },
+    "source": "research/german-forces.md 5"
+  },
+  {
+    "when": "1944-09-20T14:30",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Containers on LZ Z",
+    "text": "Afternoon. Supply containers fall on LZ Z and outside the British lines; captured panels and flares used to draw the drop.",
+    "at": {
+      "lat": 52,
+      "lon": 5.772,
+      "place": "LZ Z"
+    },
+    "source": "research-arnhem/sept-19-20.md 4.1, 6.4"
+  },
+  {
+    "when": "1944-09-20T14:30",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Boats arrive; tanks to the bank",
+    "text": "1430-1440. 26 canvas assault boats arrive, of 32 or 33 promised. Two squadrons of 2nd Irish Guards move up to the embankment by the power station to give fire.",
+    "at": {
+      "lat": 51.855,
+      "lon": 5.83,
+      "place": "Waal bank by the PGEM power station"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-20T14:30",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Typhoons, then smoke",
+    "text": "Fire plan for the crossing: Typhoon strike 1445-1455, smoke on the far bank, about 100 field guns and the Irish Guards' tanks firing from the bank on Fort Hof van Holland and the dyke.",
+    "at": {
+      "lat": 51.862,
+      "lon": 5.852,
+      "place": "Fort Hof van Holland"
+    },
+    "source": "research/allied-forces.md 4; research/allied-forces.md 3.2"
+  },
+  {
+    "when": "1944-09-20T15:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "H-hour: 3/504 crosses the Waal",
+    "text": "1457 first wave launched, H-hour 1500: H and I Cos 3/504 with the battalion command group, C/307th Engineers paddling. Half the first-wave boats lost; 11 boats make six crossings.",
+    "at": {
+      "lat": 51.855,
+      "lon": 5.83,
+      "place": "Waal bank by the PGEM power station"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-20T15:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Boats on the river",
+    "text": "1500. Assault boats crossing the Waal about 2 km west of the road bridge. Fired on by 20-mm, MGs, mortars and artillery; most 88s cannot depress and engage the tanks on the bank. A Spitfire shot down.",
+    "at": {
+      "lat": 51.855,
+      "lon": 5.83,
+      "place": "Waal bank by the PGEM power station"
+    },
+    "source": "research/german-forces.md 5; research/german-forces.md 2.1"
+  },
+  {
+    "when": "1944-09-20T15:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Flame tanks at Koude Herberg",
+    "text": "1500. C Coy 1 Border attacked at Koude Herberg by two flame-thrower tanks and an SP gun; the SP knocked out by a 6-pdr. C Coy holds.",
+    "at": {
+      "lat": 51.989,
+      "lon": 5.812,
+      "place": "Koude Herberg, Utrechtseweg"
+    },
+    "source": "research-arnhem/sept-19-20.md 3.3, 7"
+  },
+  {
+    "when": "1944-09-20T15:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Charges laid; surrender refused",
+    "text": "Afternoon. Brinkmann's and Knaust's men work in with flamethrowers and Panzerfausts. Engineers twice try to lay charges under the ramp and are driven off. A surrender demand refused.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/sept-19-20.md 6.1"
+  },
+  {
+    "when": "1944-09-20T16:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "504th on the north bank",
+    "text": "About 1600. H/504 platoons on the railway embankment north of the river; a platoon takes Fort Hof van Holland. Germans start to retreat across the railway bridge.",
+    "at": {
+      "lat": 51.862,
+      "lon": 5.852,
+      "place": "Fort Hof van Holland"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-20T16:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Bridge: the school abandoned",
+    "text": "Afternoon. 1st Para Sqn RE and 3 Para men abandon the Van Limburg Stirum school, about 30 able to fight; Lt Grayburn killed. Survivors round Bde HQ.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/sept-19-20.md 3.4"
+  },
+  {
+    "when": "1944-09-20T16:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Wyler retaken; railway bridge lost",
+    "text": "Afternoon. A battalion attack retakes Wyler; two American platoons pull out. In Nijmegen the south end of the railway bridge is lost and Fort Hof van Holland falls.",
+    "at": {
+      "lat": 51.8085,
+      "lon": 5.965,
+      "place": "Wyler"
+    },
+    "source": "research/german-forces.md 5"
+  },
+  {
+    "when": "1944-09-20T16:20",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Hunner Park taken",
+    "text": "1620. Traffic circle and Hunner Park taken by the Grenadiers and 2/505.",
+    "at": {
+      "lat": 51.8465,
+      "lon": 5.873,
+      "place": "Hunner Park"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-20T16:30",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Lonsdale Force burned out",
+    "text": "1630-1830. SP guns and tanks set Lonsdale Force's houses at 705774 on fire; enfilade MG fire from the railway embankment.",
+    "at": {
+      "lat": 51.98,
+      "lon": 5.85,
+      "place": "Road junction 705774, Oosterbeek-Laag"
+    },
+    "source": "research-arnhem/sept-19-20.md 3.2"
+  },
+  {
+    "when": "1944-09-20T17:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Big drop on DZ O",
+    "text": "1648-1749. 310 aircraft drop 441 tons, mostly ammunition, on DZ O, spread over about 2 x 6 miles. Division recovers 60 per cent with Dutch help.",
+    "at": {
+      "lat": 51.77,
+      "lon": 5.79,
+      "place": "DZ O, Overasselt"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-20T17:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Second wave: 'great rejoicing'",
+    "text": "About 1700. Second resupply wave, more successful; 1 Para diary: air resupply caused great rejoicing. About 21 tons collected over the day.",
+    "at": {
+      "lat": 51.988,
+      "lon": 5.833,
+      "place": "Hartenstein Hotel"
+    },
+    "source": "research-arnhem/sept-19-20.md 4.1"
+  },
+  {
+    "when": "1944-09-20T17:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Bayonet charge into the Border lines",
+    "text": "About 1700. 156 Bn and Bde HQ break out of the hollow with the bayonet into the Border lines; 60-70 men get in. Lt Col des Voeux killed. Hackett at Div HQ 1850.",
+    "at": {
+      "lat": 51.991,
+      "lon": 5.823,
+      "place": "Hackett's hollow, 686787"
+    },
+    "source": "research-arnhem/sept-19-20.md 3.1"
+  },
+  {
+    "when": "1944-09-20T18:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "South end cleared",
+    "text": "About 1800. South end of the road bridge cleared. US flag seen on the north end of the railway bridge.",
+    "at": {
+      "lat": 51.849,
+      "lon": 5.87,
+      "place": "Waal road bridge, south end"
+    },
+    "source": "research/allied-forces.md 4; research/german-forces.md 5"
+  },
+  {
+    "when": "1944-09-20T18:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Beek taken",
+    "text": "Early evening. A battalion of KG Becker forces two American platoons out of Beek toward Hotel Berg en Dal.",
+    "at": {
+      "lat": 51.829,
+      "lon": 5.925,
+      "place": "Beek"
+    },
+    "source": "research/german-forces.md 4.2, 5"
+  },
+  {
+    "when": "1944-09-20T18:13",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Orders: a troop to rush the bridge",
+    "text": "About 1800-1813. A troop of No. 1 Sqn 2nd Grenadier Guards (Sgt Robinson) to rush the road bridge; Lt Jones's sappers of 14th Fd Sqn RE ordered forward to follow and cut the demolition leads.",
+    "at": {
+      "lat": 51.849,
+      "lon": 5.87,
+      "place": "Waal road bridge, south end"
+    },
+    "source": "research/allied-forces.md 4; research/allied-forces.md 3.2"
+  },
+  {
+    "when": "1944-09-20T18:15",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Tigers cross the bridge",
+    "text": "1815. Div log: 4 Tiger tanks and one recce vehicle crossed the main bridge from north to south. Sappers removed the fuses from the north end.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/sept-19-20.md 3.4, 6.1"
+  },
+  {
+    "when": "1944-09-20T18:15",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Armour across the Arnhem bridge",
+    "text": "Late afternoon. Tigers and a reconnaissance vehicle cross the Arnhem road bridge north to south into a blocking line on the Betuwe.",
+    "at": {
+      "lat": 51.969,
+      "lon": 5.912,
+      "place": "Arnhem road bridge, south end"
+    },
+    "source": "research-arnhem/sept-19-20.md 5.1, 6.1"
+  },
+  {
+    "when": "1944-09-20T18:15",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Mook retaken",
+    "text": "From about 1815. 1/505's reserve platoons with about six Coldstream tanks retake Mook by nightfall.",
+    "at": {
+      "lat": 51.753,
+      "lon": 5.884,
+      "place": "Mook"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-20T18:45",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "'Tom Tit': back to the church",
+    "text": "1845-1900. Lonsdale Force ordered back to a line round Oosterbeek church, code word Tom Tit; to be in position by 2030.",
+    "at": {
+      "lat": 51.978,
+      "lon": 5.838,
+      "place": "Oosterbeek Oude Kerk"
+    },
+    "source": "research-arnhem/sept-19-20.md 3.2"
+  },
+  {
+    "when": "1944-09-20T18:45",
+    "side": null,
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Sunset",
+    "text": "About 1843 sunset.",
+    "source": "research-arnhem/sept-19-20.md 0"
+  },
+  {
+    "when": "1944-09-20T19:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Tanks across the Waal bridge",
+    "text": "About 1900 (1830-1910 by different accounts). A troop of Grenadier tanks rushed across the road bridge, losing two; link-up with 3/504 at the north end about 1910-1915.",
+    "at": {
+      "lat": 51.862,
+      "lon": 5.866,
+      "place": "Lent"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-20T19:10",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Harmel: blow it",
+    "text": "About 1910. Watching from his bunker at Lent, Harmel says he ordered the road bridge blown as the tanks crossed. Nothing happens; he blames a cable cut by shellfire.",
+    "at": {
+      "lat": 51.862,
+      "lon": 5.866,
+      "place": "Lent"
+    },
+    "source": "research/german-forces.md 5; research/german-forces.md 6"
+  },
+  {
+    "when": "1944-09-20T19:20",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Demolition wires cut",
+    "text": "Evening. Lt Jones's sappers follow the tanks over, cutting leads and removing igniters; TNT charges found in green boxes on a pier at the north end.",
+    "at": {
+      "lat": 51.849,
+      "lon": 5.87,
+      "place": "Waal road bridge, south end"
+    },
+    "source": "research/allied-forces.md 3.2; research/german-forces.md 6"
+  },
+  {
+    "when": "1944-09-20T19:30",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Wounded surrendered at the bridge",
+    "text": "After dark. Bde HQ house on fire. Frost orders the wounded handed over; a truce of about 2 hours and about 280 wounded evacuated. About 140 effective left.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/sept-19-20.md 3.4"
+  },
+  {
+    "when": "1944-09-20T19:30",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Truce at the bridge",
+    "text": "Evening. Two-hour truce at the bridge; about 280 British wounded carried off, mostly to the St Elisabeth Hospital. Our men edge closer to the British HQ meanwhile.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/sept-19-20.md 6.1"
+  },
+  {
+    "when": "1944-09-20T19:45",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Surrenders on the railway bridge",
+    "text": "Dusk. 200-300 men surrender from the middle of the railway bridge. 267 German dead later counted on it.",
+    "at": {
+      "lat": 51.854,
+      "lon": 5.858,
+      "place": "Waal railway bridge"
+    },
+    "source": "research/german-forces.md 5; research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-20T20:00",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Harmel: block the Elst road",
+    "text": "Night. Harmel orders every available anti-tank gun and gun to block the Lent-Elst road, and part of II./SS-Pz.Rgt. 10 and a battalion of SS-PGR 22 to counter-attack. First Panzers to cross at Pannerden after dark.",
+    "at": {
+      "lat": 51.919,
+      "lon": 5.845,
+      "place": "Elst"
+    },
+    "source": "research/german-forces.md 5"
+  },
+  {
+    "when": "1944-09-20T20:00",
+    "side": "german",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Next: clear the ramp, push on to Elst",
+    "text": "Tettau now under II SS-Panzerkorps; Model orders all units round the pocket under the 9th SS for a concentric attack at 0700 tomorrow (time uncertain). At the bridge, clear the north ramp and get Knaust's armour to Elst against XXX Corps.",
+    "at": {
+      "lat": 51.988,
+      "lon": 5.833,
+      "place": "Hartenstein Hotel"
+    },
+    "source": "research-arnhem/sept-19-20.md 6.2, 6.4"
+  },
+  {
+    "when": "1944-09-20T20:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Green to find XXX Corps",
+    "text": "Evening. The ferry party to take Capt Green, Adjt RE, over to the south bank to find XXX Corps. 1 AL Bde reports the ferry still under control at 1830.",
+    "at": {
+      "lat": 51.972,
+      "lon": 5.819,
+      "place": "Heveadorp ferry"
+    },
+    "source": "research-arnhem/sept-19-20.md 4.2"
+  },
+  {
+    "when": "1944-09-20T20:00",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "plan",
+    "title": "Hold the bridge tonight",
+    "text": "The road bridge to be consolidated tonight; 21st A/Tk Regt's M10s to cross after dark.",
+    "at": {
+      "lat": 51.862,
+      "lon": 5.866,
+      "place": "Lent"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-20T20:00",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "plan",
+    "title": "Gough: break out to Oosterbeek",
+    "text": "Evening. Gough sends about 120 men who are not of 2 Para to try to break out north toward Oosterbeek; the rest to hold round Bde HQ.",
+    "at": {
+      "lat": 51.977,
+      "lon": 5.91,
+      "place": "Arnhem road bridge, north end"
+    },
+    "source": "research-arnhem/sept-19-20.md 3.4"
+  },
+  {
+    "when": "1944-09-20T20:30",
+    "side": "german",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Euling breaks out",
+    "text": "Night. Euling breaks out with about 60 men along the bank under the road bridge.",
+    "at": {
+      "lat": 51.849,
+      "lon": 5.87,
+      "place": "Waal road bridge, south end"
+    },
+    "source": "research/german-forces.md 5"
+  },
+  {
+    "when": "1944-09-20T20:30",
+    "side": "allied",
+    "sector": "nijmegen",
+    "kind": "event",
+    "title": "Beek and the Mook line",
+    "text": "Night. H/508 goes to re-establish the Beek roadblock, and is in by 2140. 185 glider pilots sent to reinforce the 505th at Mook.",
+    "at": {
+      "lat": 51.829,
+      "lon": 5.925,
+      "place": "Beek"
+    },
+    "source": "research/allied-forces.md 4"
+  },
+  {
+    "when": "1944-09-20T20:30",
+    "side": "allied",
+    "sector": "arnhem",
+    "kind": "event",
+    "title": "Lonsdale Force at the church",
+    "text": "2030. Lonsdale Force in its new line round Oosterbeek church: 11 Para north of the road, 1 and 3 Para by the path, Staffords in the laundry. About 3,600 men in the perimeter.",
+    "at": {
+      "lat": 51.978,
+      "lon": 5.838,
+      "place": "Oosterbeek Oude Kerk"
+    },
+    "source": "research-arnhem/sept-19-20.md 3.2, 3.3"
+  }
+]

@@ -11,8 +11,9 @@
  * Positions are converted to hexes. If a hex is already taken, or the unit
  * cannot enter it, the unit moves to the nearest hex it can use, and the move
  * is reported, so nothing shifts silently. Objective hexes may name a bridge
- * ("bridge:<id>"), meaning both its ends. The result is validated and written
- * to ../scenario.json.
+ * ("bridge:<id>"), meaning both its ends. A shared war diary is filtered to the
+ * scenario's sectors and hours and its entries given turns. The result is
+ * validated and written to ../scenario.json.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -29,6 +30,7 @@ import {
   type MovementClass,
   type OffsetTuple,
   type ScenarioFile,
+  type Side,
 } from '../../packages/engine/src/index.ts';
 import { hexAt, toLAEA, windowGrid, type LatLon } from './geo.ts';
 import type { MapConfig } from './build-map.ts';
@@ -39,7 +41,23 @@ type SourceEvent =
   | (Omit<Extract<ScenarioFile['events'][number], { kind: 'reinforcement' }>, 'entry'> & { entry: Where[] })
   | (Omit<Extract<ScenarioFile['events'][number], { kind: 'supply-drop' }>, 'at'> & { at: Where });
 
-interface ScenarioSource extends Omit<ScenarioFile, 'map' | 'units' | 'events' | 'supplySources' | 'objectives' | 'schemaVersion'> {
+/** A war-diary entry as written, with its date and time on the scenario's clock. */
+interface SourceDiaryEntry {
+  when: string;
+  side: Side | null;
+  sector: string;
+  kind: 'event' | 'plan';
+  title: string;
+  text: string;
+  at?: Where;
+  source: string;
+  /** Only for these scenario ids. */
+  scenarios?: string[];
+}
+
+interface ScenarioSource extends Omit<ScenarioFile, 'map' | 'units' | 'events' | 'supplySources' | 'objectives' | 'schemaVersion' | 'diary'> {
+  /** A shared diary file (relative to the source folder) and the sectors this scenario takes from it. */
+  diary?: { file: string; sectors?: string[] };
   units: SourceUnit[];
   events: SourceEvent[];
   supplySources: (Omit<NonNullable<ScenarioFile['supplySources']>[number], 'at'> & { at: Where })[];
@@ -107,6 +125,43 @@ const bridgeEnds = (id: string): OffsetTuple[] => {
   return [b.edge[0], b.edge[1]];
 };
 
+// War diary: the entries inside this scenario's hours, each in the turn its time falls in.
+const diary: NonNullable<ScenarioFile['diary']> = [];
+if (src.diary) {
+  const entries = JSON.parse(readFileSync(join(dir, src.diary.file), 'utf8')) as SourceDiaryEntry[];
+  const minutes = (when: string) => {
+    const m = /^(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d)$/.exec(when);
+    if (!m) throw new Error(`Diary time ${when} is not YYYY-MM-DDTHH:MM`);
+    return Date.UTC(+m[1]!, +m[2]! - 1, +m[3]!, +m[4]!, +m[5]!) / 60_000;
+  };
+  if (!src.start.date) throw new Error('A scenario with a diary needs start.date');
+  const start = minutes(`${src.start.date}T00:00`) + src.start.minuteOfDay;
+  const turnLength = DEFAULT_RULES.stepMinutes * DEFAULT_RULES.stepsPerTurn;
+  const last = src.victory?.lastTurn ?? Infinity;
+  for (const e of entries) {
+    if (e.scenarios && !e.scenarios.includes(src.id)) continue;
+    if (src.diary.sectors && !src.diary.sectors.includes(e.sector)) continue;
+    const elapsed = minutes(e.when) - start;
+    const turn = Math.floor(elapsed / turnLength) + 1;
+    if (elapsed < 0 || turn > last) continue;
+    const at = e.at ? hexAt(grid, toLAEA(e.at)) : null;
+    diary.push({
+      turn,
+      time: e.when.slice(11),
+      day: Number(e.when.slice(8, 10)),
+      side: e.side,
+      kind: e.kind,
+      title: e.title,
+      text: e.text,
+      ...(at ? { at } : {}),
+      ...(e.at?.place ? { place: e.at.place } : {}),
+      source: e.source,
+    });
+  }
+  diary.sort((a, b) => a.turn - b.turn || (a.day - b.day) || a.time.localeCompare(b.time));
+  report.push(`Diary: ${diary.length} of ${entries.length} entries`);
+}
+
 const scenario: ScenarioFile = {
   schemaVersion: 1,
   id: src.id,
@@ -129,6 +184,7 @@ const scenario: ScenarioFile = {
     hexes: o.hexes.flatMap((h) => (typeof h === 'string' ? bridgeEnds(h.replace(/^bridge:/, '')) : [toHex(h, o.id)])),
   })),
   ...(src.victory ? { victory: src.victory } : {}),
+  ...(diary.length ? { diary } : {}),
   provenance: src.provenance,
 };
 
