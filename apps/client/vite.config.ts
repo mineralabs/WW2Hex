@@ -1,11 +1,13 @@
 import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
+import { guidePages } from './guide-pages.ts';
 
 const repoRoot = fileURLToPath(new URL('../..', import.meta.url));
 
 export default defineConfig({
-  plugins: [react()],
+  // guidePages serves docs/players-guide.md and docs/combat-rules.md as searchable pages next to the game.
+  plugins: [react(), guidePages()],
   server: {
     port: 5173,
     fs: { allow: [repoRoot] },

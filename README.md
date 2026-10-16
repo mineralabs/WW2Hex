@@ -109,8 +109,10 @@ both ends of the Heumen lock bridge. The assault boats for crossing the Waal arr
 
 **How to play:** [docs/players-guide.md](docs/players-guide.md) covers the controls, orders,
 seeing, fighting, cohesion, supply and winning; the **Rules** button in the game has the same in
-brief. The arithmetic and four worked examples are in [docs/combat-rules.md](docs/combat-rules.md).
-All numbers are provisional playtest values.
+brief, and the game serves the guide as a searchable page at `/guide.html` (linked from the lobby,
+the Help panel and the Rules card). The arithmetic and four worked examples are in
+[docs/combat-rules.md](docs/combat-rules.md), served at `/combat-rules.html`. All numbers are
+provisional playtest values.
 
 ## Checks
 

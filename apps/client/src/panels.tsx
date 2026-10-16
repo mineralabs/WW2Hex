@@ -582,8 +582,11 @@ export function HelpPanel({ phase }: { phase: MatchPhase }) {
         fire. <strong>Pictures / Symbols</strong> in the top bar changes how units are drawn.
       </p>
       <p className="muted small">
-        <strong>Rules</strong> in the top bar has the rules in brief: orders, seeing, fighting, cohesion, supply and winning. The full
-        player’s guide is docs/players-guide.md.
+        <strong>Rules</strong> in the top bar has the rules in brief: orders, seeing, fighting, cohesion, supply and winning. The full{' '}
+        <a href="guide.html" target="_blank" rel="noopener">
+          player’s guide
+        </a>{' '}
+        opens in a new tab and can be searched.
       </p>
     </section>
   );

@@ -98,6 +98,9 @@ The first game's questions ("do they recover?", "can Withdraw slip past the enem
 only in the designer's rules document. [players-guide.md](players-guide.md) now gives a player
 the rules in the order they meet them, and the **Rules** button in the top bar shows the same in
 brief, with every number read from the rules object so the text cannot drift from the engine.
+The game also serves the guide and the combat rules as searchable pages (`/guide.html`,
+`/combat-rules.html`), built from the Markdown by a small Vite plugin (`apps/client/guide-pages.ts`)
+so there is one source; the lobby, the Help panel and the Rules card link to the guide.
 
 ## Known limitations
 

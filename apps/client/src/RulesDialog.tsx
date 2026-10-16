@@ -32,7 +32,11 @@ export function RulesDialog({ rules, onClose }: { rules: Rules; onClose: () => v
       <div className="modal rules" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="Rules in brief">
         <h2>Rules in brief</h2>
         <p className="muted small">
-          Numbers are provisional playtest values (rules {r.rulesVersion}). The full player’s guide is docs/players-guide.md.
+          Numbers are provisional playtest values (rules {r.rulesVersion}). The full{' '}
+          <a href="guide.html" target="_blank" rel="noopener">
+            player’s guide
+          </a>{' '}
+          opens in a new tab and can be searched.
         </p>
 
         <section>

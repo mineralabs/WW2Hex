@@ -230,7 +230,11 @@ export function Lobby(props: {
       </main>
       <footer className="lobby-foot muted small">
         Everything runs on the host player’s computer. No accounts, no paid server. See docs/connection-guide.md for setting up a game between two
-        computers.
+        computers. New to the game? Read the{' '}
+        <a href="guide.html" target="_blank" rel="noopener">
+          player’s guide
+        </a>
+        .
       </footer>
     </div>
   );
