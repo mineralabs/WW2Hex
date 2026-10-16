@@ -2,7 +2,7 @@
 
 This document is written for the designer and playtesters. It explains how a fight is worked out,
 with four worked examples. Every number is a **provisional playtest value** from
-`packages/engine/src/rules.ts` (`rulesVersion 0.2.0-provisional`). None of them is a researched
+`packages/engine/src/rules.ts` (`rulesVersion 0.4.0-provisional`). None of them is a researched
 historical rate.
 
 Research-derived facts belong in the scenario's equipment catalogue: name, role and sources. The
@@ -25,7 +25,8 @@ be listed first.
 
 1. **Halt check.** An Advance stops if the unit itself can see an enemy within 2 hexes. The
    order is cleared and the unit fights where it stands.
-2. **Movement.** Ten one-minute ticks, using the Stage 1 collision rules.
+2. **Movement.** Ten one-minute ticks, using the Stage 1 collision rules with two Stage 3
+   changes (see [Queues and stopped units](#queues-and-stopped-units)).
 3. **Spotting** at the new positions.
 4. **Fire.** Every eligible unit picks a target and works out its damage from the same pre-damage
    snapshot.
@@ -124,7 +125,8 @@ Each modifier is then applied in order, rounding down after each:
 | 4 | Target preparation | 100 − 15 × level % (level 3 → 55%) |
 | 5 | Target exposed | 125% if the target moved this step in clear or polder |
 | 6 | Assault | 150% for an Attack firing into the hex it is trying to enter, cohesion ≥ 50 |
-| 7 | Unseen bombardment | 50% for indirect fire on a target the firing side cannot see |
+| 7 | Assault across a river | Across a major river 60%, even over a bridge; across a stream 80%. Applies only to an assault, and only when a river edge lies between the two hexes. It appears in a calculation only when it applies |
+| 8 | Unseen bombardment | 50% for indirect fire on a target the firing side cannot see |
 
 > **damage = ⌊ result ÷ 1000 ⌋**
 
@@ -138,6 +140,42 @@ All damage on one target in a step is added together. Then:
   type first.
 - **Non-armoured equipment** shrinks with personnel, rounded up. For example, rifle sections stay
   proportional to the men left.
+
+**Example: assaulting over a bridge.** The Allied battalion from worked example 1 assaults the
+German battalion across a bridged major river. Neither unit is prepared, and both are in clear
+terrain.
+
+| Step | Value |
+| --- | ---: |
+| Base | 10 800 |
+| × cohesion, supply, terrain and preparation, all 100% | 10 800 |
+| × assault 150% | 16 200 |
+| × across a major river 60% | 9 720 |
+| **Damage** | **9 casualties** (16 without the river) |
+
+The river makes an assault over the bridge weaker than plain fire (10 casualties), so it pays to
+wear the defender down with fire and artillery before going in.
+
+## Queues and stopped units
+
+Each hex holds one counter, so units on the same road form a queue. Stage 3 changed two of the
+Stage 1 rules after a playtest showed units getting stuck for good.
+
+- **Several friendly units want the same hex.** The one that has been waiting longest goes first.
+  Waiting means being ready to enter the next hex and being held back. If they became ready in
+  the same minute, the one coming from the earliest direction in the fixed compass order E, NE,
+  NW, W, SW, SE goes first. Units always come from different directions, because each hex holds
+  one unit. Unit ids and the order units are listed in never decide it. Before Stage 3 all of them
+  waited, and kept waiting for ever.
+- **A friendly unit that has stopped is in the way.** "Stopped" means it has no route to follow:
+  no order, Defend, or it has finished its move. The moving unit finds a way round it, avoiding
+  every stopped unit of its own side. It keeps any waypoints still ahead, and starts its progress
+  afresh. If there is no way round, such as a stopped unit on the bridge, it waits. If the
+  stopped unit holds the moving unit's destination, the moving unit stops where it is. An Attack
+  whose objective is held by friends switches to Defend.
+- **Units of the other side are never avoided.** A route only ever avoids the unit's own side, so
+  movement reveals nothing about hidden enemies. Opposing units that want the same empty hex
+  both halt, as before.
 
 ## Cohesion, retreat and destruction
 

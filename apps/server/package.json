@@ -8,6 +8,12 @@
     "start": "node src/main.ts"
   },
   "devDependencies": {
-    "@types/node": "^24.0.0"
+    "@types/node": "^24.0.0",
+    "@types/ws": "^8.18.2"
+  },
+  "dependencies": {
+    "@ww2hex/engine": "0.1.0",
+    "@ww2hex/protocol": "0.1.0",
+    "ws": "^8.22.0"
   }
 }

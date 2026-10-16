@@ -1,4 +1,4 @@
-import type { MovementClass, SupplyStatus, Terrain, UnitType } from './types.ts';
+import type { MovementClass, RiverKind, SupplyStatus, Terrain, UnitType } from './types.ts';
 
 /**
  * Versioned balance configuration.
@@ -65,6 +65,8 @@ export interface Rules {
   exposedPercent: number;
   /** Damage multiplier for an Attack order firing into the hex it is trying to enter. */
   assaultPercent: number;
+  /** Damage multiplier for an assault across a river edge, bridged or not. */
+  riverAssaultPercent: Record<RiverKind, number>;
   /** Damage multiplier for indirect fire on a hex the firing side cannot see. */
   unobservedIndirectPercent: number;
 
@@ -101,7 +103,7 @@ export interface WeaponProfile {
 }
 
 export const DEFAULT_RULES: Rules = {
-  rulesVersion: '0.2.0-provisional',
+  rulesVersion: '0.4.0-provisional',
   stepMinutes: 10,
   stepsPerTurn: 12,
   movementTicksPerStep: 10,
@@ -151,6 +153,7 @@ export const DEFAULT_RULES: Rules = {
   maxPreparationOther: 1,
   exposedPercent: 125,
   assaultPercent: 150,
+  riverAssaultPercent: { major: 60, stream: 80 },
   unobservedIndirectPercent: 50,
 
   cohesionHitPenalty: 2,

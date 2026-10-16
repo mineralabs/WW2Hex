@@ -60,13 +60,13 @@ and all permitted moves are applied together.
 
 | Situation | Result | Event reason |
 | --- | --- | --- |
-| Several friendly units want one hex | All wait. No unit-id priority | `friendly-conflict` |
+| Several friendly units want one hex | All wait. No unit-id priority. **Changed in Stage 3:** the longest-waiting unit goes first, with a compass-direction tie-break ([combat-rules.md](combat-rules.md#queues-and-stopped-units)) | `friendly-conflict` |
 | Opposing units want the same empty hex | Both halt outside it | `contested` |
 | Next hex holds an enemy | The unit does not enter | `enemy-occupied` |
 | Opposing units try to swap hexes | Both stay (each target is enemy-held) | `enemy-occupied` |
 | Next hex holds a friendly unit that is leaving | The unit follows in the same tick | — |
 | Friendly swap or rotation, all destinations unique | All move | — |
-| Chain behind a stationary unit | The whole chain waits; nobody enters an occupied hex | `occupied` |
+| Chain behind a stationary unit | The whole chain waits; nobody enters an occupied hex. **Changed in Stage 3:** a unit blocked by a stopped friendly unit routes round it if it can | `occupied` |
 | Next move became impossible | The order is cancelled | `impassable` |
 
 Chains are settled before anything moves. Because each destination has at most one requester after

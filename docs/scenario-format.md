@@ -20,7 +20,8 @@ the right.
 | `formations` | `id`, `side`, `name`, `parentId` (or `null`), `dataStatus`. Parents must exist, be on the same side, and not form a cycle |
 | `units` | One counter each. See below |
 | `events` | Reinforcements, supply arrivals and conditions. Reserved; not read until Stage 4 |
-| `objectives` | Victory conditions. Reserved; not read until Stage 3 |
+| `objectives` | Hexes a side must hold. See below |
+| `victory` | Optional. `lastTurn` and `otherwise`. See below. Without it the scenario has no time limit |
 | `provenance` | `status`, `sources[]` (`title`, `url`, `reuse`) and `notes[]`. Records map georeferencing, reuse terms and open questions |
 
 ## `map`
@@ -45,6 +46,46 @@ Validation rules for the map:
 - Bridges sit on river edges and touch no water.
 - Roads are continuous and do not run onto water.
 - A road crosses a major river only at a bridge. Fording a stream gives a warning, not an error.
+
+## `objectives` and `victory`
+
+Victory is checked only at turn boundaries.
+
+| Field | Meaning |
+| --- | --- |
+| `id`, `name`, `description` | Identification. Players see the name and description |
+| `side` | The side that must achieve it |
+| `kind` | `hold` (the only kind so far) |
+| `hexes` | The side must control **every** one of these hexes |
+| `holdTurns` | How many consecutive turn ends the side must control all of them |
+| `initialControl` | `allied`, `german` or `null`: who controls the hexes at the start |
+| `victory.lastTurn` | The match ends once this turn has resolved |
+| `victory.otherwise` | The winner if no objective has been met by then, or `null` for a draw |
+
+Control rules:
+
+- A hex is controlled by the last side with a unit standing in it at the end of a turn. Passing
+  through during a turn does not change control.
+- Control is public. Both players see who holds each objective hex.
+
+How the result is decided:
+
+- A side with no units left loses. If both sides are left with no units, it is a draw.
+- A side wins when one of its objectives reaches its holding count.
+- If both sides meet an objective at the same turn end, it is a draw.
+
+Validation rules:
+
+- Objective ids are unique.
+- Hexes are on the map and not water, with no duplicates.
+- `holdTurns` is at least 1.
+- Objectives that share a hex agree on its `initialControl`.
+- An objective that needs more turns than `lastTurn` gives a warning.
+- Objectives without a `victory` block give a warning.
+
+The Stage 3 objective in the synthetic scenario is a placeholder for testing the match flow. The
+Allied side must hold Northton `[10,5]` and the north end of the bridge `[10,6]` for 2 turn ends,
+by the end of turn 8. Otherwise the German side wins.
 
 ## `units`
 

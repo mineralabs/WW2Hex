@@ -10,4 +10,5 @@ export * from './combat.ts';
 export * from './orders.ts';
 export * from './observe.ts';
 export * from './resolve.ts';
+export * from './objectives.ts';
 export * from './match.ts';

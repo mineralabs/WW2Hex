@@ -1,3 +1,4 @@
+import type { InviteInfo } from '@ww2hex/protocol';
 import {
   MOVEMENT_CLASSES,
   cellAt,
@@ -8,13 +9,26 @@ import {
   type GameMap,
   type Hex,
   type MatchPhase,
+  type ObjectiveStatus,
   type OrderConflict,
+  type Outcome,
   type Rules,
   type ScenarioFile,
+  type Side,
   type UnitState,
 } from '@ww2hex/engine';
-import { useEffect, useRef } from 'react';
-import { BLOCK_TEXT, SIDE_NAME, TYPE_LABEL, describeOrder, fmtDuration, fmtHex, type Names } from './format.ts';
+import { useEffect, useRef, useState } from 'react';
+import {
+  BLOCK_TEXT,
+  SIDE_NAME,
+  TYPE_LABEL,
+  describeOrder,
+  fmtDuration,
+  fmtHex,
+  outcomeDetail,
+  outcomeHeadline,
+  type Names,
+} from './format.ts';
 
 export type OrderMode = 'advance' | 'attack' | 'withdraw';
 
@@ -344,21 +358,32 @@ export function ReplayBar(props: {
 }
 
 export function HelpPanel({ phase }: { phase: MatchPhase }) {
+  if (phase === 'finished') {
+    return (
+      <section className="panel help">
+        <h3>Match over</h3>
+        <p>The map shows the final position. The last turn’s report is below.</p>
+      </section>
+    );
+  }
   return (
     <section className="panel help">
       <h3>{phase === 'planning' ? 'Planning' : 'Replay'}</h3>
       {phase === 'planning' ? (
         <ul>
           <li>
-            <kbd>Click</kbd> a counter to select it. <kbd>Drag</kbd> pans, <kbd>wheel</kbd> zooms.
+            <kbd>Click</kbd> a counter to select it. <kbd>Drag</kbd> pans; <kbd>wheel</kbd> or pinch zooms.
           </li>
           <li>
             Choose <strong>Advance</strong> (<kbd>A</kbd>), <strong>Attack</strong> (<kbd>T</kbd>) or{' '}
             <strong>Withdraw</strong> (<kbd>W</kbd>), then <kbd>Right-click</kbd> the map. <kbd>D</kbd> defends in place.
           </li>
+          <li className="muted small">
+            On a Mac, right-click is a two-finger click on the trackpad, or <kbd>Ctrl</kbd>+<kbd>Click</kbd>.
+          </li>
           <li>Orders stand until completed or changed. Units hold and return fire without one.</li>
           <li>
-            When ready, <strong>Lock orders</strong>. The turn resolves when both sides have locked.
+            When ready, <strong>Lock orders</strong>. The turn resolves when both players have locked. Your orders stay secret.
           </li>
         </ul>
       ) : (
@@ -374,5 +399,135 @@ export function HelpPanel({ phase }: { phase: MatchPhase }) {
         Grey-blue counters are German, khaki Allied. Enemy counters show only what has been observed. Red lines are fire.
       </p>
     </section>
+  );
+}
+
+export function ObjectivePanel(props: {
+  objectives: ObjectiveStatus[];
+  victory: { lastTurn: number; otherwise: Side | null } | null;
+  turn: number;
+  place: (h: Hex) => string | undefined;
+  lastTurnEnds: string | null;
+}) {
+  if (props.objectives.length === 0 && !props.victory) return null;
+  return (
+    <section className="panel objectives">
+      <h3>Objectives</h3>
+      {props.objectives.map((o) => (
+        <div key={o.id} className="objective">
+          <div>
+            <span className={`side-chip side-${o.side}`}>{SIDE_NAME[o.side]}</span> <strong>{o.name}</strong>
+          </div>
+          <div className="objective-hexes">
+            {o.hexes.map((h, i) => {
+              const c = o.control[i] ?? null;
+              return (
+                <span key={i} className={`hex-chip ${c ? `held-${c}` : 'held-none'}`} title={c ? `Held by ${SIDE_NAME[c]}` : 'Held by nobody'}>
+                  {props.place(h) ?? fmtHex(h)} · {c ? SIDE_NAME[c] : '—'}
+                </span>
+              );
+            })}
+          </div>
+          <div className="muted small">
+            Held at {o.heldFor} of {o.holdTurns} consecutive turn ends needed.
+          </div>
+        </div>
+      ))}
+      {props.victory && (
+        <p className="muted small">
+          The match ends after turn {props.victory.lastTurn}
+          {props.lastTurnEnds ? ` (${props.lastTurnEnds})` : ''}.{' '}
+          {props.victory.otherwise ? `If no objective is met by then, the ${SIDE_NAME[props.victory.otherwise]} side wins.` : 'If no objective is met by then, it is a draw.'}
+          {' '}A hex belongs to whoever last had a unit in it at the end of a turn.
+        </p>
+      )}
+    </section>
+  );
+}
+
+/** Addresses and links another player can use to reach this host. */
+export function InviteLinks({ invite, roomCode }: { invite: InviteInfo; roomCode: string | null }) {
+  const [copied, setCopied] = useState<string | null>(null);
+  if (!invite.listeningOnNetwork) {
+    return (
+      <p className="warning">
+        The host is only listening on this computer. Restart it without <code>HOST=127.0.0.1</code> so other computers can connect.
+      </p>
+    );
+  }
+  if (invite.addresses.length === 0) {
+    return <p className="warning">This computer has no network address. Connect it to your network (or to Tailscale) and restart the host.</p>;
+  }
+  const copy = (text: string) => {
+    void navigator.clipboard?.writeText(text).then(
+      () => setCopied(text),
+      () => setCopied(null),
+    );
+  };
+  return (
+    <ul className="invite-links">
+      {invite.addresses.map((a) => {
+        const link = `http://${a.address}:${invite.port}/${roomCode ? `?room=${roomCode}` : ''}`;
+        return (
+          <li key={a.address}>
+            <span className="muted small">{a.kind === 'tailscale' ? 'Over Tailscale (different houses)' : 'Same home network'}</span>
+            <span className="invite-row">
+              <code>{link}</code>
+              <button onClick={() => copy(link)}>{copied === link ? 'Copied' : 'Copy'}</button>
+            </span>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+export function InviteDialog(props: { invite: InviteInfo | null; roomCode: string; opponentJoined: boolean; onClose: () => void }) {
+  return (
+    <div className="modal-backdrop" onClick={props.onClose}>
+      <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="Invite the other player">
+        <h2>Invite the other player</h2>
+        <p>
+          Room code <span className="room-code">{props.roomCode}</span>
+        </p>
+        <p>Send them one of these links. Opening it fills in the room code.</p>
+        {props.invite ? <InviteLinks invite={props.invite} roomCode={props.roomCode} /> : <p className="muted">Connecting…</p>}
+        <p className="muted small">
+          The first person to join with this code takes the other side. After that, the code alone cannot take a side. See
+          docs/connection-guide.md if the link does not open.
+        </p>
+        <p className={props.opponentJoined ? 'ok-text' : 'muted'}>{props.opponentJoined ? 'The other player has joined.' : 'Waiting for the other player to join…'}</p>
+        <button className="primary" onClick={props.onClose}>
+          Close
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export function OutcomeDialog(props: {
+  outcome: Outcome;
+  side: Side;
+  objectives: ObjectiveStatus[];
+  lastTurn: number | null;
+  onClose: () => void;
+  onLeave: () => void;
+}) {
+  const o = props.outcome;
+  const tone = o.winner === null ? 'draw' : o.winner === props.side ? 'won' : 'lost';
+  return (
+    <div className="modal-backdrop">
+      <div className={`modal outcome outcome-${tone}`} role="dialog" aria-label="Result">
+        <div className="outcome-kicker">{tone === 'won' ? 'You won' : tone === 'lost' ? 'You lost' : 'Neither side won'}</div>
+        <h2>{outcomeHeadline(o)}</h2>
+        <p>{outcomeDetail(o, props.objectives, props.lastTurn)}</p>
+        <div className="button-row">
+          <button className="primary" onClick={props.onClose}>
+            Look at the map
+          </button>
+          <button onClick={props.onLeave}>Back to the lobby</button>
+        </div>
+      </div>
+    </div>
   );
 }

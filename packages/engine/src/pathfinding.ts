@@ -18,7 +18,8 @@ export type RouteResult = { ok: true; route: Route } | { ok: false; error: strin
  *
  * Uses only static map knowledge (terrain, roads, rivers, bridges). Enemy
  * positions are deliberately ignored so that route validation cannot reveal
- * concealed units; obstructions are handled during resolution.
+ * concealed units; obstructions are handled during resolution. `avoid` lists
+ * hexes the route must not enter (used to steer round the unit's own side).
  */
 export function findRoute(
   map: GameMap,
@@ -26,6 +27,7 @@ export function findRoute(
   cls: MovementClass,
   start: Hex,
   waypoints: readonly Hex[],
+  avoid: ReadonlySet<HexKey> = new Set(),
 ): RouteResult {
   if (!isOnMap(map, start)) return { ok: false, error: 'Start hex is off the map' };
   if (waypoints.length === 0) return { ok: false, error: 'No destination given' };
@@ -35,7 +37,7 @@ export function findRoute(
   for (const [i, wp] of waypoints.entries()) {
     if (!isOnMap(map, wp)) return { ok: false, error: `Waypoint ${i + 1} is off the map` };
     if (hexEquals(from, wp)) continue;
-    const leg = shortestPath(map, rules, cls, from, wp);
+    const leg = shortestPath(map, rules, cls, from, wp, avoid);
     if (!leg) {
       return { ok: false, error: `No passable route to waypoint ${i + 1} (${hexKey(wp)})` };
     }
@@ -86,6 +88,7 @@ function shortestPath(
   cls: MovementClass,
   start: Hex,
   goal: Hex,
+  avoid: ReadonlySet<HexKey>,
 ): Route | null {
   const hScale = minStepCost(rules, cls);
   const heuristic = (h: Hex) => hexDistance(h, goal) * hScale;
@@ -104,10 +107,11 @@ function shortestPath(
     if (node.g !== best.get(node.key)) continue; // stale entry
     if (hexEquals(node.hex, goal)) return reconstruct(cameFrom, start, goal);
     for (const n of neighbors(node.hex)) {
+      const k = hexKey(n);
+      if (avoid.has(k)) continue;
       const c = moveCost(map, rules, cls, node.hex, n);
       if (c === null) continue;
       const g = node.g + c;
-      const k = hexKey(n);
       const prevBest = best.get(k);
       if (prevBest !== undefined && prevBest <= g) continue;
       best.set(k, g);

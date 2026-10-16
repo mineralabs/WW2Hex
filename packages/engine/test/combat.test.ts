@@ -206,3 +206,28 @@ describe('worked example 4: artillery against a defended position', () => {
     expect(bombard(world, art, unit(state, 'g'), true).damage).toBe(0);
   });
 });
+
+describe('assaults across rivers', () => {
+  // Allied infantry south of the river at [0,1] assaults German infantry at [0,0].
+  const across = (kind: 'major' | 'stream' | null) => {
+    const s = tiny({
+      cols: 1,
+      rows: 2,
+      rivers: kind ? [{ id: 'r', name: 'River', kind, edges: [[[0, 0], [0, 1]]] }] : [],
+      bridges: kind === 'major' ? [{ id: 'b', name: 'Bridge', edge: [[0, 0], [0, 1]] }] : [],
+      units: [ARMED.infantry('a', 'allied', [0, 1]), ARMED.infantry('g', 'german', [0, 0], 22, 500)],
+    });
+    const unit = (id: string) => s.state.units.find((u) => u.id === id)!;
+    return calculateFire(s.world, rules, unit('a'), unit('g'), { mode: 'direct', assault: true, observed: true });
+  };
+
+  it('cuts an assault over a bridged major river to 60%, across a stream to 80%, and leaves others alone', () => {
+    // 10 800 base × 150% assault = 16 200 → 16 casualties with no river.
+    expect(across(null).steps.find((s) => s.name === 'river')).toBeUndefined();
+    expect(across(null).damage).toBe(16);
+    expect(across('major').steps.find((s) => s.name === 'river')).toEqual({ name: 'river', percent: 60, value: 9720 });
+    expect(across('major').damage).toBe(9);
+    expect(across('stream').steps.find((s) => s.name === 'river')).toEqual({ name: 'river', percent: 80, value: 12960 });
+    expect(across('stream').damage).toBe(12);
+  });
+});

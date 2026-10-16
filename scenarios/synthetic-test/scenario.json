@@ -711,7 +711,25 @@
     }
   ],
   "events": [],
-  "objectives": [],
+  "objectives": [
+    {
+      "id": "secure-northton",
+      "name": "Secure Northton and the bridge",
+      "description": "Placeholder objective for engine testing. The Allied side must control Northton and the north end of the Test Road Bridge at the end of two consecutive turns.",
+      "side": "allied",
+      "kind": "hold",
+      "hexes": [
+        [10, 5],
+        [10, 6]
+      ],
+      "holdTurns": 2,
+      "initialControl": "german"
+    }
+  ],
+  "victory": {
+    "lastTurn": 8,
+    "otherwise": "german"
+  },
   "provenance": {
     "status": "synthetic",
     "sources": [],

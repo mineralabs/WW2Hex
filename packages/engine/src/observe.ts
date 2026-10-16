@@ -216,6 +216,9 @@ export function observeStep(events: readonly GameEvent[], side: Side, ctx: Obser
       case 'pinned':
         if (e.side === side) out.push({ ...t, kind: e.kind, unitId: e.unitId, at: e.at });
         break;
+      case 'objective-control':
+        out.push({ ...t, kind: e.kind, hex: e.hex, from: e.from, to: e.to });
+        break;
       case 'turn-ended':
         turnEnd = { ...t, kind: e.kind, endedTurn: e.endedTurn };
         break;

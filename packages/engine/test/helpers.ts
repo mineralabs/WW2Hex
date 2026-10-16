@@ -78,6 +78,8 @@ export interface TinyOptions {
   bridges?: MapFile['bridges'];
   roads?: MapFile['roads'];
   units?: UnitFile[];
+  objectives?: ScenarioFile['objectives'];
+  victory?: ScenarioFile['victory'];
 }
 
 /** A small synthetic scenario for focused rule tests. */
@@ -112,7 +114,8 @@ export function tinyFile(o: TinyOptions): ScenarioFile {
     ],
     units: o.units ?? [],
     events: [],
-    objectives: [],
+    objectives: o.objectives ?? [],
+    ...(o.victory ? { victory: o.victory } : {}),
     provenance: { status: 'synthetic', sources: [], notes: [] },
   };
 }

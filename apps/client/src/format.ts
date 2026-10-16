@@ -2,8 +2,9 @@ import {
   axialToOffset,
   type BlockReason,
   type FireResult,
-  type GameEvent,
   type Hex,
+  type ObjectiveStatus,
+  type Outcome,
   type ObservedEvent,
   type Order,
   type Side,
@@ -114,33 +115,30 @@ export function describeObserved(e: ObservedEvent, names: Names): string {
       return `Lost contact ${e.contactId}; last seen at ${fmtHex(e.lastSeen)}`;
     case 'contact-cleared':
       return `${fmtHex(e.at)} is clear; contact ${e.contactId} has gone`;
+    case 'objective-control':
+      return `Objective hex ${fmtHex(e.hex)} is now held by the ${SIDE_NAME[e.to]} side`;
     case 'turn-ended':
       return `End of turn ${e.endedTurn}`;
   }
 }
 
-/** Umpire view: the complete authoritative log. */
-export function describeEvent(e: GameEvent, name: (id: string) => string): string {
-  switch (e.kind) {
-    case 'unit-moved':
-      return `${name(e.unitId)} entered ${fmtHex(e.to)}`;
-    case 'move-blocked':
-      return `${name(e.unitId)} halted before ${fmtHex(e.target)}: ${BLOCK_TEXT[e.reason]}`;
-    case 'order-completed':
-      return `${name(e.unitId)} reached ${fmtHex(e.at)}`;
-    case 'advance-halted':
-      return `${name(e.unitId)} stopped its advance on sighting ${name(e.enemyUnitId)}`;
-    case 'fire':
-      return `${name(e.firerId)} ${e.mode === 'indirect' ? 'shelled' : e.assault ? 'assaulted' : 'fired on'} ${name(e.targetId)}: ${e.damage} damage`;
-    case 'losses':
-      return `${name(e.unitId)} lost ${e.personnel} men; cohesion ${e.cohesionAfter}`;
-    case 'destroyed':
-      return `${name(e.unitId)} was destroyed`;
-    case 'retreated':
-      return `${name(e.unitId)} fell back to ${fmtHex(e.to)}`;
-    case 'pinned':
-      return `${name(e.unitId)} is pinned`;
-    case 'turn-ended':
-      return `End of turn ${e.endedTurn}`;
+export function outcomeHeadline(o: Outcome): string {
+  return o.winner ? `${SIDE_NAME[o.winner]} victory` : 'Draw';
+}
+
+/** One sentence on why the match ended. */
+export function outcomeDetail(o: Outcome, objectives: readonly ObjectiveStatus[], lastTurn: number | null): string {
+  switch (o.reason) {
+    case 'objective': {
+      const met = objectives.filter((x) => o.objectiveIds.includes(x.id));
+      if (o.winner === null) return `Both sides met an objective at the end of turn ${o.turn}.`;
+      const names = met.map((x) => `“${x.name}”`).join(' and ') || 'its objective';
+      const turns = met[0]?.holdTurns ?? 1;
+      return `The ${SIDE_NAME[o.winner]} side met ${names}, holding it at the end of ${turns} consecutive turn${turns === 1 ? '' : 's'}.`;
+    }
+    case 'elimination':
+      return o.winner ? `The ${SIDE_NAME[o.winner === 'allied' ? 'german' : 'allied']} side has no units left.` : 'Neither side has any units left.';
+    case 'time':
+      return `Turn ${lastTurn ?? o.turn} ended without an objective being met${o.winner ? `, so the ${SIDE_NAME[o.winner]} side wins` : ''}.`;
   }
 }

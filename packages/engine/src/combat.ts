@@ -1,4 +1,4 @@
-import { DIRECTIONS, compareHex, hexAdd, hexDistance, hexEquals, hexKey, type Hex } from './hex.ts';
+import { DIRECTIONS, compareHex, edgeKey, hexAdd, hexDistance, hexEquals, hexKey, type Hex } from './hex.ts';
 import { cellAt, moveCost } from './map.ts';
 import type { Rules, WeaponProfile } from './rules.ts';
 import type { FireMode, GameMap, UnitState, World } from './types.ts';
@@ -92,6 +92,10 @@ export function calculateFire(
     ['preparation', 100 - rules.preparationPerLevel * preparationLevel(rules, target)],
     ['exposed', exposed ? rules.exposedPercent : 100],
     ['assault', opts.assault ? rules.assaultPercent : 100],
+    // Listed only when it applies, so ordinary calculations keep their familiar steps.
+    ...(opts.assault && riverAssault(world, rules, firer.pos, target.pos) !== 100
+      ? [['river', riverAssault(world, rules, firer.pos, target.pos)] as [string, number]]
+      : []),
     ['unobserved', opts.mode === 'indirect' && !opts.observed ? rules.unobservedIndirectPercent : 100],
   ];
   let value = base;
@@ -160,6 +164,12 @@ export function planFires(world: World, rules: Rules, units: readonly UnitState[
     if (best) fires.push(best);
   }
   return fires;
+}
+
+/** An assault across a river edge is harder, even over a bridge: the attackers are funnelled and exposed. */
+function riverAssault(world: World, rules: Rules, from: Hex, to: Hex): number {
+  const river = world.map.riverEdges.get(edgeKey(from, to));
+  return river ? rules.riverAssaultPercent[river.kind] : 100;
 }
 
 /** The hex an Attack order is trying to enter, if it qualifies for the assault bonus. */

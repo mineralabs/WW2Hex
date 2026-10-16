@@ -90,13 +90,11 @@ export function applyOrderSet(state: GameState, world: World, rules: Rules, set:
       continue;
     }
     seen.add(unitId);
-    const unit = next.units.find((u) => u.id === unitId);
+    // Missing and enemy units get the same answer, so validation cannot be
+    // used to test whether a hidden enemy unit still exists.
+    const unit = next.units.find((u) => u.id === unitId && u.side === set.side);
     if (!unit) {
-      errors.push(`Unknown unit ${unitId}`);
-      continue;
-    }
-    if (unit.side !== set.side) {
-      errors.push(`Unit ${unitId} does not belong to ${set.side}`);
+      errors.push(`${set.side} has no unit ${unitId}`);
       continue;
     }
     if (order === null) {
@@ -130,7 +128,11 @@ function setOrder(unit: UnitState, order: Order | null): void {
   const newNext = orderPath(order)[0];
   const sameNextHex = oldNext !== undefined && newNext !== undefined && hexEquals(oldNext, newNext);
   unit.order = order;
-  if (!sameNextHex) unit.movement.progress = 0;
+  // A new next hex starts from scratch: no free distance and no place in a queue.
+  if (!sameNextHex) {
+    unit.movement.progress = 0;
+    unit.movement.waited = 0;
+  }
   unit.movement.blocked = null;
 }
 

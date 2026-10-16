@@ -72,6 +72,8 @@ export interface RenderView {
   preview: PreviewView | null;
   conflictHexes: Hex[];
   fireLines: FireLine[];
+  /** Objective hexes and who holds each. */
+  objectives: { hex: Hex; control: Side | null }[];
 }
 
 export interface MapHandlers {
@@ -103,6 +105,7 @@ export class MapRenderer {
   private readonly overlay = new Graphics();
   private readonly overlayLabels = new Container();
   private readonly fireLayer = new Graphics();
+  private readonly objectiveLayer = new Graphics();
   private readonly unitLayer = new Container();
   private readonly counters = new Map<string, CounterNode>();
   private readonly map: GameMap;
@@ -130,7 +133,7 @@ export class MapRenderer {
     });
     el.appendChild(this.app.canvas);
     this.app.stage.addChild(this.world);
-    this.world.addChild(this.buildStaticMap(), this.buildPlaceLabels(), this.overlay, this.unitLayer, this.fireLayer, this.overlayLabels);
+    this.world.addChild(this.buildStaticMap(), this.buildPlaceLabels(), this.overlay, this.unitLayer, this.objectiveLayer, this.fireLayer, this.overlayLabels);
     this.attachInput();
     this.app.ticker.add(() => this.animate());
     this.mounted = true;
@@ -345,6 +348,17 @@ export class MapRenderer {
     g.clear();
     for (const child of this.overlayLabels.removeChildren()) child.destroy();
 
+    // Objectives: an inner ring in the holder's colour, and a star above the counters.
+    const og = this.objectiveLayer;
+    og.clear();
+    for (const o of view.objectives) {
+      const color = o.control ? SIDE_COLOR[o.control].route : COLORS.objectiveNone;
+      const c = hexToPixel(o.hex, HEX_SIZE);
+      const inset = hexCorners(o.hex, HEX_SIZE).flatMap((p) => [c.x + (p.x - c.x) * 0.86, c.y + (p.y - c.y) * 0.86]);
+      g.poly(inset).stroke({ width: 3, color, alpha: 0.85 });
+      og.star(c.x + HEX_SIZE * 0.5, c.y - HEX_SIZE * 0.52, 5, 6.5, 3).fill({ color }).stroke({ width: 1.5, color: 0xffffff });
+    }
+
     for (const h of view.conflictHexes) hexOutline(g, h, { width: 3, color: COLORS.conflict, alpha: 0.9 });
     if (view.selectedHex) hexOutline(g, view.selectedHex, { width: 3.5, color: COLORS.selection });
     if (view.hoverHex) hexOutline(g, view.hoverHex, { width: 2, color: COLORS.hover, alpha: 0.9 });
@@ -441,7 +455,9 @@ export class MapRenderer {
 
     const onDown = (e: PointerEvent) => {
       const p = local(e);
-      down = { x: p.x, y: p.y, wx: this.world.x, wy: this.world.y, button: e.button, dragging: false };
+      // On a Mac, Ctrl+click is the usual right-click; treat it as one everywhere.
+      const button = e.button === 0 && e.ctrlKey ? 2 : e.button;
+      down = { x: p.x, y: p.y, wx: this.world.x, wy: this.world.y, button, dragging: false };
       canvas.setPointerCapture(e.pointerId);
     };
     const onMove = (e: PointerEvent) => {
@@ -480,7 +496,11 @@ export class MapRenderer {
       e.preventDefault();
       const p = local(e);
       const old = this.world.scale.x;
-      const next = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, old * Math.exp(-e.deltaY * 0.0015)));
+      // Firefox can report whole lines rather than pixels.
+      const dy = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
+      // A trackpad pinch arrives as small wheel steps with ctrlKey set, so it needs more weight.
+      const rate = e.ctrlKey ? 0.01 : 0.0015;
+      const next = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, old * Math.exp(-dy * rate)));
       this.world.scale.set(next);
       this.world.position.set(p.x - ((p.x - this.world.x) * next) / old, p.y - ((p.y - this.world.y) * next) / old);
     };

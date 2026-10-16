@@ -1,4 +1,5 @@
 import type { EdgeKey, Hex, HexKey } from './hex.ts';
+import type { Objective, Victory } from './objectives.ts';
 
 // ---------------------------------------------------------------------------
 // Shared vocabulary
@@ -57,9 +58,33 @@ export interface ScenarioFile {
   units: UnitFile[];
   /** Reinforcements, supply arrivals and conditions. Not used until Stage 4. */
   events: unknown[];
-  /** Victory conditions. Not used until Stage 3. */
-  objectives: unknown[];
+  /** Hexes a side must hold. Evaluated at turn boundaries. */
+  objectives: ObjectiveFile[];
+  /** Scenario length and the result if no objective is met. Omit for an open-ended test map. */
+  victory?: VictoryFile;
   provenance: ProvenanceFile;
+}
+
+export interface ObjectiveFile {
+  id: string;
+  name: string;
+  description: string;
+  /** The side that must achieve it. */
+  side: Side;
+  kind: 'hold';
+  /** Every one of these hexes must be controlled by `side`. */
+  hexes: OffsetTuple[];
+  /** Consecutive turn ends at which `side` must control all the hexes. */
+  holdTurns: number;
+  /** Who controls the hexes when the scenario starts. */
+  initialControl: Side | null;
+}
+
+export interface VictoryFile {
+  /** The match ends when this turn has resolved, if it has not ended sooner. */
+  lastTurn: number;
+  /** The result when no objective has been met by then: the winning side, or null for a draw. */
+  otherwise: Side | null;
 }
 
 export interface MapFile {
@@ -166,11 +191,13 @@ export interface GameMap {
   places: readonly { name: string; kind: 'town' | 'village' | 'feature'; at: Hex }[];
 }
 
-/** Everything static the rules need besides the state: the map and equipment catalogue. */
+/** Everything static the rules need besides the state: the map, equipment catalogue and objectives. */
 export interface World {
   map: GameMap;
   /** Equipment id → combat class. */
   combatClass: ReadonlyMap<string, string>;
+  objectives: readonly Objective[];
+  victory: Victory | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -251,6 +278,8 @@ export interface UnitState {
     progress: number;
     /** Why the last attempt to enter the next hex failed, until it succeeds. */
     blocked: BlockReason | null;
+    /** Minutes spent ready to enter the next hex but held back. The longest wait goes first. */
+    waited: number;
   };
   /** Consecutive steps without moving; drives defensive preparation. */
   stationarySteps: number;
@@ -288,6 +317,8 @@ export interface GameState {
   contacts: Record<Side, ContactRecord[]>;
   nextContactNo: Record<Side, number>;
   destroyed: { unitId: string; side: Side; at: Hex; time: number }[];
+  /** Public. Controller of every objective hex, and consecutive turn ends each objective has been held. */
+  objectives: { control: Record<HexKey, Side | null>; heldFor: Record<string, number> };
 }
 
 // ---------------------------------------------------------------------------
@@ -330,6 +361,8 @@ export type GameEvent =
   | (EventBase & { kind: 'destroyed'; unitId: string; side: Side; at: Hex })
   | (EventBase & { kind: 'retreated'; unitId: string; side: Side; from: Hex; to: Hex })
   | (EventBase & { kind: 'pinned'; unitId: string; side: Side; at: Hex })
+  /** Objective control is public, so both sides observe this as it is. */
+  | (EventBase & { kind: 'objective-control'; hex: Hex; from: Side | null; to: Side })
   | (EventBase & { kind: 'turn-ended'; endedTurn: number });
 
 export type GameEventKind = GameEvent['kind'];
@@ -393,4 +426,5 @@ export type ObservedEvent =
   | (ObservedBase & { kind: 'contact-spotted'; contactId: string; at: Hex; apparentType: UnitType })
   | (ObservedBase & { kind: 'contact-lost'; contactId: string; lastSeen: Hex })
   | (ObservedBase & { kind: 'contact-cleared'; contactId: string; at: Hex })
+  | (ObservedBase & { kind: 'objective-control'; hex: Hex; from: Side | null; to: Side })
   | (ObservedBase & { kind: 'turn-ended'; endedTurn: number });

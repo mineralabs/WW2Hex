@@ -1,6 +1,8 @@
-import { hexDistance, hexEquals, hexKey, type Hex } from './hex.ts';
+import { DIRECTIONS, hexDistance, hexEquals, hexKey, type Hex } from './hex.ts';
 import { applyDamage, cohesionLoss, isDestroyed, planFires, resolveRetreats } from './combat.ts';
 import { moveCost } from './map.ts';
+import { findRoute } from './pathfinding.ts';
+import { updateObjectives } from './objectives.ts';
 import { observeStep, playerView, updateContacts } from './observe.ts';
 import { tickMinutes, type Rules } from './rules.ts';
 import { byId, cloneState, elapsedMinutes } from './scenario.ts';
@@ -61,7 +63,7 @@ export function resolveStep(state: GameState, world: World, rules: Rules): Resol
     const enemy = nearest(u.pos, close);
     if (!enemy) continue;
     u.order = null;
-    u.movement = { progress: 0, blocked: null };
+    u.movement = { progress: 0, blocked: null, waited: 0 };
     events.push({ ...at(t0), kind: 'advance-halted', unitId: u.id, side: u.side, at: u.pos, enemyUnitId: enemy.id });
   }
 
@@ -134,7 +136,7 @@ export function resolveStep(state: GameState, world: World, rules: Rules): Resol
   const broken = next.units.filter((u) => u.lastStep.hit && u.cohesion < rules.breakCohesion);
   for (const u of broken) {
     u.order = null;
-    u.movement = { progress: 0, blocked: null };
+    u.movement = { progress: 0, blocked: null, waited: 0 };
   }
   const threatsFor = (u: UnitState): Hex[] =>
     next.units.filter((e) => e.side !== u.side && spotFire.bySide[u.side].has(e.id)).map((e) => e.pos);
@@ -161,6 +163,7 @@ export function resolveStep(state: GameState, world: World, rules: Rules): Resol
   const contacts = updateContacts(next, map, rules, spotEnd, destroyedIds, at(tEnd));
 
   if (step + 1 >= rules.stepsPerTurn) {
+    events.push(...updateObjectives(next, world, at(tEnd)));
     next.clock = { turn: turn + 1, step: 0 };
     events.push({ ...at(tEnd), kind: 'turn-ended', endedTurn: turn });
   } else {
@@ -230,6 +233,9 @@ function movementTick(
 ): void {
   const occupant = new Map<string, UnitState>();
   for (const u of units) occupant.set(hexKey(u.pos), u);
+  // Hexes held by each side's units that have stopped (no route to follow).
+  const parked: Record<Side, Set<string>> = { allied: new Set(), german: new Set() };
+  for (const u of units) if (orderPath(u.order).length === 0) parked[u.side].add(hexKey(u.pos));
 
   // 1. Accumulate progress and collect requests from the shared snapshot.
   const requests = new Map<string, MoveRequest>();
@@ -254,7 +260,9 @@ function movementTick(
     if (occ && occ.side !== req.unit.side) outcomes.set(id, 'enemy-occupied');
   }
 
-  // 2b. Several units wanting the same hex all wait. No unit-id priority.
+  // 2b. Several units wanting the same hex. Opposing units all halt. Among
+  //     friendly units, the one that has waited longest goes first; equal waits
+  //     go by the compass direction it comes from. Never by unit id.
   const byDest = new Map<string, MoveRequest[]>();
   for (const [id, req] of requests) {
     if (outcomes.has(id)) continue;
@@ -264,7 +272,12 @@ function movementTick(
   for (const group of byDest.values()) {
     if (group.length < 2) continue;
     const mixed = new Set(group.map((r) => r.unit.side)).size > 1;
-    for (const r of group) outcomes.set(r.unit.id, mixed ? 'contested' : 'friendly-conflict');
+    if (mixed) {
+      for (const r of group) outcomes.set(r.unit.id, 'contested');
+      continue;
+    }
+    const winner = [...group].sort((a, b) => b.unit.movement.waited - a.unit.movement.waited || approach(a) - approach(b))[0]!;
+    for (const r of group) if (r !== winner) outcomes.set(r.unit.id, 'friendly-conflict');
   }
 
   // 2c. Moves into friendly-occupied hexes succeed only if the occupant leaves.
@@ -320,6 +333,7 @@ function movementTick(
       order.path.shift();
       u.movement.progress = 0;
       u.movement.blocked = null;
+      u.movement.waited = 0;
       events.push({ ...base, kind: 'unit-moved', from: req.from, to: req.to });
       if (order.path.length === 0) {
         // An Attack that takes its objective consolidates there.
@@ -332,10 +346,55 @@ function movementTick(
       events.push({ ...base, kind: 'move-blocked', at: req.from, target: req.to, reason: outcome });
     }
     u.movement.blocked = outcome;
+    u.movement.waited += tick;
     if (outcome === 'impassable') {
       u.order = null;
-      u.movement.progress = 0;
-      u.movement.blocked = null;
+      u.movement = { progress: 0, blocked: null, waited: 0 };
+    }
+    const occ = occupant.get(hexKey(req.to));
+    if (outcome === 'occupied' && occ && occ.side === u.side && orderPath(occ.order).length === 0) {
+      goRoundParked(u, map, rules, parked[u.side], { ...at, unitId: u.id, side: u.side }, events);
     }
   }
+}
+
+/**
+ * A unit held up by one of its own units that has stopped finds a way round
+ * it. If its destination is itself held by a stopped friendly unit, it stops
+ * where it is: an Attack has been carried by friends, so it defends.
+ * Only the unit's own side is avoided, so this reveals nothing about the enemy.
+ */
+function goRoundParked(
+  u: UnitState,
+  map: GameMap,
+  rules: Rules,
+  parked: ReadonlySet<string>,
+  base: { time: number; turn: number; step: number; unitId: string; side: Side },
+  events: GameEvent[],
+): void {
+  const order = u.order as Extract<NonNullable<UnitState['order']>, { path: Hex[] }>;
+  const path = order.path;
+  const destination = path[path.length - 1]!;
+  if (parked.has(hexKey(destination))) {
+    u.order = order.kind === 'attack' ? { kind: 'defend' } : null;
+    u.movement = { progress: 0, blocked: null, waited: 0 };
+    events.push({ ...base, kind: 'order-completed', at: u.pos });
+    return;
+  }
+  // Keep the waypoints still ahead, then the destination.
+  const ahead = order.waypoints.filter((w) => path.some((p) => hexEquals(p, w)) && !hexEquals(w, destination));
+  const r = findRoute(map, rules, u.movementClass, u.pos, [...ahead, destination], parked);
+  if (!r.ok) return; // No way round: keep waiting.
+  order.path = r.route.path;
+  // A new next hex starts from scratch: no free distance.
+  u.movement = { progress: 0, blocked: null, waited: 0 };
+}
+
+/**
+ * Compass direction a move comes from, as seen from its destination, in the
+ * fixed order E, NE, NW, W, SW, SE. Each hex holds one unit, so units wanting
+ * the same hex always come from different directions.
+ */
+function approach(req: MoveRequest): number {
+  return DIRECTIONS.findIndex((d) => req.from.q - req.to.q === d.q && req.from.r - req.to.r === d.r);
 }

@@ -1,4 +1,5 @@
 import { buildMap, fromOffset } from './map.ts';
+import { buildObjectives, initialObjectiveState } from './objectives.ts';
 import { DEFAULT_RULES, type Rules } from './rules.ts';
 import type { GameMap, GameState, ScenarioFile, UnitState, World } from './types.ts';
 import { validateScenario, type ValidationIssue } from './validate.ts';
@@ -33,7 +34,12 @@ export function loadScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULES): 
 }
 
 export function buildWorld(file: ScenarioFile, map: GameMap = buildMap(file.map)): World {
-  return { map, combatClass: new Map(file.equipment.map((e) => [e.id, e.combatClass])) };
+  return {
+    map,
+    combatClass: new Map(file.equipment.map((e) => [e.id, e.combatClass])),
+    objectives: buildObjectives(file),
+    victory: file.victory ? { ...file.victory } : null,
+  };
 }
 
 export function initialState(file: ScenarioFile, rules: Rules = DEFAULT_RULES): GameState {
@@ -54,7 +60,7 @@ export function initialState(file: ScenarioFile, rules: Rules = DEFAULT_RULES): 
       supply: u.supply,
       dataStatus: u.dataStatus,
       order: null,
-      movement: { progress: 0, blocked: null },
+      movement: { progress: 0, blocked: null, waited: 0 },
       stationarySteps: 0,
       damageCarry: 0,
       lastStep: { moved: false, fired: false, hit: false },
@@ -68,6 +74,7 @@ export function initialState(file: ScenarioFile, rules: Rules = DEFAULT_RULES): 
     contacts: { allied: [], german: [] },
     nextContactNo: { allied: 1, german: 1 },
     destroyed: [],
+    objectives: initialObjectiveState(file.objectives),
   };
 }
 

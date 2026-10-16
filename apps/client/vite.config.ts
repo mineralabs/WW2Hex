@@ -8,8 +8,12 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
-    // Scenario data lives in /scenarios at the repository root.
     fs: { allow: [repoRoot] },
+    // The game host must be running too (npm run host:dev); pages talk to it through here.
+    proxy: {
+      '/ws': { target: 'ws://localhost:8790', ws: true },
+      '/api': { target: 'http://localhost:8790' },
+    },
   },
   build: {
     outDir: 'dist',

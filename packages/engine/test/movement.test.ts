@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   applyOrderSet,
   applyUnitOrder,
+  hexEquals,
   arrivalEstimates,
   findOrderConflicts,
   fromOffset,
@@ -119,7 +120,26 @@ describe('following a route', () => {
 });
 
 describe('movement collisions', () => {
-  it('makes friendly units wanting the same hex all wait', () => {
+  it('lets one of two friendly units arriving together go first, by compass direction, never by id', () => {
+    for (const [westId, eastId] of [['a', 'b'], ['b', 'a']]) {
+      const { world, state } = tiny({
+        cols: 3,
+        rows: 1,
+        units: [unitFile(westId!, 'allied', [0, 0]), unitFile(eastId!, 'allied', [2, 0])],
+      });
+      let s = order(state, world, 'allied', 'a', at(1, 0));
+      s = order(s, world, 'allied', 'b', at(1, 0));
+      expect(findOrderConflicts(s, 'allied')).toEqual([{ kind: 'same-destination', hex: at(1, 0), unitIds: ['a', 'b'] }]);
+      const r = resolveTurn(s, world, rules);
+      // Both are ready in the same minute. The one coming from the east (first in E, NE, NW, W, SW, SE) goes.
+      expect(unit(r.state, eastId!).pos).toEqual(at(1, 0));
+      expect(unit(r.state, westId!).pos).toEqual(at(0, 0));
+      const blocked = r.events.filter((e) => e.kind === 'move-blocked');
+      expect(blocked).toMatchObject([{ unitId: westId, reason: 'friendly-conflict' }, { unitId: westId, reason: 'occupied' }]);
+    }
+  });
+
+  it('lets the unit that has waited longer go first, whatever its direction', () => {
     const { world, state } = tiny({
       cols: 3,
       rows: 1,
@@ -127,12 +147,70 @@ describe('movement collisions', () => {
     });
     let s = order(state, world, 'allied', 'a', at(1, 0));
     s = order(s, world, 'allied', 'b', at(1, 0));
-    expect(findOrderConflicts(s, 'allied')).toEqual([{ kind: 'same-destination', hex: at(1, 0), unitIds: ['a', 'b'] }]);
+    // The western unit has already been held up for a while; compass order alone would favour the eastern one.
+    unit(s, 'a').movement.waited = 5;
     const r = resolveTurn(s, world, rules);
-    expect(unit(r.state, 'a').pos).toEqual(at(0, 0));
+    expect(unit(r.state, 'a').pos).toEqual(at(1, 0));
     expect(unit(r.state, 'b').pos).toEqual(at(2, 0));
-    const blocked = r.events.filter((e) => e.kind === 'move-blocked');
-    expect(blocked.map((e) => e.kind === 'move-blocked' && e.reason)).toEqual(['friendly-conflict', 'friendly-conflict']);
+  });
+
+  it('never leaves friendly units jammed where their routes merge (the synthetic bridge road)', () => {
+    const file = syntheticFile();
+    file.units = file.units.filter((u) => u.side === 'allied');
+    const { world, state } = loadScenario(file, rules);
+    // From the playtest: three units sent over the bridge. Two met at the junction south of it and
+    // waited for ever under the old "all wait" rule.
+    let s = order(state, world, 'allied', 'a-arm-1', at(10, 3));
+    s = order(s, world, 'allied', 'a-arm-2', at(11, 3));
+    s = order(s, world, 'allied', 'a-inf-1', at(9, 4));
+    for (let turn = 0; turn < 3; turn++) s = resolveTurn(s, world, rules).state;
+    expect(unit(s, 'a-arm-1').pos).toEqual(at(10, 3));
+    expect(unit(s, 'a-arm-2').pos).toEqual(at(11, 3));
+    expect(unit(s, 'a-inf-1').pos).toEqual(at(9, 4));
+    assertNoStacking(s);
+  });
+
+  it('goes round a friendly unit that has stopped in its way', () => {
+    const { world, state } = tiny({
+      cols: 5,
+      rows: 3,
+      units: [unitFile('a', 'allied', [0, 1]), unitFile('parked', 'allied', [2, 1])],
+    });
+    const s = order(state, world, 'allied', 'a', at(4, 1));
+    expect(unit(s, 'a').order).toMatchObject({ path: expect.arrayContaining([at(2, 1)]) });
+    const r = resolveTurn(s, world, rules);
+    expect(unit(r.state, 'a').pos).toEqual(at(4, 1));
+    expect(r.events.some((e) => e.kind === 'unit-moved' && e.unitId === 'a' && hexEquals(e.to, at(2, 1)))).toBe(false);
+    assertNoStacking(r.state);
+  });
+
+  it('keeps waiting behind a stopped friend when there is no way round', () => {
+    const { world, state } = tiny({
+      cols: 5,
+      rows: 1,
+      units: [unitFile('a', 'allied', [0, 0]), unitFile('parked', 'allied', [2, 0])],
+    });
+    const r = resolveTurn(order(state, world, 'allied', 'a', at(4, 0)), world, rules);
+    expect(unit(r.state, 'a').pos).toEqual(at(1, 0));
+    expect(unit(r.state, 'a').movement.blocked).toBe('occupied');
+    expect(unit(r.state, 'a').order).not.toBeNull();
+  });
+
+  it('stops short when a stopped friend already holds its destination; an Attack then defends', () => {
+    const { world, state } = tiny({
+      cols: 4,
+      rows: 1,
+      units: [unitFile('a', 'allied', [0, 0]), unitFile('b', 'allied', [1, 0]), unitFile('parked', 'allied', [3, 0])],
+    });
+    let s = order(state, world, 'allied', 'a', at(3, 0));
+    const attack = applyUnitOrder(s, world, rules, 'allied', 'b', { kind: 'attack', target: at(3, 0) });
+    if (!attack.ok) throw new Error(attack.errors.join());
+    s = attack.state;
+    const r = resolveTurn(s, world, rules);
+    expect(unit(r.state, 'b').pos).toEqual(at(2, 0));
+    expect(unit(r.state, 'b').order).toEqual({ kind: 'defend' });
+    expect(unit(r.state, 'a').pos).toEqual(at(1, 0));
+    expect(unit(r.state, 'a').order).toBeNull();
   });
 
   it('lets a unit follow directly into a hex that is being vacated', () => {

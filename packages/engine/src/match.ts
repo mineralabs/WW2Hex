@@ -1,3 +1,4 @@
+import { evaluateVictory, type Outcome } from './objectives.ts';
 import { applyOrderSet } from './orders.ts';
 import { resolveTurn } from './resolve.ts';
 import type { Rules } from './rules.ts';
@@ -18,12 +19,15 @@ import {
  *
  *   planning → (both sides commit) → resolution → replay → (both finish) → planning
  *
+ * Victory is checked when a turn resolves. If the match is decided, both
+ * players still watch that turn's replay, and the match is then finished.
+ *
  * A side's orders are frozen at commitment and stay secret. Committing the
  * same set twice is harmless; a different set after locking is refused. The
  * turn resolves exactly once, when the second side commits.
  */
 
-export type MatchPhase = 'planning' | 'replay';
+export type MatchPhase = 'planning' | 'replay' | 'finished';
 
 export interface SideReplay {
   turn: number;
@@ -36,6 +40,8 @@ export interface MatchState {
   state: GameState;
   committed: Record<Side, CommittedOrderSet | null>;
   replayFinished: Record<Side, boolean>;
+  /** Set when the turn that decided the match resolves. */
+  outcome: Outcome | null;
   lastTurn: {
     turn: number;
     replays: Record<Side, SideReplay>;
@@ -50,6 +56,7 @@ export function newMatch(state: GameState): MatchState {
     state,
     committed: { allied: null, german: null },
     replayFinished: { allied: false, german: false },
+    outcome: null,
     lastTurn: null,
   };
 }
@@ -91,6 +98,7 @@ export function commitOrders(match: MatchState, world: World, rules: Rules, set:
       state: turn.state,
       committed: { allied: null, german: null },
       replayFinished: { allied: false, german: false },
+      outcome: evaluateVictory(turn.state, world),
       lastTurn: {
         turn: match.state.clock.turn,
         replays: {
@@ -103,11 +111,15 @@ export function commitOrders(match: MatchState, world: World, rules: Rules, set:
   };
 }
 
-/** A side has watched (or skipped) its replay. Planning resumes once both have. */
+/**
+ * A side has watched (or skipped) its replay. Planning resumes once both have,
+ * or the match is finished if that turn decided it.
+ */
 export function finishReplay(match: MatchState, side: Side): MatchState {
   if (match.phase !== 'replay') return match;
   const replayFinished = { ...match.replayFinished, [side]: true };
   if (replayFinished.allied && replayFinished.german) {
+    if (match.outcome) return { ...match, phase: 'finished', replayFinished };
     return { ...match, phase: 'planning', replayFinished: { allied: false, german: false } };
   }
   return { ...match, replayFinished };

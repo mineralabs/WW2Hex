@@ -180,6 +180,52 @@ export function validateScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULE
     }
   }
 
+  // Objectives and victory ----------------------------------------------------
+  const objectiveIds = new Set<string>();
+  for (const o of file.objectives) {
+    if (objectiveIds.has(o.id)) error('objective-id-duplicate', `Duplicate objective id ${o.id}`);
+    objectiveIds.add(o.id);
+    if (o.side !== 'allied' && o.side !== 'german') error('objective-side', `Objective ${o.id}: side must be allied or german`);
+    if (o.kind !== 'hold') error('objective-kind', `Objective ${o.id}: unknown kind "${String(o.kind)}"`);
+    if (o.initialControl !== null && o.initialControl !== 'allied' && o.initialControl !== 'german') {
+      error('objective-initial-control', `Objective ${o.id}: initialControl must be allied, german or null`);
+    }
+    if (!Number.isInteger(o.holdTurns) || o.holdTurns < 1) error('objective-hold-turns', `Objective ${o.id}: holdTurns must be a whole number of at least 1`);
+    if (o.hexes.length === 0) error('objective-empty', `Objective ${o.id} has no hexes`);
+    const keys = new Set<string>();
+    for (const at of o.hexes) {
+      const h = fromOffset(at);
+      const cell = cellAt(map, h);
+      if (!cell) error('objective-off-map', `Objective ${o.id}: ${fmt(at)} is off the map`);
+      else if (cell.terrain === 'water') error('objective-on-water', `Objective ${o.id}: ${fmt(at)} is water`);
+      if (keys.has(hexKey(h))) error('objective-hex-duplicate', `Objective ${o.id} lists ${fmt(at)} twice`);
+      keys.add(hexKey(h));
+    }
+  }
+  const objectiveHexControl = new Map<string, string>();
+  for (const o of file.objectives) {
+    for (const at of o.hexes) {
+      const k = hexKey(fromOffset(at));
+      const prior = objectiveHexControl.get(k);
+      if (prior !== undefined && prior !== String(o.initialControl)) {
+        error('objective-control-conflict', `Objectives disagree about who controls ${fmt(at)} at the start`);
+      }
+      objectiveHexControl.set(k, String(o.initialControl));
+    }
+  }
+  if (file.victory) {
+    const v = file.victory;
+    if (!Number.isInteger(v.lastTurn) || v.lastTurn < 1) error('victory-last-turn', 'victory.lastTurn must be a whole number of at least 1');
+    if (v.otherwise !== null && v.otherwise !== 'allied' && v.otherwise !== 'german') {
+      error('victory-otherwise', 'victory.otherwise must be allied, german or null (a draw)');
+    }
+    for (const o of file.objectives) {
+      if (o.holdTurns > v.lastTurn) warn('objective-unreachable', `Objective ${o.id} needs ${o.holdTurns} turns but the scenario lasts ${v.lastTurn}`);
+    }
+  } else if (file.objectives.length > 0) {
+    warn('victory-missing', 'Scenario has objectives but no victory block, so it has no time limit');
+  }
+
   // Honest labelling ----------------------------------------------------------
   if (file.dataStatus === 'verified') {
     const unverified = [
