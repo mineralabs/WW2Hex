@@ -56,6 +56,8 @@ export function UnitPanel(props: {
   onHold: () => void;
   onUndo: () => void;
   onClearWaypoints: () => void;
+  /** The unit's formation, when ordering all of it at once is possible: its name, how many units, and whether it is on. */
+  formation: { name: string; count: number; on: boolean; onToggle: () => void } | null;
   /** During a replay: what this unit fired at and what fired at it in the step shown, with reasons. */
   fights?: { text: string; detail: string[] }[];
   /** Direct and indirect fire ranges and spotting range, in hexes. */
@@ -221,6 +223,16 @@ export function UnitPanel(props: {
               </button>
             ))}
           </div>
+          {props.formation && (
+            <button
+              className={`formation-toggle ${props.formation.on ? 'active' : ''}`}
+              aria-pressed={props.formation.on}
+              onClick={props.formation.onToggle}
+              title="Key F. The next order goes to every unit of this formation, each to its own hex round the target"
+            >
+              Whole formation: {props.formation.name} ({props.formation.count})
+            </button>
+          )}
           <div className="button-row">
             <button onClick={props.onDefend} title="Key D">
               Defend

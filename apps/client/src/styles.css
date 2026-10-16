@@ -1700,3 +1700,17 @@ table.rooms td button.link {
   color: #f0d8e6;
   border: 1px solid #6c5274;
 }
+
+/* The whole-formation switch in the unit panel: plain until on, then the side's blue. */
+.formation-toggle {
+  width: 100%;
+  margin: 6px 0 2px;
+  text-align: left;
+  font-size: 12px;
+}
+.formation-toggle.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--panel);
+  font-weight: 600;
+}

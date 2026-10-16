@@ -39,6 +39,7 @@ import { MapView, type MapMode } from './map/MapView.tsx';
 import type { CounterStyle, CounterView, Effect, FireLine, MapHandlers, PreviewView, RenderView, RouteView, TurnPicture } from './map/renderer.ts';
 import { genericPicture, pictureFor } from './map/silhouettes.ts';
 import { isModelId } from './map/catalog3d.ts';
+import { formationOrders } from './formation.ts';
 import { scenarioSun } from './map/sun.ts';
 import type { FigureKind } from './map/paint.ts';
 import type { ConnectionStatus } from './net/connection.ts';
@@ -346,6 +347,13 @@ export function Game(props: {
     return out;
   }, [phase, shown, map, selectedId]);
 
+  // Ordering a whole formation at once: the selected unit and every other unit of ours in the same formation.
+  const [formationOn, setFormationOn] = useState(false);
+  const mates = useMemo(
+    () => (selectedUnit && selectedUnit.side === side ? planned.units.filter((u) => u.side === side && u.formationId === selectedUnit.formationId) : []),
+    [selectedUnit, planned, side],
+  );
+
   const preview = useMemo((): PreviewView | null => {
     if (!canOrder(selectedUnit) || !hoverHex || hexEquals(hoverHex, selectedUnit.pos)) return null;
     const u = selectedUnit;
@@ -361,9 +369,10 @@ export function Game(props: {
     const kept = next && r.route.path[0] && hexEquals(next, r.route.path[0]) ? u.movement.progress : 0;
     const total = Math.max(r.route.total - kept, 0);
     const verb = mode === 'attack' ? 'Attack' : mode === 'withdraw' ? 'Withdraw' : 'Advance';
-    return { start: u.pos, path: r.route.path, waypoints, target: hoverHex, ok: true, straight: false, label: `${verb} · ${fmtDuration(total)} · ${clockLabel(file, shown.time + total).slice(-5)}` };
+    const whole = formationOn && mates.length > 1 ? ` · whole formation (${mates.length})` : '';
+    return { start: u.pos, path: r.route.path, waypoints, target: hoverHex, ok: true, straight: false, label: `${verb} · ${fmtDuration(total)} · ${clockLabel(file, shown.time + total).slice(-5)}${whole}` };
     // canOrder depends on phase and locked, both from view.
-  }, [selectedUnit, hoverHex, waypoints, mode, map, world, file, shown.time, view]);
+  }, [selectedUnit, hoverHex, waypoints, mode, map, world, file, shown.time, view, formationOn, mates]);
 
   const conflicts = useMemo(() => (phase === 'planning' ? findOrderConflicts(planned, side) : []), [phase, planned, side]);
 
@@ -756,6 +765,26 @@ export function Game(props: {
     [planned, world, side],
   );
 
+  /**
+   * One order for every unit in the selected unit's formation. The unit nearest the target takes
+   * the hex itself; the others take the nearest free hexes round it that they can reach, so the
+   * formation arrives on a front. Artillery bombards the target instead of joining an attack.
+   */
+  const draftFormation = useCallback(
+    (target: Hex | null, kind: OrderMode | 'defend') => {
+      const { inputs, skipped } = formationOrders(planned, world, RULES, side, turn, mates, target, kind, waypoints);
+      setDrafts((d) => ({ ...d, ...inputs }));
+      setWaypoints([]);
+      const n = Object.keys(inputs).length;
+      setMessage(
+        skipped.length === 0
+          ? null
+          : `Ordered ${n} of ${mates.length} units of the formation. No order for ${skipped.join(', ')}${kind === 'attack' ? ' (out of range or no route)' : ' (no route)'}.`,
+      );
+    },
+    [mates, world, planned, side, turn, waypoints],
+  );
+
   const clearDraft = (u: UnitState) =>
     setDrafts((d) => {
       const rest = { ...d };
@@ -797,6 +826,10 @@ export function Game(props: {
           if (!hexEquals(last, hex)) setWaypoints([...waypoints, hex]);
           return;
         }
+        if (formationOn && mates.length > 1) {
+          draftFormation(hex, mode);
+          return;
+        }
         const input: OrderInput =
           mode === 'attack' ? { kind: 'attack', target: hex, ...(waypoints.length ? { waypoints } : {}) } : { kind: mode, waypoints: [...waypoints, hex] };
         draft(selectedUnit, input);
@@ -804,7 +837,7 @@ export function Game(props: {
       onHover: setHoverHex,
     }),
     // canOrder reads phase and locked from view.
-    [counters, selectedUnit, waypoints, mode, world, draft, phase, view, side],
+    [counters, selectedUnit, waypoints, mode, world, draft, draftFormation, formationOn, mates, phase, view, side],
   );
 
   // Replay playback, resting longer on a key moment.
@@ -833,7 +866,11 @@ export function Game(props: {
         if (e.key === 'a') setMode('advance');
         if (e.key === 't') setMode('attack');
         if (e.key === 'w') setMode('withdraw');
-        if (e.key === 'd' && canOrder(selectedUnit)) draft(selectedUnit, { kind: 'defend' });
+        if (e.key === 'd' && canOrder(selectedUnit)) {
+          if (formationOn && mates.length > 1) draftFormation(null, 'defend');
+          else draft(selectedUnit, { kind: 'defend' });
+        }
+        if (e.key === 'f' && canOrder(selectedUnit) && mates.length > 1) setFormationOn((on) => !on);
       }
       if (watching) {
         if (e.key === ' ') {
@@ -1028,7 +1065,12 @@ export function Game(props: {
             drafted={selectedUnit.id in drafts && !locked[side]}
             mode={mode}
             onMode={setMode}
-            onDefend={() => draft(selectedUnit, { kind: 'defend' })}
+            onDefend={() => (formationOn && mates.length > 1 ? draftFormation(null, 'defend') : draft(selectedUnit, { kind: 'defend' }))}
+            formation={
+              mates.length > 1
+                ? { name: file.formations.find((f) => f.id === selectedUnit.formationId)?.name ?? 'formation', count: mates.length, on: formationOn, onToggle: () => setFormationOn((on) => !on) }
+                : null
+            }
             onHold={() => draft(selectedUnit, null)}
             onUndo={() => clearDraft(selectedUnit)}
             onClearWaypoints={() => setWaypoints([])}

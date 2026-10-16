@@ -32,6 +32,7 @@ The same text, in short form, is behind the **Rules** button in the game's top b
 | Choose what a right-click gives | **A** Advance, **T** Attack, **W** Withdraw, or the buttons in the unit panel |
 | Give the order | Right-click the destination (on a Mac: two-finger click, or Ctrl+click) |
 | A route with turns in it | **Shift**+right-click each waypoint, then a plain right-click on the final destination |
+| Order a whole formation | Select a unit, press **F** (or **Whole formation** in the unit panel), then give the order as usual. Every unit of that formation gets it: the nearest takes the hex you clicked, the others the nearest free hexes round it, so they arrive on a front. In an attack the formation's guns bombard the target instead. **D** then puts the whole formation on Defend. Press **F** again to go back to single units |
 | Defend in place | **D** |
 | Cancel an order | **Hold (no order)** in the unit panel |
 | Change your mind | **undo change** in the unit panel, any time before you lock |
