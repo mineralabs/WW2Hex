@@ -4,6 +4,7 @@ import {
   hexCorners,
   hexKey,
   hexToPixel,
+  neighbors,
   parseEdgeKey,
   pixelToHex,
   type GameMap,
@@ -104,6 +105,8 @@ export interface RenderView {
   effects: Effect[] | null;
   /** The whole turn in one picture: trails, fights and losses. Null when not shown. */
   turnPicture: TurnPicture | null;
+  /** The selected unit's reach: every hex it can fire into, and whether that is bombardment or direct fire. */
+  range: { hexes: Hex[]; mode: 'direct' | 'indirect'; side: Side } | null;
 }
 
 export interface TurnPicture {
@@ -446,6 +449,25 @@ export class MapRenderer {
     const g = this.overlay;
     g.clear();
     for (const child of this.overlayLabels.removeChildren()) child.destroy();
+
+    // The selected unit's reach: a faint tint over every hex in range, and a line round the edge.
+    if (view.range) {
+      const inRange = new Set(view.range.hexes.map(hexKey));
+      const color = view.range.mode === 'indirect' ? COLORS.fire : SIDE_COLOR[view.range.side].route;
+      for (const h of view.range.hexes) g.poly(hexCorners(h, HEX_SIZE).flatMap((p) => [p.x, p.y])).fill({ color, alpha: 0.07 });
+      const edges: Point[][] = [];
+      for (const h of view.range.hexes) {
+        for (const n of neighbors(h)) {
+          if (inRange.has(hexKey(n))) continue;
+          const [c1, c2] = edgeCorners(h, n);
+          edges.push([cornerToPixel(c1, HEX_SIZE), cornerToPixel(c2, HEX_SIZE)]);
+        }
+      }
+      for (const e of edges) {
+        if (view.range.mode === 'indirect') dashed(g, e, { width: 2.5, color, alpha: 0.85 });
+        else polyline(g, e).stroke({ width: 2.5, color, alpha: 0.85, cap: 'round' });
+      }
+    }
 
     // Objectives: an inner ring in the holder's colour, and a star above the counters.
     const og = this.objectiveLayer;

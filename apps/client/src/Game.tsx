@@ -460,6 +460,23 @@ export function Game(props: {
     return { trails, fights: [...fights.values()], losses };
   }, [pictureWanted, replay, side, enemy]);
 
+  // The selected unit's reach, for the ring on the map and the line in its panel.
+  const selectedRanges = useMemo(
+    () =>
+      selectedUnit
+        ? { direct: maxRange(world, RULES, selectedUnit, 'direct'), indirect: maxRange(world, RULES, selectedUnit, 'indirect'), spot: RULES.spotRange[selectedUnit.type] }
+        : null,
+    [selectedUnit, world],
+  );
+  const rangeView = useMemo((): RenderView['range'] => {
+    if (!selectedUnit || !selectedRanges) return null;
+    const mode = selectedRanges.indirect > 0 ? 'indirect' : 'direct';
+    const r = mode === 'indirect' ? selectedRanges.indirect : selectedRanges.direct;
+    if (r === 0) return null;
+    const hexes = [...map.cells.values()].map((c) => c.hex).filter((h) => hexDistance(h, selectedUnit.pos) <= r);
+    return { hexes, mode, side: selectedUnit.side };
+  }, [selectedUnit, selectedRanges, map]);
+
   const renderView: RenderView = useMemo(
     () => ({
       counters,
@@ -473,8 +490,9 @@ export function Game(props: {
       counterStyle,
       effects,
       turnPicture,
+      range: rangeView,
     }),
-    [counters, selectedHex, hoverHex, routeInfo, preview, conflicts, fireLines, objectiveMarks, counterStyle, effects, turnPicture],
+    [counters, selectedHex, hoverHex, routeInfo, preview, conflicts, fireLines, objectiveMarks, counterStyle, effects, turnPicture, rangeView],
   );
 
   // Event log: during the replay, what has happened so far; otherwise the last turn's report.
@@ -796,6 +814,7 @@ export function Game(props: {
             onUndo={() => clearDraft(selectedUnit)}
             onClearWaypoints={() => setWaypoints([])}
             fights={selectedFights}
+            ranges={selectedRanges ?? { direct: 0, indirect: 0, spot: 0 }}
             costToNext={(() => {
               const next = orderPath(selectedUnit.order).slice(0, 1);
               return next.length ? (pathCosts(map, RULES, selectedUnit.movementClass, selectedUnit.pos, next, { side, turn })?.[0] ?? null) : null;

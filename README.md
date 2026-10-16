@@ -64,8 +64,10 @@ npm run dev        # client with hot reload → http://localhost:5173 (talks to 
 
 1. **Plan.** Click a counter, pick **Advance** (`A`), **Attack** (`T`) or **Withdraw** (`W`), then
    right-click the map. **Defend** (`D`) holds and digs in. Hover first to preview the route and
-   arrival time. Shift+right-click adds waypoints. Artillery's Attack button reads **Bombard**:
-   right-click a hex within range. On a Mac, right-click is a two-finger click on the trackpad, or
+   arrival time. Shift+right-click adds waypoints, then a plain right-click on the destination
+   places the order. Artillery's Attack button reads **Bombard**: right-click a hex within range.
+   A selected unit shows its reach on the map, a ring round every hex it can fire into, and its
+   panel gives the ranges in hexes. On a Mac, right-click is a two-finger click on the trackpad, or
    Ctrl+click.
 2. **Lock orders.** Your orders are frozen and stay secret. The top bar shows whether the other
    player has locked.

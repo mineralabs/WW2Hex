@@ -58,6 +58,8 @@ export function UnitPanel(props: {
   onClearWaypoints: () => void;
   /** During a replay: what this unit fired at and what fired at it in the step shown, with reasons. */
   fights?: { text: string; detail: string[] }[];
+  /** Direct and indirect fire ranges and spotting range, in hexes. */
+  ranges: { direct: number; indirect: number; spot: number };
 }) {
   const { unit: u, file, eta } = props;
   const formations = new Map(file.formations.map((f) => [f.id, f]));
@@ -109,6 +111,22 @@ export function UnitPanel(props: {
         </dd>
         <dt>Prepared</dt>
         <dd>{props.preparation > 0 ? `level ${props.preparation} (−${15 * props.preparation}% damage taken)` : 'no'}</dd>
+        <dt>Range</dt>
+        <dd>
+          {props.ranges.indirect > 0 && (
+            <>
+              bombards up to <strong>{props.ranges.indirect}</strong> hexes
+              {props.ranges.direct > 0 ? ' · ' : ''}
+            </>
+          )}
+          {props.ranges.direct > 0 && (
+            <>
+              fires up to <strong>{props.ranges.direct}</strong> hex{props.ranges.direct === 1 ? '' : 'es'}
+            </>
+          )}
+          {props.ranges.direct === 0 && props.ranges.indirect === 0 && 'no weapons'}
+          <span className="muted small">shown on the map while selected · sees {props.ranges.spot} hexes</span>
+        </dd>
       </dl>
 
       <details className="equipment">
