@@ -2,7 +2,7 @@
 
 This document is written for the designer and playtesters. It explains how a fight is worked out,
 with four worked examples. Every number is a **provisional playtest value** from
-`packages/engine/src/rules.ts` (`rulesVersion 0.6.0-provisional`). None of them is a researched
+`packages/engine/src/rules.ts` (`rulesVersion 0.6.1-provisional`). None of them is a researched
 historical rate.
 
 Research-derived facts belong in the scenario's equipment catalogue: name, role and sources. The
@@ -195,6 +195,12 @@ Stage 1 rules after a playtest showed units getting stuck for good.
   afresh. If there is no way round, such as a stopped unit on the bridge, it waits. If the
   stopped unit holds the moving unit's destination, the moving unit stops where it is. An Attack
   whose objective is held by friends switches to Defend.
+- **A halted friend is passed through** (rules 0.6.1). When the next hex holds a friendly unit
+  that has stopped and the route goes on beyond it, the unit pays for both hexes and arrives in
+  the one beyond, as a column passes a halted vehicle. A unit never passes through the enemy, or
+  through a friend that is itself still moving: that is a queue, and the queue rules above apply.
+  Before this, a unit standing still on a bridge end with no order blocked every unit behind it
+  for the rest of the game.
 - **Units of the other side are never avoided.** A route only ever avoids the unit's own side, so
   movement reveals nothing about hidden enemies. Opposing units that want the same empty hex
   both halt, as before.

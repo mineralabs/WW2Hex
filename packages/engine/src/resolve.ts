@@ -238,6 +238,8 @@ interface MoveRequest {
   unit: UnitState;
   from: Hex;
   to: Hex;
+  /** A halted friendly unit's hex passed through on the way to `to`. */
+  via: Hex | null;
 }
 
 type Outcome = 'ok' | BlockReason;
@@ -265,16 +267,33 @@ function movementTick(
   const requests = new Map<string, MoveRequest>();
   const outcomes = new Map<string, Outcome>();
   for (const u of units) {
-    const nextHex = orderPath(u.order)[0];
+    const path = orderPath(u.order);
+    const nextHex = path[0];
     if (!nextHex) continue;
-    const cost = moveCost(map, rules, u.movementClass, u.pos, nextHex, { side: u.side, turn: at.turn });
+    const ctx = { side: u.side, turn: at.turn };
+    let cost = moveCost(map, rules, u.movementClass, u.pos, nextHex, ctx);
     if (cost === null) {
       outcomes.set(u.id, 'impassable');
-      requests.set(u.id, { unit: u, from: u.pos, to: nextHex });
+      requests.set(u.id, { unit: u, from: u.pos, to: nextHex, via: null });
       continue;
     }
+    // A halted friend in the next hex is passed through, as a column passes a halted vehicle:
+    // the unit pays for both hexes and arrives in the one beyond. Never through the enemy, and
+    // never through a friend that is itself still moving (that is a queue).
+    let to = nextHex;
+    let via: Hex | null = null;
+    const occ = occupant.get(hexKey(nextHex));
+    const beyond = path[1];
+    if (occ && occ.side === u.side && orderPath(occ.order).length === 0 && beyond) {
+      const more = moveCost(map, rules, u.movementClass, nextHex, beyond, ctx);
+      if (more !== null) {
+        to = beyond;
+        via = nextHex;
+        cost += more;
+      }
+    }
     u.movement.progress = Math.min(u.movement.progress + tick, cost);
-    if (u.movement.progress >= cost) requests.set(u.id, { unit: u, from: u.pos, to: nextHex });
+    if (u.movement.progress >= cost) requests.set(u.id, { unit: u, from: u.pos, to, via });
   }
 
   // 2a. Enemy-occupied destinations are never entered.
@@ -355,10 +374,11 @@ function movementTick(
       const order = u.order as Extract<NonNullable<UnitState['order']>, { path: Hex[] }>;
       u.pos = req.to;
       order.path.shift();
+      if (req.via) order.path.shift();
       u.movement.progress = 0;
       u.movement.blocked = null;
       u.movement.waited = 0;
-      events.push({ ...base, kind: 'unit-moved', from: req.from, to: req.to });
+      events.push({ ...base, kind: 'unit-moved', from: req.from, to: req.to, ...(req.via ? { via: [req.via] } : {}) });
       if (order.path.length === 0) {
         // An Attack that takes its objective consolidates there.
         u.order = order.kind === 'attack' ? { kind: 'defend' } : null;
@@ -420,5 +440,6 @@ function goRoundParked(
  * the same hex always come from different directions.
  */
 function approach(req: MoveRequest): number {
-  return DIRECTIONS.findIndex((d) => req.from.q - req.to.q === d.q && req.from.r - req.to.r === d.r);
+  const origin = req.via ?? req.from;
+  return DIRECTIONS.findIndex((d) => origin.q - req.to.q === d.q && origin.r - req.to.r === d.r);
 }

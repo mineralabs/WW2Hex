@@ -319,7 +319,7 @@ export function Game(props: {
     for (const e of replay.events) {
       if (e.kind !== 'unit-moved' || e.step !== frame - 1) continue;
       const id = e.unit.kind === 'own' ? e.unit.unitId : e.unit.kind === 'contact' ? `contact:${e.unit.contactId}` : null;
-      if (id) out.set(id, [...(out.get(id) ?? []), e.to]);
+      if (id) out.set(id, [...(out.get(id) ?? []), ...(e.via ?? []), e.to]);
     }
     return out;
   }, [watching, replay, frame]);

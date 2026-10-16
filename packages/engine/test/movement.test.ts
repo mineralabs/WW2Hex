@@ -170,7 +170,7 @@ describe('movement collisions', () => {
     assertNoStacking(s);
   });
 
-  it('goes round a friendly unit that has stopped in its way', () => {
+  it('gets past a friendly unit that has stopped in its way', () => {
     const { world, state } = tiny({
       cols: 5,
       rows: 3,
@@ -184,16 +184,65 @@ describe('movement collisions', () => {
     assertNoStacking(r.state);
   });
 
-  it('keeps waiting behind a stopped friend when there is no way round', () => {
+  it('passes through a stopped friend on a single-file road, paying for both hexes', () => {
     const { world, state } = tiny({
       cols: 5,
       rows: 1,
       units: [unitFile('a', 'allied', [0, 0]), unitFile('parked', 'allied', [2, 0])],
     });
     const r = resolveTurn(order(state, world, 'allied', 'a', at(4, 0)), world, rules);
-    expect(unit(r.state, 'a').pos).toEqual(at(1, 0));
-    expect(unit(r.state, 'a').movement.blocked).toBe('occupied');
-    expect(unit(r.state, 'a').order).not.toBeNull();
+    expect(unit(r.state, 'a').pos).toEqual(at(4, 0));
+    expect(unit(r.state, 'parked').pos).toEqual(at(2, 0));
+    const through = r.events.find((e) => e.kind === 'unit-moved' && e.unitId === 'a' && hexEquals(e.to, at(3, 0)));
+    expect(through && through.kind === 'unit-moved' ? through.via : null).toEqual([at(2, 0)]);
+    // Entering [1,0] took 15 min; passing [2,0] into [3,0] took 30 (two clear hexes); then [4,0] 15.
+    const moves = r.events.filter((e) => e.kind === 'unit-moved' && e.unitId === 'a').map((e) => e.time);
+    expect(moves).toEqual([15, 45, 60]);
+    expect(r.events.some((e) => e.kind === 'move-blocked' && e.unitId === 'a')).toBe(false);
+    assertNoStacking(r.state);
+  });
+
+  it('cannot pass through a stopped friend onto a hex the enemy holds, nor through two stopped friends in a row', () => {
+    const enemyBeyond = tiny({
+      cols: 5,
+      rows: 1,
+      units: [unitFile('a', 'allied', [0, 0]), unitFile('parked', 'allied', [1, 0]), unitFile('g', 'german', [2, 0])],
+    });
+    const r1 = resolveTurn(
+      (() => {
+        const x = applyUnitOrder(enemyBeyond.state, enemyBeyond.world, rules, 'allied', 'a', { kind: 'attack', target: at(4, 0) });
+        if (!x.ok) throw new Error();
+        return x.state;
+      })(),
+      enemyBeyond.world,
+      rules,
+    );
+    expect(unit(r1.state, 'a').pos).toEqual(at(0, 0));
+    expect(unit(r1.state, 'a').movement.blocked).toBe('enemy-occupied');
+
+    const twoParked = tiny({
+      cols: 6,
+      rows: 1,
+      units: [unitFile('a', 'allied', [0, 0]), unitFile('p1', 'allied', [2, 0]), unitFile('p2', 'allied', [3, 0])],
+    });
+    const r2 = resolveTurn(order(twoParked.state, twoParked.world, 'allied', 'a', at(5, 0)), twoParked.world, rules);
+    expect(unit(r2.state, 'a').pos).toEqual(at(1, 0));
+    expect(unit(r2.state, 'a').movement.blocked).toBe('occupied');
+    assertNoStacking(r2.state);
+  });
+
+  it('passes through a stopped friend standing on a bridge end', () => {
+    // The only way north is the bridge between rows 2 and 1; a friend with no order stands on its south end.
+    const { world, state } = tiny({
+      cols: 1,
+      rows: 4,
+      rivers: [{ id: 'w', name: 'River', kind: 'major', edges: [[[0, 1], [0, 2]]] }],
+      bridges: [{ id: 'b', name: 'Bridge', edge: [[0, 1], [0, 2]] }],
+      units: [unitFile('a', 'allied', [0, 3], 'tracked'), unitFile('guard', 'allied', [0, 2])],
+    });
+    const r = resolveTurn(order(state, world, 'allied', 'a', at(0, 0)), world, rules);
+    expect(unit(r.state, 'a').pos).toEqual(at(0, 0));
+    expect(unit(r.state, 'guard').pos).toEqual(at(0, 2));
   });
 
   it('stops short when a stopped friend already holds its destination; an Attack then defends', () => {

@@ -119,7 +119,7 @@ export interface WeaponProfile {
 }
 
 export const DEFAULT_RULES: Rules = {
-  rulesVersion: '0.6.0-provisional',
+  rulesVersion: '0.6.1-provisional',
   stepMinutes: 10,
   stepsPerTurn: 12,
   movementTicksPerStep: 10,

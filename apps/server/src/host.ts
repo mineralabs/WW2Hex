@@ -321,7 +321,7 @@ export class GameHost {
     const connections = { allied: new Set<Connection>(), german: new Set<Connection>() };
     let problem: string | null = null;
     if (record.saveVersion !== SAVE_VERSION) problem = `saved in format ${String(record.saveVersion)}, this host reads ${SAVE_VERSION}`;
-    else if (record.rulesVersion !== this.rules.rulesVersion) {
+    else if (!rulesCompatible(record.rulesVersion, this.rules.rulesVersion)) {
       problem = `played under rules ${record.rulesVersion}; this host runs ${this.rules.rulesVersion}`;
     }
     let world: World | null = null;
@@ -387,6 +387,12 @@ export class GameHost {
   private fail(conn: Connection, code: ErrorCode, message: string): void {
     conn.send({ type: 'error', code, message });
   }
+}
+
+/** Rules versions agree on everything but the patch number: saves resume across fixes, never across balance changes. */
+export function rulesCompatible(saved: string, running: string): boolean {
+  const majorMinor = (v: string) => v.split('.').slice(0, 2).join('.');
+  return majorMinor(saved) === majorMinor(running);
 }
 
 export function normaliseRoomCode(raw: string): string {

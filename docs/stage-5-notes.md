@@ -77,6 +77,21 @@ checks the same on the wire.
 - **Wrecks persist** for the rest of the replay and in the turn picture; a surrender shows a
   white flag instead. They are offset within the hex so a counter can stand there.
 
+## Rules 0.6.1: passing a halted friend
+
+Found in the first game. A reinforcement column arrived at Grave, its lead unit was left without
+an order, and the three units behind it sat for two hours. The engine tried to route them round,
+but every detour crossed the Heumen lock bridge, where a paratroop battalion with no order stood
+on the bridge end, and a unit could not enter a hex another unit held. So a parked unit on a
+bridge end blocked the whole corridor for good, and the advice to hold both bridge ends would have
+jammed every reinforcement.
+
+The fix is a movement rule: a unit passes through a halted friendly unit when its route goes on
+beyond, paying for both hexes and arriving in the one beyond. Never through the enemy, never
+through a friend that is still moving (that is a queue), and never two halted friends in a row.
+The summary now says who was held up and behind whom, and saves resume across patch versions of
+the rules so games in progress carry on.
+
 ## Known limitations
 
 - **No sound**, and terrain is drawn as before.

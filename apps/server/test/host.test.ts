@@ -294,6 +294,25 @@ describe('commitment, reconnection and restart', () => {
     await players.allied.viewWhere((v) => v.phase === 'planning' && v.clock.turn === 2);
   });
 
+  it('resumes a match saved under the same rules with a different patch number', async () => {
+    const dir = tempDir();
+    const s = await server(dir);
+    const { roomCode, credentials } = track(await openMatch(s.port));
+    await s.close();
+    running.splice(running.indexOf(s), 1);
+    const file = new FileMatchStore(dir).fileFor(roomCode);
+    const record = JSON.parse(readFileSync(file, 'utf8')) as RoomRecord;
+    const [major, minor, rest] = record.rulesVersion.split('.');
+    const patched = `${major}.${minor}.${Number.parseInt(rest ?? '0', 10) + 7}-provisional`;
+    writeFileSync(file, JSON.stringify({ ...record, rulesVersion: patched }));
+    const again = await server(dir);
+    expect(again.host.roomSummaries()[0]!.problem).toBeNull();
+    const c = await TestClient.connect(again.port);
+    clients.push(c);
+    c.send({ type: 'join', roomCode, credential: credentials.allied });
+    expect((await c.next('joined')).side).toBe('allied');
+  });
+
   it('will not resume a match saved under different rules', async () => {
     const dir = tempDir();
     const s = await server(dir);

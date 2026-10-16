@@ -468,7 +468,7 @@ export interface FireFactor {
 }
 
 export type GameEvent =
-  | (EventBase & { kind: 'unit-moved'; unitId: string; side: Side; from: Hex; to: Hex })
+  | (EventBase & { kind: 'unit-moved'; unitId: string; side: Side; from: Hex; to: Hex; via?: Hex[] })
   | (EventBase & { kind: 'move-blocked'; unitId: string; side: Side; at: Hex; target: Hex; reason: BlockReason })
   | (EventBase & { kind: 'order-completed'; unitId: string; side: Side; at: Hex })
   | (EventBase & { kind: 'advance-halted'; unitId: string; side: Side; at: Hex; enemyUnitId: string })
@@ -544,7 +544,7 @@ interface ObservedBase {
 }
 
 export type ObservedEvent =
-  | (ObservedBase & { kind: 'unit-moved'; unit: UnitRef; from: Hex; to: Hex })
+  | (ObservedBase & { kind: 'unit-moved'; unit: UnitRef; from: Hex; to: Hex; via?: Hex[] })
   | (ObservedBase & { kind: 'move-blocked'; unitId: string; at: Hex; target: Hex; reason: BlockReason })
   | (ObservedBase & { kind: 'order-completed'; unitId: string; at: Hex })
   | (ObservedBase & { kind: 'advance-halted'; unitId: string; at: Hex; by: UnitRef })

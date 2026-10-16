@@ -65,6 +65,25 @@ describe('the turn summary', () => {
   });
 });
 
+describe('units held up', () => {
+  it('says which unit stood in the way when a column never moved', () => {
+    // Two stopped friends in a row: the mover can pass one but not two, so it waits all turn.
+    const file = tinyFile({
+      cols: 6,
+      rows: 1,
+      units: [unitFile('mover', 'allied', [0, 0]), unitFile('p1', 'allied', [2, 0]), unitFile('p2', 'allied', [3, 0])],
+    });
+    const { world, state } = loadScenario(file, rules);
+    let m: MatchState = newMatch(state);
+    const r = commitOrders(m, world, rules, { side: 'allied', turn: 1, orders: [{ unitId: 'mover', order: { kind: 'advance', waypoints: [{ q: 5, r: 0 }] } }] });
+    if (!r.ok) throw new Error(r.error);
+    m = (commitOrders(r.match, world, rules, { side: 'german', turn: 1, orders: [] }) as { match: MatchState }).match;
+    const ctx: NarrativeContext = { names: { unit: (id) => id, equipment: (id) => id }, placeNear: fmtHex, time: String, vehicleName: () => null };
+    const lines = summarizeTurn(m.lastTurn!.replays.allied, ctx);
+    expect(lines).toContain('mover was held up for most of the turn behind p1, which was standing still.');
+  });
+});
+
 describe('key moments', () => {
   it('picks the assault and the first time under fire, in time order, each placed on the map', () => {
     const { m, ctx } = battle();

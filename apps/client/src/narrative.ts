@@ -1,4 +1,4 @@
-import { hexDistance, hexEquals, hexKey, type Hex, type ObservedEvent, type SideReplay, type UnitRef } from '@ww2hex/engine';
+import { hexDistance, hexEquals, hexKey, orderPath, type Hex, type ObservedEvent, type SideReplay, type UnitRef } from '@ww2hex/engine';
 import { TYPE_LABEL, type Names } from './format.ts';
 
 /**
@@ -223,6 +223,23 @@ export function summarizeTurn(replay: SideReplay, ctx: NarrativeContext): string
   if (halted.length > 0) lines.push(`${listNames(halted.map((e) => own(e.unitId)))} halted on sighting the enemy.`);
   const first = replay.frames[0]!;
   const last = replay.frames[replay.frames.length - 1]!;
+
+  // Units that ended the turn stuck, having waited an hour or more: say what stood in the way.
+  const stuck = new Map<string, string[]>();
+  for (const after of last.ownUnits) {
+    const reason = after.movement.blocked;
+    const next = orderPath(after.order)[0];
+    if (!reason || !next || after.movement.waited < 60) continue;
+    let why: string;
+    if (reason === 'occupied' || reason === 'friendly-conflict') {
+      const blocker = last.ownUnits.find((x) => hexEquals(x.pos, next));
+      why = blocker ? `behind ${own(blocker.id)}, which was standing still` : 'behind other friendly units';
+    } else if (reason === 'enemy-occupied') why = `by the enemy holding ${ctx.placeNear(next)}`;
+    else if (reason === 'contested') why = `by the enemy moving into ${ctx.placeNear(next)}`;
+    else why = `because the way to ${ctx.placeNear(next)} is impassable`;
+    stuck.set(why, [...(stuck.get(why) ?? []), own(after.id)]);
+  }
+  for (const [why, units] of stuck) lines.push(`${listNames(units)} ${units.length === 1 ? 'was' : 'were'} held up for most of the turn ${why}.`);
   const moved = new Map<string, string[]>();
   for (const u of last.ownUnits) {
     const before = first.ownUnits.find((x) => x.id === u.id);

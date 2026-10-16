@@ -154,7 +154,7 @@ export function observeStep(events: readonly GameEvent[], side: Side, ctx: Obser
     const t = { time: e.time, turn: e.turn, step: e.step };
     switch (e.kind) {
       case 'unit-moved': {
-        if (e.side === side) out.push({ ...t, kind: e.kind, unit: ref(e.unitId, e.side), from: e.from, to: e.to });
+        if (e.side === side) out.push({ ...t, kind: e.kind, unit: ref(e.unitId, e.side), from: e.from, to: e.to, ...(e.via ? { via: e.via } : {}) });
         else if (seenAt(ctx.start, e.unitId) || seenAt(ctx.end, e.unitId)) {
           const r = ref(e.unitId, e.side);
           if (r.kind === 'contact') out.push({ ...t, kind: e.kind, unit: r, from: e.from, to: e.to });
