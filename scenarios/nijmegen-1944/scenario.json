@@ -3891,15 +3891,15 @@
         13,
         14
       ],
-      "personnel": 500,
+      "personnel": 300,
       "equipment": {
-        "us-rifle-squad": 21
+        "us-rifle-squad": 10
       },
       "cohesion": 85,
       "supply": "low",
       "reserves": 60,
       "dataStatus": "provisional",
-      "note": "allied-forces.md 2.3: strength unknown, estimate. Placed at De Hut, east of Jonkerbos (51.815, 5.855)."
+      "note": "allied-forces.md 2.3: D Company was on LZ T and F Company with 3/508 at Beek, leaving headquarters company and E Company at De Hut. About 300 men is an estimate: a 508th battalion of roughly 580 jumpers less two rifle companies of about 140 each. Placed at De Hut, east of Jonkerbos (51.815, 5.855)."
     },
     {
       "id": "a-3-508",
