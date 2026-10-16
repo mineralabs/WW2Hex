@@ -65,6 +65,8 @@ export interface CounterView {
   badge: string | null;
   /** During a replay: the hexes the unit passed through to reach `pos` this step, in order. */
   via: Hex[];
+  /** Men lost since the start of the turn being shown, as a negative number; null when not shown. */
+  delta: number | null;
 }
 
 export type CounterStyle = 'pictures' | 'symbols';
@@ -896,7 +898,20 @@ function drawCounter(u: CounterView, style: CounterStyle): Container {
   };
   c.addChild(g);
   const name = label(u.label, -h * 0.32, u.badge ? 8 : 8.5, '600');
-  label(u.detail, h * 0.33, 8, '400');
+  const detail = label(u.detail, h * 0.33, 8, '400');
+  if (u.delta !== null && u.delta < 0) {
+    // Losses since the start of the turn, in the bottom-right corner; the strength moves left to make room.
+    detail.anchor.set(0, 0.5);
+    detail.position.set(-w / 2 + (u.badge ? 3 : 6), h * 0.33);
+    const d = new Text({
+      text: `${u.delta}`,
+      resolution: 4,
+      style: { fontFamily: 'system-ui, sans-serif', fontSize: 7.5, fontWeight: '700', fill: COLORS.fire, stroke: { color: 0xffffff, width: 2.5 } },
+    });
+    d.anchor.set(1, 0.5);
+    d.position.set(w / 2 - 2, h * 0.33);
+    c.addChild(d);
+  }
   if (u.badge) {
     // The name sits between the badge and the readiness dot, shrunk to fit if it must.
     const left = -w / 2 + 1.5 + badgeW + 2;

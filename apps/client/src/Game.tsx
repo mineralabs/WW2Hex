@@ -325,8 +325,11 @@ export function Game(props: {
   }, [watching, replay, frame]);
 
   const counters = useMemo((): CounterView[] => {
+    // Losses since the start of the turn, shown on the counter during the replay and with the turn picture.
+    const startOfTurn = replay && (watching || showPicture) ? new Map(replay.frames[0]!.ownUnits.map((u) => [u.id, u.personnel])) : null;
     const own = shown.units.map((u) => {
       const look = formationLook(u.formationId);
+      const before = startOfTurn?.get(u.id);
       return {
         id: u.id,
         side: u.side,
@@ -344,6 +347,7 @@ export function Game(props: {
         picture: pictureFor(u, catalogue, look.nation),
         badge: look.badge,
         via: viaByCounter.get(u.id) ?? [],
+        delta: before !== undefined ? u.personnel - before : null,
       };
     });
     // Enemy contacts show only their apparent type; their nationality is the side's usual one.
@@ -365,9 +369,10 @@ export function Game(props: {
       picture: genericPicture(c.apparentType),
       badge: null,
       via: viaByCounter.get(`contact:${c.contactId}`) ?? [],
+      delta: null,
     }));
     return [...contacts, ...own];
-  }, [shown, selectedId, enemy, formationColor, formationLook, catalogue, file, viaByCounter]);
+  }, [shown, selectedId, enemy, formationColor, formationLook, catalogue, file, viaByCounter, replay, watching, showPicture]);
 
   const objectiveMarks = useMemo(() => view.objectives.flatMap((o) => o.hexes.map((hex, i) => ({ hex, control: o.control[i] ?? null }))), [view.objectives]);
 
