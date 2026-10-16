@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { COUNTER_H, COUNTER_W, MOVE_MS, MapRenderer, TWEEN_MS, alongPath, type CounterView, type MapHandlers, type RenderView } from './renderer.ts';
 import { miniature, miniatureKey } from './models3d.ts';
 import { Scenery } from './scenery3d.ts';
+import { tileRegions, type Region } from './tiles.ts';
 import { PAINT_EVENT } from './paint.ts';
 import { isDark, onThemeChange, tokenColour } from '../theme.ts';
 import type { SunPosition } from './sun.ts';
@@ -17,6 +18,24 @@ const DRAG_THRESHOLD = 4;
 /** How long after a change the board keeps redrawing, to play tweens and effects (ms). */
 const ANIMATE_MS = 1700;
 const BASE_Y = -0.3;
+/** Board picture sharpness: canvas pixels per map pixel. */
+const BOARD_SCALE = 1.6;
+/** Largest tile of the board picture, in canvas pixels a side. */
+const TILE_PX = 4096;
+
+interface Tile {
+  /** The part of the board it covers, in map pixels. */
+  region: Region;
+  /** Its own copy of the picture, or null when it shows the board's canvas directly. */
+  canvas: HTMLCanvasElement | null;
+  texture: THREE.CanvasTexture;
+  geo: THREE.BufferGeometry;
+  /** Ground heights of the mesh's vertices before exaggeration. */
+  base: Float32Array;
+  /** How much of the texture's width and height the tile uses (a lone tile's canvas can be a little larger). */
+  coverageU?: number;
+  coverageV?: number;
+}
 const RAD_3D = Math.PI / 180;
 /** Camera distance (hexes) up to which nameplates stay their normal size. */
 const PLATE_NEAR = 6;
@@ -72,10 +91,11 @@ export class Map3D {
   private readonly scene = new THREE.Scene();
   private readonly camera = new THREE.PerspectiveCamera(36, 1, 0.05, 400);
   private controls: OrbitControls | null = null;
-  private texture: THREE.CanvasTexture | null = null;
-  private terrainGeo: THREE.BufferGeometry | null = null;
+  /** The board picture in tiles, each laid on its own patch of ground. One tile draws straight from the board's canvas. */
+  private tiles: Tile[] = [];
+  /** The outline of the board, for the model's sides: points and their ground heights before exaggeration. */
+  private outline: { x: number; z: number; h: number }[] = [];
   private skirtGeo: THREE.BufferGeometry | null = null;
-  private readonly baseHeights: Float32Array[] = [];
   private exaggeration = 4;
   private dirtyUntil = 0;
   private hover: Hex | null = null;
@@ -117,10 +137,9 @@ export class Map3D {
     } catch {
       // Storage unavailable; miniatures it is.
     }
-    const max = maxTextureSize();
-    const b = MapRenderer.boardBounds(map);
-    const scale = Math.min(1.6, (max * 0.98) / Math.max(b.maxX - b.minX, b.maxY - b.minY));
-    this.board = new MapRenderer(map, handlers, { asTexture: { scale } });
+    // The board is drawn at a fixed sharpness, in tiles of at most TILE_PX pixels a side, so any size of map stays sharp.
+    const tile = Math.min(TILE_PX, maxTextureSize());
+    this.board = new MapRenderer(map, handlers, { asTexture: { scale: BOARD_SCALE, tile } });
     this.height = relief ? reliefHeights(map, relief) : hexHeights(map);
   }
 
@@ -162,9 +181,7 @@ export class Map3D {
     this.applyLight();
     this.cleanup.push(onThemeChange(() => this.applyLight()));
 
-    this.texture = new THREE.CanvasTexture(tex.canvas);
-    this.texture.colorSpace = THREE.SRGBColorSpace;
-    this.texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    this.makeTiles(tex.canvas, renderer.capabilities.getMaxAnisotropy());
     this.buildGround();
     this.scene.add(this.pieceGroup);
     try {
@@ -222,8 +239,10 @@ export class Map3D {
     for (const off of this.cleanup) off();
     this.cleanup.length = 0;
     this.controls?.dispose();
-    this.texture?.dispose();
-    this.terrainGeo?.dispose();
+    for (const t of this.tiles) {
+      t.texture.dispose();
+      t.geo.dispose();
+    }
     this.skirtGeo?.dispose();
     this.pieceGeo.dispose();
     for (const p of this.pieces.values()) this.removePiece(p);
@@ -555,56 +574,109 @@ export class Map3D {
     this.flight = { t0: performance.now(), ms, fromPos: this.camera.position.clone(), fromTarget: this.controls.target.clone(), toPos: pos, toTarget: target };
   }
 
-  /** The ground mesh over the board area, its sides, and a floor beneath. */
+  /** Cuts the board into tiles the board's canvas can draw one at a time. */
+  private makeTiles(source: HTMLCanvasElement, anisotropy: number): void {
+    const b = this.bounds;
+    const scale = this.board.textureScale;
+    const regions = tileRegions(b, source.width, source.height, scale);
+    const single = regions.length === 1;
+    for (const region of regions) {
+      // A lone tile shows the board's canvas itself; several each copy their part into a canvas of their own.
+      const canvas = single ? null : document.createElement('canvas');
+      if (canvas) {
+        canvas.width = Math.round((region.maxX - region.minX) * scale);
+        canvas.height = Math.round((region.maxY - region.minY) * scale);
+      }
+      const texture = new THREE.CanvasTexture(canvas ?? source);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.anisotropy = anisotropy;
+      this.tiles.push({ region, canvas, texture, geo: new THREE.BufferGeometry(), base: new Float32Array(0) });
+    }
+    // A lone tile's canvas may be larger than the board (it is sized to whole pixels): map only the board's part.
+    if (single) {
+      const t = this.tiles[0]!;
+      t.coverageU = ((b.maxX - b.minX) * scale) / source.width;
+      t.coverageV = ((b.maxY - b.minY) * scale) / source.height;
+    }
+    this.redrawTiles();
+  }
+
+  /** Draws every tile of the board picture afresh. */
+  private redrawTiles(): void {
+    this.board.advance();
+    const source = this.tiles[0] && !this.tiles[0].canvas ? null : this.board.texture?.canvas ?? null;
+    for (const t of this.tiles) {
+      this.board.renderRegion(t.region.minX, t.region.minY);
+      if (t.canvas && source) t.canvas.getContext('2d')!.drawImage(source, 0, 0, t.canvas.width, t.canvas.height, 0, 0, t.canvas.width, t.canvas.height);
+      t.texture.needsUpdate = true;
+    }
+  }
+
+  /** The ground: a mesh for each tile over its part of the board, the model's sides, and a floor beneath. */
   private buildGround(): void {
+    for (const t of this.tiles) {
+      const r = t.region;
+      const x0 = r.minX / PX_PER_HEX;
+      const z0 = r.minY / PX_PER_HEX;
+      const w = (r.maxX - r.minX) / PX_PER_HEX;
+      const d = (r.maxY - r.minY) / PX_PER_HEX;
+      const nx = Math.max(2, Math.round(w * MESH_PER_HEX) + 1);
+      const nz = Math.max(2, Math.round(d * MESH_PER_HEX) + 1);
+      const positions = new Float32Array(nx * nz * 3);
+      const uvs = new Float32Array(nx * nz * 2);
+      const base = new Float32Array(nx * nz);
+      const cu = t.coverageU ?? 1;
+      const cv = t.coverageV ?? 1;
+      for (let j = 0; j < nz; j++) {
+        for (let i = 0; i < nx; i++) {
+          const k = j * nx + i;
+          const x = x0 + (i / (nx - 1)) * w;
+          const z = z0 + (j / (nz - 1)) * d;
+          positions[k * 3] = x;
+          positions[k * 3 + 2] = z;
+          base[k] = this.height(x, z);
+          uvs[k * 2] = (i / (nx - 1)) * cu;
+          uvs[k * 2 + 1] = 1 - (j / (nz - 1)) * cv;
+        }
+      }
+      const index: number[] = [];
+      for (let j = 0; j < nz - 1; j++) {
+        for (let i = 0; i < nx - 1; i++) {
+          const a = j * nx + i;
+          index.push(a, a + nx, a + 1, a + 1, a + nx, a + nx + 1);
+        }
+      }
+      t.geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      t.geo.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+      t.geo.setIndex(index);
+      t.base = base;
+      const ground = new THREE.Mesh(t.geo, new THREE.MeshStandardMaterial({ map: t.texture, roughness: 0.95, metalness: 0 }));
+      ground.receiveShadow = true;
+      ground.castShadow = true;
+      this.scene.add(ground);
+    }
+
+    // The model's sides, round the outline of the board.
     const b = this.bounds;
     const x0 = b.minX / PX_PER_HEX;
     const z0 = b.minY / PX_PER_HEX;
-    const w = (b.maxX - b.minX) / PX_PER_HEX;
-    const d = (b.maxY - b.minY) / PX_PER_HEX;
-    const nx = Math.round(w * MESH_PER_HEX) + 1;
-    const nz = Math.round(d * MESH_PER_HEX) + 1;
-    const positions = new Float32Array(nx * nz * 3);
-    const uvs = new Float32Array(nx * nz * 2);
-    const base = new Float32Array(nx * nz);
-    for (let j = 0; j < nz; j++) {
-      for (let i = 0; i < nx; i++) {
-        const k = j * nx + i;
-        const x = x0 + (i / (nx - 1)) * w;
-        const z = z0 + (j / (nz - 1)) * d;
-        positions[k * 3] = x;
-        positions[k * 3 + 2] = z;
-        base[k] = this.height(x, z);
-        uvs[k * 2] = i / (nx - 1);
-        uvs[k * 2 + 1] = 1 - j / (nz - 1);
-      }
-    }
-    const index: number[] = [];
-    for (let j = 0; j < nz - 1; j++) {
-      for (let i = 0; i < nx - 1; i++) {
-        const a = j * nx + i;
-        index.push(a, a + nx, a + 1, a + 1, a + nx, a + nx + 1);
-      }
-    }
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
-    geo.setIndex(index);
-    this.terrainGeo = geo;
-    const ground = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map: this.texture, roughness: 0.95, metalness: 0 }));
-    ground.receiveShadow = true;
-    ground.castShadow = true;
-    this.scene.add(ground);
-
-    // The model's sides, round the border of the mesh.
-    const border: number[] = [];
-    for (let i = 0; i < nx; i++) border.push(i);
-    for (let j = 1; j < nz; j++) border.push(j * nx + nx - 1);
-    for (let i = nx - 2; i >= 0; i--) border.push((nz - 1) * nx + i);
-    for (let j = nz - 2; j >= 0; j--) border.push(j * nx);
-    const skirtPos = new Float32Array(border.length * 6);
+    const x1 = b.maxX / PX_PER_HEX;
+    const z1 = b.maxY / PX_PER_HEX;
+    const step = 1 / MESH_PER_HEX;
+    const pts: { x: number; z: number }[] = [];
+    const along = (ax: number, az: number, bx: number, bz: number) => {
+      const n = Math.max(1, Math.round(Math.hypot(bx - ax, bz - az) / step));
+      for (let i = 0; i < n; i++) pts.push({ x: ax + ((bx - ax) * i) / n, z: az + ((bz - az) * i) / n });
+    };
+    along(x0, z0, x1, z0);
+    along(x1, z0, x1, z1);
+    along(x1, z1, x0, z1);
+    along(x0, z1, x0, z0);
+    pts.push({ ...pts[0]! });
+    this.outline = pts.map((p) => ({ ...p, h: this.height(p.x, p.z) }));
+    const skirtPos = new Float32Array(this.outline.length * 6);
     const skirtIdx: number[] = [];
-    for (let n = 0; n < border.length - 1; n++) {
+    for (let n = 0; n < this.outline.length - 1; n++) {
       const a = n * 2;
       skirtIdx.push(a, a + 1, a + 2, a + 2, a + 1, a + 3);
     }
@@ -613,37 +685,32 @@ export class Map3D {
     skirtGeo.setIndex(skirtIdx);
     this.skirtGeo = skirtGeo;
     this.scene.add(new THREE.Mesh(skirtGeo, new THREE.MeshStandardMaterial({ color: 0x6a5d4c, roughness: 1, side: THREE.DoubleSide })));
-    const floor = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshStandardMaterial({ color: 0x4f463a, roughness: 1 }));
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(x1 - x0, z1 - z0), new THREE.MeshStandardMaterial({ color: 0x4f463a, roughness: 1 }));
     floor.rotation.x = -Math.PI / 2;
-    floor.position.set(x0 + w / 2, BASE_Y, z0 + d / 2);
+    floor.position.set((x0 + x1) / 2, BASE_Y, (z0 + z1) / 2);
     this.scene.add(floor);
-
-    this.baseHeights.length = 0;
-    this.baseHeights.push(base, Float32Array.from(border));
     this.applyExaggeration();
   }
 
   private applyExaggeration(): void {
-    const geo = this.terrainGeo;
+    for (const t of this.tiles) {
+      const pos = t.geo.attributes.position?.array as Float32Array | undefined;
+      if (!pos) continue;
+      for (let k = 0; k < t.base.length; k++) pos[k * 3 + 1] = t.base[k]! * this.exaggeration;
+      t.geo.attributes.position!.needsUpdate = true;
+      t.geo.computeVertexNormals();
+      t.geo.computeBoundingSphere();
+    }
     const skirt = this.skirtGeo;
-    if (!geo || !skirt) return;
-    const [base, border] = this.baseHeights as [Float32Array, Float32Array];
-    const pos = geo.attributes.position!.array as Float32Array;
-    for (let k = 0; k < base.length; k++) pos[k * 3 + 1] = base[k]! * this.exaggeration;
-    geo.attributes.position!.needsUpdate = true;
-    geo.computeVertexNormals();
-    geo.computeBoundingSphere();
-    const sp = skirt.attributes.position!.array as Float32Array;
-    border.forEach((k, n) => {
-      const x = pos[k * 3]!;
-      const y = pos[k * 3 + 1]!;
-      const z = pos[k * 3 + 2]!;
-      sp.set([x, y, z, x, BASE_Y, z], n * 6);
-    });
-    skirt.attributes.position!.needsUpdate = true;
-    skirt.computeVertexNormals();
-    skirt.computeBoundingSphere();
+    if (skirt) {
+      const sp = skirt.attributes.position!.array as Float32Array;
+      this.outline.forEach((p, n) => sp.set([p.x, p.h * this.exaggeration, p.z, p.x, BASE_Y, p.z], n * 6));
+      skirt.attributes.position!.needsUpdate = true;
+      skirt.computeVertexNormals();
+      skirt.computeBoundingSphere();
+    }
     this.scenery?.place((x, z) => this.y(x, z));
+    this.dirtyUntil = Math.max(this.dirtyUntil, performance.now() + 50);
   }
 
   /** The see-through panel in the corner: camera views and how strongly heights are exaggerated. */
@@ -785,10 +852,7 @@ export class Map3D {
     this.controls?.update();
     this.placePieces(now);
     // Redraw the board picture only while something on it may be moving.
-    if (now < this.dirtyUntil && this.texture) {
-      this.board.renderFrame();
-      this.texture.needsUpdate = true;
-    }
+    if (now < this.dirtyUntil && this.tiles.length) this.redrawTiles();
     this.renderer?.render(this.scene, this.camera);
   }
 

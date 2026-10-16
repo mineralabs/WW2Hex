@@ -207,10 +207,10 @@ export class MapRenderer {
   /** A pan in progress: where the world container is heading, and when it started. */
   private pan: { from: Point; to: Point; start: number; ms: number } | null = null;
 
-  private readonly asTexture: { scale: number } | null;
+  private readonly asTexture: { scale: number; tile: number } | null;
   private boardBounds = { minX: 0, minY: 0, maxX: 0, maxY: 0 };
 
-  constructor(map: GameMap, handlers: MapHandlers, options?: { asTexture?: { scale: number } }) {
+  constructor(map: GameMap, handlers: MapHandlers, options?: { asTexture?: { scale: number; tile: number } }) {
     this.map = map;
     this.handlers = handlers;
     this.asTexture = options?.asTexture ?? null;
@@ -256,7 +256,27 @@ export class MapRenderer {
   renderFrame(): void {
     if (!this.mounted) return;
     this.animate();
+    this.renderRegion(this.boardBounds.minX, this.boardBounds.minY);
+  }
+
+  /** In texture mode: move animations on to now, without drawing. */
+  advance(): void {
+    if (this.mounted) this.animate();
+  }
+
+  /**
+   * In texture mode: draw the part of the board whose top-left corner is (minX, minY) in map
+   * pixels, as large as the canvas holds. A big board is drawn tile by tile this way.
+   */
+  renderRegion(minX: number, minY: number): void {
+    if (!this.mounted || !this.asTexture) return;
+    this.world.position.set(-minX * this.asTexture.scale, -minY * this.asTexture.scale);
     this.app.render();
+  }
+
+  /** In texture mode: the canvas scale, map pixels to canvas pixels. */
+  get textureScale(): number {
+    return this.asTexture?.scale ?? 1;
   }
 
   get isMounted(): boolean {
@@ -264,7 +284,7 @@ export class MapRenderer {
   }
 
   async mount(el: HTMLElement): Promise<void> {
-    if (this.asTexture) return this.mountAsTexture(this.asTexture.scale);
+    if (this.asTexture) return this.mountAsTexture(this.asTexture.scale, this.asTexture.tile);
     await this.app.init({
       resizeTo: el,
       background: sky(),
@@ -293,12 +313,13 @@ export class MapRenderer {
     fitWhenSized();
   }
 
-  private async mountAsTexture(scale: number): Promise<void> {
+  private async mountAsTexture(scale: number, tile: number): Promise<void> {
     const b = MapRenderer.boardBounds(this.map);
     this.boardBounds = b;
+    // One canvas, at most `tile` pixels a side; a bigger board is drawn through it a region at a time.
     await this.app.init({
-      width: Math.round((b.maxX - b.minX) * scale),
-      height: Math.round((b.maxY - b.minY) * scale),
+      width: Math.min(tile, Math.round((b.maxX - b.minX) * scale)),
+      height: Math.min(tile, Math.round((b.maxY - b.minY) * scale)),
       background: sky(),
       antialias: true,
       autoDensity: false,

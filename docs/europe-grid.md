@@ -75,6 +75,11 @@ view shows also appears in 3D, and a click lands on the hex under the pointer.
   rises about 07:25, is due south at 13:30 and sets about 19:37, so the Guards' bridge crossing at
   19:10 comes in a low, red sun. Shadows lengthen and warm towards dusk, the sky darkens through
   twilight, and the night is lit by a dim blue moon. Off, the board has a fixed afternoon sun.
+- **Big maps:** the board picture is drawn at a fixed sharpness (1.6 canvas pixels per map pixel)
+  in tiles of at most 4,096 pixels a side ([`tiles.ts`](../apps/client/src/map/tiles.ts)), each on
+  its own patch of ground. A Nijmegen-sized map is one tile drawn straight from the board's canvas;
+  a corridor-sized map (about 110 × 45 hexes) takes three. For a much larger map, the relief's
+  `reliefSpacingMeters` can be raised from 100 m to keep the scenario file small.
 - Three.js loads only when a player first switches to 3D.
 
 ## The Gun Park
@@ -103,6 +108,4 @@ airborne), never which unit it is.
 
 ## Next steps
 
-- **Larger maps:** draw the ground in tiles and fetch the relief per tile, instead of one mesh
-  and one picture per scenario.
 - **Formation orders:** give a division or regiment one order, as larger maps will need.
