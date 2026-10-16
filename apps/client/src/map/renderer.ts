@@ -14,9 +14,14 @@ import {
   type Side,
   type UnitType,
 } from '@ww2hex/engine';
-import { Application, Container, Graphics, Text } from 'pixi.js';
+import { Application, Container, Graphics, Rectangle, Text } from 'pixi.js';
+import type { FigureKind } from './paint.ts';
 import { drawPicture, type Picture } from './silhouettes.ts';
 import { COLORS, HEX_SIZE, NATION_COLOR, SIDE_COLOR, TERRAIN_COLOR, readinessColor } from './style.ts';
+import { onThemeChange, tokenColour } from '../theme.ts';
+
+/** The colour round the board, which follows the light or dark theme. */
+const sky = () => tokenColour('--map-sky', COLORS.background);
 
 export interface RouteView {
   unitId: string;
@@ -61,6 +66,10 @@ export interface CounterView {
   nation: Nation | null;
   /** The silhouette shown in picture style. */
   picture: Picture;
+  /** 3D: the equipment that picks a detailed model (a gun's id), when known. */
+  model: string | null;
+  /** 3D: which soldiers to show, when known. */
+  figure: FigureKind | null;
   /** Formation letters, if the scenario gives any. */
   badge: string | null;
   /** During a replay: the hexes the unit passed through to reach `pos` this step, in order. */
@@ -109,6 +118,12 @@ export interface RenderView {
   turnPicture: TurnPicture | null;
   /** The selected unit's reach: every hex it can fire into, and whether that is bombardment or direct fire. */
   range: { hexes: Hex[]; mode: 'direct' | 'indirect'; side: Side } | null;
+  /** Own air drops still to come: the hexes they reach and a caption. */
+  supplyDrops: { hexes: Hex[]; label: string }[];
+  /** Where own supply roads leave the map: a small arrow off the edge and the place they lead to. */
+  supplySigns: { hex: Hex; text: string; open: boolean }[];
+  /** 3D only: where the sun is at the moment shown, or null when the scenario does not say. */
+  sun?: { azimuth: number; elevation: number } | null;
 }
 
 export interface TurnPicture {
@@ -137,24 +152,40 @@ interface CounterNode {
   ms: number;
 }
 
-const TWEEN_MS = 280;
+/** A counter's face, in map pixels. */
+export const COUNTER_W = HEX_SIZE * 1.36;
+export const COUNTER_H = HEX_SIZE * 1.08;
+export const TWEEN_MS = 280;
 /** A step's movement is played over this long, so it fits inside a replay frame. */
-const MOVE_MS = 650;
+export const MOVE_MS = 650;
 /** How long the step's effects keep animating. */
 const EFFECTS_MS = 1200;
 const DRAG_THRESHOLD = 4;
 const MIN_ZOOM = 0.35;
 const MAX_ZOOM = 4;
 
+/** The whole board drawn at a fixed scale into an off-screen canvas, for the 3D view to lay over its terrain. */
+export interface BoardTexture {
+  canvas: HTMLCanvasElement;
+  /** The board area the canvas covers, in map pixels (the coordinates of hexToPixel at HEX_SIZE). */
+  bounds: { minX: number; minY: number; maxX: number; maxY: number };
+}
+
 /**
  * Draws the map, counters and order overlays with PixiJS. It holds no game
  * rules: it is given a RenderView and reports pointer input as hexes.
+ *
+ * With `asTexture`, it draws the whole board at a fixed scale into a canvas
+ * that is not on the page, takes no input, and renders only when asked
+ * (renderFrame), so the 3D view can use the picture as the ground's surface.
  */
 export class MapRenderer {
   private readonly app = new Application();
   private readonly world = new Container();
   private readonly overlay = new Graphics();
   private readonly overlayLabels = new Container();
+  private readonly supplyLayer = new Container();
+  private supplyKey = '';
   private readonly fireLayer = new Graphics();
   private readonly objectiveLayer = new Graphics();
   private readonly wreckLayer = new Graphics();
@@ -176,9 +207,56 @@ export class MapRenderer {
   /** A pan in progress: where the world container is heading, and when it started. */
   private pan: { from: Point; to: Point; start: number; ms: number } | null = null;
 
-  constructor(map: GameMap, handlers: MapHandlers) {
+  private readonly asTexture: { scale: number } | null;
+  private boardBounds = { minX: 0, minY: 0, maxX: 0, maxY: 0 };
+
+  constructor(map: GameMap, handlers: MapHandlers, options?: { asTexture?: { scale: number } }) {
     this.map = map;
     this.handlers = handlers;
+    this.asTexture = options?.asTexture ?? null;
+  }
+
+  /** The board extent in map pixels: every hex plus a hex of margin. */
+  static boardBounds(map: GameMap): { minX: number; minY: number; maxX: number; maxY: number } {
+    const pts = [...map.cells.values()].map((c) => hexToPixel(c.hex, HEX_SIZE));
+    return {
+      minX: Math.min(...pts.map((p) => p.x)) - HEX_SIZE * 1.5,
+      maxX: Math.max(...pts.map((p) => p.x)) + HEX_SIZE * 1.5,
+      minY: Math.min(...pts.map((p) => p.y)) - HEX_SIZE * 1.5,
+      maxY: Math.max(...pts.map((p) => p.y)) + HEX_SIZE * 1.5,
+    };
+  }
+
+  /** In texture mode: the canvas and the board area it shows. */
+  get texture(): BoardTexture | null {
+    return this.asTexture && this.mounted ? { canvas: this.app.canvas, bounds: this.boardBounds } : null;
+  }
+
+  /** The colour round the board. */
+  setBackground(colour: number): void {
+    if (this.mounted) this.app.renderer.background.color = colour;
+  }
+
+  /** Shows or hides the counters in the board picture (the 3D view can draw them as standing pieces instead). */
+  setCountersVisible(on: boolean): void {
+    this.unitLayer.visible = on;
+  }
+
+  /** One counter drawn on its own, cropped to its face, for a 3D piece. */
+  counterImage(u: CounterView, style: CounterStyle): HTMLCanvasElement {
+    const node = drawCounter(u, style);
+    const w = COUNTER_W;
+    const h = COUNTER_H;
+    const canvas = this.app.renderer.extract.canvas({ target: node, frame: new Rectangle(-w / 2, -h / 2, w, h), resolution: 6, antialias: true }) as HTMLCanvasElement;
+    node.destroy({ children: true });
+    return canvas;
+  }
+
+  /** In texture mode: advance animations and draw one frame now. */
+  renderFrame(): void {
+    if (!this.mounted) return;
+    this.animate();
+    this.app.render();
   }
 
   get isMounted(): boolean {
@@ -186,16 +264,18 @@ export class MapRenderer {
   }
 
   async mount(el: HTMLElement): Promise<void> {
+    if (this.asTexture) return this.mountAsTexture(this.asTexture.scale);
     await this.app.init({
       resizeTo: el,
-      background: COLORS.background,
+      background: sky(),
       antialias: true,
       autoDensity: true,
       resolution: Math.min(window.devicePixelRatio || 1, 2),
     });
     el.appendChild(this.app.canvas);
+    this.cleanup.push(onThemeChange(() => (this.app.renderer.background.color = sky())));
     this.app.stage.addChild(this.world);
-    this.world.addChild(this.buildStaticMap(), this.buildPlaceLabels(), this.overlay, this.pictureLayer, this.wreckLayer, this.unitLayer, this.objectiveLayer, this.fireLayer, this.effectLayer, this.effectLabels, this.overlayLabels);
+    this.world.addChild(this.buildStaticMap(), this.buildPlaceLabels(), this.supplyLayer, this.overlay, this.pictureLayer, this.wreckLayer, this.unitLayer, this.objectiveLayer, this.fireLayer, this.effectLayer, this.effectLabels, this.overlayLabels);
     this.attachInput();
     this.app.ticker.add(() => this.animate());
     this.mounted = true;
@@ -213,6 +293,29 @@ export class MapRenderer {
     fitWhenSized();
   }
 
+  private async mountAsTexture(scale: number): Promise<void> {
+    const b = MapRenderer.boardBounds(this.map);
+    this.boardBounds = b;
+    await this.app.init({
+      width: Math.round((b.maxX - b.minX) * scale),
+      height: Math.round((b.maxY - b.minY) * scale),
+      background: sky(),
+      antialias: true,
+      autoDensity: false,
+      resolution: 1,
+      preserveDrawingBuffer: true,
+      autoStart: false,
+      sharedTicker: false,
+    });
+    this.app.ticker.stop();
+    this.app.stage.addChild(this.world);
+    this.world.addChild(this.buildStaticMap(), this.buildPlaceLabels(), this.supplyLayer, this.overlay, this.pictureLayer, this.wreckLayer, this.unitLayer, this.objectiveLayer, this.fireLayer, this.effectLayer, this.effectLabels, this.overlayLabels);
+    this.world.scale.set(scale);
+    this.world.position.set(-b.minX * scale, -b.minY * scale);
+    this.mounted = true;
+    this.renderFrame();
+  }
+
   destroy(): void {
     for (const off of this.cleanup) off();
     this.cleanup.length = 0;
@@ -221,6 +324,7 @@ export class MapRenderer {
   }
 
   fitToMap(): void {
+    if (this.asTexture) return;
     const pts = [...this.map.cells.values()].map((c) => hexToPixel(c.hex, HEX_SIZE));
     const minX = Math.min(...pts.map((p) => p.x)) - HEX_SIZE;
     const maxX = Math.max(...pts.map((p) => p.x)) + HEX_SIZE;
@@ -238,7 +342,7 @@ export class MapRenderer {
 
   /** Glides the view so that `hex` sits in the centre, keeping the zoom. */
   panTo(hex: Hex, ms = 600): void {
-    if (!this.mounted) return;
+    if (!this.mounted || this.asTexture) return;
     const { width, height } = this.app.screen;
     const s = this.world.scale.x;
     const p = hexToPixel(hex, HEX_SIZE);
@@ -249,6 +353,7 @@ export class MapRenderer {
   update(view: RenderView): void {
     if (!this.mounted) return;
     this.updateCounters(view);
+    this.drawSupply(view);
     this.drawOverlay(view);
     this.fireLines = view.fireLines;
     if (view.turnPicture !== this.turnPicture) {
@@ -382,6 +487,65 @@ export class MapRenderer {
       layer.addChild(t);
     }
     return layer;
+  }
+
+  // -------------------------------------------------------------------------
+  // Supply: drop zones and road signs at the map edge
+  // -------------------------------------------------------------------------
+
+  private drawSupply(view: RenderView): void {
+    const key = JSON.stringify([view.supplyDrops, view.supplySigns]);
+    if (key === this.supplyKey) return;
+    this.supplyKey = key;
+    for (const child of this.supplyLayer.removeChildren()) child.destroy();
+    const g = new Graphics();
+    this.supplyLayer.addChild(g);
+
+    // Drop zones: a faint tint, a dashed edge, and the caption above the zone.
+    for (const d of view.supplyDrops) {
+      if (d.hexes.length === 0) continue;
+      const inZone = new Set(d.hexes.map(hexKey));
+      for (const h of d.hexes) g.poly(hexCorners(h, HEX_SIZE).flatMap((p) => [p.x, p.y])).fill({ color: COLORS.supplyDrop, alpha: 0.07 });
+      for (const h of d.hexes) {
+        for (const n of neighbors(h)) {
+          if (inZone.has(hexKey(n))) continue;
+          const [c1, c2] = edgeCorners(h, n);
+          dashed(g, [cornerToPixel(c1, HEX_SIZE), cornerToPixel(c2, HEX_SIZE)], { width: 2, color: COLORS.supplyDrop, alpha: 0.75 });
+        }
+      }
+      const pts = d.hexes.map((h) => hexToPixel(h, HEX_SIZE));
+      const top = Math.min(...pts.map((p) => p.y));
+      const cx = (Math.min(...pts.map((p) => p.x)) + Math.max(...pts.map((p) => p.x))) / 2;
+      const t = smallLabel(d.label, COLORS.supplyDrop, 10, '600');
+      t.anchor.set(0.5, 1);
+      t.position.set(cx, top - HEX_SIZE * 0.9);
+      this.supplyLayer.addChild(t);
+    }
+
+    // Road signs: an arrow from the source hex towards the nearest map edge, the place name behind it.
+    const all = [...this.map.cells.values()].map((cell) => hexToPixel(cell.hex, HEX_SIZE));
+    const bounds = { left: Math.min(...all.map((p) => p.x)), right: Math.max(...all.map((p) => p.x)), top: Math.min(...all.map((p) => p.y)), bottom: Math.max(...all.map((p) => p.y)) };
+    for (const sign of view.supplySigns) {
+      const c = hexToPixel(sign.hex, HEX_SIZE);
+      const edges: [number, number, number][] = [
+        [c.x - bounds.left, -1, 0],
+        [bounds.right - c.x, 1, 0],
+        [c.y - bounds.top, 0, -1],
+        [bounds.bottom - c.y, 0, 1],
+      ];
+      const [, dx, dy] = edges.reduce((a, b) => (b[0] < a[0] ? b : a));
+      const alpha = sign.open ? 0.85 : 0.5;
+      const from = { x: c.x + dx * HEX_SIZE * 0.1, y: c.y + dy * HEX_SIZE * 0.1 };
+      const to = { x: c.x + dx * HEX_SIZE * 0.85, y: c.y + dy * HEX_SIZE * 0.85 };
+      g.moveTo(from.x, from.y).lineTo(to.x, to.y).stroke({ width: 1.6, color: COLORS.label, alpha, cap: 'round' });
+      arrowHead(g, [from, to], COLORS.label, alpha, 6);
+      const t = smallLabel(sign.text, COLORS.label, 9.5, 'normal');
+      t.alpha = sign.open ? 1 : 0.7;
+      // The text sits on the map side of the arrow's tail.
+      t.anchor.set(0.5 + dx * 0.5, 0.5 + dy * 0.5);
+      t.position.set(from.x, from.y);
+      this.supplyLayer.addChild(t);
+    }
   }
 
   // -------------------------------------------------------------------------
@@ -844,6 +1008,14 @@ function arrowHead(g: Graphics, pts: Point[], color: number, alpha: number, size
   ]).fill({ color, alpha });
 }
 
+function smallLabel(text: string, fill: number, fontSize: number, fontWeight: '600' | 'normal'): Text {
+  return new Text({
+    text,
+    resolution: 3,
+    style: { fontFamily: 'system-ui, sans-serif', fontSize, fontWeight, fontStyle: 'italic', fill, stroke: { color: COLORS.labelHalo, width: 3 } },
+  });
+}
+
 function hexOutline(g: Graphics, h: Hex, style: { width: number; color: number; alpha?: number }): void {
   g.poly(hexCorners(h, HEX_SIZE).flatMap((p) => [p.x, p.y])).stroke({ alpha: 1, ...style });
 }
@@ -851,8 +1023,8 @@ function hexOutline(g: Graphics, h: Hex, style: { width: number; color: number; 
 function drawCounter(u: CounterView, style: CounterStyle): Container {
   const c = new Container();
   const side = u.nation ? { ...SIDE_COLOR[u.side], ...NATION_COLOR[u.nation] } : SIDE_COLOR[u.side];
-  const w = HEX_SIZE * 1.36;
-  const h = HEX_SIZE * 1.08;
+  const w = COUNTER_W;
+  const h = COUNTER_H;
   const g = new Graphics();
   c.alpha = u.stale ? 0.5 : 1;
   g.roundRect(-w / 2 + 1.5, -h / 2 + 2, w, h, 3).fill({ color: 0x000000, alpha: 0.25 }); // shadow
@@ -926,7 +1098,7 @@ function drawCounter(u: CounterView, style: CounterStyle): Container {
 }
 
 /** The point a fraction `t` of the way along a polyline. */
-function alongPath(pts: Point[], t: number): Point {
+export function alongPath(pts: Point[], t: number): Point {
   const lens: number[] = [];
   let total = 0;
   for (let i = 1; i < pts.length; i++) {

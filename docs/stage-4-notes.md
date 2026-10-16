@@ -67,7 +67,7 @@ historical plan can work but is not guaranteed. Balance needs real playtesting (
 **The map**
 
 - **Grid:** 30 × 31 hexes of 1 km in RD New (EPSG:28992), from x 174 000 and y 437 500 (the centre
-  of hex [0,0]). It runs from Grave to the Reichswald heights and from Gennep to Elst, as the
+  of hex [0,0]). *Since moved to the Europe grid, 30 × 32 hexes: see [europe-grid.md](europe-grid.md).* It runs from Grave to the Reichswald heights and from Gennep to Elst, as the
   geography research recommended.
 - **Woods** in the Netherlands come from the 1938-42 national forest survey (RCE
   "Bosstatistiek"), read off its colours. In Germany, which the survey does not cover, they come

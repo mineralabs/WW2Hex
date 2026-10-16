@@ -34,7 +34,7 @@ import { buildPlayerView, publicScenario } from './views.ts';
  * - A room code lets a browser claim a side that nobody holds yet, once.
  * - Claiming a side issues an unguessable credential. Only that credential
  *   reconnects to the side afterwards; the room code alone no longer does.
- * - Creating rooms, listing saved matches and releasing seats are allowed
+ * - Creating rooms, listing saved matches, releasing seats and deleting games are allowed
  *   only from the host computer itself.
  *
  * Every change is saved before anyone is told about it, so a restart never
@@ -208,6 +208,29 @@ export class GameHost {
         this.log(`Room ${room.record.roomCode}: ${msg.side} seat released`);
         conn.send({ type: 'rooms', rooms: this.roomSummaries() });
         this.broadcastViews(room);
+        return;
+      }
+
+      case 'delete-room': {
+        if (!conn.hostComputer) return this.fail(conn, 'not-host-computer', 'Only the host computer can delete a saved game.');
+        const code = normaliseRoomCode(msg.roomCode);
+        const room = this.rooms.get(code);
+        if (!room) return this.fail(conn, 'unknown-room', 'No such game.');
+        // Off the disk first; only then does the room disappear.
+        try {
+          this.opts.store.remove(code);
+        } catch (e) {
+          return this.fail(conn, 'rejected', `Could not delete ${code}: ${e instanceof Error ? e.message : String(e)}`);
+        }
+        this.rooms.delete(code);
+        for (const side of ['allied', 'german'] as const) {
+          for (const c of [...room.connections[side]]) {
+            this.detach(c);
+            if (c !== conn) c.send({ type: 'error', code: 'room-deleted', message: `The host deleted game ${code}.` });
+          }
+        }
+        this.log(`Room ${code}: deleted`);
+        conn.send({ type: 'rooms', rooms: this.roomSummaries() });
         return;
       }
     }

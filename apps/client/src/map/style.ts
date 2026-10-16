@@ -29,6 +29,7 @@ export const COLORS = {
   fire: 0xd2401f,
   objectiveNone: 0x6b6450,
   boatCrossing: 0x1f4e79,
+  supplyDrop: 0x2f7d6d,
 };
 
 export const SIDE_COLOR: Record<Side, { fill: number; text: number; route: number }> = {

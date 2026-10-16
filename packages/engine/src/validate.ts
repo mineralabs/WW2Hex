@@ -43,6 +43,19 @@ export function validateScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULE
   const m = file.map;
   validateGrid(m, error);
   if (!(m.geo.hexSpacingMeters > 0)) error('geo-scale', 'map.geo.hexSpacingMeters must be positive');
+  if (file.start.date !== undefined) {
+    const d = /^(\d{4})-(\d{2})-(\d{2})$/.exec(file.start.date);
+    if (!d || Number.isNaN(Date.parse(`${file.start.date}T00:00:00Z`))) error('start-date', `start.date must be a date such as 1944-09-19 (got ${file.start.date})`);
+    else if (Number(d[3]) !== file.start.day) error('start-date-day', `start.date ${file.start.date} is not day ${file.start.day}`);
+  }
+  if (m.relief) {
+    const r = m.relief;
+    if (!(Number.isInteger(r.cols) && r.cols > 1 && Number.isInteger(r.rows) && r.rows > 1 && r.spacingMeters > 0 && r.metresPerUnit > 0)) {
+      error('relief-shape', 'map.relief needs at least 2 × 2 samples, a positive spacing and a positive metresPerUnit');
+    } else if (Math.floor((r.heights.length * 3) / 4) - (r.heights.endsWith('==') ? 2 : r.heights.endsWith('=') ? 1 : 0) !== r.cols * r.rows * 2) {
+      error('relief-size', `map.relief.heights must hold ${r.cols} × ${r.rows} 16-bit samples`);
+    }
+  }
 
   const map = buildMap(m);
 
@@ -243,6 +256,7 @@ export function validateScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULE
     else if (cell.terrain === 'water') error('supply-source-on-water', `Supply source ${s.id} at ${fmt(s.at)} is water`);
     if (!Number.isInteger(s.range) || s.range < 1) error('supply-source-range', `Supply source ${s.id}: range must be a whole number of minutes, at least 1`);
     if (s.fromTurn !== undefined && (!Number.isInteger(s.fromTurn) || s.fromTurn < 1)) error('supply-source-from-turn', `Supply source ${s.id}: fromTurn must be a whole number of at least 1`);
+    if (s.toward !== undefined && (typeof s.toward !== 'string' || s.toward.trim() === '')) error('supply-source-toward', `Supply source ${s.id}: toward must be a place name`);
   }
 
   // Objectives and victory ----------------------------------------------------

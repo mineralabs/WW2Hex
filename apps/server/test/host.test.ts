@@ -1,5 +1,6 @@
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { request } from 'node:http';
+import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { DEFAULT_RULES, applyUnitOrder, buildWorld, fromOffset, type CommittedOrderSet, type OrderInput, type Side } from '@ww2hex/engine';
 import type { PlayerView, ServerMessage } from '@ww2hex/protocol';
@@ -256,6 +257,7 @@ describe('commitment, reconnection and restart', () => {
     let failNext = false;
     const flaky = {
       loadAll: () => store.loadAll(),
+      remove: (code: string) => store.remove(code),
       save: (r: RoomRecord) => {
         if (failNext) {
           failNext = false;
@@ -359,6 +361,7 @@ describe('seats and the host computer', () => {
       { type: 'create-room', scenarioId: 'synthetic-test-01', side: 'allied' },
       { type: 'list-rooms' },
       { type: 'release-seat', roomCode: 'ABCDEF', side: 'allied' },
+      { type: 'delete-room', roomCode: 'ABCDEF' },
     ]) {
       host.receive(guest.conn, JSON.stringify(msg));
       expect(guest.last()).toMatchObject({ type: 'error', code: 'not-host-computer' });
@@ -382,6 +385,30 @@ describe('seats and the host computer', () => {
     hello(host, replacement);
     host.receive(replacement.conn, JSON.stringify({ type: 'join', roomCode, credential: null }));
     expect(replacement.sent.find((m) => m.type === 'joined')).toMatchObject({ side: 'allied' });
+  });
+
+  it('lets the host delete a saved game, keeping its file in deleted/', () => {
+    const dir = tempDir();
+    const scenario = syntheticScenario();
+    const opts = { store: new FileMatchStore(dir), scenarios: new Map([[scenario.id, scenario]]), invite: () => ({ port: 1, listeningOnNetwork: true, addresses: [] }), log: () => {} };
+    const host = new GameHost(opts);
+    const me = fake(true, '127.0.0.1');
+    hello(host, me);
+    host.receive(me.conn, JSON.stringify({ type: 'create-room', scenarioId: 'synthetic-test-01', side: 'allied' }));
+    const roomCode = (me.sent.find((m) => m.type === 'joined') as Extract<ServerMessage, { type: 'joined' }>).roomCode;
+    const guest = fake(false);
+    hello(host, guest);
+    host.receive(guest.conn, JSON.stringify({ type: 'join', roomCode, credential: null }));
+
+    host.receive(me.conn, JSON.stringify({ type: 'delete-room', roomCode }));
+    expect(me.last()).toMatchObject({ type: 'rooms', rooms: [] });
+    expect(guest.last()).toMatchObject({ type: 'error', code: 'room-deleted' });
+    expect(readdirSync(dir).filter((f) => f.startsWith('match-'))).toEqual([]);
+    expect(readdirSync(join(dir, 'deleted')).some((f) => f.startsWith(`match-${roomCode}-`))).toBe(true);
+    // It stays gone after a restart.
+    expect(new GameHost({ ...opts, store: new FileMatchStore(dir) }).roomSummaries()).toEqual([]);
+    host.receive(guest.conn, JSON.stringify({ type: 'join', roomCode, credential: null }));
+    expect(guest.last()).toMatchObject({ code: 'unknown-room' });
   });
 
   it('locks out a computer after repeated wrong room codes', () => {
@@ -487,6 +514,11 @@ describe('the Nijmegen scenario over the network', () => {
 
     expect(hostJoined.scenario.map.bridges.some((b) => b.id === 'waal-assault-boats')).toBe(true);
     expect(guestJoined.scenario.map.bridges.some((b) => b.id === 'waal-assault-boats')).toBe(false);
+    // Each side is told its own air drops, so it can see the zones on its map.
+    const drops = (side: Side) => nijmegen.events.filter((e) => e.kind === 'supply-drop' && e.side === side).map((e) => e.id);
+    expect(drops('allied').length).toBeGreaterThan(0);
+    expect(hostJoined.scenario.events.map((e) => e.id)).toEqual(drops('allied'));
+    expect(guestJoined.scenario.events.map((e) => e.id)).toEqual(drops('german'));
     for (const side of SIDES_BOTH) {
       const all = players[side].raw.join('\n');
       const enemyIds = [

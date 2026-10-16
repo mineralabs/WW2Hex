@@ -14,7 +14,7 @@ the right.
 | `schemaVersion` | Always `1` for now |
 | `id`, `name`, `description` | Identification. A synthetic scenario must say so in its name |
 | `dataStatus` | `synthetic`, `provisional` or `verified`. `verified` is rejected while any unit, formation, equipment entry, event or supply source is not verified, or while `provenance.sources` is empty |
-| `start` | `{ day, minuteOfDay }` at the start of turn 1 |
+| `start` | `{ day, minuteOfDay }` at the start of turn 1. Optional `date` (ISO, such as `"1944-09-19"`, whose day must match `day`) and `utcOffsetMinutes` (the clock the scenario's times are in) let the 3D view place the sun |
 | `map` | See below |
 | `equipment` | Catalogue: `id`, `name`, `role`, `combatClass`, `researchStatus`, `sources[]`. Historical facts and sources go here. `combatClass` names a weapon profile in the rules, such as `rifle-section` or `medium-tank`. The game numbers live in that profile, never in the catalogue |
 | `formations` | `id`, `side`, `name`, `parentId` (or `null`), `dataStatus`. Optional `nation` (`us`, `uk` or `de`: counter colours) and `badge` (up to four characters shown on its counters), both inherited by child formations and units. Parents must exist, be on the same side, and not form a cycle |
@@ -29,7 +29,7 @@ the right.
 
 | Field | Meaning |
 | --- | --- |
-| `geo` | `crs` (a metric CRS such as an EPSG code), `origin` (projected coordinate of hex `[0,0]`, or `null` when synthetic), `orientation`, `hexSpacingMeters` |
+| `geo` | `crs` (a metric CRS such as an EPSG code), `origin` (projected coordinate of hex `[0,0]`, or `null` when synthetic), `orientation`, `hexSpacingMeters`. Optional `grid`: `id`, `col`, `row`, where hex `[0,0]` sits in a shared grid such as the Europe grid, so maps of neighbouring areas line up. Optional `centre`: the map centre's `lat` and `lon`, for the sun |
 | `cols`, `rows` | Grid size |
 | `terrainLegend` | One character per terrain: `clear`, `polder`, `woods`, `town`, `water` |
 | `terrain` | `rows` strings of `cols` characters each |
@@ -38,6 +38,7 @@ the right.
 | `bridges` | `id`, `name`, `edge`: a river edge the bridge crosses. Optional: `movementClasses` (who can use it, e.g. `["foot"]` for a railway or damaged bridge; default all), `side` (only that side may use it, such as an assault-boat crossing; the other side's players are not sent it), `fromTurn` (usable from that turn) |
 | `roads` | `id`, `name`, `kind` (`main` or `secondary`), and `hexes`: a chain of adjacent hexes |
 | `places` | `name`, `kind` (`town`, `village` or `feature`), `at` |
+| `relief` | Optional fine terrain for the 3D view; the rules never read it. `source`, `crs`, `origin` (projected position of the north-west sample), `spacingMeters`, `cols`, `rows`, `metresPerUnit`, and `heights`: `cols` × `rows` little-endian 16-bit signed integers, row by row from the north, in base64 |
 
 Validation rules for the map:
 
@@ -123,9 +124,10 @@ be passable for each.
 ## `supplySources`
 
 `id`, `name`, `side`, `at`, `range` (minutes of wheeled travel), optional `fromTurn`,
-`dataStatus` and `note`. Supply routes are traced from these; see
+optional `toward` (the place the road leads to off the map, shown as a sign at the map edge, e.g.
+`"Kleve"`), `dataStatus` and `note`. Supply routes are traced from these; see
 [combat-rules.md](combat-rules.md#supply-and-reserves). Each side's players are sent only their
-own side's sources.
+own side's sources, and only their own side's supply drops, which their map shows as drop zones.
 
 ## Building a historical scenario
 
@@ -136,12 +138,15 @@ npm run build:map       # scenarios/nijmegen-1944/source/map-config.json -> map.
 npm run build:scenario  # map.generated.json + scenario.source.json -> scenarios/nijmegen-1944/scenario.json
 ```
 
-- **`map-config.json`** sets the grid (RD New origin, spacing, size) and lists the 1944 features:
+- **`map-config.json`** sets which part of the Europe grid the map covers (`grid`: the global
+  `col` and `row` of its hex `[0,0]`, which must be an even row, and its `cols` and `rows`), the
+  spacing of the 3D relief (`reliefSpacingMeters`), and lists the 1944 features:
   settlements with their built-up radius, bridges, roads as chains of points, and named
   features. Each entry carries a `source` note.
 - **`build-map.ts`** downloads the open data it needs and caches it in
   `tools/map-builder/.cache`:
   - elevation (EU-DEM);
+  - fine relief for the 3D view (Copernicus DEM GLO-30, read from AWS open data);
   - rivers and canals (OpenStreetMap);
   - woodland, from the 1938-42 forest survey in the Netherlands and OpenStreetMap in Germany.
 

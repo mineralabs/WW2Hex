@@ -5,6 +5,8 @@ import type { Welcome } from './App.tsx';
 import { SIDE_NAME, outcomeHeadline } from './format.ts';
 import type { ConnectionStatus } from './net/connection.ts';
 import { forgetSeat, savedSeats } from './net/seats.ts';
+import { GunParkView } from './GunParkView.tsx';
+import { ThemeToggle } from './ThemeToggle.tsx';
 import { InviteLinks } from './panels.tsx';
 
 export function Lobby(props: {
@@ -16,6 +18,7 @@ export function Lobby(props: {
   onCreate: (scenarioId: string, side: Side) => void;
   onJoin: (roomCode: string, credential: string | null) => void;
   onRelease: (roomCode: string, side: Side) => void;
+  onDelete: (roomCode: string) => void;
   onRefreshRooms: () => void;
 }) {
   const { welcome } = props;
@@ -24,6 +27,7 @@ export function Lobby(props: {
   const [seats, setSeats] = useState(savedSeats);
   const [scenarioId, setScenarioId] = useState<string | null>(null);
   const [side, setSide] = useState<Side>('allied');
+  const [gunPark, setGunPark] = useState(false);
   const ready = props.status === 'open' && welcome !== null;
   const scenario = welcome?.scenarios.find((s) => s.id === scenarioId) ?? welcome?.scenarios[0];
   const seatsHere = seats.filter((s) => !urlRoom || s.roomCode === urlRoom);
@@ -36,7 +40,12 @@ export function Lobby(props: {
         <span className={`conn conn-${props.status}`}>
           {props.status === 'open' ? `Connected to the host at ${location.host}` : props.status === 'connecting' ? 'Connecting to the host…' : 'Cannot reach the host. Retrying…'}
         </span>
+        <button className="gun-park-open" onClick={() => setGunPark(true)} title="The guns and soldiers in 3D, and their paint schemes">
+          Gun Park
+        </button>
+        <ThemeToggle />
       </header>
+      {gunPark && <GunParkView onClose={() => setGunPark(false)} />}
 
       {props.status === 'closed' && (
         <div className="lobby-banner bad">
@@ -217,6 +226,21 @@ export function Lobby(props: {
                                 Take open seat
                               </button>
                             )}
+                            <button
+                              className="link small"
+                              disabled={!ready}
+                              title="Remove this game from the list. Its file is kept in the saves folder's deleted/ folder."
+                              onClick={() => {
+                                const live = r.connected.allied || r.connected.german;
+                                if (confirm(`Delete game ${r.roomCode}?${live ? ' Anyone playing it will be disconnected.' : ''} It cannot be resumed from the lobby afterwards.`)) {
+                                  for (const s of mine) forgetSeat(s.roomCode, s.side);
+                                  setSeats(savedSeats());
+                                  props.onDelete(r.roomCode);
+                                }
+                              }}
+                            >
+                              delete
+                            </button>
                           </td>
                         </tr>
                       );

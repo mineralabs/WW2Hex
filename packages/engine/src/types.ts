@@ -51,7 +51,11 @@ export interface ScenarioFile {
   dataStatus: DataStatus;
   description: string;
   /** Scenario day number and minute-of-day at the start of turn 1. */
-  start: { day: number; minuteOfDay: number };
+  /**
+   * When the scenario starts. Optional `date` (ISO, e.g. "1944-09-19") and `utcOffsetMinutes` (the
+   * clock the times are given in) let the 3D view place the sun.
+   */
+  start: { day: number; minuteOfDay: number; date?: string; utcOffsetMinutes?: number };
   map: MapFile;
   equipment: EquipmentFile[];
   formations: FormationFile[];
@@ -129,6 +133,8 @@ export interface SupplySourceFile {
   range: number;
   /** Supplies flow from the start of this turn. Default: 1. */
   fromTurn?: number;
+  /** Where the road leads off the map, for the sign at the map edge (e.g. "Kleve"). */
+  toward?: string;
   dataStatus: DataStatus;
   note?: string;
 }
@@ -150,6 +156,10 @@ export interface MapFile {
     origin: { x: number; y: number } | null;
     orientation: string;
     hexSpacingMeters: number;
+    /** Where hex [0, 0] sits in a shared grid (e.g. the Europe grid), so maps of neighbouring areas line up. */
+    grid?: { id: string; col: number; row: number };
+    /** Latitude and longitude of the map's centre, for the sun's position in the 3D view. */
+    centre?: { lat: number; lon: number };
   };
   cols: number;
   rows: number;
@@ -174,6 +184,27 @@ export interface MapFile {
   }[];
   roads: { id: string; name: string; kind: RoadKind; hexes: OffsetTuple[] }[];
   places: { name: string; kind: 'town' | 'village' | 'feature'; at: OffsetTuple }[];
+  /** Optional fine terrain for drawing the map in 3D. The rules never read it. */
+  relief?: MapRelief;
+}
+
+/**
+ * Heights on a regular grid in the map's projected metres, finer than the
+ * hexes. Sample [col,row] sits at (origin.x + col × spacing, origin.y − row × spacing):
+ * row 0 runs along the north edge.
+ */
+export interface MapRelief {
+  source: string;
+  crs: string;
+  /** Projected position of sample [0,0], the north-west corner. */
+  origin: { x: number; y: number };
+  spacingMeters: number;
+  cols: number;
+  rows: number;
+  /** Heights are whole numbers of this many metres. */
+  metresPerUnit: number;
+  /** cols × rows little-endian 16-bit signed integers, row by row from the north, base64. */
+  heights: string;
 }
 
 export interface EquipmentFile {
@@ -293,6 +324,7 @@ export interface SupplySource {
   at: Hex;
   range: number;
   fromTurn: number;
+  toward: string | null;
 }
 
 export interface SupplyDrop {

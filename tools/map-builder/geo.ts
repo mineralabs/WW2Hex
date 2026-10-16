@@ -1,11 +1,15 @@
 /**
  * Coordinates for building georeferenced hex maps.
  *
- * Maps are laid out in the Dutch national grid, RD New (EPSG:28992): metres,
- * x east, y north. Conversion to and from WGS84 latitude/longitude uses the
- * published approximation polynomials (Schreutelkamp and Strang van Hees),
- * accurate to about a metre across the Netherlands and its border area,
- * which is far finer than a 1 km hex needs.
+ * Every map is a window onto one hex grid that covers all of Europe, laid
+ * over ETRS89 / LAEA Europe (EPSG:3035): metres, x east, y north, equal-area,
+ * the European Environment Agency's reference grid. Maps built on it share
+ * hex edges, so neighbouring scenarios join up hex for hex.
+ *
+ * The Dutch national grid, RD New (EPSG:28992), is kept for reading Dutch
+ * sources published in it (the 1938-42 forest survey). Conversion to and from
+ * WGS84 uses the published approximation polynomials (Schreutelkamp and Strang
+ * van Hees), accurate to about a metre across the Netherlands and its border.
  */
 
 export interface LatLon {
@@ -61,28 +65,110 @@ export function fromRD({ x, y }: RD): LatLon {
   return { lat, lon };
 }
 
+// ETRS89 / LAEA Europe (EPSG:3035) ----------------------------------------------
+
+/** A point in a metric map projection: x east, y north. */
+export interface XY {
+  x: number;
+  y: number;
+}
+
+// GRS80 ellipsoid; projection centre 52°N 10°E; false easting and northing (EPSG:3035).
+const LAEA = { a: 6378137, f: 1 / 298.257222101, lat0: 52, lon0: 10, fe: 4321000, fn: 3210000 };
+const RAD = Math.PI / 180;
+const E2 = LAEA.f * (2 - LAEA.f);
+const E = Math.sqrt(E2);
+const qOf = (sinPhi: number) =>
+  (1 - E2) * (sinPhi / (1 - E2 * sinPhi * sinPhi) - (1 / (2 * E)) * Math.log((1 - E * sinPhi) / (1 + E * sinPhi)));
+const QP = qOf(1);
+const RQ = LAEA.a * Math.sqrt(QP / 2);
+const SIN0 = Math.sin(LAEA.lat0 * RAD);
+const BETA0 = Math.asin(qOf(SIN0) / QP);
+const D = (LAEA.a * (Math.cos(LAEA.lat0 * RAD) / Math.sqrt(1 - E2 * SIN0 * SIN0))) / (RQ * Math.cos(BETA0));
+
+/** WGS84/ETRS89 latitude and longitude to LAEA Europe metres (EPSG Guidance Note 7-2, Lambert Azimuthal Equal Area). */
+export function toLAEA({ lat, lon }: LatLon): XY {
+  const beta = Math.asin(qOf(Math.sin(lat * RAD)) / QP);
+  const dl = (lon - LAEA.lon0) * RAD;
+  const b = RQ * Math.sqrt(2 / (1 + Math.sin(BETA0) * Math.sin(beta) + Math.cos(BETA0) * Math.cos(beta) * Math.cos(dl)));
+  return {
+    x: LAEA.fe + b * D * Math.cos(beta) * Math.sin(dl),
+    y: LAEA.fn + (b / D) * (Math.cos(BETA0) * Math.sin(beta) - Math.sin(BETA0) * Math.cos(beta) * Math.cos(dl)),
+  };
+}
+
+export function fromLAEA({ x, y }: XY): LatLon {
+  const dx = (x - LAEA.fe) / D;
+  const dy = D * (y - LAEA.fn);
+  const rho = Math.hypot(dx, dy);
+  if (rho === 0) return { lat: LAEA.lat0, lon: LAEA.lon0 };
+  const c = 2 * Math.asin(rho / (2 * RQ));
+  const beta = Math.asin(Math.cos(c) * Math.sin(BETA0) + (dy * Math.sin(c) * Math.cos(BETA0)) / rho);
+  const lon = LAEA.lon0 + Math.atan2(dx * Math.sin(c), rho * Math.cos(BETA0) * Math.cos(c) - dy * Math.sin(BETA0) * Math.sin(c)) / RAD;
+  const e4 = E2 * E2;
+  const e6 = e4 * E2;
+  const lat =
+    beta +
+    (E2 / 3 + (31 * e4) / 180 + (517 * e6) / 5040) * Math.sin(2 * beta) +
+    ((23 * e4) / 360 + (251 * e6) / 3780) * Math.sin(4 * beta) +
+    ((761 * e6) / 45360) * Math.sin(6 * beta);
+  return { lat: lat / RAD, lon };
+}
+
+// The Europe hex grid -------------------------------------------------------------
+
 /**
- * A pointy-top hex grid in "odd-r" offset coordinates laid over RD New, as the
- * engine expects: row 0 is the northernmost row, odd rows sit half a hex east.
- * `origin` is the RD position of the centre of hex [0,0].
+ * One grid of pointy-top hexes over all of Europe, 1 km between centres, in
+ * "odd-r" offset coordinates as the engine expects: row 0 is the northernmost
+ * row and odd rows sit half a hex east. Global hex [0,0] is centred at
+ * LAEA (2 000 000, 5 600 000), north-west of Iceland, so every European hex
+ * has positive coordinates.
+ */
+export const EUROPE_GRID = { id: 'europe-laea-1km', crs: 'EPSG:3035', origin: { x: 2_000_000, y: 5_600_000 }, spacing: 1000 } as const;
+
+/** A scenario's map: `cols` × `rows` hexes of the Europe grid, starting at global hex [col,row]. */
+export interface GridWindow {
+  grid: typeof EUROPE_GRID.id;
+  col: number;
+  row: number;
+  cols: number;
+  rows: number;
+}
+
+/**
+ * A hex grid in projected metres. `origin` is the centre of the window's
+ * hex [0,0]. Odd local rows sit half a hex east, so a window must start on
+ * an even global row to keep the Europe grid's shifting.
  */
 export interface HexGrid {
-  origin: RD;
+  origin: XY;
   /** Distance between neighbouring hex centres, metres. */
   spacing: number;
   cols: number;
   rows: number;
 }
 
-export function hexCentre(g: HexGrid, col: number, row: number): RD {
+/** The hex grid for a window onto the Europe grid. */
+export function windowGrid(w: GridWindow): HexGrid {
+  if (w.grid !== EUROPE_GRID.id) throw new Error(`Unknown grid ${w.grid}`);
+  if (w.row % 2 !== 0) throw new Error(`A map window must start on an even global row (got ${w.row}), so odd rows stay shifted east`);
+  return { origin: hexCentre({ ...EUROPE_GRID, cols: Infinity, rows: Infinity }, w.col, w.row), spacing: EUROPE_GRID.spacing, cols: w.cols, rows: w.rows };
+}
+
+/** The Europe-grid hex [col,row] containing a point, ignoring any window. */
+export function europeHexAt(p: XY): [number, number] {
+  return hexAt({ ...EUROPE_GRID, cols: Infinity, rows: Infinity }, p)!;
+}
+
+export function hexCentre(g: HexGrid, col: number, row: number): XY {
   return {
     x: g.origin.x + col * g.spacing + (row % 2 === 1 ? g.spacing / 2 : 0),
     y: g.origin.y - row * g.spacing * (Math.sqrt(3) / 2),
   };
 }
 
-/** The hex [col,row] containing an RD point, or null if it is off the grid. */
-export function hexAt(g: HexGrid, p: RD): [number, number] | null {
+/** The hex [col,row] containing a point, or null if it is off the grid. */
+export function hexAt(g: HexGrid, p: XY): [number, number] | null {
   // Search the few hexes around the estimated row and column for the nearest centre.
   const rowEst = Math.round((g.origin.y - p.y) / (g.spacing * (Math.sqrt(3) / 2)));
   let best: [number, number] | null = null;
@@ -103,9 +189,9 @@ export function hexAt(g: HexGrid, p: RD): [number, number] | null {
 }
 
 /** Sample points spread over a hex (its centre and two rings), for estimating land cover. */
-export function hexSamples(g: HexGrid, col: number, row: number): RD[] {
+export function hexSamples(g: HexGrid, col: number, row: number): XY[] {
   const c = hexCentre(g, col, row);
-  const out: RD[] = [c];
+  const out: XY[] = [c];
   const r = g.spacing / Math.sqrt(3); // centre to corner
   for (const ring of [0.35, 0.7]) {
     for (let i = 0; i < 12; i++) {
@@ -116,7 +202,7 @@ export function hexSamples(g: HexGrid, col: number, row: number): RD[] {
   return out;
 }
 
-export function pointInPolygon(p: RD, ring: readonly RD[]): boolean {
+export function pointInPolygon(p: XY, ring: readonly XY[]): boolean {
   let inside = false;
   for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
     const a = ring[i]!;
@@ -127,8 +213,8 @@ export function pointInPolygon(p: RD, ring: readonly RD[]): boolean {
 }
 
 /** Whether segments ab and cd cross (proper intersection). */
-export function segmentsCross(a: RD, b: RD, c: RD, d: RD): boolean {
-  const o = (p: RD, q: RD, r: RD) => (q.x - p.x) * (r.y - p.y) - (q.y - p.y) * (r.x - p.x);
+export function segmentsCross(a: XY, b: XY, c: XY, d: XY): boolean {
+  const o = (p: XY, q: XY, r: XY) => (q.x - p.x) * (r.y - p.y) - (q.y - p.y) * (r.x - p.x);
   const d1 = o(c, d, a);
   const d2 = o(c, d, b);
   const d3 = o(a, b, c);

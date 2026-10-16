@@ -29,10 +29,19 @@ describe('the Nijmegen 1944 scenario', () => {
     expect(file.provenance.sources.length).toBeGreaterThan(3);
   });
 
-  it('is georeferenced in the Dutch national grid at 1 km hexes', () => {
-    expect(file.map.geo.crs).toMatch(/28992/);
+  it('is a window onto the Europe grid at 1 km hexes, starting on an even row', () => {
+    expect(file.map.geo.crs).toMatch(/3035/);
     expect(file.map.geo.origin).not.toBeNull();
     expect(file.map.geo.hexSpacingMeters).toBe(1000);
+    expect(file.map.geo.grid).toEqual({ id: 'europe-laea-1km', col: 2023, row: 2760 });
+  });
+
+  it('carries fine relief for the 3D view covering the whole map', () => {
+    const r = file.map.relief!;
+    expect(r.spacingMeters).toBe(100);
+    // One hex of margin beyond the 30 x 32 window on every side.
+    expect(r.cols * r.spacingMeters).toBeGreaterThan(31_000);
+    expect(r.rows * r.spacingMeters).toBeGreaterThan(27_000);
   });
 
   it('gives both sides reinforcements, an objective and supply', () => {

@@ -33,6 +33,8 @@ export interface MatchStore {
   loadAll(): LoadedRecord[];
   /** Must not return until the record is safely on disk. Throws on failure. */
   save(record: RoomRecord): void;
+  /** Takes a match out of the saved games. Throws on failure. */
+  remove(roomCode: string): void;
 }
 
 /**
@@ -68,6 +70,14 @@ export class FileMatchStore implements MatchStore {
       }
     }
     return out;
+  }
+
+  /** Moves the match file into deleted/, so a game removed by mistake can be put back by hand. */
+  remove(roomCode: string): void {
+    const bin = join(this.dir, 'deleted');
+    mkdirSync(bin, { recursive: true });
+    const file = this.fileFor(roomCode);
+    replaceFile(file, join(bin, `match-${roomCode}-${new Date().toISOString().replace(/[:.]/g, '-')}.json`));
   }
 
   save(record: RoomRecord): void {

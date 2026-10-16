@@ -106,6 +106,7 @@ export function App() {
           switch (msg.code) {
             case 'bad-credential':
             case 'seat-released':
+            case 'room-deleted':
             case 'room-unavailable': {
               const seat = seatRef.current;
               if (seat && msg.code !== 'room-unavailable') forgetSeat(seat.roomCode, seat.side);
@@ -176,6 +177,7 @@ export function App() {
       }}
       onJoin={join}
       onRelease={(roomCode, side) => send({ type: 'release-seat', roomCode, side })}
+      onDelete={(roomCode) => send({ type: 'delete-room', roomCode })}
       onRefreshRooms={() => send({ type: 'list-rooms' })}
     />
   );

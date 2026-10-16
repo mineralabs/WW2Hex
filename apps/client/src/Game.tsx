@@ -11,8 +11,10 @@ import {
   findRoute,
   hexDistance,
   hexEquals,
+  edgeKey,
   hexKey,
   maxRange,
+  neighbors,
   orderPath,
   otherSide,
   pathCosts,
@@ -32,12 +34,17 @@ import type { ClientMessage, InviteInfo, PlayerView } from '@ww2hex/protocol';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { GameSession, Notice } from './App.tsx';
 import { SIDE_NAME, describeFactors, describeObserved, fmtDuration, fmtHex, type Names } from './format.ts';
-import { MapView } from './map/MapView.tsx';
+import { MapView, type MapMode } from './map/MapView.tsx';
 import type { CounterStyle, CounterView, Effect, FireLine, MapHandlers, PreviewView, RenderView, RouteView, TurnPicture } from './map/renderer.ts';
 import { genericPicture, pictureFor } from './map/silhouettes.ts';
+import { isModelId } from './map/catalog3d.ts';
+import { scenarioSun } from './map/sun.ts';
+import type { FigureKind } from './map/paint.ts';
 import type { ConnectionStatus } from './net/connection.ts';
 import { keyMoments, placeNamer, summarizeTurn, type NarrativeContext } from './narrative.ts';
 import { sessionValue, setSessionValue } from './net/seats.ts';
+import { GunParkView } from './GunParkView.tsx';
+import { ThemeToggle } from './ThemeToggle.tsx';
 import { RulesDialog } from './RulesDialog.tsx';
 import {
   ConflictPanel,
@@ -57,6 +64,11 @@ import {
 } from './panels.tsx';
 
 const RULES = DEFAULT_RULES;
+/** Which of a unit's equipment its 3D model shows: vehicles first, then heavier guns before lighter ones. */
+const MODEL_RANK: Record<string, number> = {
+  'medium-tank': 0, 'tank-17pdr': 0, 'assault-gun': 0, 'tank-destroyer': 0, 'light-tank': 1, 'armoured-car': 1, 'flak-halftrack': 2,
+  'medium-gun': 3, 'field-gun': 3, 'heavy-flak': 3, 'pack-howitzer': 4, 'at-gun': 4, 'light-at-gun': 5, 'light-flak': 6,
+};
 const FORMATION_PALETTE = [0x6d3f99, 0x2f7d6d, 0xb0563a, 0x3f5fa8, 0x9a7a2c, 0x8a3a5a];
 const SHORT_TYPE: Record<UnitState['type'], string> = {
   infantry: 'Inf',
@@ -126,6 +138,7 @@ export function Game(props: {
   const [focus, setFocus] = useState<{ hex: Hex; nonce: number } | null>(null);
   const [showInvite, setShowInvite] = useState(() => side === session.hostSide && !view.claimed[enemy]);
   const [showRules, setShowRules] = useState(false);
+  const [showGunPark, setShowGunPark] = useState(false);
   const [outcomeClosed, setOutcomeClosed] = useState(false);
   const [showPicture, setShowPicture] = useState(false);
 
@@ -237,6 +250,60 @@ export function Game(props: {
     };
   }, [file]);
   const catalogue = useMemo(() => new Map(file.equipment.map((e) => [e.id, { combatClass: e.combatClass, role: e.role }])), [file]);
+  // For the 3D miniatures: a unit's main vehicle or gun, and which soldiers it is (army, Waffen-SS or paratroops).
+  // As with the counter pictures, the most numerous armoured vehicle decides, then the most numerous gun.
+  const modelFor = useCallback(
+    (u: UnitState): string | null => {
+      const rank = (id: string) => MODEL_RANK[catalogue.get(id)?.combatClass ?? ''] ?? 9;
+      const modelled = Object.entries(u.equipment)
+        .filter(([id, n]) => n > 0 && isModelId(id))
+        .sort((a, b) => rank(a[0]) - rank(b[0]) || b[1] - a[1] || (a[0] < b[0] ? -1 : 1));
+      return modelled[0]?.[0] ?? null;
+    },
+    [catalogue],
+  );
+  const figureFor = useMemo(() => {
+    const byId = new Map(file.formations.map((f) => [f.id, f]));
+    return (u: UnitState, nation: Nation | null): FigureKind | null => {
+      if (u.side === 'allied') return nation === 'us' || u.type === 'airborne-infantry' ? 'us-para' : 'uk';
+      if (u.type === 'airborne-infantry') return 'de-fj';
+      // Only the unit and its own formation count: Kampfgruppe Henke's army troops served under an SS division.
+      return /\bSS\b|SS-/.test(`${u.name} ${byId.get(u.formationId)?.name ?? ''}`) ? 'de-ss' : 'de';
+    };
+  }, [file]);
+  const [mapMode, setMapMode] = useState<MapMode>(() => {
+    try {
+      return localStorage.getItem('ww2hex:map-mode') === '3d' ? '3d' : '2d';
+    } catch {
+      return '2d';
+    }
+  });
+  const chooseMapMode = (m: MapMode) => {
+    setMapMode(m);
+    try {
+      localStorage.setItem('ww2hex:map-mode', m);
+    } catch {
+      // Storage unavailable; the choice lasts for this page only.
+    }
+  };
+  const on3dFailed = useCallback((reason: string) => {
+    setMapMode('2d');
+    setMessage(`The 3D view could not start on this computer (${reason}), so the map is back in 2D.`);
+  }, []);
+  // In 3D, which pieces show: miniatures have no counter art, so Pictures / Symbols then does nothing.
+  const [pieceStyle, setPieceStyle] = useState<string>(() => {
+    try {
+      return localStorage.getItem('ww2hex:pieces') ?? 'models';
+    } catch {
+      return 'models';
+    }
+  });
+  useEffect(() => {
+    const on = (e: Event) => setPieceStyle(String((e as CustomEvent).detail));
+    window.addEventListener('ww2hex:pieces-changed', on);
+    return () => window.removeEventListener('ww2hex:pieces-changed', on);
+  }, []);
+  const counterArtShown = mapMode === '2d' || pieceStyle !== 'models';
   const [counterStyle, setCounterStyle] = useState<CounterStyle>(() => {
     try {
       return localStorage.getItem('ww2hex:counter-style') === 'symbols' ? 'symbols' : 'pictures';
@@ -347,6 +414,8 @@ export function Game(props: {
         selected: u.id === selectedId,
         nation: look.nation,
         picture: pictureFor(u, catalogue, look.nation),
+        model: modelFor(u),
+        figure: figureFor(u, look.nation),
         badge: look.badge,
         via: viaByCounter.get(u.id) ?? [],
         delta: before !== undefined ? u.personnel - before : null,
@@ -369,12 +438,15 @@ export function Game(props: {
       selected: `contact:${c.contactId}` === selectedId,
       nation: enemyNation,
       picture: genericPicture(c.apparentType),
+      // Only what can be seen: the side's usual guns and soldiers, never which unit it is.
+      model: null,
+      figure: (enemy === 'german' ? (c.apparentType === 'airborne-infantry' ? 'de-fj' : 'de') : c.apparentType === 'airborne-infantry' ? 'us-para' : 'uk') as FigureKind,
       badge: null,
       via: viaByCounter.get(`contact:${c.contactId}`) ?? [],
       delta: null,
     }));
     return [...contacts, ...own];
-  }, [shown, selectedId, enemy, formationColor, formationLook, catalogue, file, viaByCounter, replay, watching, showPicture]);
+  }, [shown, selectedId, enemy, formationColor, formationLook, catalogue, modelFor, figureFor, file, viaByCounter, replay, watching, showPicture]);
 
   const objectiveMarks = useMemo(() => view.objectives.flatMap((o) => o.hexes.map((hex, i) => ({ hex, control: o.control[i] ?? null }))), [view.objectives]);
 
@@ -498,6 +570,93 @@ export function Game(props: {
     return { hexes, mode, side: selectedUnit.side };
   }, [selectedUnit, selectedRanges, map]);
 
+  // Own air drops still to come, and signs where own supply roads leave the map.
+  const shownTurn = watching ? replay!.turn : turn;
+  const supplyDrops = useMemo(
+    () =>
+      world.supplyDrops
+        .filter((d) => d.side === side && d.turn > shownTurn)
+        .map((d) => ({
+          hexes: [...map.cells.values()].map((c) => c.hex).filter((h) => hexDistance(h, d.at) <= d.radius),
+          label: `Supply drop · turn ${d.turn}, ${clockLabel(file, (d.turn - 1) * turnMinutes(RULES)).slice(-5)} · +${d.amount}`,
+        })),
+    [world, side, shownTurn, map, file],
+  );
+  const supplySigns = useMemo(
+    () =>
+      world.supplySources
+        .filter((s) => s.side === side && s.toward !== null)
+        .map((s) => ({ hex: s.at, text: s.fromTurn > shownTurn ? `To ${s.toward} · from turn ${s.fromTurn}` : `To ${s.toward}`, open: s.fromTurn <= shownTurn })),
+    [world, side, shownTurn],
+  );
+
+  // Key places for the 3D oblique views: this side's objective, the enemy's, then towns nearest this side's objective.
+  const viewpoints = useMemo(() => {
+    const objectives = [...view.objectives].sort((a, b) => Number(b.side === side) - Number(a.side === side));
+    const points = objectives.flatMap((o) => (o.hexes[0] ? [{ name: `${o.side === side ? 'Our objective' : 'Enemy objective'}: ${o.name}`, hex: o.hexes[0] }] : []));
+    const anchor = points[0]?.hex;
+    const towns = map.places
+      .filter((p) => p.kind === 'town')
+      .sort((a, b) => (anchor ? hexDistance(a.at, anchor) - hexDistance(b.at, anchor) : 0));
+    for (const t of towns) {
+      if (points.length >= 9) break;
+      if (points.some((p) => hexDistance(p.hex, t.at) <= 1)) continue;
+      points.push({ name: t.name, hex: t.at });
+    }
+    return { points, side };
+  }, [view.objectives, map, side]);
+
+  // The card beside the pointer: the key facts about the hex under it.
+  const hoverCard = useMemo(() => {
+    if (!hoverHex) return null;
+    const cell = cellAt(map, hoverHex);
+    if (!cell) return null;
+    const place = map.places.find((p) => hexEquals(p.at, hoverHex))?.name;
+    const ns = neighbors(hoverHex);
+    const rivers = [...new Set(ns.flatMap((n) => map.riverEdges.get(edgeKey(hoverHex, n))?.riverId ?? []))].map((id) => map.rivers.find((r) => r.id === id)?.name ?? id);
+    const road = ns.some((n) => map.roadEdges.has(edgeKey(hoverHex, n)));
+    const crossings = ns.flatMap((n) => map.bridges.get(edgeKey(hoverHex, n)) ?? []);
+    const objective = view.objectives.find((o) => o.hexes.some((h) => hexEquals(h, hoverHex)));
+    const held = objective ? objective.control[objective.hexes.findIndex((h) => hexEquals(h, hoverHex))] ?? null : null;
+    const here = counters.filter((c) => hexEquals(c.pos, hoverHex));
+    return (
+      <>
+        <div className="hc-title">
+          {fmtHex(hoverHex)}
+          {place && <span> · {place}</span>}
+        </div>
+        <div>
+          <span className="hc-terrain">{cell.terrain}</span> · {cell.elevation} m · takes {RULES.terrainProtection[cell.terrain]}% damage
+        </div>
+        {(road || rivers.length > 0) && <div className="hc-muted">{[road && 'Road', ...rivers].filter(Boolean).join(' · ')}</div>}
+        {crossings.map((b) => (
+          <div key={b.id}>
+            {b.name}
+            <span className="hc-muted">
+              {' '}
+              · {b.movementClasses.length < 3 ? `${b.movementClasses.join(' and ')} only` : 'all units'}
+              {b.fromTurn > 1 ? ` · from turn ${b.fromTurn}` : ''}
+            </span>
+          </div>
+        ))}
+        {objective && (
+          <div className="hc-objective">
+            ★ {objective.name} · {held ? `held by ${SIDE_NAME[held]}` : 'not held'}
+          </div>
+        )}
+        {here.map((c) => (
+          <div key={c.id} className={c.side === side ? 'hc-own' : 'hc-enemy'}>
+            {c.side === side ? c.label : `Enemy ${c.label}`} · {c.detail}
+          </div>
+        ))}
+      </>
+    );
+  }, [hoverHex, map, view.objectives, counters, side]);
+
+  // The sun over the map at the moment shown, for the 3D view's light; rounded to the minute it moves by.
+  const sunMinute = Math.round(shown.time);
+  const sun = useMemo(() => scenarioSun(file.start, file.map.geo.centre, sunMinute), [file, sunMinute]);
+
   const renderView: RenderView = useMemo(
     () => ({
       counters,
@@ -512,8 +671,11 @@ export function Game(props: {
       effects,
       turnPicture,
       range: rangeView,
+      supplyDrops,
+      supplySigns,
+      sun,
     }),
-    [counters, selectedHex, hoverHex, routeInfo, preview, conflicts, fireLines, objectiveMarks, counterStyle, effects, turnPicture, rangeView],
+    [counters, selectedHex, hoverHex, routeInfo, preview, conflicts, fireLines, objectiveMarks, counterStyle, effects, turnPicture, rangeView, supplyDrops, supplySigns, sun],
   );
 
   // Event log: during the replay, what has happened so far; otherwise the last turn's report.
@@ -749,16 +911,30 @@ export function Game(props: {
               Result
             </button>
           )}
-          <div className="style-toggle" role="group" aria-label="Counter style">
-            <button className={counterStyle === 'pictures' ? 'active' : ''} onClick={() => chooseCounterStyle('pictures')} title="Counters with pictures of the unit">
-              Pictures
+          <div className="style-toggle" role="group" aria-label="Map view">
+            <button className={mapMode === '2d' ? 'active' : ''} onClick={() => chooseMapMode('2d')} title="The flat map">
+              2D
             </button>
-            <button className={counterStyle === 'symbols' ? 'active' : ''} onClick={() => chooseCounterStyle('symbols')} title="Counters with military map symbols">
-              Symbols
+            <button className={mapMode === '3d' ? 'active' : ''} onClick={() => chooseMapMode('3d')} title="The map in relief. Drag to move; Shift+drag (or right-drag) to turn and tilt; scroll or pinch to zoom">
+              3D
             </button>
           </div>
+          {counterArtShown && (
+            <div className="style-toggle" role="group" aria-label="Counter style">
+              <button className={counterStyle === 'pictures' ? 'active' : ''} onClick={() => chooseCounterStyle('pictures')} title="Counters with pictures of the unit">
+                Pictures
+              </button>
+              <button className={counterStyle === 'symbols' ? 'active' : ''} onClick={() => chooseCounterStyle('symbols')} title="Counters with military map symbols">
+                Symbols
+              </button>
+            </div>
+          )}
           <button onClick={() => setFitRequest((n) => n + 1)} title="Fit the whole map in view">
             Fit
+          </button>
+          <ThemeToggle />
+          <button onClick={() => setShowGunPark(true)} title="The guns and soldiers in 3D, and their paint schemes for the 3D map">
+            Gun Park
           </button>
           <button onClick={() => setShowRules(true)} title="The rules in brief">
             Rules
@@ -770,7 +946,18 @@ export function Game(props: {
       </header>
 
       <main className="main">
-        <MapView map={map} view={renderView} handlers={handlers} fitRequest={fitRequest} focus={focus} />
+        <MapView
+          map={map}
+          relief={file.map.relief ?? null}
+          mode={mapMode}
+          view={renderView}
+          handlers={handlers}
+          fitRequest={fitRequest}
+          focus={focus}
+          on3dFailed={on3dFailed}
+          hoverCard={hoverCard}
+          viewpoints={viewpoints}
+        />
         {watching && (
           <ReplayBar
             frame={frame}
@@ -871,6 +1058,7 @@ export function Game(props: {
         <InviteDialog invite={props.invite} roomCode={roomCode} opponentJoined={view.claimed[enemy]} onClose={() => setShowInvite(false)} />
       )}
       {showRules && <RulesDialog rules={RULES} onClose={() => setShowRules(false)} />}
+      {showGunPark && <GunParkView onClose={() => setShowGunPark(false)} />}
       {view.outcome && !outcomeClosed && (
         <OutcomeDialog
           outcome={view.outcome}

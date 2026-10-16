@@ -84,7 +84,9 @@ code.
   `npm run host` again. Open browser pages reconnect by themselves within a few seconds. A page
   that was closed can rejoin from the lobby under **Your games in this browser**.
 - The host computer lists every saved game under **Saved games on this computer**. Saves are in the
-  `saves/` folder.
+  `saves/` folder. **delete** removes a game from the list (anyone playing it is disconnected); its
+  file moves to `saves/deleted/`, so a game deleted by mistake can be restored by moving the file
+  back and restarting the host.
 
 **Seats belong to a browser.** Joining stores a private key in that browser. The room code lets
 someone take the open side **once**; after that, it cannot take a side. If the guest switches

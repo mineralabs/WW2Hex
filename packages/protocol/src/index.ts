@@ -94,7 +94,9 @@ export type ClientMessage =
   /** Host computer only: list saved matches. */
   | { type: 'list-rooms' }
   /** Host computer only: free a side's seat so it can be claimed again with the room code. */
-  | { type: 'release-seat'; roomCode: string; side: Side };
+  | { type: 'release-seat'; roomCode: string; side: Side }
+  /** Host computer only: remove a saved game from the list. Its file is kept in the saves folder's deleted/ folder. */
+  | { type: 'delete-room'; roomCode: string };
 
 export type ErrorCode =
   | 'bad-message'
@@ -107,6 +109,7 @@ export type ErrorCode =
   | 'not-joined'
   | 'rejected'
   | 'seat-released'
+  | 'room-deleted'
   | 'too-many-attempts';
 
 export type ServerMessage =
@@ -185,6 +188,8 @@ function readMessage(data: unknown): ClientMessage {
       return { type: 'list-rooms' };
     case 'release-seat':
       return { type: 'release-seat', roomCode: str(m.roomCode, 'roomCode'), side: side(m.side, 'side') };
+    case 'delete-room':
+      return { type: 'delete-room', roomCode: str(m.roomCode, 'roomCode') };
     default:
       throw new Invalid(`Unknown message type ${JSON.stringify(m.type)}`);
   }

@@ -1,8 +1,9 @@
 {
   "id": "nijmegen-1944",
   "name": "Nijmegen sector, September 1944",
-  "grid": { "origin": { "x": 174500, "y": 437500 }, "spacing": 1000, "cols": 30, "rows": 31 },
+  "grid": { "grid": "europe-laea-1km", "col": 2023, "row": 2760, "cols": 30, "rows": 32 },
   "elevationStepMeters": 10,
+  "reliefSpacingMeters": 100,
   "polderBelowMeters": 10.5,
   "polderRisePerKmEast": 0.1,
   "woodsFraction": 0.35,

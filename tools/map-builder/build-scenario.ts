@@ -30,7 +30,7 @@ import {
   type OffsetTuple,
   type ScenarioFile,
 } from '../../packages/engine/src/index.ts';
-import { hexAt, toRD, type LatLon } from './geo.ts';
+import { hexAt, toLAEA, windowGrid, type LatLon } from './geo.ts';
 import type { MapConfig } from './build-map.ts';
 
 type Where = LatLon & { place?: string };
@@ -51,10 +51,11 @@ const cfg = JSON.parse(readFileSync(join(dir, 'map-config.json'), 'utf8')) as Ma
 const mapFile = JSON.parse(readFileSync(join(dir, 'map.generated.json'), 'utf8')) as ScenarioFile['map'];
 const src = JSON.parse(readFileSync(join(dir, 'scenario.source.json'), 'utf8')) as ScenarioSource;
 const map = buildMap(mapFile);
+const grid = windowGrid(cfg.grid);
 const report: string[] = [];
 
 const toHex = (w: Where, what: string): OffsetTuple => {
-  const h = hexAt(cfg.grid, toRD(w));
+  const h = hexAt(grid, toLAEA(w));
   if (!h) throw new Error(`${what} at ${w.lat},${w.lon} (${w.place ?? ''}) is off the map`);
   return h;
 };

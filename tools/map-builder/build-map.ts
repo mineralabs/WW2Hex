@@ -4,9 +4,13 @@
  *
  *   node tools/map-builder/build-map.ts scenarios/<id>/source/map-config.json
  *
- * Writes map.generated.json next to the configuration. What comes from where:
+ * Writes map.generated.json next to the configuration. The map is a window
+ * onto the Europe hex grid (see geo.ts), so maps of neighbouring areas share
+ * hex edges. What comes from where:
  *
  * - Elevation: EU-DEM, averaged over seven points in each hex.
+ * - Relief for the 3D view (optional): Copernicus DEM GLO-30, sampled on a
+ *   fine regular grid (relief.ts).
  * - Woods: the 1938-42 Dutch forest survey (Bosstatistiek) inside the
  *   Netherlands, and OpenStreetMap woodland in Germany, where it covers enough
  *   of a hex.
@@ -35,13 +39,17 @@ import {
 } from '../../packages/engine/src/index.ts';
 import { elevations, overpass, type OsmElement } from './fetch.ts';
 import { Bosstatistiek } from './raster.ts';
-import { fromRD, hexAt, hexCentre, hexSamples, pointInPolygon, segmentsCross, toRD, type HexGrid, type LatLon, type RD } from './geo.ts';
+import { buildRelief } from './relief.ts';
+import { EUROPE_GRID, fromLAEA, hexAt, hexCentre, hexSamples, pointInPolygon, segmentsCross, toLAEA, toRD, windowGrid, type GridWindow, type HexGrid, type LatLon, type XY } from './geo.ts';
 
 export interface MapConfig {
   id: string;
   name: string;
-  grid: HexGrid;
+  /** Which part of the Europe hex grid this map covers. */
+  grid: GridWindow;
   elevationStepMeters: number;
+  /** Spacing of the fine terrain samples for the 3D view, metres (e.g. 100). Omit for none. */
+  reliefSpacingMeters?: number;
   /** Hexes averaging below this height (metres) at the west edge are polder unless town or woods. */
   polderBelowMeters: number;
   /** How much the polder height rises per km eastwards, following the river plain upstream. */
@@ -85,7 +93,7 @@ type Cell = { col: number; row: number };
 const key = (col: number, row: number) => `${col},${row}`;
 
 export async function buildMap(cfg: MapConfig): Promise<{ map: MapFile; report: string[] }> {
-  const g = cfg.grid;
+  const g = windowGrid(cfg.grid);
   const report: string[] = [];
   const cells: Cell[] = [];
   for (let row = 0; row < g.rows; row++) for (let col = 0; col < g.cols; col++) cells.push({ col, row });
@@ -94,7 +102,7 @@ export async function buildMap(cfg: MapConfig): Promise<{ map: MapFile; report: 
   const corners = [
     { x: g.origin.x - g.spacing, y: g.origin.y + g.spacing },
     { x: g.origin.x + (g.cols + 1) * g.spacing, y: g.origin.y - g.rows * g.spacing },
-  ].map(fromRD);
+  ].map(fromLAEA);
   const bbox = `${Math.min(corners[0]!.lat, corners[1]!.lat)},${Math.min(corners[0]!.lon, corners[1]!.lon)},${Math.max(corners[0]!.lat, corners[1]!.lat)},${Math.max(corners[0]!.lon, corners[1]!.lon)}`;
 
   // Elevation ------------------------------------------------------------------
@@ -102,7 +110,7 @@ export async function buildMap(cfg: MapConfig): Promise<{ map: MapFile; report: 
   const pts: LatLon[] = [];
   for (const c of cells) {
     const centre = hexCentre(g, c.col, c.row);
-    for (const o of offsets) pts.push(fromRD({ x: centre.x + o.x * g.spacing, y: centre.y + o.y * g.spacing }));
+    for (const o of offsets) pts.push(fromLAEA({ x: centre.x + o.x * g.spacing, y: centre.y + o.y * g.spacing }));
   }
   const heights = await elevations(pts);
   const elevation = new Map<string, number>();
@@ -118,26 +126,36 @@ export async function buildMap(cfg: MapConfig): Promise<{ map: MapFile; report: 
   const woodEls = await overpass(
     `[out:json][timeout:120];(way["landuse"="forest"](${bbox});way["natural"="wood"](${bbox});relation["landuse"="forest"](${bbox});relation["natural"="wood"](${bbox}););out geom;`,
   );
-  const woods = woodEls.flatMap(polygonsOf).map((ring) => ring.map(toRD));
-  const notWoods = (cfg.woodsAbsentIn1944 ?? []).map((w) => w.polygon.map(toRD));
-  const extraWoods = (cfg.woodsPresentIn1944 ?? []).map((w) => w.polygon.map(toRD));
+  const woods = woodEls.flatMap(polygonsOf).map((ring) => ring.map(toLAEA));
+  const notWoods = (cfg.woodsAbsentIn1944 ?? []).map((w) => w.polygon.map(toLAEA));
+  const extraWoods = (cfg.woodsPresentIn1944 ?? []).map((w) => w.polygon.map(toLAEA));
   report.push(`Woodland polygons from OSM: ${woods.length}`);
   const survey = cfg.woods?.netherlands === 'bosstatistiek' ? new Bosstatistiek() : null;
-  let osmAreas: RD[][] = [];
+  let osmAreas: XY[][] = [];
   if (survey) {
-    await survey.load({ x: g.origin.x - g.spacing, y: g.origin.y - g.rows * g.spacing }, { x: g.origin.x + (g.cols + 1) * g.spacing, y: g.origin.y + g.spacing });
+    // The survey is published in the Dutch national grid: load the RD box round the whole window.
+    const rd = [
+      { x: g.origin.x - g.spacing, y: g.origin.y + g.spacing },
+      { x: g.origin.x + (g.cols + 1) * g.spacing, y: g.origin.y + g.spacing },
+      { x: g.origin.x - g.spacing, y: g.origin.y - g.rows * g.spacing },
+      { x: g.origin.x + (g.cols + 1) * g.spacing, y: g.origin.y - g.rows * g.spacing },
+    ].map((p) => toRD(fromLAEA(p)));
+    await survey.load(
+      { x: Math.min(...rd.map((p) => p.x)), y: Math.min(...rd.map((p) => p.y)) },
+      { x: Math.max(...rd.map((p) => p.x)), y: Math.max(...rd.map((p) => p.y)) },
+    );
     const names = (cfg.woods?.osmAreas ?? []).join('|');
     const areaEls = names
       ? await overpass(`[out:json][timeout:120];relation["boundary"="administrative"]["admin_level"="8"]["name"~"^(${names})$"](${bbox});out geom;`)
       : [];
-    osmAreas = areaEls.flatMap(polygonsOf).map((ring) => ring.map(toRD));
+    osmAreas = areaEls.flatMap(polygonsOf).map((ring) => ring.map(toLAEA));
     report.push(`Woods: 1938-42 Bosstatistiek in the Netherlands; OSM inside ${areaEls.length} German municipalities`);
   }
 
   // Towns ----------------------------------------------------------------------
   const townHexes = new Set<string>();
   for (const s of cfg.settlements) {
-    const centre = toRD(s.centre);
+    const centre = toLAEA(s.centre);
     const home = hexAt(g, centre);
     if (!home) {
       report.push(`Settlement ${s.name} is off the map`);
@@ -155,10 +173,10 @@ export async function buildMap(cfg: MapConfig): Promise<{ map: MapFile; report: 
   for (const c of cells) {
     const k = key(c.col, c.row);
     const samples = hexSamples(g, c.col, c.row);
-    const osmWood = (p: RD) => woods.some((ring) => pointInPolygon(p, ring)) && !notWoods.some((ring) => pointInPolygon(p, ring));
-    const inWood = (p: RD) =>
+    const osmWood = (p: XY) => woods.some((ring) => pointInPolygon(p, ring)) && !notWoods.some((ring) => pointInPolygon(p, ring));
+    const inWood = (p: XY) =>
       extraWoods.some((ring) => pointInPolygon(p, ring)) ||
-      (survey && !osmAreas.some((ring) => pointInPolygon(p, ring)) ? survey.coverAt(p) === 'forest' : osmWood(p));
+      (survey && !osmAreas.some((ring) => pointInPolygon(p, ring)) ? survey.coverAt(toRD(fromLAEA(p))) === 'forest' : osmWood(p));
     const woodShare = samples.filter(inWood).length / samples.length;
     let t: Terrain = 'clear';
     if (townHexes.has(k)) t = 'town';
@@ -169,23 +187,23 @@ export async function buildMap(cfg: MapConfig): Promise<{ map: MapFile; report: 
 
   // Rivers ---------------------------------------------------------------------
   // Each river becomes one main line; canals and tributaries are then joined to the river they meet.
-  const mainLines = new Map<string, RD[]>();
+  const mainLines = new Map<string, XY[]>();
   for (const r of cfg.rivers) {
     const names = r.osmNames.join('|');
     const els = await overpass(`[out:json][timeout:120];way["waterway"="${r.osmWaterway}"]["name"~"^(${names})$"](${bbox});out geom;`);
-    const ways = els.filter((e) => e.geometry).map((e) => e.geometry!.map((p) => toRD({ lat: p.lat, lon: p.lon })));
+    const ways = els.filter((e) => e.geometry).map((e) => e.geometry!.map((p) => toLAEA({ lat: p.lat, lon: p.lon })));
     if (ways.length === 0) throw new Error(`No OSM ways found for river ${r.id} (${r.osmWaterway} ${names})`);
     const line = mainLine(ways);
     report.push(`River ${r.id}: ${ways.length} OSM ways, main line ${(lineLength(line) / 1000).toFixed(1)} km`);
     mainLines.set(r.id, line);
   }
-  const insideGrid = (p: RD) =>
+  const insideGrid = (p: XY) =>
     p.x > g.origin.x - g.spacing && p.x < g.origin.x + g.cols * g.spacing && p.y < g.origin.y + g.spacing && p.y > g.origin.y - g.rows * g.spacing;
   for (const [id, line] of mainLines) {
     for (const end of [0, line.length - 1]) {
       const from = line[end]!;
       if (!insideGrid(from)) continue;
-      let best: RD | null = null;
+      let best: XY | null = null;
       let bestId = '';
       let bestD = 1500;
       for (const [other, ol] of mainLines) {
@@ -243,7 +261,7 @@ export async function buildMap(cfg: MapConfig): Promise<{ map: MapFile; report: 
   const bridges: MapFile['bridges'] = [];
   const bridgeEdges = new Set<string>();
   for (const b of cfg.bridges) {
-    const p = toRD(b.at);
+    const p = toLAEA(b.at);
     const river = rivers.find((r) => r.id === b.river);
     if (!river) throw new Error(`Bridge ${b.id}: unknown river ${b.river}`);
     let best: [OffsetTuple, OffsetTuple] | null = null;
@@ -278,7 +296,7 @@ export async function buildMap(cfg: MapConfig): Promise<{ map: MapFile; report: 
   const roads: MapFile['roads'] = [];
   for (const road of cfg.roads) {
     const hexes: OffsetTuple[] = [];
-    const anchors = road.via.map((p) => toRD(p));
+    const anchors = road.via.map((p) => toLAEA(p));
     for (let i = 1; i < anchors.length; i++) {
       const leg = roadLeg(g, anchors[i - 1]!, anchors[i]!, riverEdgeOwner, bridgeEdges);
       if (!leg) throw new Error(`Road ${road.id}: no legal hex route for leg ${i} (does it cross a river away from a bridge?)`);
@@ -290,23 +308,31 @@ export async function buildMap(cfg: MapConfig): Promise<{ map: MapFile; report: 
   // Places ---------------------------------------------------------------------
   const places: MapFile['places'] = [];
   for (const s of cfg.settlements.filter((x) => x.label)) {
-    const at = hexAt(g, toRD(s.centre));
+    const at = hexAt(g, toLAEA(s.centre));
     if (at) places.push({ name: s.name, kind: s.kind, at });
   }
   for (const f of cfg.features ?? []) {
-    const at = hexAt(g, toRD(f.at));
+    const at = hexAt(g, toLAEA(f.at));
     if (at) places.push({ name: f.name, kind: 'feature', at });
   }
+
+  // Fine terrain for the 3D view --------------------------------------------------
+  const relief = cfg.reliefSpacingMeters ? await buildRelief(g, cfg.reliefSpacingMeters) : null;
+  if (relief) report.push(relief.report);
 
   const legend: Record<Terrain, string> = { clear: '.', polder: 'p', woods: 'f', town: 't', water: 'w' };
   const map: MapFile = {
     id: cfg.id,
     name: cfg.name,
     geo: {
-      crs: 'EPSG:28992 (RD New)',
+      crs: 'EPSG:3035 (ETRS89-LAEA Europe)',
       origin: { x: Math.round(g.origin.x), y: Math.round(g.origin.y) },
       orientation: 'pointy-top hexes, odd-r offset, row 0 north, odd rows shifted east',
       hexSpacingMeters: g.spacing,
+      grid: { id: EUROPE_GRID.id, col: cfg.grid.col, row: cfg.grid.row },
+      centre: (({ lat, lon }) => ({ lat: Number(lat.toFixed(4)), lon: Number(lon.toFixed(4)) }))(
+        fromLAEA(hexCentre(g, (g.cols - 1) / 2, Math.round((g.rows - 1) / 2))),
+      ),
     },
     cols: g.cols,
     rows: g.rows,
@@ -320,17 +346,18 @@ export async function buildMap(cfg: MapConfig): Promise<{ map: MapFile; report: 
     bridges,
     roads,
     places,
+    ...(relief ? { relief: relief.relief } : {}),
   };
   return { map, report };
 }
 
-function lineLength(line: readonly RD[]): number {
+function lineLength(line: readonly XY[]): number {
   let l = 0;
   for (let i = 1; i < line.length; i++) l += Math.hypot(line[i]!.x - line[i - 1]!.x, line[i]!.y - line[i - 1]!.y);
   return l;
 }
 
-function nearestOnSegment(p: RD, a: RD, b: RD): RD {
+function nearestOnSegment(p: XY, a: XY, b: XY): XY {
   const dx = b.x - a.x;
   const dy = b.y - a.y;
   const t = dx === 0 && dy === 0 ? 0 : Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / (dx * dx + dy * dy)));
@@ -343,10 +370,10 @@ function nearestOnSegment(p: RD, a: RD, b: RD): RD {
  * follows the shortest route between the two ends that lie furthest apart.
  * Twin channels round islands and weirs collapse to one, and side arms drop out.
  */
-function mainLine(ways: RD[][]): RD[] {
-  const k = (p: RD) => `${Math.round(p.x)},${Math.round(p.y)}`;
-  const adj = new Map<string, { to: string; way: RD[]; len: number }[]>();
-  const pos = new Map<string, RD>();
+function mainLine(ways: XY[][]): XY[] {
+  const k = (p: XY) => `${Math.round(p.x)},${Math.round(p.y)}`;
+  const adj = new Map<string, { to: string; way: XY[]; len: number }[]>();
+  const pos = new Map<string, XY>();
   for (const w of ways) {
     const a = k(w[0]!);
     const b = k(w[w.length - 1]!);
@@ -399,7 +426,7 @@ function mainLine(ways: RD[][]): RD[] {
   }
   // Shortest route from a to b.
   const dist = new Map<string, number>([[a, 0]]);
-  const prev = new Map<string, { from: string; way: RD[] }>();
+  const prev = new Map<string, { from: string; way: XY[] }>();
   const open = new Set([a]);
   while (open.size) {
     let cur = '';
@@ -422,7 +449,7 @@ function mainLine(ways: RD[][]): RD[] {
       }
     }
   }
-  const segments: RD[][] = [];
+  const segments: XY[][] = [];
   for (let n = b; n !== a; n = prev.get(n)!.from) segments.unshift(prev.get(n)!.way);
   return segments.flatMap((s, i) => (i === 0 ? s : s.slice(1)));
 }
@@ -459,11 +486,11 @@ function polygonsOf(el: OsmElement): LatLon[][] {
  * Hexes for one straight road leg: the cheapest hex path, preferring hexes
  * near the straight line, that crosses rivers only at bridges.
  */
-function roadLeg(g: HexGrid, from: RD, to: RD, riverEdges: Map<string, string>, bridgeEdges: Set<string>): OffsetTuple[] | null {
+function roadLeg(g: HexGrid, from: XY, to: XY, riverEdges: Map<string, string>, bridgeEdges: Set<string>): OffsetTuple[] | null {
   const start = hexAt(g, from);
   const goal = hexAt(g, to);
   if (!start || !goal) return null;
-  const off = (p: RD) => {
+  const off = (p: XY) => {
     const dx = to.x - from.x;
     const dy = to.y - from.y;
     const len = Math.hypot(dx, dy) || 1;

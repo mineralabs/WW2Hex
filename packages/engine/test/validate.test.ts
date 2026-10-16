@@ -78,6 +78,42 @@ describe('scenario validation', () => {
     );
   });
 
+  it('accepts 3D relief of the right size and rejects a mismatch', () => {
+    // Base64 of n zero bytes, without relying on browser or Node globals.
+    const zeros = (n: number) => 'AAAA'.repeat(Math.floor(n / 3)) + ['', 'AA==', 'AAA='][n % 3];
+    const relief = (cols: number, rows: number, samples: number) => ({
+      source: 'test',
+      crs: 'test',
+      origin: { x: 0, y: 0 },
+      spacingMeters: 100,
+      cols,
+      rows,
+      metresPerUnit: 0.25,
+      heights: zeros(samples * 2),
+    });
+    const ok = syntheticFile();
+    ok.map.relief = relief(3, 2, 6);
+    expect(codes(ok)).toEqual([]);
+    const short = syntheticFile();
+    short.map.relief = relief(3, 2, 5);
+    expect(codes(short)).toContain('relief-size');
+    const flat = syntheticFile();
+    flat.map.relief = relief(1, 2, 2);
+    expect(codes(flat)).toContain('relief-shape');
+  });
+
+  it('checks a start date is a real date on the scenario\'s first day', () => {
+    const ok = syntheticFile();
+    ok.start = { ...ok.start, date: `1944-09-${String(ok.start.day).padStart(2, '0')}`, utcOffsetMinutes: 120 };
+    expect(codes(ok)).toEqual([]);
+    const wrongDay = syntheticFile();
+    wrongDay.start = { ...wrongDay.start, date: `1944-09-${String((wrongDay.start.day % 28) + 1).padStart(2, '0')}` };
+    expect(codes(wrongDay)).toContain('start-date-day');
+    const garbled = syntheticFile();
+    garbled.start = { ...garbled.start, date: '19 Sep 1944' };
+    expect(codes(garbled)).toContain('start-date');
+  });
+
   it('detects malformed terrain grids', () => {
     const f = tinyFile({ cols: 3, rows: 2, terrain: ['..', '.x.'], units: [unitFile('a', 'allied', [0, 0])] });
     expect(codes(f)).toEqual(expect.arrayContaining(['terrain-cols', 'terrain-code']));

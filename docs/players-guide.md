@@ -28,6 +28,7 @@ The same text, in short form, is behind the **Rules** button in the game's top b
 | --- | --- |
 | Select a unit or hex | Click it |
 | Pan, zoom | Drag; mouse wheel or pinch. **Fit** shows the whole map |
+| See the map in relief | **3D** in the toolbar (**2D** goes back). Drag to move; **Shift+drag** (or ⌘+drag, or right-drag with a mouse) to turn and tilt; wheel, two-finger scroll or pinch to zoom; the icons in the corner give set views, all seen from your own side's lines (oblique views of the board and key places, top-down, low, and face the front: north up for the Allies, south up for the Germans), cycle the units between miniatures (little tanks, guns and soldiers), counter blocks and flat counters, and **Gun Park** shows the guns and soldiers close up and lets you choose their paint schemes for the 3D map, and set how much heights are exaggerated. Clicks and orders work as in 2D |
 | Choose what a right-click gives | **A** Advance, **T** Attack, **W** Withdraw, or the buttons in the unit panel |
 | Give the order | Right-click the destination (on a Mac: two-finger click, or Ctrl+click) |
 | A route with turns in it | **Shift**+right-click each waypoint, then a plain right-click on the final destination |
@@ -222,6 +223,11 @@ turn uses 36 a turn. Artillery firing all turn uses 108: a battery with no route
 turns.
 
 Supply is automatic. You cannot move it, only protect the road.
+
+Your map shows your own side's supply: a small arrow and a name (such as *To Kleve*) where each
+supply road leaves the map, marked *from turn N* until it opens, and a dashed green zone for each
+air drop still to come, captioned with its turn, time and amount. The other side's roads and drops
+are never shown to you.
 
 ## 10. Objectives and winning
 
