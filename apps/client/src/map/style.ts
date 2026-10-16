@@ -1,4 +1,4 @@
-import type { Side, Terrain } from '@ww2hex/engine';
+import type { Nation, Side, Terrain } from '@ww2hex/engine';
 
 /** Hex corner radius in world pixels. */
 export const HEX_SIZE = 32;
@@ -34,6 +34,13 @@ export const COLORS = {
 export const SIDE_COLOR: Record<Side, { fill: number; text: number; route: number }> = {
   allied: { fill: 0xc9b98a, text: 0x231f15, route: 0x305b8a },
   german: { fill: 0x9aa5ad, text: 0x15191c, route: 0x7a2e2e },
+};
+
+/** Counter colours by nationality: US olive, British khaki, German field grey. */
+export const NATION_COLOR: Record<Nation, { fill: number; text: number }> = {
+  us: { fill: 0x8f9a5c, text: 0x1a1f10 },
+  uk: { fill: 0xc9b98a, text: 0x231f15 },
+  de: { fill: 0x9aa5ad, text: 0x15191c },
 };
 
 export function readinessColor(cohesion: number): number {

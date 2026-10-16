@@ -56,6 +56,8 @@ export function UnitPanel(props: {
   onHold: () => void;
   onUndo: () => void;
   onClearWaypoints: () => void;
+  /** During a replay: what this unit fired at and what fired at it in the step shown, with reasons. */
+  fights?: { text: string; detail: string[] }[];
 }) {
   const { unit: u, file, eta } = props;
   const formations = new Map(file.formations.map((f) => [f.id, f]));
@@ -125,6 +127,24 @@ export function UnitPanel(props: {
           </tbody>
         </table>
       </details>
+
+      {props.fights && props.fights.length > 0 && (
+        <>
+          <h3>This step</h3>
+          <ul className="fights">
+            {props.fights.map((f, i) => (
+              <li key={i}>
+                <details>
+                  <summary>
+                    {f.text} <span className="why">why?</span>
+                  </summary>
+                  <Reasons lines={f.detail} />
+                </details>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
 
       <h3>
         Order {props.drafted && <span className="draft-chip">changed this turn</span>}
@@ -303,12 +323,28 @@ export interface LogEntry {
   time: number;
   kind: string;
   text: string;
+  /** The reasons behind a fire result; click the entry to read them. */
+  detail?: string[];
+}
+
+/** Lines of reasons, used under log entries and in the unit panel. */
+function Reasons({ lines }: { lines: string[] }) {
+  return (
+    <ul className="reasons">
+      {lines.map((l, i) => (
+        <li key={i} className={i === lines.length - 1 ? 'overall' : ''}>
+          {l}
+        </li>
+      ))}
+    </ul>
+  );
 }
 
 export function EventLog(props: { entries: LogEntry[]; time: (t: number) => string; title: string }) {
-  const end = useRef<HTMLDivElement>(null);
+  const list = useRef<HTMLOListElement>(null);
+  // Follow the newest entry inside the log's own scroll box, without moving the rest of the sidebar.
   useEffect(() => {
-    end.current?.scrollIntoView({ block: 'nearest' });
+    if (list.current) list.current.scrollTop = list.current.scrollHeight;
   }, [props.entries.length]);
   return (
     <section className="panel log">
@@ -316,15 +352,25 @@ export function EventLog(props: { entries: LogEntry[]; time: (t: number) => stri
       {props.entries.length === 0 ? (
         <div className="muted">Nothing to report yet.</div>
       ) : (
-        <ol>
-          {props.entries.map((e) => (
-            <li key={e.key} className={`ev-${e.kind}`}>
-              <time>{props.time(e.time)}</time> {e.text}
-            </li>
-          ))}
+        <ol ref={list}>
+          {props.entries.map((e) =>
+            e.detail ? (
+              <li key={e.key} className={`ev-${e.kind}`}>
+                <details>
+                  <summary>
+                    <time>{props.time(e.time)}</time> {e.text} <span className="why">why?</span>
+                  </summary>
+                  <Reasons lines={e.detail} />
+                </details>
+              </li>
+            ) : (
+              <li key={e.key} className={`ev-${e.kind}`}>
+                <time>{props.time(e.time)}</time> {e.text}
+              </li>
+            ),
+          )}
         </ol>
       )}
-      <div ref={end} />
     </section>
   );
 }
@@ -335,15 +381,23 @@ export function ReplayBar(props: {
   time: string;
   playing: boolean;
   speed: number;
+  /** Frames worth pausing on, with a short caption. */
+  moments: { frame: number; text: string }[];
   onFrame: (f: number) => void;
   onPlay: () => void;
   onSpeed: (s: number) => void;
+  onSkip: () => void;
 }) {
   const last = props.frames - 1;
+  const prevMoment = [...props.moments].reverse().find((m) => m.frame < props.frame);
+  const nextMoment = props.moments.find((m) => m.frame > props.frame);
   return (
     <div className="replay-bar" role="group" aria-label="Replay">
       <button onClick={() => props.onFrame(0)} disabled={props.frame === 0} title="Start of turn">
         ⏮
+      </button>
+      <button onClick={() => prevMoment && props.onFrame(prevMoment.frame)} disabled={!prevMoment} title={prevMoment ? `Back to: ${prevMoment.text}` : 'No earlier moment'}>
+        ◆◀
       </button>
       <button onClick={() => props.onFrame(Math.max(0, props.frame - 1))} disabled={props.frame === 0} title="Previous step (←)">
         ◀
@@ -352,16 +406,33 @@ export function ReplayBar(props: {
         {props.playing ? '⏸' : '▶'}
       </button>
       <button onClick={() => props.onFrame(Math.min(last, props.frame + 1))} disabled={props.frame === last} title="Next step (→)">
-        ▶|
+        ▶
       </button>
-      <input
-        type="range"
-        min={0}
-        max={last}
-        value={props.frame}
-        onChange={(e) => props.onFrame(Number(e.target.value))}
-        aria-label="Replay position"
-      />
+      <button onClick={() => nextMoment && props.onFrame(nextMoment.frame)} disabled={!nextMoment} title={nextMoment ? `On to: ${nextMoment.text}` : 'No later moment'}>
+        ▶◆
+      </button>
+      <div className="replay-track">
+        <input
+          type="range"
+          min={0}
+          max={last}
+          value={props.frame}
+          onChange={(e) => props.onFrame(Number(e.target.value))}
+          aria-label="Replay position"
+        />
+        <div className="replay-markers" aria-hidden="true">
+          {props.moments.map((m) => (
+            <button
+              key={`${m.frame}:${m.text}`}
+              className={`replay-marker ${m.frame === props.frame ? 'current' : ''}`}
+              style={{ left: `${(100 * m.frame) / Math.max(1, last)}%` }}
+              title={m.text}
+              onClick={() => props.onFrame(m.frame)}
+              tabIndex={-1}
+            />
+          ))}
+        </div>
+      </div>
       <span className="replay-time">
         {props.time} · step {props.frame}/{last}
       </span>
@@ -372,7 +443,54 @@ export function ReplayBar(props: {
           </option>
         ))}
       </select>
+      <button className="skip" onClick={props.onSkip} disabled={props.frame === last} title="Jump to the end of the turn and read the summary">
+        Skip to summary
+      </button>
     </div>
+  );
+}
+
+/** What happened this turn, in a few sentences, with the story of the turns before. */
+export function SummaryPanel(props: {
+  title: string;
+  lines: string[];
+  story: { turn: number; lines: string[] }[];
+  turnLabel: (turn: number) => string;
+  /** When given, a button that shows or hides the turn's picture on the map. */
+  picture?: { shown: boolean; onToggle: () => void };
+}) {
+  const earlier = props.story.filter((s) => s.lines !== props.lines);
+  return (
+    <section className="panel summary">
+      <h3>
+        {props.title}
+        {props.picture && (
+          <button className={`link small picture-toggle ${props.picture.shown ? 'on' : ''}`} onClick={props.picture.onToggle}>
+            {props.picture.shown ? 'hide it on the map' : 'show it on the map'}
+          </button>
+        )}
+      </h3>
+      <ul>
+        {props.lines.map((l, i) => (
+          <li key={i}>{l}</li>
+        ))}
+      </ul>
+      {earlier.length > 0 && (
+        <details className="story">
+          <summary>The story so far</summary>
+          {earlier.map((s) => (
+            <div key={s.turn} className="story-turn">
+              <h4>{props.turnLabel(s.turn)}</h4>
+              <ul>
+                {s.lines.map((l, i) => (
+                  <li key={i}>{l}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </details>
+      )}
+    </section>
   );
 }
 
@@ -415,7 +533,8 @@ export function HelpPanel({ phase }: { phase: MatchPhase }) {
         </ul>
       )}
       <p className="muted small">
-        Grey-blue counters are German, khaki Allied. Enemy counters show only what has been observed. Red lines are fire.
+        Counter colours: US olive, British khaki, German grey. Enemy counters show only what has been observed. Red lines are
+        fire. <strong>Pictures / Symbols</strong> in the top bar changes how units are drawn.
       </p>
     </section>
   );

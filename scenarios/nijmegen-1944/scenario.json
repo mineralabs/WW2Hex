@@ -3502,168 +3502,216 @@
       "side": "allied",
       "name": "I Airborne Corps",
       "parentId": null,
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "IAC"
     },
     {
       "id": "a-82",
       "side": "allied",
       "name": "82nd Airborne Division (US)",
       "parentId": "a-i-abn-corps",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "us",
+      "badge": "82"
     },
     {
       "id": "a-504",
       "side": "allied",
       "name": "504th Parachute Infantry Regiment",
       "parentId": "a-82",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "us",
+      "badge": "504"
     },
     {
       "id": "a-505",
       "side": "allied",
       "name": "505th Parachute Infantry Regiment",
       "parentId": "a-82",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "us",
+      "badge": "505"
     },
     {
       "id": "a-508",
       "side": "allied",
       "name": "508th Parachute Infantry Regiment",
       "parentId": "a-82",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "us",
+      "badge": "508"
     },
     {
       "id": "a-82-arty",
       "side": "allied",
       "name": "82nd Airborne Division Artillery",
       "parentId": "a-82",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "us",
+      "badge": "82A"
     },
     {
       "id": "a-82-troops",
       "side": "allied",
       "name": "82nd Airborne divisional troops",
       "parentId": "a-82",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "us",
+      "badge": "82"
     },
     {
       "id": "a-xxx",
       "side": "allied",
       "name": "XXX Corps",
       "parentId": null,
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "XXX"
     },
     {
       "id": "a-xxx-troops",
       "side": "allied",
       "name": "XXX Corps troops",
       "parentId": "a-xxx",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "XXX"
     },
     {
       "id": "a-gds",
       "side": "allied",
       "name": "Guards Armoured Division",
       "parentId": "a-xxx",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "GAD"
     },
     {
       "id": "a-5gab",
       "side": "allied",
       "name": "5th Guards Armoured Brigade",
       "parentId": "a-gds",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "GAD"
     },
     {
       "id": "a-32gb",
       "side": "allied",
       "name": "32nd Guards Brigade",
       "parentId": "a-gds",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "GAD"
     },
     {
       "id": "a-gds-ra",
       "side": "allied",
       "name": "Guards Armoured Division Royal Artillery",
       "parentId": "a-gds",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "GAD"
     },
     {
       "id": "a-gds-troops",
       "side": "allied",
       "name": "Guards Armoured divisional troops",
       "parentId": "a-gds",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "GAD"
     },
     {
       "id": "a-8ab",
       "side": "allied",
       "name": "8th Armoured Brigade",
       "parentId": "a-xxx",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "uk",
+      "badge": "8AB"
     },
     {
       "id": "g-iissk",
       "side": "german",
       "name": "II. SS-Panzerkorps",
       "parentId": null,
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "de",
+      "badge": "SS"
     },
     {
       "id": "g-10ss",
       "side": "german",
       "name": "10. SS-Panzer-Division Frundsberg",
       "parentId": "g-iissk",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "de",
+      "badge": "10SS"
     },
     {
       "id": "g-kg-henke",
       "side": "german",
       "name": "Kampfgruppe Henke",
       "parentId": "g-10ss",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "de",
+      "badge": "Hen"
     },
     {
       "id": "g-korps-feldt",
       "side": "german",
       "name": "Korps Feldt",
       "parentId": null,
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "de",
+      "badge": "Fdt"
     },
     {
       "id": "g-406",
       "side": "german",
       "name": "406. Division z.b.V.",
       "parentId": "g-korps-feldt",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "de",
+      "badge": "406"
     },
     {
       "id": "g-kg-greschick",
       "side": "german",
       "name": "Kampfgruppe Greschick",
       "parentId": "g-korps-feldt",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "de",
+      "badge": "Gre"
     },
     {
       "id": "g-iifjk",
       "side": "german",
       "name": "II. Fallschirmkorps",
       "parentId": null,
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "de",
+      "badge": "FJ"
     },
     {
       "id": "g-kg-becker",
       "side": "german",
       "name": "Kampfgruppe Becker",
       "parentId": "g-iifjk",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "de",
+      "badge": "Bec"
     },
     {
       "id": "g-kg-hermann",
       "side": "german",
       "name": "Kampfgruppe Hermann",
       "parentId": "g-iifjk",
-      "dataStatus": "provisional"
+      "dataStatus": "provisional",
+      "nation": "de",
+      "badge": "Her"
     }
   ],
   "units": [

@@ -127,6 +127,9 @@ export interface ObservationContext {
   losses: ReadonlyMap<string, { lost: number; baseline: number; destroyed: boolean }>;
 }
 
+/** Factors that describe the target rather than the firer. */
+const TARGET_FACTORS = new Set(['terrain', 'preparation', 'exposed']);
+
 export function fireResult(loss: { lost: number; baseline: number; destroyed: boolean } | undefined): FireResult {
   if (!loss || loss.lost === 0) return loss?.destroyed ? 'heavy' : 'no-effect';
   if (loss.destroyed) return 'heavy';
@@ -181,6 +184,8 @@ export function observeStep(events: readonly GameEvent[], side: Side, ctx: Obser
             mode: e.mode,
             assault: e.assault,
             result: seen ? fireResult(ctx.losses.get(e.targetId)) : 'not-observed',
+            // Everything about the firer, and what could be seen of the target.
+            factors: e.factors.filter((f) => seen || !TARGET_FACTORS.has(f.name)),
           });
         } else if (targetSide === side) {
           const seen = seenAt(ctx.end, e.firerId);
@@ -194,6 +199,9 @@ export function observeStep(events: readonly GameEvent[], side: Side, ctx: Obser
             mode: e.mode,
             assault: e.assault,
             result: fireResult(ctx.losses.get(e.targetId)),
+            // Only what the target could observe: its own cover, the assault, the river, and
+            // the distance if the firer was seen. Never the firer's cohesion, supply or movement.
+            factors: e.factors.filter((f) => TARGET_FACTORS.has(f.name) || f.name === 'assault' || f.name === 'river' || (f.name === 'range' && seen)),
           });
         }
         break;

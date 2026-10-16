@@ -101,6 +101,7 @@ export function resolveStep(state: GameState, world: World, rules: Rules): Resol
       mode: f.mode,
       assault: f.assault,
       damage: f.damage,
+      factors: f.factors,
     });
   }
   const fired = new Set(fires.map((f) => f.firer.id));

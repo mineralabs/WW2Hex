@@ -1,4 +1,4 @@
-import type { GameMap } from '@ww2hex/engine';
+import type { GameMap, Hex } from '@ww2hex/engine';
 import { useEffect, useRef, useState } from 'react';
 import { MapRenderer, type MapHandlers, type RenderView } from './renderer.ts';
 
@@ -8,9 +8,11 @@ interface Props {
   handlers: MapHandlers;
   /** Increment to re-fit the whole map in the viewport. */
   fitRequest: number;
+  /** A hex to glide the view to; a new `nonce` triggers the move. */
+  focus: { hex: Hex; nonce: number } | null;
 }
 
-export function MapView({ map, view, handlers, fitRequest }: Props) {
+export function MapView({ map, view, handlers, fitRequest, focus }: Props) {
   const host = useRef<HTMLDivElement>(null);
   const renderer = useRef<MapRenderer | null>(null);
   const handlersRef = useRef(handlers);
@@ -52,6 +54,10 @@ export function MapView({ map, view, handlers, fitRequest }: Props) {
   useEffect(() => {
     if (ready && fitRequest > 0) renderer.current?.fitToMap();
   }, [fitRequest, ready]);
+
+  useEffect(() => {
+    if (ready && focus) renderer.current?.panTo(focus.hex);
+  }, [focus, ready]);
 
   return <div className="map-host" ref={host} />;
 }

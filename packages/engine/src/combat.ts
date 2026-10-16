@@ -1,7 +1,7 @@
 import { DIRECTIONS, compareHex, edgeKey, hexAdd, hexDistance, hexEquals, hexKey, type Hex } from './hex.ts';
 import { cellAt, moveCost } from './map.ts';
 import type { Rules, WeaponProfile } from './rules.ts';
-import type { FireMode, GameMap, UnitState, World } from './types.ts';
+import type { FireFactor, FireMode, GameMap, UnitState, World } from './types.ts';
 import type { Spotting } from './visibility.ts';
 
 /**
@@ -58,6 +58,8 @@ export interface FireCalculation {
   points: number;
   /** Whole damage points this fire alone is worth (fractions carry over on the target). */
   damage: number;
+  /** The factors behind the result, for reporting. Only those that changed anything, plus range. */
+  factors: FireFactor[];
 }
 
 /** Damage `firer` would do to `target` this step. Pure integer arithmetic. */
@@ -71,6 +73,8 @@ export function calculateFire(
   const d = hexDistance(firer.pos, target.pos);
   const hard = isHardTarget(world, rules, target);
   let sum = 0;
+  let full = 0; // as if every weapon were in range and stationary
+  let inRange = 0; // as if stationary
   for (const [w, count] of weaponsOf(world, rules, firer)) {
     const value = hard ? w.hard : w.soft;
     const range =
@@ -83,8 +87,12 @@ export function calculateFire(
           : 0;
     const moving = firer.lastStep.moved ? w.fireWhileMoving : 100;
     sum += count * value * range * moving;
+    full += count * value * 100 * 100;
+    inRange += count * value * range * 100;
   }
   const base = Math.floor(sum / 100);
+  const factors: FireFactor[] = [{ name: 'range', percent: full > 0 ? Math.floor((100 * inRange) / full) : 0, detail: d }];
+  if (firer.lastStep.moved) factors.push({ name: 'moving', percent: inRange > 0 ? Math.floor((100 * sum) / inRange) : 0 });
 
   const terrain = cellAt(world.map, target.pos)?.terrain ?? 'clear';
   const exposed = target.lastStep.moved && (terrain === 'clear' || terrain === 'polder');
@@ -106,7 +114,13 @@ export function calculateFire(
     value = Math.floor((value * percent) / 100);
     return { name, percent, value };
   });
-  return { base, steps, points: value, damage: Math.floor(value / (100 * rules.firePointsPerDamage)) };
+  for (const [name, percent] of modifiers) {
+    if (percent === 100) continue;
+    const f: FireFactor = { name: name as FireFactor['name'], percent };
+    if (name === 'preparation') f.detail = preparationLevel(rules, target);
+    factors.push(f);
+  }
+  return { base, steps, points: value, damage: Math.floor(value / (100 * rules.firePointsPerDamage)), factors };
 }
 
 export interface PlannedFire {
@@ -117,6 +131,7 @@ export interface PlannedFire {
   /** Hundredths of a fire point. */
   points: number;
   damage: number;
+  factors: FireFactor[];
 }
 
 /**
@@ -138,7 +153,7 @@ export function planFires(world: World, rules: Rules, units: readonly UnitState[
       if (target && target.side !== firer.side) {
         const observed = spot.bySide[firer.side].has(target.id);
         const c = calculateFire(world, rules, firer, target, { mode: 'indirect', assault: false, observed });
-        options.push({ firer, target, mode: 'indirect', assault: false, points: c.points, damage: c.damage });
+        options.push({ firer, target, mode: 'indirect', assault: false, points: c.points, damage: c.damage, factors: c.factors });
       }
     } else {
       const assaultHex = assaultTarget(rules, firer);
@@ -146,13 +161,13 @@ export function planFires(world: World, rules: Rules, units: readonly UnitState[
         const target = byId.get(id)!;
         const assault = assaultHex !== null && hexEquals(assaultHex, target.pos);
         const direct = calculateFire(world, rules, firer, target, { mode: 'direct', assault, observed: true });
-        options.push({ firer, target, mode: 'direct', assault, points: direct.points, damage: direct.damage });
+        options.push({ firer, target, mode: 'direct', assault, points: direct.points, damage: direct.damage, factors: direct.factors });
       }
       if (maxRange(world, rules, firer, 'indirect') > 0) {
         for (const id of spot.bySide[firer.side]) {
           const target = byId.get(id)!;
           const c = calculateFire(world, rules, firer, target, { mode: 'indirect', assault: false, observed: true });
-          options.push({ firer, target, mode: 'indirect', assault: false, points: c.points, damage: c.damage });
+          options.push({ firer, target, mode: 'indirect', assault: false, points: c.points, damage: c.damage, factors: c.factors });
         }
       }
     }

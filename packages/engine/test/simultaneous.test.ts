@@ -108,6 +108,32 @@ describe('simultaneous fire', () => {
   });
 });
 
+describe('reasons behind fire', () => {
+  it('tells the firer everything and the target only what it could observe', () => {
+    // Allied infantry assaults German infantry dug in in a town; the Germans fire back.
+    const { world, state } = tiny({
+      cols: 2,
+      rows: 1,
+      terrain: ['.t'],
+      units: [ARMED.infantry('a', 'allied', [0, 0]), ARMED.infantry('g', 'german', [1, 0], 22, 500)],
+    });
+    const g = unit(state, 'g');
+    g.order = { kind: 'defend' };
+    g.stationarySteps = 6;
+    g.cohesion = 60;
+    g.supply = 'low';
+    const s = give(state, world, 'allied', 'a', { kind: 'attack', target: at(1, 0) });
+    const r = resolveStep(s, world, rules);
+    const alliedFire = r.observed.allied.find((e) => e.kind === 'fire' && e.firer.kind === 'own');
+    const germanFireSeenByAllies = r.observed.allied.find((e) => e.kind === 'fire' && e.firer.kind !== 'own');
+    expect(alliedFire && alliedFire.kind === 'fire' ? alliedFire.factors.map((f) => f.name) : []).toEqual(['range', 'terrain', 'preparation', 'assault']);
+    // The German battalion has low cohesion and supply, but the Allied player is not told so.
+    expect(germanFireSeenByAllies && germanFireSeenByAllies.kind === 'fire' ? germanFireSeenByAllies.factors.map((f) => f.name) : []).toEqual(['range']);
+    const germanOwn = r.observed.german.find((e) => e.kind === 'fire' && e.firer.kind === 'own');
+    expect(germanOwn && germanOwn.kind === 'fire' ? germanOwn.factors.map((f) => f.name) : []).toEqual(['range', 'cohesion', 'supply']);
+  });
+});
+
 describe('orders in contact', () => {
   it('halts an Advance when the unit sees an enemy within two hexes', () => {
     const { world, state } = tiny({
@@ -254,6 +280,15 @@ describe('information leakage', () => {
         }
         for (const e of match.lastTurn!.replays[side].events) {
           if (e.kind === 'losses') expect(file.units.find((u) => u.id === e.unitId)!.side).toBe(side);
+          if (e.kind === 'fire' && e.firer.kind !== 'own') {
+            // Enemy fire on you: never the enemy's cohesion, supply, movement or what it could see.
+            for (const f of e.factors) expect(['terrain', 'preparation', 'exposed', 'assault', 'river', 'range']).toContain(f.name);
+            if (e.firer.kind === 'unseen') expect(e.factors.some((f) => f.name === 'range')).toBe(false);
+          }
+          if (e.kind === 'fire' && e.firer.kind === 'own' && e.result === 'not-observed') {
+            // Shelling blind: nothing about the target beyond the hex itself.
+            for (const f of e.factors) expect(['range', 'moving', 'cohesion', 'supply', 'assault', 'river', 'unobserved']).toContain(f.name);
+          }
         }
       }
       match = finishReplay(finishReplay(match, 'allied'), 'german');

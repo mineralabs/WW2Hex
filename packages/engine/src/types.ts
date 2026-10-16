@@ -186,9 +186,17 @@ export interface EquipmentFile {
   sources: string[];
 }
 
+/** Who a formation belongs to, for the look of its counters. Inherited from parent formations. */
+export type Nation = 'us' | 'uk' | 'de';
+export const NATIONS: readonly Nation[] = ['us', 'uk', 'de'];
+
 export interface FormationFile {
   id: string;
   side: Side;
+  /** Optional; inherited from the parent formation when left out. */
+  nation?: Nation;
+  /** Up to four characters shown on the formation's counters, such as "82" or "GAD". Inherited. */
+  badge?: string;
   name: string;
   parentId: string | null;
   dataStatus: DataStatus;
@@ -449,6 +457,16 @@ interface EventBase {
 
 export type FireMode = 'direct' | 'indirect';
 
+/**
+ * One thing that shaped a fire result, as a percentage of full effect.
+ * `range` carries the distance in hexes as `detail`; `preparation` carries the level.
+ */
+export interface FireFactor {
+  name: 'range' | 'moving' | 'cohesion' | 'supply' | 'terrain' | 'preparation' | 'exposed' | 'assault' | 'river' | 'unobserved';
+  percent: number;
+  detail?: number;
+}
+
 export type GameEvent =
   | (EventBase & { kind: 'unit-moved'; unitId: string; side: Side; from: Hex; to: Hex })
   | (EventBase & { kind: 'move-blocked'; unitId: string; side: Side; at: Hex; target: Hex; reason: BlockReason })
@@ -464,6 +482,7 @@ export type GameEvent =
       mode: FireMode;
       assault: boolean;
       damage: number;
+      factors: FireFactor[];
     })
   | (EventBase & {
       kind: 'losses';
@@ -539,6 +558,8 @@ export type ObservedEvent =
       mode: FireMode;
       assault: boolean;
       result: FireResult;
+      /** Why it went as it did, limited to what this side could know. */
+      factors: FireFactor[];
     })
   | (ObservedBase & { kind: 'losses'; unitId: string; personnel: number; equipment: Record<string, number>; cohesionAfter: number })
   | (ObservedBase & { kind: 'destroyed'; unit: UnitRef; at: Hex; surrendered?: boolean })

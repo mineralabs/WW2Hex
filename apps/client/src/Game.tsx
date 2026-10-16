@@ -5,11 +5,13 @@ import {
   applyUnitOrder,
   arrivalEstimates,
   buildWorld,
+  cellAt,
   clockLabel,
   findOrderConflicts,
   findRoute,
   hexDistance,
   hexEquals,
+  hexKey,
   maxRange,
   orderPath,
   otherSide,
@@ -20,6 +22,8 @@ import {
   type ContactView,
   type GameState,
   type Hex,
+  type Nation,
+  type ObservedEvent,
   type OrderInput,
   type Side,
   type UnitState,
@@ -27,10 +31,12 @@ import {
 import type { ClientMessage, InviteInfo, PlayerView } from '@ww2hex/protocol';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { GameSession, Notice } from './App.tsx';
-import { SIDE_NAME, describeObserved, fmtDuration, fmtHex, type Names } from './format.ts';
+import { SIDE_NAME, describeFactors, describeObserved, fmtDuration, fmtHex, type Names } from './format.ts';
 import { MapView } from './map/MapView.tsx';
-import type { CounterView, FireLine, MapHandlers, PreviewView, RenderView, RouteView } from './map/renderer.ts';
+import type { CounterStyle, CounterView, Effect, FireLine, MapHandlers, PreviewView, RenderView, RouteView, TurnPicture } from './map/renderer.ts';
+import { genericPicture, pictureFor } from './map/silhouettes.ts';
 import type { ConnectionStatus } from './net/connection.ts';
+import { keyMoments, placeNamer, summarizeTurn, type NarrativeContext } from './narrative.ts';
 import { sessionValue, setSessionValue } from './net/seats.ts';
 import {
   ConflictPanel,
@@ -43,6 +49,7 @@ import {
   OutcomeDialog,
   ReinforcementPanel,
   ReplayBar,
+  SummaryPanel,
   UnitPanel,
   type LogEntry,
   type OrderMode,
@@ -61,6 +68,10 @@ const SHORT_TYPE: Record<UnitState['type'], string> = {
   headquarters: 'HQ',
 };
 const REPLAY_FRAME_MS = 800;
+/** Enemy hit words, weakest first, so the strongest result shown wins when several shots land. */
+const RESULT_ORDER: (string | null)[] = [null, 'light', 'moderate', 'heavy'];
+/** How long the replay rests on a key moment before moving on. */
+const MOMENT_DWELL_MS = 2600;
 
 type Drafts = Record<string, OrderInput | null>;
 
@@ -111,8 +122,10 @@ export function Game(props: {
   const [playing, setPlaying] = useState(false);
   const [speed, setSpeed] = useState(1);
   const [fitRequest, setFitRequest] = useState(0);
+  const [focus, setFocus] = useState<{ hex: Hex; nonce: number } | null>(null);
   const [showInvite, setShowInvite] = useState(() => side === session.hostSide && !view.claimed[enemy]);
   const [outcomeClosed, setOutcomeClosed] = useState(false);
+  const [showPicture, setShowPicture] = useState(false);
 
   // A new turn starts with no drafts (or whatever this tab saved for it).
   if (draftsFor !== draftKey) {
@@ -127,10 +140,12 @@ export function Game(props: {
   useEffect(() => {
     setFrame(0);
     setPlaying(true);
+    setShowPicture(false);
   }, [replayTurn]);
 
   const locked = view.locked;
   const known = useMemo(() => knownState(view), [view]);
+
 
   // Planning: own units with this side's committed or drafted orders applied.
   const planned = useMemo(() => {
@@ -164,10 +179,77 @@ export function Game(props: {
     };
   }, [replay, view.ownUnits, view.ownReinforcements, file]);
 
+  // Words for the turn: the summary and the moments worth pausing on.
+  const vehicleName = useCallback(
+    (equipmentId: string): string | null => {
+      const cls = world.combatClass.get(equipmentId) ?? '';
+      if (cls === 'armoured-car') return 'armoured car';
+      return RULES.weapons[cls]?.armoured ? 'tank' : null;
+    },
+    [world],
+  );
+  const narrativeCtx = useMemo(
+    (): NarrativeContext => ({
+      names,
+      placeNear: placeNamer(map.places, [...map.bridges.values()], hexDistance, fmtHex),
+      time: (t) => clockLabel(file, t).slice(-5),
+      vehicleName,
+    }),
+    [names, map, file, vehicleName],
+  );
+  const summary = useMemo(() => (replay ? summarizeTurn(replay, narrativeCtx) : []), [replay, narrativeCtx]);
+  const moments = useMemo(() => (replay ? keyMoments(replay, narrativeCtx) : []), [replay, narrativeCtx]);
+  const momentNow = watching ? (moments.find((m) => m.frame === frame) ?? null) : null;
+
+  // The story so far: each turn's summary, kept in this browser for this seat.
+  const storyKey = `ww2hex:story:${roomCode}:${side}`;
+  const [story, setStory] = useState<{ turn: number; lines: string[] }[]>(() => sessionValue<{ turn: number; lines: string[] }[]>(storyKey) ?? []);
+  useEffect(() => {
+    if (!replay || summary.length === 0 || story.some((s) => s.turn === replay.turn)) return;
+    const next = [...story, { turn: replay.turn, lines: summary }].sort((a, b) => a.turn - b.turn);
+    setStory(next);
+    setSessionValue(storyKey, next);
+  }, [replay, summary, story, storyKey]);
+
+  // Glide to each key moment as the replay reaches it.
+  useEffect(() => {
+    if (momentNow) setFocus({ hex: momentNow.hex, nonce: Date.now() });
+  }, [momentNow]);
+
   const formationColor = useMemo(() => {
     const index = new Map(file.formations.map((f, i) => [f.id, i]));
     return (id: string) => FORMATION_PALETTE[(index.get(id) ?? 0) % FORMATION_PALETTE.length]!;
   }, [file]);
+
+  // Nationality and badge come from the nearest formation up the chain that sets them.
+  const formationLook = useMemo(() => {
+    const byId = new Map(file.formations.map((f) => [f.id, f]));
+    return (id: string): { nation: Nation | null; badge: string | null } => {
+      let nation: Nation | null = null;
+      let badge: string | null = null;
+      for (let f = byId.get(id); f; f = f.parentId ? byId.get(f.parentId) : undefined) {
+        if (nation === null && f.nation) nation = f.nation;
+        if (badge === null && f.badge) badge = f.badge;
+      }
+      return { nation, badge };
+    };
+  }, [file]);
+  const catalogue = useMemo(() => new Map(file.equipment.map((e) => [e.id, { combatClass: e.combatClass, role: e.role }])), [file]);
+  const [counterStyle, setCounterStyle] = useState<CounterStyle>(() => {
+    try {
+      return localStorage.getItem('ww2hex:counter-style') === 'symbols' ? 'symbols' : 'pictures';
+    } catch {
+      return 'pictures';
+    }
+  });
+  const chooseCounterStyle = (s: CounterStyle) => {
+    setCounterStyle(s);
+    try {
+      localStorage.setItem('ww2hex:counter-style', s);
+    } catch {
+      // Storage unavailable; the choice lasts for this page only.
+    }
+  };
 
   const selectedUnit = shown.units.find((u) => u.id === selectedId) ?? null;
   const selectedContact = shown.contacts.find((c) => `contact:${c.contactId}` === selectedId) ?? null;
@@ -230,21 +312,42 @@ export function Game(props: {
     return [];
   }, [watching, replay, frame, phase, shown, side, enemy]);
 
+  // The hexes each unit passed through in the step just replayed, for movement that follows the ground.
+  const viaByCounter = useMemo(() => {
+    const out = new Map<string, Hex[]>();
+    if (!watching || !replay || frame === 0) return out;
+    for (const e of replay.events) {
+      if (e.kind !== 'unit-moved' || e.step !== frame - 1) continue;
+      const id = e.unit.kind === 'own' ? e.unit.unitId : e.unit.kind === 'contact' ? `contact:${e.unit.contactId}` : null;
+      if (id) out.set(id, [...(out.get(id) ?? []), e.to]);
+    }
+    return out;
+  }, [watching, replay, frame]);
+
   const counters = useMemo((): CounterView[] => {
-    const own = shown.units.map((u) => ({
-      id: u.id,
-      side: u.side,
-      pos: u.pos,
-      type: u.type,
-      label: u.shortName,
-      detail: String(u.personnel),
-      cohesion: u.cohesion,
-      supplied: u.supply === 'supplied',
-      blocked: u.movement.blocked !== null,
-      formationColor: formationColor(u.formationId),
-      stale: false,
-      selected: u.id === selectedId,
-    }));
+    const own = shown.units.map((u) => {
+      const look = formationLook(u.formationId);
+      return {
+        id: u.id,
+        side: u.side,
+        pos: u.pos,
+        type: u.type,
+        label: u.shortName,
+        detail: String(u.personnel),
+        cohesion: u.cohesion,
+        supplied: u.supply === 'supplied',
+        blocked: u.movement.blocked !== null,
+        formationColor: formationColor(u.formationId),
+        stale: false,
+        selected: u.id === selectedId,
+        nation: look.nation,
+        picture: pictureFor(u, catalogue, look.nation),
+        badge: look.badge,
+        via: viaByCounter.get(u.id) ?? [],
+      };
+    });
+    // Enemy contacts show only their apparent type; their nationality is the side's usual one.
+    const enemyNation: Nation | null = file.formations.some((f) => f.nation) ? (enemy === 'german' ? 'de' : 'uk') : null;
     const contacts = shown.contacts.map((c) => ({
       id: `contact:${c.contactId}`,
       side: enemy,
@@ -258,11 +361,104 @@ export function Game(props: {
       formationColor: null,
       stale: !c.live,
       selected: `contact:${c.contactId}` === selectedId,
+      nation: enemyNation,
+      picture: genericPicture(c.apparentType),
+      badge: null,
+      via: viaByCounter.get(`contact:${c.contactId}`) ?? [],
     }));
     return [...contacts, ...own];
-  }, [shown, selectedId, enemy, formationColor, file]);
+  }, [shown, selectedId, enemy, formationColor, formationLook, catalogue, file, viaByCounter]);
 
   const objectiveMarks = useMemo(() => view.objectives.flatMap((o) => o.hexes.map((hex, i) => ({ hex, control: o.control[i] ?? null }))), [view.objectives]);
+
+  // What to animate for the step just replayed: hits and losses, bursts, retreats, wrecks.
+  const effects = useMemo((): Effect[] | null => {
+    if (!watching || !replay) return null;
+    const step = frame - 1;
+    const out: Effect[] = [];
+    const hitOwn = new Map<string, Extract<ObservedEvent, { kind: 'losses' }> | null>();
+    const hitEnemy = new Map<string, string | null>();
+    for (const e of replay.events) {
+      if (e.kind === 'destroyed' && e.step < frame) out.push({ kind: 'wreck', hex: e.at, surrendered: e.surrendered === true });
+      if (e.step !== step) continue;
+      switch (e.kind) {
+        case 'fire':
+          out.push({ kind: 'burst', hex: e.targetPos, big: e.mode === 'indirect' });
+          if (e.target.kind === 'own') hitOwn.set(e.target.unitId, hitOwn.get(e.target.unitId) ?? null);
+          else if (e.target.kind === 'contact' && e.result !== 'not-observed') {
+            const word = e.result === 'no-effect' ? null : e.result;
+            const prev = hitEnemy.get(e.target.contactId);
+            hitEnemy.set(e.target.contactId, RESULT_ORDER.indexOf(word) > RESULT_ORDER.indexOf(prev ?? null) ? word : (prev ?? null));
+          }
+          break;
+        case 'losses':
+          hitOwn.set(e.unitId, e);
+          break;
+        case 'retreated':
+          out.push({ kind: 'retreat', from: e.from, to: e.to, side: e.unit.kind === 'own' ? side : enemy });
+          break;
+        case 'pinned':
+          out.push({ kind: 'word', hex: e.at, text: 'pinned' });
+          break;
+        case 'advance-halted':
+          out.push({ kind: 'word', hex: e.at, text: 'halt' });
+          break;
+      }
+    }
+    const units = new Map(shown.units.map((u) => [u.id, u]));
+    for (const [unitId, loss] of hitOwn) {
+      const u = units.get(unitId) ?? replay.frames[step]?.ownUnits.find((x) => x.id === unitId);
+      if (!u) continue;
+      let text: string | null = null;
+      if (loss && loss.personnel > 0) {
+        const vehicles = Object.entries(loss.equipment).filter(([id]) => vehicleName(id)).reduce((n, [, k]) => n + k, 0);
+        text = `−${loss.personnel}${vehicles ? ` · −${vehicles} ${vehicles === 1 ? 'vehicle' : 'vehicles'}` : ''}`;
+      }
+      out.push({ kind: 'hit', hex: u.pos, text, own: true });
+    }
+    const contacts = new Map(shown.contacts.map((c) => [c.contactId, c]));
+    for (const [contactId, word] of hitEnemy) {
+      const c = contacts.get(contactId);
+      if (c) out.push({ kind: 'hit', hex: c.pos, text: word, own: false });
+    }
+    return out;
+  }, [watching, replay, frame, shown, side, enemy, vehicleName]);
+
+
+  // The whole turn in one picture, at the end of the replay and on request afterwards.
+  const pictureWanted = replay !== null && ((watching && frame === frameCount - 1) || (!watching && showPicture));
+  const turnPicture = useMemo((): TurnPicture | null => {
+    if (!pictureWanted || !replay) return null;
+    const trails: TurnPicture['trails'] = [];
+    const first = replay.frames[0]!;
+    for (const u of first.ownUnits) {
+      const points: Hex[] = [];
+      for (const f of replay.frames) {
+        const now = f.ownUnits.find((x) => x.id === u.id);
+        if (!now) break;
+        if (points.length === 0 || !hexEquals(points[points.length - 1]!, now.pos)) points.push(now.pos);
+      }
+      trails.push({ side, own: true, points });
+    }
+    const seen = new Map<string, Hex[]>();
+    for (const f of replay.frames) {
+      for (const c of f.contacts) {
+        if (!c.live) continue;
+        const pts = seen.get(c.contactId) ?? [];
+        if (pts.length === 0 || !hexEquals(pts[pts.length - 1]!, c.pos)) pts.push(c.pos);
+        seen.set(c.contactId, pts);
+      }
+    }
+    for (const points of seen.values()) trails.push({ side: enemy, own: false, points });
+    const fights = new Map<string, { hex: Hex; count: number }>();
+    for (const e of replay.events) {
+      if (e.kind !== 'fire') continue;
+      const k = hexKey(e.targetPos);
+      fights.set(k, { hex: e.targetPos, count: (fights.get(k)?.count ?? 0) + 1 });
+    }
+    const losses = replay.events.flatMap((e) => (e.kind === 'destroyed' ? [{ hex: e.at, surrendered: e.surrendered === true }] : []));
+    return { trails, fights: [...fights.values()], losses };
+  }, [pictureWanted, replay, side, enemy]);
 
   const renderView: RenderView = useMemo(
     () => ({
@@ -274,16 +470,40 @@ export function Game(props: {
       conflictHexes: conflicts.map((c) => c.hex),
       fireLines,
       objectives: objectiveMarks,
+      counterStyle,
+      effects,
+      turnPicture,
     }),
-    [counters, selectedHex, hoverHex, routeInfo, preview, conflicts, fireLines, objectiveMarks],
+    [counters, selectedHex, hoverHex, routeInfo, preview, conflicts, fireLines, objectiveMarks, counterStyle, effects, turnPicture],
   );
 
   // Event log: during the replay, what has happened so far; otherwise the last turn's report.
+  // Fire entries carry their reasons, to read on a click.
+  const reasonsFor = useCallback(
+    (e: Extract<ObservedEvent, { kind: 'fire' }>) => describeFactors(e.factors, cellAt(map, e.targetPos)?.terrain ?? null),
+    [map],
+  );
   const log = useMemo((): LogEntry[] => {
     if (!replay) return [];
     const upTo = watching ? frame : Infinity;
-    return replay.events.filter((e) => e.step < upTo).map((e, i) => ({ key: i, time: e.time, kind: e.kind, text: describeObserved(e, names) }));
-  }, [replay, watching, frame, names]);
+    return replay.events
+      .filter((e) => e.step < upTo)
+      .map((e, i) => ({ key: i, time: e.time, kind: e.kind, text: describeObserved(e, names), ...(e.kind === 'fire' ? { detail: reasonsFor(e) } : {}) }));
+  }, [replay, watching, frame, names, reasonsFor]);
+
+  // The selected unit's fights in the step shown, for the unit panel during a replay.
+  const selectedFights = useMemo(() => {
+    if (!watching || !replay || frame === 0 || !selectedId) return [];
+    return replay.events
+      .filter(
+        (e): e is Extract<ObservedEvent, { kind: 'fire' }> =>
+          e.kind === 'fire' &&
+          e.step === frame - 1 &&
+          ((e.firer.kind === 'own' && e.firer.unitId === selectedId) || (e.target.kind === 'own' && e.target.unitId === selectedId)),
+      )
+      .map((e) => ({ text: describeObserved(e, names), detail: reasonsFor(e) }));
+  }, [watching, replay, frame, selectedId, names, reasonsFor]);
+
 
   // ---------------------------------------------------------------------------
   // Talking to the host
@@ -383,16 +603,17 @@ export function Game(props: {
     [counters, selectedUnit, waypoints, mode, world, draft, phase, view, side],
   );
 
-  // Replay playback.
+  // Replay playback, resting longer on a key moment.
   useEffect(() => {
     if (!playing || !watching) return;
     if (frame >= frameCount - 1) {
       setPlaying(false);
       return;
     }
-    const t = setTimeout(() => setFrame((f) => Math.min(f + 1, frameCount - 1)), REPLAY_FRAME_MS / speed);
+    const dwell = moments.some((m) => m.frame === frame) ? MOMENT_DWELL_MS : REPLAY_FRAME_MS;
+    const t = setTimeout(() => setFrame((f) => Math.min(f + 1, frameCount - 1)), dwell / speed);
     return () => clearTimeout(t);
-  }, [playing, watching, frame, frameCount, speed]);
+  }, [playing, watching, frame, frameCount, speed, moments]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -447,7 +668,7 @@ export function Game(props: {
       <header className="topbar">
         <div className="brand">
           <strong>WW2Hex</strong>
-          <span className="stage">Stage 3 prototype</span>
+          <span className="stage">Stage 5 prototype</span>
         </div>
         <div className="scenario-badge" title={file.description}>
           {file.dataStatus === 'synthetic' ? 'SYNTHETIC TEST SCENARIO — not historical' : file.name}
@@ -489,6 +710,14 @@ export function Game(props: {
               Result
             </button>
           )}
+          <div className="style-toggle" role="group" aria-label="Counter style">
+            <button className={counterStyle === 'pictures' ? 'active' : ''} onClick={() => chooseCounterStyle('pictures')} title="Counters with pictures of the unit">
+              Pictures
+            </button>
+            <button className={counterStyle === 'symbols' ? 'active' : ''} onClick={() => chooseCounterStyle('symbols')} title="Counters with military map symbols">
+              Symbols
+            </button>
+          </div>
           <button onClick={() => setFitRequest((n) => n + 1)} title="Fit the whole map in view">
             Fit
           </button>
@@ -499,7 +728,7 @@ export function Game(props: {
       </header>
 
       <main className="main">
-        <MapView map={map} view={renderView} handlers={handlers} fitRequest={fitRequest} />
+        <MapView map={map} view={renderView} handlers={handlers} fitRequest={fitRequest} focus={focus} />
         {watching && (
           <ReplayBar
             frame={frame}
@@ -507,6 +736,7 @@ export function Game(props: {
             time={clockLabel(file, shown.time)}
             playing={playing}
             speed={speed}
+            moments={moments}
             onFrame={(f) => {
               setPlaying(false);
               setFrame(f);
@@ -516,7 +746,17 @@ export function Game(props: {
               setPlaying((p) => !p);
             }}
             onSpeed={setSpeed}
+            onSkip={() => {
+              setPlaying(false);
+              setFrame(frameCount - 1);
+            }}
           />
+        )}
+        {momentNow && (
+          <div className="moment-caption" role="status">
+            <span className="moment-time">{clockLabel(file, shown.time).slice(-5)}</span>
+            {momentNow.text}
+          </div>
         )}
         {status !== 'open' && <div className="conn-banner">Connection to the host lost. Reconnecting… Your orders are kept.</div>}
         {status === 'open' && waitingFor && <div className="wait-banner">{waitingFor}</div>}
@@ -528,6 +768,15 @@ export function Game(props: {
       </main>
 
       <aside className="sidebar">
+        {replay && summary.length > 0 && (!watching || frame === frameCount - 1) && (
+          <SummaryPanel
+            title={watching ? `Turn ${replay.turn} in brief` : `Last turn (${replay.turn}) in brief`}
+            lines={summary}
+            story={story}
+            turnLabel={(t) => `Turn ${t}`}
+            {...(!watching ? { picture: { shown: showPicture, onToggle: () => setShowPicture((v) => !v) } } : {})}
+          />
+        )}
         {selectedUnit ? (
           <UnitPanel
             unit={selectedUnit}
@@ -546,6 +795,7 @@ export function Game(props: {
             onHold={() => draft(selectedUnit, null)}
             onUndo={() => clearDraft(selectedUnit)}
             onClearWaypoints={() => setWaypoints([])}
+            fights={selectedFights}
             costToNext={(() => {
               const next = orderPath(selectedUnit.order).slice(0, 1);
               return next.length ? (pathCosts(map, RULES, selectedUnit.movementClass, selectedUnit.pos, next, { side, turn })?.[0] ?? null) : null;

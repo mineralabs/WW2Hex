@@ -1,6 +1,7 @@
 import {
   axialToOffset,
   type BlockReason,
+  type FireFactor,
   type FireResult,
   type Hex,
   type ObjectiveStatus,
@@ -154,4 +155,54 @@ export function outcomeDetail(o: Outcome, objectives: readonly ObjectiveStatus[]
     case 'time':
       return `Turn ${lastTurn ?? o.turn} ended without an objective being met${o.winner ? `, so the ${SIDE_NAME[o.winner]} side wins` : ''}.`;
   }
+}
+
+const TERRAIN_WORD: Record<string, string> = { clear: 'open ground', polder: 'polder', woods: 'woods', town: 'a town', water: 'water' };
+
+/**
+ * The reasons behind one fire result, as the player may know them, each as a
+ * short sentence, ending with the overall effect.
+ */
+export function describeFactors(factors: readonly FireFactor[], targetTerrain: string | null): string[] {
+  const lines: string[] = [];
+  let overall = 100;
+  for (const f of factors) {
+    overall = (overall * f.percent) / 100;
+    switch (f.name) {
+      case 'range':
+        if (f.percent === 0) lines.push(`Out of range at ${f.detail} hexes: no effect`);
+        else if (f.detail === 1 && f.percent === 100) lines.push('Point-blank range: full effect');
+        else lines.push(`Range ${f.detail} hexes: ${f.percent}% of full effect`);
+        break;
+      case 'moving':
+        lines.push(`Firing on the move: ${f.percent}%`);
+        break;
+      case 'cohesion':
+        lines.push(`Shaken (cohesion): firing at ${f.percent}%`);
+        break;
+      case 'supply':
+        lines.push(`Short of supplies: ${f.percent}%`);
+        break;
+      case 'terrain':
+        lines.push(`Target in ${TERRAIN_WORD[targetTerrain ?? ''] ?? 'cover'}: ${f.percent === 50 ? 'half damage' : `${f.percent}%`}`);
+        break;
+      case 'preparation':
+        lines.push(`Target dug in (level ${f.detail}): ${f.percent}%`);
+        break;
+      case 'exposed':
+        lines.push(`Target caught moving in the open: +${f.percent - 100}%`);
+        break;
+      case 'assault':
+        lines.push(`Assault: +${f.percent - 100}%`);
+        break;
+      case 'river':
+        lines.push(`Assault across a river: ${f.percent}%`);
+        break;
+      case 'unobserved':
+        lines.push(`Shelling a hex nobody could see: ${f.percent === 50 ? 'half effect' : `${f.percent}%`}`);
+        break;
+    }
+  }
+  lines.push(`Overall: ${Math.round(overall)}% of full effect`);
+  return lines;
 }

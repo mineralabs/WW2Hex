@@ -372,6 +372,12 @@ nothing about the enemy's until they are spotted.
 ## What each side is told
 
 - **Your own units:** exact losses, cohesion, retreats and halts.
+- **Why it went as it did:** every fire result carries its reasons: the range, and each factor
+  that changed the result (cohesion, supply, moving, the target's terrain and dug-in level, a
+  target caught in the open, assault, river, shelling blind). For enemy fire on you, only what
+  you could observe is given: your own terrain and cover, whether it was an assault or came
+  across a river, and the range if the firer was seen. The enemy's cohesion, supply and movement
+  are never reported, nor whether the enemy could see you.
 - **Your fire:** what you fired at. If you could see the target you also get a rough result:
   - no effect;
   - light (up to 2% of the target's starting strength);

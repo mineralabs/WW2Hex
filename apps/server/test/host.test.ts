@@ -139,6 +139,9 @@ describe('information leakage in network payloads', () => {
           for (const e of m.replay.events) {
             if (e.kind === 'losses') expect(scenario.units.find((u) => u.id === e.unitId)!.side).toBe(side);
             if (e.kind === 'fire') fired = true;
+            if (e.kind === 'fire' && e.firer.kind !== 'own') {
+              for (const f of e.factors) expect(['terrain', 'preparation', 'exposed', 'assault', 'river', 'range']).toContain(f.name);
+            }
           }
         }
       }

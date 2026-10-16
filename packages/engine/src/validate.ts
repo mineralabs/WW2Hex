@@ -11,6 +11,7 @@ import {
 import { buildMap, cellAt, fromOffset, isOnMap } from './map.ts';
 import { DEFAULT_RULES, type Rules } from './rules.ts';
 import {
+  NATIONS,
   TERRAINS,
   type FormationFile,
   type GameMap,
@@ -148,6 +149,8 @@ export function validateScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULE
   const formations = new Map(file.formations.map((f) => [f.id, f]));
   if (formations.size !== file.formations.length) error('formation-id-duplicate', 'Formation ids must be unique');
   for (const f of file.formations) {
+    if (f.nation !== undefined && !NATIONS.includes(f.nation)) error('formation-nation', `Formation ${f.id}: nation must be one of ${NATIONS.join(', ')}`);
+    if (f.badge !== undefined && (f.badge.length < 1 || f.badge.length > 4)) error('formation-badge', `Formation ${f.id}: badge must be 1-4 characters`);
     if (f.parentId === null) continue;
     const parent = formations.get(f.parentId);
     if (!parent) {

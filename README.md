@@ -3,7 +3,7 @@
 A two-player, simultaneous-turn WWII operational wargame on hex maps. The design is in
 [WW2_Hex_Game_Development_Brief.md](WW2_Hex_Game_Development_Brief.md).
 
-**Status: Stage 4 (historical Nijmegen scenario).**
+**Status: Stage 5, part 1 (a legible game).**
 
 - One player's computer runs the game host. Both players play in a web browser, each on their own
   computer.
@@ -74,6 +74,15 @@ npm run dev        # client with hot reload → http://localhost:5173 (talks to 
    time shown.
 4. **Finish replay.** The next turn starts once both players have finished.
 
+**Following the battle.** The replay pauses on the moments that matter, with a caption, and pans
+to them; the diamonds under the scrub bar jump between them, and **Skip to summary** goes
+straight to the end. At the end, **Turn N in brief** gives the turn in a few sentences, and the
+map shows the turn in one picture: a ghost where each unit started, a trail to where it ended, a
+starburst where there was fighting, a cross where a unit was lost. During planning, **show it on
+the map** brings that picture back. Click **why?** on any shot in the event log, or select a unit
+during the replay, to see the reasons behind a result. **Pictures / Symbols** in the top bar
+switches counters between silhouettes and military map symbols.
+
 The **Objectives** panel shows who holds each objective hex: a star and ring on the map, in the
 holder's colour. The **Reinforcements** panel lists your own units still to arrive. A unit's
 panel shows its supply: reserves fall as it fires and moves, and refill only while a supply
@@ -102,7 +111,7 @@ All numbers are provisional playtest values.
 ## Checks
 
 ```sh
-npm test           # 149 tests (Vitest): engine, protocol, host and map tools
+npm test           # 155 tests (Vitest): engine, protocol, host, client narrative and map tools
 npm run typecheck  # TypeScript across all packages
 npm run check      # both
 ```
@@ -120,6 +129,8 @@ The tests cover:
 - supply routes, reserves, air drops and reinforcements;
 - limited crossings (railway bridge, assault boats);
 - the Nijmegen scenario validating, with every uncertain value labelled;
+- the reasons behind fire results, and that enemy fire reports only what the target could observe;
+- turn summaries and key moments from a real fight, for both sides;
 - information leakage, checked on the exact messages each player receives;
 - message validation, seats, credentials and origin checks;
 - duplicate commits;
@@ -142,11 +153,9 @@ The tests cover:
 | `scenarios/synthetic-test` | The synthetic engine-development scenario |
 | `tools/map-builder` | Builds georeferenced hex maps and scenarios from open data and research: `npm run build:map`, `npm run build:scenario` |
 | `saves` | Saved matches (created by the host; not in git) |
-| `docs` | [Connection guide](docs/connection-guide.md), [combat rules](docs/combat-rules.md), [research](docs/research), [Stage 4 notes](docs/stage-4-notes.md), [Stage 3 notes](docs/stage-3-notes.md), [Stage 2 notes](docs/stage-2-notes.md), [Stage 1 notes](docs/stage-1-notes.md), [scenario format](docs/scenario-format.md) |
+| `docs` | [Connection guide](docs/connection-guide.md), [combat rules](docs/combat-rules.md), [research](docs/research), [Stage 5 notes](docs/stage-5-notes.md), [Stage 4 notes](docs/stage-4-notes.md), [Stage 3 notes](docs/stage-3-notes.md), [Stage 2 notes](docs/stage-2-notes.md), [Stage 1 notes](docs/stage-1-notes.md), [scenario format](docs/scenario-format.md) |
 
 ## Next
 
-Stage 4's real test is playing Nijmegen: whether both sides have more than one credible plan,
-and whether the outcomes make sense. Stage 5 follows from that: formation orders, clearer
-feedback, readable counters, tuned objectives. See
-[docs/stage-4-notes.md](docs/stage-4-notes.md#stage-5-hand-off).
+Play Nijmegen. The first game decides the second part of Stage 5: formation orders, night, and
+tuning from what the game shows. See [docs/stage-5-notes.md](docs/stage-5-notes.md).

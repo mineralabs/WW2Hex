@@ -17,7 +17,7 @@ the right.
 | `start` | `{ day, minuteOfDay }` at the start of turn 1 |
 | `map` | See below |
 | `equipment` | Catalogue: `id`, `name`, `role`, `combatClass`, `researchStatus`, `sources[]`. Historical facts and sources go here. `combatClass` names a weapon profile in the rules, such as `rifle-section` or `medium-tank`. The game numbers live in that profile, never in the catalogue |
-| `formations` | `id`, `side`, `name`, `parentId` (or `null`), `dataStatus`. Parents must exist, be on the same side, and not form a cycle |
+| `formations` | `id`, `side`, `name`, `parentId` (or `null`), `dataStatus`. Optional `nation` (`us`, `uk` or `de`: counter colours) and `badge` (up to four characters shown on its counters), both inherited by child formations and units. Parents must exist, be on the same side, and not form a cycle |
 | `units` | One counter each. See below |
 | `events` | Reinforcements and airborne supply drops. See below |
 | `supplySources` | Optional. Where each side's supply comes from. A side with none is always in supply. See below |

@@ -92,6 +92,10 @@ describe('worked example 2: armour against anti-tank guns', () => {
     const c = fire(world, at, tk);
     expect(values(c)).toEqual([6000, 6000, 6000, 6000, 6000, 7500, 7500, 7500]);
     expect(c.damage).toBe(2);
+    expect(c.factors).toEqual([
+      { name: 'range', percent: 60, detail: 2 },
+      { name: 'exposed', percent: 125 },
+    ]);
     const lost = applyDamage(world, rules, tk, c.damage);
     expect(tk.equipment['medium-tank']).toBe(50);
     expect(tk.damageCarry).toBe(2);
@@ -154,6 +158,15 @@ describe('worked example 3: an attack into a town', () => {
     expect(values(c)).toEqual([10800, 9720, 9720, 4860, 3402, 3402, 5103, 5103]);
     expect(c.damage).toBe(1);
     expect(fire(world, g, a).damage).toBe(2);
+    // The reasons, as reported to the player: everything that changed the result, plus range.
+    expect(c.factors).toEqual([
+      { name: 'range', percent: 100, detail: 1 },
+      { name: 'cohesion', percent: 90 },
+      { name: 'terrain', percent: 50 },
+      { name: 'preparation', percent: 70, detail: 2 },
+      { name: 'assault', percent: 150 },
+    ]);
+    expect(fire(world, g, a).factors).toEqual([{ name: 'range', percent: 100, detail: 1 }]);
   });
 
   it('the assault bonus is only given at cohesion 50 or more', () => {
