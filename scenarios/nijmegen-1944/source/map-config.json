@@ -51,7 +51,8 @@
     { "name": "Kranenburg", "kind": "town", "centre": { "lat": 51.7897, "lon": 6.0072 }, "radiusKm": 0.3, "label": true, "source": "settlements-roads-1944.md 1c" }
   ],
   "features": [
-    { "name": "Valkhof", "at": { "lat": 51.8478, "lon": 5.8703 }, "source": "crossings-timeline.md key places" },
+    { "name": "Hunner Park", "at": { "lat": 51.8471, "lon": 5.8721 }, "source": "crossings-timeline.md key places; the Valkhof, Keizer Lodewijkplein and the road bridge's south end fall in the same hex" },
+    { "name": "Kronenburgerpark", "at": { "lat": 51.8460, "lon": 5.8500 }, "source": "allied-forces.md 6 key places; Ersatz-Bataillon 6 held it" },
     { "name": "Fort Hof van Holland", "at": { "lat": 51.8621, "lon": 5.8522 }, "source": "crossings-timeline.md (identification provisional)" },
     { "name": "Duivelsberg", "at": { "lat": 51.8206, "lon": 5.9436 }, "source": "settlements-roads-1944.md 4" },
     { "name": "Kiekberg", "at": { "lat": 51.7486, "lon": 5.9186 }, "source": "settlements-roads-1944.md 4" },

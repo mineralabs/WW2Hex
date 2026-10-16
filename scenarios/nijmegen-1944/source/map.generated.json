@@ -3137,10 +3137,18 @@
       ]
     },
     {
-      "name": "Valkhof",
+      "name": "Hunner Park",
       "kind": "feature",
       "at": [
         14,
+        10
+      ]
+    },
+    {
+      "name": "Kronenburgerpark",
+      "kind": "feature",
+      "at": [
+        12,
         10
       ]
     },
