@@ -104,7 +104,7 @@ to 0.
 | Combat class | Fire vs soft | Fire vs hard | Direct range (hexes) | Indirect range (hexes) | Fire while moving | Armoured | Used for |
 | --- | ---: | ---: | ---: | ---: | ---: | :---: | --- |
 | rifle-section | 4 | 1 | 1 | – | 50% | | Rifle sections and squads, with their light support weapons |
-| heavy-tank | 7 | 14 | 3 | – | 40% | ✓ | Tiger I (0.7.1) |
+| heavy-tank | 7 | 14 | 3 | – | 40% | ✓ | Tiger I (0.8.0) |
 | medium-tank | 6 | 8 | 2 | – | 50% | ✓ | Sherman (75 mm), Cromwell, Panzer IV |
 | tank-17pdr | 6 | 12 | 2 | – | 50% | ✓ | Sherman Firefly, Challenger |
 | light-tank | 4 | 4 | 2 | – | 60% | ✓ | Stuart |

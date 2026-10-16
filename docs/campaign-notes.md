@@ -132,7 +132,7 @@ Arnhem scenarios stay as they were and can still be played on their own. Everyth
   and back, as on 17-18 September, is the German player's choice. No separate counter is left at
   the Waal bridge.
 - **New equipment:**
-  - the **Tiger I**, under a new heavy-tank class (rules 0.7.1, which old saves still load under: fire 7 against infantry and 14
+  - the **Tiger I**, under a new heavy-tank class (rules 0.8.0: fire 7 against infantry and 14
     against vehicles, 3 hexes);
   - **captured French tanks**, rated as light tanks and shown as a Char B1 bis.
 
