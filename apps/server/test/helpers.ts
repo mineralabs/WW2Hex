@@ -181,6 +181,7 @@ export function knownState(view: PlayerView): GameState {
     contacts: { allied: [], german: [] },
     nextContactNo: { allied: 1, german: 1 },
     destroyed: [],
+    reinforcements: [],
     objectives: { control: {}, heldFor: {} },
   };
 }

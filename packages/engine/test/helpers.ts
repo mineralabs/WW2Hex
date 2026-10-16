@@ -80,6 +80,8 @@ export interface TinyOptions {
   units?: UnitFile[];
   objectives?: ScenarioFile['objectives'];
   victory?: ScenarioFile['victory'];
+  events?: ScenarioFile['events'];
+  supplySources?: ScenarioFile['supplySources'];
 }
 
 /** A small synthetic scenario for focused rule tests. */
@@ -113,7 +115,8 @@ export function tinyFile(o: TinyOptions): ScenarioFile {
       { id: 'fg', side: 'german', name: 'Test German', parentId: null, dataStatus: 'synthetic' },
     ],
     units: o.units ?? [],
-    events: [],
+    events: o.events ?? [],
+    ...(o.supplySources ? { supplySources: o.supplySources } : {}),
     objectives: o.objectives ?? [],
     ...(o.victory ? { victory: o.victory } : {}),
     provenance: { status: 'synthetic', sources: [], notes: [] },

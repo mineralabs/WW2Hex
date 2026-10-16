@@ -53,6 +53,22 @@ export interface Rules {
   /** A unit is a hard target when armoured vehicles × this ≥ personnel. */
   hardTargetRatio: number;
   supplyPercent: Record<SupplyStatus, number>;
+  supply: {
+    /** Reserves below this are Low. */
+    lowBelow: number;
+    /** Reserves below this are Exhausted. */
+    exhaustedBelow: number;
+    /** Reserves used in a step in which the unit fired directly. */
+    fireCost: number;
+    /** Reserves used in a step in which the unit fired indirectly (artillery). */
+    indirectFireCost: number;
+    /** Reserves used in a step in which the unit moved. */
+    moveCost: number;
+    /** Reserves regained in a step while a supply route reaches the unit. */
+    resupplyPerStep: number;
+    /** Starting reserves for a unit given only a supply status. */
+    defaultReserves: Record<SupplyStatus, number>;
+  };
   /** Damage taken by a target in this terrain, percent. */
   terrainProtection: Record<Terrain, number>;
   /** Damage reduction per preparation level, percent points. */
@@ -103,7 +119,7 @@ export interface WeaponProfile {
 }
 
 export const DEFAULT_RULES: Rules = {
-  rulesVersion: '0.4.0-provisional',
+  rulesVersion: '0.6.0-provisional',
   stepMinutes: 10,
   stepsPerTurn: 12,
   movementTicksPerStep: 10,
@@ -137,15 +153,37 @@ export const DEFAULT_RULES: Rules = {
     'medium-tank': { soft: 6, hard: 8, directRange: 2, indirectRange: 0, fireWhileMoving: 50, armoured: true },
     'armoured-car': { soft: 3, hard: 1, directRange: 2, indirectRange: 0, fireWhileMoving: 75, armoured: true },
     'at-gun': { soft: 1, hard: 10, directRange: 2, indirectRange: 0, fireWhileMoving: 0, armoured: false },
-    'field-gun': { soft: 10, hard: 2, directRange: 1, indirectRange: 8, fireWhileMoving: 0, armoured: false },
+    // Indirect ranges are in 1 km hexes: field guns about 10 km (25-pdr 12 km, leFH 18 10.7 km, M3 7.6 km),
+    // pack howitzers 8.8 km, medium guns 13 km and more.
+    'field-gun': { soft: 10, hard: 2, directRange: 1, indirectRange: 10, fireWhileMoving: 0, armoured: false },
     transport: { soft: 0, hard: 0, directRange: 0, indirectRange: 0, fireWhileMoving: 0, armoured: false },
+    // Added for the Nijmegen scenario (Stage 4).
+    'light-tank': { soft: 4, hard: 4, directRange: 2, indirectRange: 0, fireWhileMoving: 60, armoured: true },
+    'tank-17pdr': { soft: 6, hard: 12, directRange: 2, indirectRange: 0, fireWhileMoving: 50, armoured: true },
+    'assault-gun': { soft: 5, hard: 11, directRange: 2, indirectRange: 0, fireWhileMoving: 25, armoured: true },
+    'tank-destroyer': { soft: 4, hard: 12, directRange: 2, indirectRange: 0, fireWhileMoving: 25, armoured: true },
+    'light-at-gun': { soft: 1, hard: 6, directRange: 2, indirectRange: 0, fireWhileMoving: 0, armoured: false },
+    'heavy-flak': { soft: 4, hard: 14, directRange: 3, indirectRange: 0, fireWhileMoving: 0, armoured: false },
+    'light-flak': { soft: 4, hard: 2, directRange: 2, indirectRange: 0, fireWhileMoving: 0, armoured: false },
+    'flak-halftrack': { soft: 4, hard: 2, directRange: 2, indirectRange: 0, fireWhileMoving: 50, armoured: false },
+    'pack-howitzer': { soft: 7, hard: 2, directRange: 1, indirectRange: 8, fireWhileMoving: 0, armoured: false },
+    'medium-gun': { soft: 16, hard: 3, directRange: 0, indirectRange: 13, fireWhileMoving: 0, armoured: false },
   },
   rangePercent: [0, 100, 60, 40],
-  firePointsPerDamage: 10,
+  firePointsPerDamage: 30,
   damagePerVehicle: 3,
   crewPerVehicle: 5,
   hardTargetRatio: 15,
   supplyPercent: { supplied: 100, low: 75, exhausted: 40 },
+  supply: {
+    lowBelow: 50,
+    exhaustedBelow: 20,
+    fireCost: 3,
+    indirectFireCost: 9,
+    moveCost: 1,
+    resupplyPerStep: 6,
+    defaultReserves: { supplied: 100, low: 40, exhausted: 10 },
+  },
   terrainProtection: { clear: 100, polder: 90, woods: 60, town: 50, water: 100 },
   preparationPerLevel: 15,
   stepsPerPreparationLevel: 3,

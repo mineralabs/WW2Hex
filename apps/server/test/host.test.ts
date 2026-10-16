@@ -5,7 +5,7 @@ import { DEFAULT_RULES, applyUnitOrder, buildWorld, fromOffset, type CommittedOr
 import type { PlayerView, ServerMessage } from '@ww2hex/protocol';
 import { GameHost, type Connection } from '../src/host.ts';
 import { networkInterfaces } from 'node:os';
-import { isThisComputer, type RunningServer } from '../src/server.ts';
+import { isThisComputer, startServer, type RunningServer } from '../src/server.ts';
 import { FileMatchStore, type RoomRecord } from '../src/storage.ts';
 import { SIDES_BOTH, TestClient, knownState, openMatch, randomOrders, start, syntheticScenario, tempDir } from './helpers.ts';
 
@@ -418,5 +418,45 @@ describe('WebSocket origin checks', () => {
     expect(await upgrade(s.port, { host: `localhost:${s.port}`, origin: 'http://evil.example' })).toBe(403);
     expect(await upgrade(s.port, { host: `evil.example:${s.port}`, origin: `http://evil.example:${s.port}` })).toBe(403);
     expect(await upgrade(s.port, { host: `my-pc.tail1234.ts.net:${s.port}`, origin: `http://my-pc.tail1234.ts.net:${s.port}` })).toBe(101);
+  });
+});
+
+describe('the Nijmegen scenario over the network', () => {
+  it('never tells a player about the other side’s reinforcements, supply or boat crossing', async () => {
+    const dir = tempDir();
+    const nijmegen = JSON.parse(readFileSync(new URL('../../../scenarios/nijmegen-1944/scenario.json', import.meta.url), 'utf8')) as ReturnType<typeof syntheticScenario>;
+    const s = await startServer({ port: 0, host: '127.0.0.1', clientDir: null, store: new FileMatchStore(dir), scenarios: new Map([[nijmegen.id, nijmegen]]), log: () => {} });
+    running.push(s);
+    const host = await TestClient.connect(s.port);
+    clients.push(host);
+    host.send({ type: 'create-room', scenarioId: nijmegen.id, side: 'allied' });
+    const hostJoined = await host.next('joined');
+    const guest = await TestClient.connect(s.port);
+    clients.push(guest);
+    guest.send({ type: 'join', roomCode: hostJoined.roomCode, credential: null });
+    const guestJoined = await guest.next('joined');
+    const players = { allied: host, german: guest };
+
+    // A turn of each side's fighting, so contacts and events flow.
+    for (const side of SIDES_BOTH) players[side].send({ type: 'commit-orders', orders: { side, turn: 1, orders: [] } });
+    for (const side of SIDES_BOTH) await players[side].next('replay');
+
+    expect(hostJoined.scenario.map.bridges.some((b) => b.id === 'waal-assault-boats')).toBe(true);
+    expect(guestJoined.scenario.map.bridges.some((b) => b.id === 'waal-assault-boats')).toBe(false);
+    for (const side of SIDES_BOTH) {
+      const all = players[side].raw.join('\n');
+      const enemyIds = [
+        ...nijmegen.units.filter((u) => u.side !== side).map((u) => u.id),
+        ...nijmegen.events.flatMap((e) => (e.kind === 'reinforcement' && e.side !== side ? e.units.map((u) => u.id) : [])),
+        ...nijmegen.events.filter((e) => e.side !== side).map((e) => e.id),
+        ...(nijmegen.supplySources ?? []).filter((x) => x.side !== side).map((x) => x.id),
+        ...nijmegen.formations.filter((f) => f.side !== side).map((f) => f.id),
+      ];
+      for (const id of enemyIds) expect(all, `${side} saw ${id}`).not.toContain(`"${id}"`);
+      // Its own reinforcements are listed.
+      const own = nijmegen.events.flatMap((e) => (e.kind === 'reinforcement' && e.side === side ? e.units.map((u) => u.id) : []));
+      const view = players[side].latestView()!;
+      expect(view.ownReinforcements.map((p) => p.unit.id).sort()).toEqual(own.sort());
+    }
   });
 });

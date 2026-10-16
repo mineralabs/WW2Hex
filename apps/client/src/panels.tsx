@@ -17,10 +17,11 @@ import {
   type Side,
   type UnitState,
 } from '@ww2hex/engine';
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import {
   BLOCK_TEXT,
   SIDE_NAME,
+  SUPPLY_TEXT,
   TYPE_LABEL,
   describeOrder,
   fmtDuration,
@@ -97,7 +98,13 @@ export function UnitPanel(props: {
           <span className="meter-value">{u.cohesion}</span>
         </dd>
         <dt>Supply</dt>
-        <dd className={`supply-${u.supply}`}>{u.supply[0]!.toUpperCase() + u.supply.slice(1)}</dd>
+        <dd>
+          <span className={`supply-${u.supply}`}>{SUPPLY_TEXT[u.supply]}</span>
+          <div className="meter" title={`Reserves ${u.reserves} / 100`}>
+            <div style={{ width: `${u.reserves}%` }} className={u.supply === 'supplied' ? 'ok' : u.supply === 'low' ? 'warn' : 'bad'} />
+          </div>
+          <span className="muted small">{u.inSupply ? 'route open: reserves refill' : 'route cut: reserves only fall'}</span>
+        </dd>
         <dt>Prepared</dt>
         <dd>{props.preparation > 0 ? `level ${props.preparation} (−${15 * props.preparation}% damage taken)` : 'no'}</dd>
       </dl>
@@ -215,7 +222,7 @@ export function HexPanel(props: { hex: Hex; map: GameMap; rules: Rules; place?: 
   if (!cell) return null;
   const ns = neighbors(hex);
   const riverSides = ns.filter((n) => map.riverEdges.has(edgeKey(hex, n)));
-  const bridges = ns.filter((n) => map.bridges.has(edgeKey(hex, n)));
+  const bridges = ns.map((n) => map.bridges.get(edgeKey(hex, n))).filter((b) => b !== undefined);
   const roads = ns.filter((n) => map.roadEdges.has(edgeKey(hex, n)));
   const riverNames = [...new Set(riverSides.map((n) => map.riverEdges.get(edgeKey(hex, n))!.riverId))]
     .map((id) => map.rivers.find((r) => r.id === id)?.name ?? id)
@@ -242,8 +249,20 @@ export function HexPanel(props: { hex: Hex; map: GameMap; rules: Rules; place?: 
         <dt>River</dt>
         <dd>
           {riverSides.length > 0 ? `${riverNames} on ${riverSides.length} side${riverSides.length > 1 ? 's' : ''}` : 'none'}
-          {bridges.length > 0 && ' · bridge'}
         </dd>
+        {bridges.map((b) => (
+          <Fragment key={b.id}>
+            <dt>Crossing</dt>
+            <dd>
+              {b.name}
+              <span className="muted small">
+                {b.movementClasses.length < 3 ? `${b.movementClasses.join(' and ')} only` : 'all units'}
+                {b.side ? ` · ${SIDE_NAME[b.side]} only` : ''}
+                {b.fromTurn > 1 ? ` · from turn ${b.fromTurn}` : ''}
+              </span>
+            </dd>
+          </Fragment>
+        ))}
         <dt>Entry cost</dt>
         <dd>
           {MOVEMENT_CLASSES.map((c) => {
@@ -529,5 +548,33 @@ export function OutcomeDialog(props: {
         </div>
       </div>
     </div>
+  );
+}
+
+/** This side's own units still to arrive. The other side never receives this. */
+export function ReinforcementPanel(props: {
+  pending: { unit: UnitState; turn: number; entry: Hex[] }[];
+  turn: number;
+  turnStart: (turn: number) => string;
+  place: (h: Hex) => string | undefined;
+}) {
+  if (props.pending.length === 0) return null;
+  return (
+    <section className="panel reinforcements">
+      <h3>Reinforcements</h3>
+      <ul>
+        {props.pending.map((p) => (
+          <li key={p.unit.id}>
+            <strong>{p.unit.name}</strong> <span className="muted small">({TYPE_LABEL[p.unit.type].toLowerCase()})</span>
+            <div className="muted small">
+              {p.turn <= props.turn
+                ? 'Waiting: every entry hex is occupied'
+                : `Turn ${p.turn} (${props.turnStart(p.turn)})`}{' '}
+              at {props.place(p.entry[0]!) ?? fmtHex(p.entry[0]!)}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

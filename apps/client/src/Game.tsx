@@ -41,6 +41,7 @@ import {
   InviteDialog,
   ObjectivePanel,
   OutcomeDialog,
+  ReinforcementPanel,
   ReplayBar,
   UnitPanel,
   type LogEntry,
@@ -73,6 +74,7 @@ function knownState(view: PlayerView): GameState {
     contacts: { allied: [], german: [] },
     nextContactNo: { allied: 1, german: 1 },
     destroyed: [],
+    reinforcements: [],
     objectives: { control: {}, heldFor: {} },
   };
 }
@@ -150,6 +152,7 @@ export function Game(props: {
   const names: Names = useMemo(() => {
     const units = new Map<string, UnitState>();
     for (const u of replay?.frames[0]?.ownUnits ?? []) units.set(u.id, u);
+    for (const p of view.ownReinforcements) units.set(p.unit.id, p.unit);
     for (const u of view.ownUnits) units.set(u.id, u);
     const equipment = new Map(file.equipment.map((e) => [e.id, e.name]));
     return {
@@ -159,7 +162,7 @@ export function Game(props: {
       },
       equipment: (id) => equipment.get(id) ?? id,
     };
-  }, [replay, view.ownUnits, file]);
+  }, [replay, view.ownUnits, view.ownReinforcements, file]);
 
   const formationColor = useMemo(() => {
     const index = new Map(file.formations.map((f, i) => [f.id, i]));
@@ -177,7 +180,7 @@ export function Game(props: {
     for (const u of shown.units) {
       const path = orderPath(u.order);
       if (path.length === 0) continue;
-      const costs = pathCosts(map, RULES, u.movementClass, u.pos, path) ?? [];
+      const costs = pathCosts(map, RULES, u.movementClass, u.pos, path, { side, turn }) ?? [];
       const eta = arrivalEstimates(u, costs);
       let turnEndIndex = -1;
       eta.forEach((t, i) => {
@@ -200,7 +203,7 @@ export function Game(props: {
       const max = maxRange(world, RULES, u, 'indirect');
       return { start: u.pos, path: [], waypoints: [], target: hoverHex, ok: d <= max, straight: true, label: d <= max ? `Bombard · ${d} of ${max} hexes` : `Out of range (${d} > ${max})` };
     }
-    const r = findRoute(map, RULES, u.movementClass, u.pos, [...waypoints, hoverHex]);
+    const r = findRoute(map, RULES, u.movementClass, u.pos, [...waypoints, hoverHex], undefined, { side, turn });
     if (!r.ok) return { start: u.pos, path: [], waypoints, target: hoverHex, ok: false, straight: false, label: 'No route' };
     const next = orderPath(u.order)[0];
     const kept = next && r.route.path[0] && hexEquals(next, r.route.path[0]) ? u.movement.progress : 0;
@@ -545,7 +548,7 @@ export function Game(props: {
             onClearWaypoints={() => setWaypoints([])}
             costToNext={(() => {
               const next = orderPath(selectedUnit.order).slice(0, 1);
-              return next.length ? (pathCosts(map, RULES, selectedUnit.movementClass, selectedUnit.pos, next)?.[0] ?? null) : null;
+              return next.length ? (pathCosts(map, RULES, selectedUnit.movementClass, selectedUnit.pos, next, { side, turn })?.[0] ?? null) : null;
             })()}
           />
         ) : selectedContact ? (
@@ -555,6 +558,12 @@ export function Game(props: {
         )}
         {selectedHex && <HexPanel hex={selectedHex} map={map} rules={RULES} place={placeAt(selectedHex)} unit={unitAtSelectedHex} />}
         <ObjectivePanel objectives={view.objectives} victory={world.victory} turn={turn} place={placeAt} lastTurnEnds={lastTurnEnds} />
+        <ReinforcementPanel
+          pending={view.ownReinforcements}
+          turn={turn}
+          turnStart={(t) => clockLabel(file, (t - 1) * turnMinutes(RULES))}
+          place={placeAt}
+        />
         <ConflictPanel conflicts={conflicts} name={names.unit} />
         <EventLog
           entries={log}

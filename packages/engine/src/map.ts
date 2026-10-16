@@ -8,15 +8,17 @@ import {
   type HexKey,
 } from './hex.ts';
 import type { Rules } from './rules.ts';
-import type {
-  Bridge,
-  GameMap,
-  MapCell,
-  MapFile,
-  MovementClass,
-  OffsetTuple,
-  RiverEdge,
-  RoadKind,
+import {
+  MOVEMENT_CLASSES,
+  type Bridge,
+  type GameMap,
+  type MapCell,
+  type MapFile,
+  type MoveContext,
+  type MovementClass,
+  type OffsetTuple,
+  type RiverEdge,
+  type RoadKind,
 } from './types.ts';
 
 export function fromOffset([col, row]: OffsetTuple): Hex {
@@ -66,7 +68,16 @@ export function buildMap(file: MapFile): GameMap {
     const hb = fromOffset(b.edge[1]);
     if (!areAdjacent(ha, hb)) continue;
     const key = edgeKey(ha, hb);
-    bridges.set(key, { id: b.id, name: b.name, edge: key, a: ha, b: hb });
+    bridges.set(key, {
+      id: b.id,
+      name: b.name,
+      edge: key,
+      a: ha,
+      b: hb,
+      movementClasses: b.movementClasses ?? MOVEMENT_CLASSES,
+      side: b.side ?? null,
+      fromTurn: b.fromTurn ?? 1,
+    });
   }
 
   const roadEdges = new Map<EdgeKey, RoadKind>();
@@ -120,6 +131,7 @@ export function moveCost(
   cls: MovementClass,
   from: Hex,
   to: Hex,
+  ctx?: MoveContext,
 ): number | null {
   if (!areAdjacent(from, to)) return null;
   const dest = cellAt(map, to);
@@ -127,7 +139,13 @@ export function moveCost(
 
   const key = edgeKey(from, to);
   const river = map.riverEdges.get(key);
-  const bridged = map.bridges.has(key);
+  const bridge = map.bridges.get(key);
+  // A crossing limited to one side or to later turns is usable only when the mover qualifies.
+  const bridged =
+    !!bridge &&
+    bridge.movementClasses.includes(cls) &&
+    (bridge.side === null || bridge.side === ctx?.side) &&
+    (bridge.fromTurn <= 1 || (ctx !== undefined && ctx.turn >= bridge.fromTurn));
 
   let extra = 0;
   if (river && !bridged) {

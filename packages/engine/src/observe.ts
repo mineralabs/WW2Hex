@@ -12,6 +12,7 @@ import {
   type Side,
   type SideView,
   type UnitRef,
+  type UnitState,
 } from './types.ts';
 import { canObserveHex, type Spotting } from './visibility.ts';
 
@@ -33,6 +34,9 @@ export function playerView(state: GameState, side: Side, rules: Rules): SideView
       live: c.live,
       apparentType: c.apparentType,
     })),
+    ownReinforcements: state.reinforcements
+      .filter((p) => p.unit.side === side)
+      .map((p) => ({ unit: JSON.parse(JSON.stringify(p.unit)) as UnitState, turn: p.turn, entry: p.entry.map((h) => ({ ...h })) })),
   };
 }
 
@@ -202,7 +206,7 @@ export function observeStep(events: readonly GameEvent[], side: Side, ctx: Obser
       case 'destroyed': {
         if (e.side === side || seenAt(ctx.fire, e.unitId) || seenAt(ctx.start, e.unitId)) {
           const r = ref(e.unitId, e.side);
-          if (r.kind !== 'unseen') out.push({ ...t, kind: e.kind, unit: r, at: e.at });
+          if (r.kind !== 'unseen') out.push({ ...t, kind: e.kind, unit: r, at: e.at, ...(e.surrendered ? { surrendered: true } : {}) });
         }
         break;
       }
@@ -215,6 +219,18 @@ export function observeStep(events: readonly GameEvent[], side: Side, ctx: Obser
       }
       case 'pinned':
         if (e.side === side) out.push({ ...t, kind: e.kind, unitId: e.unitId, at: e.at });
+        break;
+      case 'reinforcement-arrived':
+        if (e.side === side) out.push({ ...t, kind: e.kind, unitId: e.unitId, at: e.at });
+        break;
+      case 'reinforcement-delayed':
+        if (e.side === side) out.push({ ...t, kind: e.kind, unitId: e.unitId });
+        break;
+      case 'supply-drop':
+        if (e.side === side) out.push({ ...t, kind: e.kind, at: e.at, delivered: e.delivered, unitIds: e.unitIds });
+        break;
+      case 'supply-changed':
+        if (e.side === side) out.push({ ...t, kind: e.kind, unitId: e.unitId, from: e.from, to: e.to, inSupply: e.inSupply });
         break;
       case 'objective-control':
         out.push({ ...t, kind: e.kind, hex: e.hex, from: e.from, to: e.to });

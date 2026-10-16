@@ -21,12 +21,13 @@ export type PlanResult = { ok: true; order: Order; route: Route | null } | { ok:
  * Turns a player's order input into a standing order with a concrete route.
  * Uses static map knowledge only, so it can never reveal hidden enemies.
  */
-export function planOrder(world: World, rules: Rules, unit: UnitState, input: OrderInput): PlanResult {
+export function planOrder(world: World, rules: Rules, unit: UnitState, input: OrderInput, turn: number): PlanResult {
   const { map } = world;
+  const ctx = { side: unit.side, turn };
   switch (input.kind) {
     case 'advance':
     case 'withdraw': {
-      const result = findRoute(map, rules, unit.movementClass, unit.pos, input.waypoints);
+      const result = findRoute(map, rules, unit.movementClass, unit.pos, input.waypoints, undefined, ctx);
       if (!result.ok) return result;
       return {
         ok: true,
@@ -50,7 +51,7 @@ export function planOrder(world: World, rules: Rules, unit: UnitState, input: Or
         };
       }
       const waypoints = [...(input.waypoints ?? []), input.target];
-      const result = findRoute(map, rules, unit.movementClass, unit.pos, waypoints);
+      const result = findRoute(map, rules, unit.movementClass, unit.pos, waypoints, undefined, ctx);
       if (!result.ok) return result;
       return {
         ok: true,
@@ -101,7 +102,7 @@ export function applyOrderSet(state: GameState, world: World, rules: Rules, set:
       setOrder(unit, null);
       continue;
     }
-    const plan = planOrder(world, rules, unit, order);
+    const plan = planOrder(world, rules, unit, order, state.clock.turn);
     if (!plan.ok) {
       errors.push(`Unit ${unitId}: ${plan.error}`);
       continue;

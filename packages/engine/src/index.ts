@@ -11,4 +11,5 @@ export * from './orders.ts';
 export * from './observe.ts';
 export * from './resolve.ts';
 export * from './objectives.ts';
+export * from './logistics.ts';
 export * from './match.ts';

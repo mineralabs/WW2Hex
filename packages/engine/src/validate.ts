@@ -16,6 +16,7 @@ import {
   type GameMap,
   type OffsetTuple,
   type ScenarioFile,
+  type UnitFile,
 } from './types.ts';
 
 export interface ValidationIssue {
@@ -46,6 +47,17 @@ export function validateScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULE
 
   // Rivers --------------------------------------------------------------------
   const seenRiverEdges = new Set<EdgeKey>();
+  // Corners touched by each river, so a canal or tributary may end where it meets another river.
+  const riverCorners = new Map<string, Set<CornerKey>>();
+  for (const river of m.rivers) {
+    const corners = new Set<CornerKey>();
+    for (const [a, b] of river.edges) {
+      const ha = fromOffset(a);
+      const hb = fromOffset(b);
+      if (areAdjacent(ha, hb)) for (const c of edgeCorners(ha, hb)) corners.add(c);
+    }
+    riverCorners.set(river.id, corners);
+  }
   for (const river of m.rivers) {
     const edges: EdgeKey[] = [];
     for (const [a, b] of river.edges) {
@@ -64,7 +76,8 @@ export function validateScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULE
       seenRiverEdges.add(key);
       edges.push(key);
     }
-    checkRiverContinuity(map, river.id, river.kind, edges, error, warn);
+    const otherCorners = new Set([...riverCorners].filter(([id]) => id !== river.id).flatMap(([, cs]) => [...cs]));
+    checkRiverContinuity(map, river.id, river.kind, edges, otherCorners, error, warn);
   }
 
   // Bridges -------------------------------------------------------------------
@@ -86,6 +99,8 @@ export function validateScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULE
     if (!map.riverEdges.has(edgeKey(ha, hb))) {
       error('bridge-not-on-river', `Bridge ${b.id} does not sit on a river edge`);
     }
+    if (b.side !== undefined && b.side !== 'allied' && b.side !== 'german') error('bridge-side', `Bridge ${b.id}: side must be allied or german`);
+    if (b.fromTurn !== undefined && (!Number.isInteger(b.fromTurn) || b.fromTurn < 1)) error('bridge-from-turn', `Bridge ${b.id}: fromTurn must be a whole number of at least 1`);
   }
 
   // Roads ---------------------------------------------------------------------
@@ -154,14 +169,25 @@ export function validateScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULE
 
   // Units ---------------------------------------------------------------------
   const unitIds = new Set<string>();
-  const occupied = new Map<string, string>();
-  for (const u of file.units) {
+  const checkUnit = (u: Omit<UnitFile, 'at'>) => {
     if (unitIds.has(u.id)) error('unit-id-duplicate', `Duplicate unit id ${u.id}`);
     unitIds.add(u.id);
     const formation = formations.get(u.formationId);
     if (!formation) error('unit-formation-missing', `Unit ${u.id}: formation ${u.formationId} does not exist`);
     else if (formation.side !== u.side) error('unit-formation-side', `Unit ${u.id} belongs to a formation on the other side`);
-
+    if (!(u.cohesion >= 0 && u.cohesion <= 100)) error('unit-cohesion', `Unit ${u.id}: cohesion must be 0-100`);
+    if (u.reserves !== undefined && !(Number.isInteger(u.reserves) && u.reserves >= 0 && u.reserves <= 100)) {
+      error('unit-reserves', `Unit ${u.id}: reserves must be a whole number 0-100`);
+    }
+    if (!Number.isInteger(u.personnel) || u.personnel < 0) error('unit-personnel', `Unit ${u.id}: personnel must be a non-negative integer`);
+    for (const [eq, n] of Object.entries(u.equipment)) {
+      if (!equipmentIds.has(eq)) error('unit-equipment-missing', `Unit ${u.id}: equipment ${eq} is not in the catalogue`);
+      if (!Number.isInteger(n) || n < 0) error('unit-equipment-count', `Unit ${u.id}: ${eq} count must be a non-negative integer`);
+    }
+  };
+  const occupied = new Map<string, string>();
+  for (const u of file.units) {
+    checkUnit(u);
     const h = fromOffset(u.at);
     const cell = cellAt(map, h);
     if (!cell) error('unit-off-map', `Unit ${u.id} at ${fmt(u.at)} is off the map`);
@@ -171,13 +197,49 @@ export function validateScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULE
     const other = occupied.get(hexKey(h));
     if (other) error('unit-stacked', `Units ${other} and ${u.id} share ${fmt(u.at)}; one counter per hex`);
     occupied.set(hexKey(h), u.id);
+  }
 
-    if (!(u.cohesion >= 0 && u.cohesion <= 100)) error('unit-cohesion', `Unit ${u.id}: cohesion must be 0-100`);
-    if (!Number.isInteger(u.personnel) || u.personnel < 0) error('unit-personnel', `Unit ${u.id}: personnel must be a non-negative integer`);
-    for (const [eq, n] of Object.entries(u.equipment)) {
-      if (!equipmentIds.has(eq)) error('unit-equipment-missing', `Unit ${u.id}: equipment ${eq} is not in the catalogue`);
-      if (!Number.isInteger(n) || n < 0) error('unit-equipment-count', `Unit ${u.id}: ${eq} count must be a non-negative integer`);
+  // Events: reinforcements and supply drops ------------------------------------
+  const lastTurn = file.victory?.lastTurn ?? Infinity;
+  const eventIds = new Set<string>();
+  for (const e of file.events) {
+    if (eventIds.has(e.id)) error('event-id-duplicate', `Duplicate event id ${e.id}`);
+    eventIds.add(e.id);
+    if (e.side !== 'allied' && e.side !== 'german') error('event-side', `Event ${e.id}: side must be allied or german`);
+    if (!Number.isInteger(e.turn) || e.turn < 1) error('event-turn', `Event ${e.id}: turn must be a whole number of at least 1`);
+    else if (e.turn > lastTurn) warn('event-after-end', `Event ${e.id} happens on turn ${e.turn}, after the scenario ends`);
+    if (e.kind === 'reinforcement') {
+      if (e.entry.length === 0) error('reinforcement-no-entry', `Reinforcement ${e.id} has no entry hexes`);
+      if (e.units.length === 0) error('reinforcement-no-units', `Reinforcement ${e.id} has no units`);
+      for (const at of e.entry) if (!cellAt(map, fromOffset(at))) error('reinforcement-entry-off-map', `Reinforcement ${e.id}: entry ${fmt(at)} is off the map`);
+      for (const u of e.units) {
+        checkUnit({ ...u, side: e.side });
+        const usable = e.entry.some((at) => {
+          const cell = cellAt(map, fromOffset(at));
+          return cell && rules.terrainCost[u.movementClass][cell.terrain] !== null;
+        });
+        if (!usable) error('reinforcement-entry-impassable', `Reinforcement ${e.id}: no entry hex is passable for ${u.id} (${u.movementClass})`);
+      }
+    } else if (e.kind === 'supply-drop') {
+      if (!cellAt(map, fromOffset(e.at))) error('supply-drop-off-map', `Supply drop ${e.id} at ${fmt(e.at)} is off the map`);
+      if (!Number.isInteger(e.radius) || e.radius < 0) error('supply-drop-radius', `Supply drop ${e.id}: radius must be a whole number of at least 0`);
+      if (!Number.isInteger(e.amount) || e.amount < 1 || e.amount > 100) error('supply-drop-amount', `Supply drop ${e.id}: amount must be 1-100`);
+    } else {
+      error('event-kind', `Event ${(e as { id: string }).id}: unknown kind "${String((e as { kind: unknown }).kind)}"`);
     }
+  }
+
+  // Supply sources ---------------------------------------------------------------
+  const sourceIds = new Set<string>();
+  for (const s of file.supplySources ?? []) {
+    if (sourceIds.has(s.id)) error('supply-source-id-duplicate', `Duplicate supply source id ${s.id}`);
+    sourceIds.add(s.id);
+    if (s.side !== 'allied' && s.side !== 'german') error('supply-source-side', `Supply source ${s.id}: side must be allied or german`);
+    const cell = cellAt(map, fromOffset(s.at));
+    if (!cell) error('supply-source-off-map', `Supply source ${s.id} at ${fmt(s.at)} is off the map`);
+    else if (cell.terrain === 'water') error('supply-source-on-water', `Supply source ${s.id} at ${fmt(s.at)} is water`);
+    if (!Number.isInteger(s.range) || s.range < 1) error('supply-source-range', `Supply source ${s.id}: range must be a whole number of minutes, at least 1`);
+    if (s.fromTurn !== undefined && (!Number.isInteger(s.fromTurn) || s.fromTurn < 1)) error('supply-source-from-turn', `Supply source ${s.id}: fromTurn must be a whole number of at least 1`);
   }
 
   // Objectives and victory ----------------------------------------------------
@@ -230,6 +292,8 @@ export function validateScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULE
   if (file.dataStatus === 'verified') {
     const unverified = [
       ...file.units.filter((u) => u.dataStatus !== 'verified').map((u) => `unit ${u.id}`),
+      ...file.events.filter((e) => e.dataStatus !== 'verified').map((e) => `event ${e.id}`),
+      ...(file.supplySources ?? []).filter((s) => s.dataStatus !== 'verified').map((s) => `supply source ${s.id}`),
       ...file.formations.filter((f) => f.dataStatus !== 'verified').map((f) => `formation ${f.id}`),
       ...file.equipment.filter((e) => e.researchStatus !== 'verified').map((e) => `equipment ${e.id}`),
     ];
@@ -266,14 +330,15 @@ function validateGrid(m: ScenarioFile['map'], error: (code: string, message: str
 /**
  * A river must be one unbroken chain of edges joined at shared corners.
  * A gap would let units slip between two river edges. Each open end of a
- * major river must reach the map boundary or open water, otherwise units could
- * simply walk around the end.
+ * major river must reach the map boundary, open water or another river (a
+ * canal joining a river), otherwise units could simply walk around the end.
  */
 function checkRiverContinuity(
   map: GameMap,
   riverId: string,
   kind: 'major' | 'stream',
   edges: EdgeKey[],
+  otherRiverCorners: ReadonlySet<CornerKey>,
   error: (code: string, message: string) => void,
   warn: (code: string, message: string) => void,
 ): void {
@@ -314,9 +379,9 @@ function checkRiverContinuity(
     if (degree > 2) warn('river-branch', `River ${riverId} branches at corner ${corner}`);
     if (degree !== 1 || kind !== 'major') continue;
     const touching = parseCornerKey(corner).map((h) => cellAt(map, h));
-    const open = touching.some((c) => c === undefined || c.terrain === 'water');
+    const open = touching.some((c) => c === undefined || c.terrain === 'water') || otherRiverCorners.has(corner);
     if (!open) {
-      error('river-open-end', `Major river ${riverId} ends inland at corner ${corner}; it must reach the map edge or water`);
+      error('river-open-end', `Major river ${riverId} ends inland at corner ${corner}; it must reach the map edge, water or another river`);
     }
   }
 }

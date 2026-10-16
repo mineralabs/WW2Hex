@@ -1,7 +1,7 @@
 {
   "name": "ww2hex",
   "private": true,
-  "description": "Two-player simultaneous-turn WWII hex wargame (Stage 3 prototype)",
+  "description": "Two-player simultaneous-turn WWII hex wargame (Stage 4 prototype)",
   "type": "module",
   "workspaces": [
     "packages/*",
@@ -15,9 +15,11 @@
     "build": "npm run build -w @ww2hex/client",
     "host": "npm run build && npm run start -w @ww2hex/server",
     "host:dev": "npm run start -w @ww2hex/server",
+    "build:map": "node tools/map-builder/build-map.ts scenarios/nijmegen-1944/source/map-config.json",
+    "build:scenario": "node tools/map-builder/build-scenario.ts scenarios/nijmegen-1944/source",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc -p packages/engine && tsc -p packages/protocol && tsc -p apps/client && tsc -p apps/server",
+    "typecheck": "tsc -p packages/engine && tsc -p packages/protocol && tsc -p apps/client && tsc -p apps/server && tsc -p tools/map-builder",
     "check": "npm run typecheck && npm test"
   },
   "devDependencies": {

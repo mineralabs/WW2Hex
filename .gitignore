@@ -3,3 +3,4 @@ dist/
 *.tsbuildinfo
 .vite/
 saves/
+tools/map-builder/.cache/

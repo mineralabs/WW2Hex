@@ -3,7 +3,7 @@
 A two-player, simultaneous-turn WWII operational wargame on hex maps. The design is in
 [WW2_Hex_Game_Development_Brief.md](WW2_Hex_Game_Development_Brief.md).
 
-**Status: Stage 3 (two-player match).**
+**Status: Stage 4 (historical Nijmegen scenario).**
 
 - One player's computer runs the game host. Both players play in a web browser, each on their own
   computer.
@@ -14,8 +14,15 @@ A two-player, simultaneous-turn WWII operational wargame on hex maps. The design
 - A match ends when a side holds its objective, wipes out the other side, or the turn limit
   passes. Games are saved as you play and survive closing a browser or restarting the host.
 
-The only scenario is a **synthetic test map** with placeholder counters; nothing in it is
-historical.
+Two scenarios:
+
+- **Nijmegen bridges, 19–20 September 1944.** A researched but **provisional** scenario. It
+  covers the US 82nd Airborne and the Guards Armoured Division against the Nijmegen garrison and
+  the German counter-attacks from the Reichswald. It is played on a georeferenced 1 km hex map
+  of the real ground in 1944, with supply and reinforcements. See
+  [docs/stage-4-notes.md](docs/stage-4-notes.md) and [docs/research](docs/research).
+- **Synthetic test map.** Placeholder counters for engine development; nothing in it is
+  historical.
 
 ## Requirements
 
@@ -68,8 +75,14 @@ npm run dev        # client with hot reload → http://localhost:5173 (talks to 
 4. **Finish replay.** The next turn starts once both players have finished.
 
 The **Objectives** panel shows who holds each objective hex: a star and ring on the map, in the
-holder's colour. In the synthetic scenario, the Allied side must hold Northton and the north end
-of the bridge at two consecutive turn ends, by the end of turn 8. Otherwise the German side wins.
+holder's colour. The **Reinforcements** panel lists your own units still to arrive. A unit's
+panel shows its supply: reserves fall as it fires and moves, and refill only while a supply
+route reaches it.
+
+At Nijmegen, the Allied side must hold both ends of the Waal road bridge by 20:00 on
+20 September, with a supplied unit there. The German side wins by stopping that, or by taking
+both ends of the Heumen lock bridge. The assault boats for crossing the Waal arrive at 14:00 on
+20 September; they are shown as a dashed crossing west of the railway bridge.
 
 ## Things to try
 
@@ -89,7 +102,7 @@ All numbers are provisional playtest values.
 ## Checks
 
 ```sh
-npm test           # 109 tests (Vitest): engine, protocol and host
+npm test           # 149 tests (Vitest): engine, protocol, host and map tools
 npm run typecheck  # TypeScript across all packages
 npm run check      # both
 ```
@@ -104,6 +117,9 @@ The tests cover:
 - batch retreats;
 - contact tracking;
 - objectives, control and victory;
+- supply routes, reserves, air drops and reinforcements;
+- limited crossings (railway bridge, assault boats);
+- the Nijmegen scenario validating, with every uncertain value labelled;
 - information leakage, checked on the exact messages each player receives;
 - message validation, seats, credentials and origin checks;
 - duplicate commits;
@@ -122,23 +138,15 @@ The tests cover:
 | `packages/protocol` | Messages between host and browser, per-player view types, and validation of browser messages |
 | `apps/client` | React panels and a PixiJS map. Holds only what the host sends this player |
 | `apps/server` | The local game-host program: serves the client, rooms and seats, authoritative turns, saving |
+| `scenarios/nijmegen-1944` | The Nijmegen scenario (`scenario.json`) and the sources it is built from (`source/`) |
 | `scenarios/synthetic-test` | The synthetic engine-development scenario |
+| `tools/map-builder` | Builds georeferenced hex maps and scenarios from open data and research: `npm run build:map`, `npm run build:scenario` |
 | `saves` | Saved matches (created by the host; not in git) |
-| `docs` | [Connection guide](docs/connection-guide.md), [combat rules](docs/combat-rules.md), [Stage 3 notes](docs/stage-3-notes.md), [Stage 2 notes](docs/stage-2-notes.md), [Stage 1 notes](docs/stage-1-notes.md), [scenario format](docs/scenario-format.md) |
+| `docs` | [Connection guide](docs/connection-guide.md), [combat rules](docs/combat-rules.md), [research](docs/research), [Stage 4 notes](docs/stage-4-notes.md), [Stage 3 notes](docs/stage-3-notes.md), [Stage 2 notes](docs/stage-2-notes.md), [Stage 1 notes](docs/stage-1-notes.md), [scenario format](docs/scenario-format.md) |
 
 ## Next
 
-Stage 3 still needs testing by hand:
-
-- on two computers on the home network;
-- then from two houses over Tailscale.
-
-Use the checklist in the [connection guide](docs/connection-guide.md#test-checklist-for-stage-3).
-
-Stage 4 is the historical Nijmegen slice. It adds:
-
-- a georeferenced map with a sourced roster;
-- basic supply;
-- a reinforcement schedule.
-
-See [docs/stage-3-notes.md](docs/stage-3-notes.md#stage-4-hand-off).
+Stage 4's real test is playing Nijmegen: whether both sides have more than one credible plan,
+and whether the outcomes make sense. Stage 5 follows from that: formation orders, clearer
+feedback, readable counters, tuned objectives. See
+[docs/stage-4-notes.md](docs/stage-4-notes.md#stage-5-hand-off).

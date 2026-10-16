@@ -1,8 +1,8 @@
-# Combat, spotting and cohesion rules (Stage 2)
+# Combat, spotting, cohesion and supply rules
 
 This document is written for the designer and playtesters. It explains how a fight is worked out,
 with four worked examples. Every number is a **provisional playtest value** from
-`packages/engine/src/rules.ts` (`rulesVersion 0.4.0-provisional`). None of them is a researched
+`packages/engine/src/rules.ts` (`rulesVersion 0.6.0-provisional`). None of them is a researched
 historical rate.
 
 Research-derived facts belong in the scenario's equipment catalogue: name, role and sources. The
@@ -32,7 +32,10 @@ be listed first.
    snapshot.
 5. **Damage.** All damage is applied together. Then cohesion changes, destruction, and retreats
    by broken units, which are resolved as a batch.
-6. **Observation.** Spotting is worked out again, so units that just fired or moved are easier to
+6. **Supply and arrivals.** Reserves are used and topped up (see [Supply](#supply-and-reserves)).
+   At the end of a turn, objective control is updated and airborne supply drops land.
+   Reinforcements whose turn has come join the map.
+7. **Observation.** Spotting is worked out again, so units that just fired or moved are easier to
    see. Each side's contact list is updated and each side's observed-event log is written.
 
 ## Spotting
@@ -77,14 +80,28 @@ to 0.
 
 ## Weapons (gameplay profile per combat class)
 
-| Combat class | Fire vs soft | Fire vs hard | Direct range (hexes) | Indirect range (hexes) | Fire while moving | Armoured |
-| --- | ---: | ---: | ---: | ---: | ---: | :---: |
-| rifle-section | 4 | 1 | 1 | – | 50% | |
-| medium-tank | 6 | 8 | 2 | – | 50% | ✓ |
-| armoured-car | 3 | 1 | 2 | – | 75% | ✓ |
-| at-gun | 1 | 10 | 2 | – | 0% | |
-| field-gun | 10 | 2 | 1 | 8 | 0% | |
-| transport | 0 | 0 | – | – | – | |
+| Combat class | Fire vs soft | Fire vs hard | Direct range (hexes) | Indirect range (hexes) | Fire while moving | Armoured | Used for |
+| --- | ---: | ---: | ---: | ---: | ---: | :---: | --- |
+| rifle-section | 4 | 1 | 1 | – | 50% | | Rifle sections and squads, with their light support weapons |
+| medium-tank | 6 | 8 | 2 | – | 50% | ✓ | Sherman (75 mm), Cromwell, Panzer IV |
+| tank-17pdr | 6 | 12 | 2 | – | 50% | ✓ | Sherman Firefly, Challenger |
+| light-tank | 4 | 4 | 2 | – | 60% | ✓ | Stuart |
+| assault-gun | 5 | 11 | 2 | – | 25% | ✓ | StuG III, Jagdpanzer IV |
+| tank-destroyer | 4 | 12 | 2 | – | 25% | ✓ | M10 Achilles |
+| armoured-car | 3 | 1 | 2 | – | 75% | ✓ | Daimler and German armoured cars |
+| at-gun | 1 | 10 | 2 | – | 0% | | 6-pdr, 17-pdr, US 57 mm |
+| light-at-gun | 1 | 6 | 2 | – | 0% | | 3.7 to 5 cm anti-tank guns |
+| heavy-flak | 4 | 14 | 3 | – | 0% | | 8.8 cm Flak in the ground role |
+| light-flak | 4 | 2 | 2 | – | 0% | | 2 cm Flak |
+| flak-halftrack | 4 | 2 | 2 | – | 50% | | 2 cm Flak on a halftrack |
+| field-gun | 10 | 2 | 1 | 10 | 0% | | 25-pdr, Sexton, 10.5 cm leFH 18, 105 mm M3 |
+| pack-howitzer | 7 | 2 | 1 | 8 | 0% | | 75 mm pack howitzer M1A1 |
+| medium-gun | 16 | 3 | – | 13 | 0% | | 15 cm sFH 18, captured 152 mm |
+| transport | 0 | 0 | – | – | – | | Lorries, jeeps, carriers |
+
+Indirect ranges are in 1 km hexes and follow the guns' real ranges, rounded: the 25-pdr reached
+about 12 km, the leFH 18 10.7 km and the US M3 7.6 km (10 for the class), the pack howitzer
+8.8 km, and the sFH 18 13 km. The fire values are gameplay coefficients, not research.
 
 Direct fire loses strength with distance:
 
@@ -128,11 +145,16 @@ Each modifier is then applied in order, rounding down after each:
 | 7 | Assault across a river | Across a major river 60%, even over a bridge; across a stream 80%. Applies only to an assault, and only when a river edge lies between the two hexes. It appears in a calculation only when it applies |
 | 8 | Unseen bombardment | 50% for indirect fire on a target the firing side cannot see |
 
-> **damage = ⌊ result ÷ 1000 ⌋**
+> **damage = ⌊ (result + carried) ÷ 3000 ⌋**
 
-That is 10 fire points per damage point.
+That is 30 fire points per damage point. All the fire on one target in a step is added up in
+hundredths of a fire point. Whatever falls short of a whole damage point is **carried** on the
+target to its next step, so steady small fire still adds up. The carried amount is dropped in a
+step with no incoming fire. (Before rules 0.6.0 this was 10 fire points and nothing carried. Real
+battalions on a historical map lost a quarter of their strength in a turn of firing, so the scale
+was cut to a third.)
 
-All damage on one target in a step is added together. Then:
+Then:
 
 - **Soft target:** each damage point is one casualty.
 - **Hard target:** every 3 damage points knock out one armoured vehicle and its 5 crew.
@@ -151,10 +173,10 @@ terrain.
 | × cohesion, supply, terrain and preparation, all 100% | 10 800 |
 | × assault 150% | 16 200 |
 | × across a major river 60% | 9 720 |
-| **Damage** | **9 casualties** (16 without the river) |
+| **Damage** ⌊9 720 ÷ 3000⌋ | **3 casualties** (5 without the river) |
 
-The river makes an assault over the bridge weaker than plain fire (10 casualties), so it pays to
-wear the defender down with fire and artillery before going in.
+The river makes an assault over the bridge no better than plain fire (also 3), so it pays to wear
+the defender down with fire and artillery before going in.
 
 ## Queues and stopped units
 
@@ -186,6 +208,7 @@ Stage 1 rules after a playtest showed units getting stuck for good.
 | Took no damage this step | +3, up to 100 |
 | Cohesion below 25 | The unit **breaks**. Its order is cleared and it retreats one hex |
 | Broken with nowhere to go | **Pinned**: stays put, −10 |
+| Pinned with cohesion down to 0 | **Surrenders**: removed, and reported as having surrendered |
 | Personnel (or armoured vehicles) at or below 15% of starting strength | **Destroyed** |
 
 **Retreat destination.** A broken unit moves to an empty, passable neighbouring hex that takes it
@@ -214,15 +237,17 @@ clear terrain.
 | --- | ---: |
 | Base: 27 × 4 × 100 × 100 ÷ 100 | 10 800 |
 | × cohesion 100%, supply 100%, clear 100%, preparation 100% | 10 800 |
-| **Damage** ⌊10 800 ÷ 1000⌋ | **10 casualties** |
-| Target cohesion: −2 − 2 × ⌊1000 ÷ 500⌋ | 100 → 94 |
-| Target rifle sections: ⌈22 × 490 ÷ 500⌉ | still 22 |
+| **Damage** ⌊10 800 ÷ 3000⌋ | **3 casualties**, 1 800 carried |
+| Target cohesion: −2 − 2 × ⌊300 ÷ 500⌋ | 100 → 98 |
+| Target rifle sections: ⌈22 × 497 ÷ 500⌉ | still 22 |
 
 The German battalion fires back in the same step from the same snapshot. Its base is
-22 × 4 × 100 = 8 800, which gives **8 casualties** to the Allied battalion.
+22 × 4 × 100 = 8 800, which gives **2 casualties** to the Allied battalion, with 2 800 carried.
+Over a two-hour turn of the same exchange that is about 43 and 35 casualties.
 
 If the German battalion holds a **town with preparation 3** instead, the Allied fire is
-10 800 → ×50% = 5 400 → ×55% = 2 970, which is **2 casualties**.
+10 800 → ×50% = 5 400 → ×55% = 2 970. That is **no casualty** in the step, but it is all carried:
+a turn of it adds up to 35 640, which is 11 casualties.
 
 ### 2. Armour against anti-tank guns
 
@@ -237,9 +262,9 @@ cannot see them. Only the guns fire.
 | Base: 10 × 10 (hard) × 60% (2 hexes) × 100 ÷ 100 | 6 000 |
 | × cohesion 100%, supply 100%, clear 100%, preparation 100% | 6 000 |
 | × exposed 125% (the tanks moved in the open) | 7 500 |
-| **Damage** | **7** |
-| Tanks knocked out: ⌊7 ÷ 3⌋, 1 point carried over | **2 tanks, 10 crew** |
-| Tank cohesion: −2 − 2 × ⌊1000 ÷ 540⌋ | 100 → 96 |
+| **Damage** ⌊7 500 ÷ 3000⌋ | **2** |
+| Tanks knocked out: ⌊2 ÷ 3⌋, 2 points carried over | **none yet** |
+| Tank cohesion: −2 (hit), no casualties | 100 → 98 |
 
 **Step 2.** Having fired, the guns can be seen from up to 3 hexes. The tanks spot them 2 hexes away
 and the Advance halts. Both sides now fire from the same snapshot:
@@ -247,18 +272,18 @@ and the Advance halts. Both sides now fire from the same snapshot:
 | Guns → tanks (tanks not moving) | Value |
 | --- | ---: |
 | Base | 6 000 |
-| **Damage** 6 + 1 carried over = 7 | **2 tanks** (1 carried over) |
+| **Damage** 2 + 2 carried over = 4 | **1 tank, 5 crew** (1 point carried over) |
 
 | Tanks → guns | Value |
 | --- | ---: |
-| Base: 48 × 6 (soft) × 60% × 100 ÷ 100 | 17 280 |
-| × cohesion 98% (50 + 96 ÷ 2) | 16 934 |
-| × supply 100%, × town 50% | 8 467 |
-| × preparation 1 (85%) | 7 196 |
-| **Damage** | **7 casualties** (of 120) |
+| Base: 50 × 6 (soft) × 60% × 100 ÷ 100 | 18 000 |
+| × cohesion 99% (50 + 98 ÷ 2) | 17 820 |
+| × supply 100%, × town 50% | 8 910 |
+| × preparation 1 (85%) | 7 573 |
+| **Damage** | **2 casualties** (of 120) |
 
-In the open, the guns would take 16 934 × 85% = 14 393, which is 14 casualties a step. The
-lesson is to scout or shell a town before sending armour past it.
+In the open, the guns would take 17 820 × 85% = 15 147, which is 5 casualties a step. The lesson is
+to scout or shell a town before sending armour past it.
 
 ### 3. An attack into a town
 
@@ -273,18 +298,18 @@ in the previous step and is not moving now.
 | × supply 100%, × town 50% | 4 860 |
 | × preparation 2 (70%) | 3 402 |
 | × **assault 150%** | 5 103 |
-| **Damage** | **5 casualties** |
+| **Damage** | **1 casualty**, 2 103 carried |
 
 | Defender → attacker (in clear, not moving, preparation 0) | Value |
 | --- | ---: |
 | Base: 22 × 4 × 100 × 100 ÷ 100 | 8 800 |
-| **Damage** | **8 casualties** |
+| **Damage** | **2 casualties**, 2 800 carried |
 
 A frontal assault on a prepared town costs the attacker more than the defender. Without the
-assault bonus, the same fire would do only **3**. An attacker worn down to cohesion 40 loses the
-bonus, because assault needs cohesion 50, and its lower cohesion also weakens its fire. It deals
-just **2**. Artillery preparation (example 4) and attacking from more than one side change that
-balance.
+assault bonus, the same fire would be 3 402, about two-thirds as much. An attacker worn down to
+cohesion 40 loses the bonus, because assault needs cohesion 50, and its lower cohesion also weakens
+its fire: 2 646, under a casualty a step. Artillery preparation (example 4) and attacking from
+more than one side change that balance.
 
 ### 4. Artillery against a defended position
 
@@ -298,11 +323,51 @@ hex 5 hexes away. A German infantry battalion holds it: town, preparation 3.
 | × town 50% | 12 000 | 12 000 |
 | × preparation 3 (55%) | 6 600 | 6 600 |
 | × unseen bombardment | – | 3 300 |
-| **Damage** | **6** | **3** |
+| **Damage** | **2** | **1** |
 | Firing player is told the result | yes ("light") | **no** ("results not observed") |
 
-The same guns firing on unprepared infantry in the open do **24** damage, or **30** if the
-infantry are moving.
+The same guns firing on unprepared infantry in the open do **8** damage, or **10** if the
+infantry are moving. Each step of firing also costs the guns 9 points of reserves (see below), so
+a battery cannot keep this up all day without a supply route.
+
+## Supply and reserves
+
+Each unit carries **reserves** from 0 to 100: ammunition, fuel and food.
+
+| Event | Reserves |
+| --- | ---: |
+| A step in which the unit fired directly | −3 |
+| A step in which the unit fired indirectly (artillery) | −9 |
+| A step in which the unit moved | −1 |
+| A step ending with a supply route to the unit | +6, up to 100 |
+| An airborne supply drop within its radius | + the drop's amount |
+
+The **supply status** shown to the player comes from the reserves: **Supplied** at 50 or more,
+**Low** from 20 to 49, **Exhausted** below 20. It affects fire through the supply modifier
+(100%, 75%, 40%).
+
+A **supply route** is traced from the side's supply sources, which are places named in the
+scenario, such as a road entering from a depot. It is costed as wheeled travel, so roads reach
+much further than open country, out to the source's range in minutes. A route cannot pass:
+- a hex holding an enemy unit;
+- a hex next to an enemy unit, unless a friendly unit holds it.
+
+So a unit in contact keeps its own hex in supply, but an enemy unit astride the road behind it
+cuts the route. A supply source may open later in the scenario. A side whose scenario lists no
+supply sources is always in supply, as on the synthetic test map.
+
+A cut route bites gradually. Reserves keep falling with use and are not topped up, so a unit goes
+from Supplied to Low to Exhausted over a few hours of fighting.
+
+Supply is automatic. A player sees their own units' reserves, status and whether the route is
+open. That tells them a route has been cut, but not where or by whom.
+
+## Reinforcements
+
+Units scheduled to arrive at the start of a turn join the map at the first of their listed entry
+hexes that is free and passable. If all are occupied, they wait, and the owning player is told
+once. A player sees their own side's coming reinforcements (unit, turn and entry point) but
+nothing about the enemy's until they are spotted.
 
 ## What each side is told
 

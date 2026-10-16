@@ -1,7 +1,9 @@
 import { buildMap, fromOffset } from './map.ts';
+import { hexKey, type Hex } from './hex.ts';
+import { deliverSupplyDrops, placeReinforcements, supplyStatus, traceSupply } from './logistics.ts';
 import { buildObjectives, initialObjectiveState } from './objectives.ts';
 import { DEFAULT_RULES, type Rules } from './rules.ts';
-import type { GameMap, GameState, ScenarioFile, UnitState, World } from './types.ts';
+import { SIDES, type GameMap, type GameState, type PendingUnit, type ScenarioFile, type UnitFile, type UnitState, type World } from './types.ts';
 import { validateScenario, type ValidationIssue } from './validate.ts';
 import { updateContacts } from './observe.ts';
 import { computeSpotting } from './visibility.ts';
@@ -27,10 +29,20 @@ export function loadScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULES): 
     );
   }
   const map = buildMap(file.map);
+  const world = buildWorld(file, map);
   const state = initialState(file, rules);
+  const start = { time: 0, turn: 1, step: 0 };
+  // Turn 1 arrivals, then supply routes as they stand at the start.
+  deliverSupplyDrops(state, world, rules, 1, start);
+  placeReinforcements(state, world, rules, start);
+  for (const side of SIDES) {
+    if (!world.supplySources.some((s) => s.side === side)) continue;
+    const reach = traceSupply(world, rules, state.units, side, 1);
+    for (const u of state.units) if (u.side === side) u.inSupply = reach.has(hexKey(u.pos));
+  }
   // Each side starts knowing whatever its units can already see.
-  updateContacts(state, map, rules, computeSpotting(map, rules, state.units), new Set(), { time: 0, turn: 1, step: 0 });
-  return { file, map, world: buildWorld(file, map), state, issues };
+  updateContacts(state, map, rules, computeSpotting(map, rules, state.units), new Set(), start);
+  return { file, map, world, state, issues };
 }
 
 export function buildWorld(file: ScenarioFile, map: GameMap = buildMap(file.map)): World {
@@ -39,33 +51,53 @@ export function buildWorld(file: ScenarioFile, map: GameMap = buildMap(file.map)
     combatClass: new Map(file.equipment.map((e) => [e.id, e.combatClass])),
     objectives: buildObjectives(file),
     victory: file.victory ? { ...file.victory } : null,
+    supplySources: (file.supplySources ?? []).map((s) => ({ id: s.id, name: s.name, side: s.side, at: fromOffset(s.at), range: s.range, fromTurn: s.fromTurn ?? 1 })),
+    supplyDrops: file.events.flatMap((e) =>
+      e.kind === 'supply-drop' ? [{ id: e.id, side: e.side, turn: e.turn, at: fromOffset(e.at), radius: e.radius, amount: e.amount }] : [],
+    ),
+  };
+}
+
+function unitFromFile(u: Omit<UnitFile, 'at'>, pos: Hex, rules: Rules): UnitState {
+  const reserves = u.reserves ?? rules.supply.defaultReserves[u.supply];
+  return {
+    id: u.id,
+    side: u.side,
+    name: u.name,
+    shortName: u.shortName,
+    formationId: u.formationId,
+    type: u.type,
+    movementClass: u.movementClass,
+    pos,
+    personnel: u.personnel,
+    equipment: { ...u.equipment },
+    baseline: { personnel: u.personnel, equipment: { ...u.equipment } },
+    cohesion: u.cohesion,
+    supply: supplyStatus(rules, reserves),
+    reserves,
+    inSupply: true,
+    dataStatus: u.dataStatus,
+    order: null,
+    movement: { progress: 0, blocked: null, waited: 0 },
+    stationarySteps: 0,
+    damageCarry: 0,
+    fireCarry: 0,
+    lastStep: { moved: false, fired: false, hit: false },
   };
 }
 
 export function initialState(file: ScenarioFile, rules: Rules = DEFAULT_RULES): GameState {
-  const units: UnitState[] = file.units
-    .map((u) => ({
-      id: u.id,
-      side: u.side,
-      name: u.name,
-      shortName: u.shortName,
-      formationId: u.formationId,
-      type: u.type,
-      movementClass: u.movementClass,
-      pos: fromOffset(u.at),
-      personnel: u.personnel,
-      equipment: { ...u.equipment },
-      baseline: { personnel: u.personnel, equipment: { ...u.equipment } },
-      cohesion: u.cohesion,
-      supply: u.supply,
-      dataStatus: u.dataStatus,
-      order: null,
-      movement: { progress: 0, blocked: null, waited: 0 },
-      stationarySteps: 0,
-      damageCarry: 0,
-      lastStep: { moved: false, fired: false, hit: false },
-    }))
-    .sort(byId);
+  const units: UnitState[] = file.units.map((u) => unitFromFile(u, fromOffset(u.at), rules)).sort(byId);
+  const reinforcements: PendingUnit[] = file.events
+    .flatMap((e) =>
+      e.kind === 'reinforcement'
+        ? e.units.map((u) => {
+            const entry = e.entry.map(fromOffset);
+            return { unit: unitFromFile({ ...u, side: e.side }, entry[0]!, rules), eventId: e.id, turn: e.turn, entry };
+          })
+        : [],
+    )
+    .sort((a, b) => a.turn - b.turn || (a.eventId < b.eventId ? -1 : a.eventId > b.eventId ? 1 : 0) || byId(a.unit, b.unit));
   return {
     scenarioId: file.id,
     rulesVersion: rules.rulesVersion,
@@ -74,6 +106,7 @@ export function initialState(file: ScenarioFile, rules: Rules = DEFAULT_RULES): 
     contacts: { allied: [], german: [] },
     nextContactNo: { allied: 1, german: 1 },
     destroyed: [],
+    reinforcements,
     objectives: initialObjectiveState(file.objectives),
   };
 }

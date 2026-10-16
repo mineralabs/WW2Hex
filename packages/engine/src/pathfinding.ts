@@ -1,7 +1,7 @@
 import { compareHex, hexDistance, hexEquals, hexKey, neighbors, type Hex, type HexKey } from './hex.ts';
 import { isOnMap, moveCost } from './map.ts';
 import type { Rules } from './rules.ts';
-import type { GameMap, MovementClass } from './types.ts';
+import type { GameMap, MoveContext, MovementClass } from './types.ts';
 
 export interface Route {
   /** Hexes to enter, in order, excluding the starting hex. */
@@ -28,6 +28,7 @@ export function findRoute(
   start: Hex,
   waypoints: readonly Hex[],
   avoid: ReadonlySet<HexKey> = new Set(),
+  ctx?: MoveContext,
 ): RouteResult {
   if (!isOnMap(map, start)) return { ok: false, error: 'Start hex is off the map' };
   if (waypoints.length === 0) return { ok: false, error: 'No destination given' };
@@ -37,7 +38,7 @@ export function findRoute(
   for (const [i, wp] of waypoints.entries()) {
     if (!isOnMap(map, wp)) return { ok: false, error: `Waypoint ${i + 1} is off the map` };
     if (hexEquals(from, wp)) continue;
-    const leg = shortestPath(map, rules, cls, from, wp, avoid);
+    const leg = shortestPath(map, rules, cls, from, wp, avoid, ctx);
     if (!leg) {
       return { ok: false, error: `No passable route to waypoint ${i + 1} (${hexKey(wp)})` };
     }
@@ -57,11 +58,12 @@ export function pathCosts(
   cls: MovementClass,
   start: Hex,
   path: readonly Hex[],
+  ctx?: MoveContext,
 ): number[] | null {
   const costs: number[] = [];
   let from = start;
   for (const h of path) {
-    const c = moveCost(map, rules, cls, from, h);
+    const c = moveCost(map, rules, cls, from, h, ctx);
     if (c === null) return null;
     costs.push(c);
     from = h;
@@ -89,6 +91,7 @@ function shortestPath(
   start: Hex,
   goal: Hex,
   avoid: ReadonlySet<HexKey>,
+  ctx?: MoveContext,
 ): Route | null {
   const hScale = minStepCost(rules, cls);
   const heuristic = (h: Hex) => hexDistance(h, goal) * hScale;
@@ -109,7 +112,7 @@ function shortestPath(
     for (const n of neighbors(node.hex)) {
       const k = hexKey(n);
       if (avoid.has(k)) continue;
-      const c = moveCost(map, rules, cls, node.hex, n);
+      const c = moveCost(map, rules, cls, node.hex, n, ctx);
       if (c === null) continue;
       const g = node.g + c;
       const prevBest = best.get(k);

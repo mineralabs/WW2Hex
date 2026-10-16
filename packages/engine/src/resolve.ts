@@ -2,6 +2,7 @@ import { DIRECTIONS, hexDistance, hexEquals, hexKey, type Hex } from './hex.ts';
 import { applyDamage, cohesionLoss, isDestroyed, planFires, resolveRetreats } from './combat.ts';
 import { moveCost } from './map.ts';
 import { findRoute } from './pathfinding.ts';
+import { deliverSupplyDrops, placeReinforcements, updateSupply } from './logistics.ts';
 import { updateObjectives } from './objectives.ts';
 import { observeStep, playerView, updateContacts } from './observe.ts';
 import { tickMinutes, type Rules } from './rules.ts';
@@ -39,7 +40,9 @@ export interface ResolveResult {
  *   3. Spotting at the new positions.
  *   4. All fire is planned from the same pre-damage snapshot.
  *   5. Damage, cohesion and destruction are applied together; broken units retreat as a batch.
- *   6. Spotting again, contact lists and each side's observed events.
+ *   6. Supply: reserves used and replenished; at a turn boundary, objectives
+ *      and airborne drops; reinforcements arriving.
+ *   7. Spotting again, contact lists and each side's observed events.
  */
 export function resolveStep(state: GameState, world: World, rules: Rules): ResolveResult {
   const { map } = world;
@@ -82,9 +85,11 @@ export function resolveStep(state: GameState, world: World, rules: Rules): Resol
   const fires = planFires(world, rules, next.units, spotFire);
 
   // 5. Damage, cohesion, destruction, retreat --------------------------------
-  const damage = new Map<string, number>();
+  // Fire is added up per target in hundredths of a fire point; whatever falls
+  // short of a whole damage point carries over to the target's next step.
+  const points = new Map<string, number>();
   for (const f of fires) {
-    damage.set(f.target.id, (damage.get(f.target.id) ?? 0) + f.damage);
+    points.set(f.target.id, (points.get(f.target.id) ?? 0) + f.points);
     events.push({
       ...at(tEnd),
       kind: 'fire',
@@ -99,10 +104,15 @@ export function resolveStep(state: GameState, world: World, rules: Rules): Resol
     });
   }
   const fired = new Set(fires.map((f) => f.firer.id));
+  const firedIndirect = new Set(fires.filter((f) => f.mode === 'indirect').map((f) => f.firer.id));
   const losses = new Map<string, { lost: number; baseline: number; destroyed: boolean }>();
   for (const u of next.units) {
-    const dmg = damage.get(u.id) ?? 0;
+    const incoming = points.get(u.id) ?? 0;
+    const total = u.fireCarry + incoming;
+    const dmg = Math.floor(total / (100 * rules.firePointsPerDamage));
+    u.fireCarry = incoming > 0 ? total % (100 * rules.firePointsPerDamage) : 0;
     u.lastStep.fired = fired.has(u.id);
+    u.lastStep.firedIndirect = firedIndirect.has(u.id);
     u.lastStep.hit = dmg > 0;
     if (dmg === 0) {
       u.cohesion = Math.min(100, u.cohesion + rules.cohesionRecovery);
@@ -156,19 +166,32 @@ export function resolveStep(state: GameState, world: World, rules: Rules): Resol
     u.cohesion = Math.max(0, u.cohesion - rules.pinnedPenalty);
     events.push({ ...at(tEnd), kind: 'pinned', unitId: u.id, side: u.side, at: u.pos });
   }
+  // A broken unit with nowhere to go and no cohesion left surrenders.
+  const surrendered = retreat.pinned.filter((u) => u.cohesion === 0);
+  for (const u of surrendered) {
+    destroyedIds.add(u.id);
+    next.destroyed.push({ unitId: u.id, side: u.side, at: u.pos, time: tEnd });
+    events.push({ ...at(tEnd), kind: 'destroyed', unitId: u.id, side: u.side, at: u.pos, surrendered: true });
+  }
+  if (surrendered.length) next.units = next.units.filter((u) => !destroyedIds.has(u.id));
   for (const u of next.units) u.stationarySteps = u.lastStep.moved ? 0 : u.stationarySteps + 1;
 
-  // 6. Observation ------------------------------------------------------------
-  const spotEnd = computeSpotting(map, rules, next.units);
-  const contacts = updateContacts(next, map, rules, spotEnd, destroyedIds, at(tEnd));
-
-  if (step + 1 >= rules.stepsPerTurn) {
+  // 6. Supply, the turn boundary and arrivals ---------------------------------
+  events.push(...updateSupply(next, world, rules, at(tEnd)));
+  const endOfTurn = step + 1 >= rules.stepsPerTurn;
+  if (endOfTurn) {
     events.push(...updateObjectives(next, world, at(tEnd)));
     next.clock = { turn: turn + 1, step: 0 };
-    events.push({ ...at(tEnd), kind: 'turn-ended', endedTurn: turn });
+    events.push(...deliverSupplyDrops(next, world, rules, turn + 1, at(tEnd)));
   } else {
     next.clock = { turn, step: step + 1 };
   }
+  events.push(...placeReinforcements(next, world, rules, at(tEnd)));
+
+  // 7. Observation ------------------------------------------------------------
+  const spotEnd = computeSpotting(map, rules, next.units);
+  const contacts = updateContacts(next, map, rules, spotEnd, destroyedIds, at(tEnd));
+  if (endOfTurn) events.push({ ...at(tEnd), kind: 'turn-ended', endedTurn: turn });
 
   const ctx = { start: spotStart, fire: spotFire, end: spotEnd, contacts, losses };
   return {
@@ -243,7 +266,7 @@ function movementTick(
   for (const u of units) {
     const nextHex = orderPath(u.order)[0];
     if (!nextHex) continue;
-    const cost = moveCost(map, rules, u.movementClass, u.pos, nextHex);
+    const cost = moveCost(map, rules, u.movementClass, u.pos, nextHex, { side: u.side, turn: at.turn });
     if (cost === null) {
       outcomes.set(u.id, 'impassable');
       requests.set(u.id, { unit: u, from: u.pos, to: nextHex });
@@ -383,7 +406,7 @@ function goRoundParked(
   }
   // Keep the waypoints still ahead, then the destination.
   const ahead = order.waypoints.filter((w) => path.some((p) => hexEquals(p, w)) && !hexEquals(w, destination));
-  const r = findRoute(map, rules, u.movementClass, u.pos, [...ahead, destination], parked);
+  const r = findRoute(map, rules, u.movementClass, u.pos, [...ahead, destination], parked, { side: u.side, turn: base.turn });
   if (!r.ok) return; // No way round: keep waiting.
   order.path = r.route.path;
   // A new next hex starts from scratch: no free distance.

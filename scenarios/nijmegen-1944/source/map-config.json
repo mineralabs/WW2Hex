@@ -1,0 +1,116 @@
+{
+  "id": "nijmegen-1944",
+  "name": "Nijmegen sector, September 1944",
+  "grid": { "origin": { "x": 174500, "y": 437500 }, "spacing": 1000, "cols": 30, "rows": 31 },
+  "elevationStepMeters": 10,
+  "polderBelowMeters": 10.5,
+  "polderRisePerKmEast": 0.1,
+  "woodsFraction": 0.35,
+  "woods": { "netherlands": "bosstatistiek", "osmAreas": ["Kranenburg", "Kleve", "Goch"] },
+  "rivers": [
+    { "id": "waal", "name": "Waal", "kind": "major", "osmNames": ["Waal", "Bijlandsch Kanaal"], "osmWaterway": "river" },
+    { "id": "maas", "name": "Maas", "kind": "major", "osmNames": ["Maas"], "osmWaterway": "river" },
+    { "id": "maas-waal-canal", "name": "Maas-Waal Canal", "kind": "major", "osmNames": ["Maas-Waalkanaal"], "osmWaterway": "canal" },
+    { "id": "niers", "name": "Niers", "kind": "stream", "osmNames": ["Niers"], "osmWaterway": "river" }
+  ],
+  "settlements": [
+    { "name": "Nijmegen", "kind": "town", "centre": { "lat": 51.8445, "lon": 5.8621 }, "radiusKm": 1.3, "label": true, "source": "settlements-roads-1944.md 1a-1b: Benedenstad, Bovenstad, Bottendaal (north), Altrade, Galgenveld (old part), Biezen built by 1944" },
+    { "name": "", "kind": "town", "centre": { "lat": 51.8370, "lon": 5.8460 }, "radiusKm": 0.6, "label": false, "source": "settlements-roads-1944.md 1b: Wolfskuil, Willemskwartier/Nije Veld built 1910s-1940" },
+    { "name": "", "kind": "town", "centre": { "lat": 51.8365, "lon": 5.8880 }, "radiusKm": 0.6, "label": false, "source": "settlements-roads-1944.md 1b: Hunnerberg villas, Hengstdal (partly), Kwakkenberg villas" },
+    { "name": "Hees", "kind": "village", "centre": { "lat": 51.8400, "lon": 5.8300 }, "radiusKm": 0.4, "label": false, "source": "settlements-roads-1944.md 1b: Hees village and villa park" },
+    { "name": "Sint Anna", "kind": "village", "centre": { "lat": 51.8231, "lon": 5.8519 }, "radiusKm": 0, "label": false, "source": "settlements-roads-1944.md 1b: tram suburb along St Annastraat" },
+    { "name": "Neerbosch", "kind": "village", "centre": { "lat": 51.8322, "lon": 5.8114 }, "radiusKm": 0, "label": false, "source": "settlements-roads-1944.md 1b" },
+    { "name": "Hatert", "kind": "village", "centre": { "lat": 51.8061, "lon": 5.8261 }, "radiusKm": 0, "label": false, "source": "settlements-roads-1944.md 1b: separate village until the 1960s" },
+    { "name": "Grave", "kind": "town", "centre": { "lat": 51.7592, "lon": 5.7383 }, "radiusKm": 0.5, "label": true, "source": "settlements-roads-1944.md 1c" },
+    { "name": "Groesbeek", "kind": "town", "centre": { "lat": 51.7760, "lon": 5.9310 }, "radiusKm": 0.8, "label": true, "source": "settlements-roads-1944.md 1c (large village); centre between the OSM and Wikidata points" },
+    { "name": "Mook", "kind": "village", "centre": { "lat": 51.7525, "lon": 5.8817 }, "radiusKm": 0, "label": true, "source": "settlements-roads-1944.md 1c" },
+    { "name": "Malden", "kind": "village", "centre": { "lat": 51.7808, "lon": 5.8544 }, "radiusKm": 0, "label": true, "source": "settlements-roads-1944.md 1c" },
+    { "name": "Heumen", "kind": "village", "centre": { "lat": 51.7656, "lon": 5.8433 }, "radiusKm": 0, "label": true, "source": "settlements-roads-1944.md 1c" },
+    { "name": "Overasselt", "kind": "village", "centre": { "lat": 51.7597, "lon": 5.7875 }, "radiusKm": 0, "label": true, "source": "settlements-roads-1944.md 1c" },
+    { "name": "Nederasselt", "kind": "village", "centre": { "lat": 51.7722, "lon": 5.7453 }, "radiusKm": 0, "label": false, "source": "settlements-roads-1944.md 1c" },
+    { "name": "Wijchen", "kind": "town", "centre": { "lat": 51.8067, "lon": 5.7211 }, "radiusKm": 0.4, "label": true, "source": "settlements-roads-1944.md 1c: village, main growth 1960-80" },
+    { "name": "Alverna", "kind": "village", "centre": { "lat": 51.8033, "lon": 5.7583 }, "radiusKm": 0, "label": false, "source": "settlements-roads-1944.md 1c" },
+    { "name": "Beek", "kind": "village", "centre": { "lat": 51.8292, "lon": 5.9258 }, "radiusKm": 0.3, "label": true, "source": "settlements-roads-1944.md 1c" },
+    { "name": "Berg en Dal", "kind": "village", "centre": { "lat": 51.8197, "lon": 5.9197 }, "radiusKm": 0, "label": true, "source": "settlements-roads-1944.md 1c: resort and villa village" },
+    { "name": "Ubbergen", "kind": "village", "centre": { "lat": 51.8333, "lon": 5.9167 }, "radiusKm": 0, "label": false, "source": "settlements-roads-1944.md 1c" },
+    { "name": "Ooij", "kind": "village", "centre": { "lat": 51.8556, "lon": 5.9222 }, "radiusKm": 0, "label": true, "source": "settlements-roads-1944.md 1c" },
+    { "name": "Lent", "kind": "village", "centre": { "lat": 51.8631, "lon": 5.8667 }, "radiusKm": 0.3, "label": true, "source": "settlements-roads-1944.md 1c; geography-1944.md 2 (Waalsprong is post-war)" },
+    { "name": "Oosterhout", "kind": "village", "centre": { "lat": 51.8789, "lon": 5.8253 }, "radiusKm": 0, "label": true, "source": "settlements-roads-1944.md 1c" },
+    { "name": "Elst", "kind": "town", "centre": { "lat": 51.9156, "lon": 5.8378 }, "radiusKm": 0.5, "label": true, "source": "settlements-roads-1944.md 1c: large village" },
+    { "name": "Bemmel", "kind": "village", "centre": { "lat": 51.8917, "lon": 5.8958 }, "radiusKm": 0.3, "label": true, "source": "settlements-roads-1944.md 1c" },
+    { "name": "Ressen", "kind": "village", "centre": { "lat": 51.8892, "lon": 5.8658 }, "radiusKm": 0, "label": false, "source": "settlements-roads-1944.md 1c" },
+    { "name": "Haalderen", "kind": "village", "centre": { "lat": 51.8865, "lon": 5.9266 }, "radiusKm": 0, "label": false, "source": "geography-1944.md 2" },
+    { "name": "Weurt", "kind": "village", "centre": { "lat": 51.8583, "lon": 5.8154 }, "radiusKm": 0, "label": false, "source": "geography-1944.md 2" },
+    { "name": "Beuningen", "kind": "village", "centre": { "lat": 51.8587, "lon": 5.7674 }, "radiusKm": 0, "label": true, "source": "geography-1944.md 2" },
+    { "name": "Cuijk", "kind": "town", "centre": { "lat": 51.7269, "lon": 5.8794 }, "radiusKm": 0.4, "label": true, "source": "settlements-roads-1944.md 1c" },
+    { "name": "Middelaar", "kind": "village", "centre": { "lat": 51.7250, "lon": 5.9164 }, "radiusKm": 0, "label": false, "source": "settlements-roads-1944.md 1c" },
+    { "name": "Milsbeek", "kind": "village", "centre": { "lat": 51.7267, "lon": 5.9478 }, "radiusKm": 0, "label": false, "source": "settlements-roads-1944.md 1c" },
+    { "name": "Gennep", "kind": "town", "centre": { "lat": 51.6942, "lon": 5.9733 }, "radiusKm": 0.4, "label": true, "source": "settlements-roads-1944.md 1c" },
+    { "name": "Wyler", "kind": "village", "centre": { "lat": 51.8056, "lon": 5.9664 }, "radiusKm": 0, "label": true, "source": "settlements-roads-1944.md 1c (German in 1944)" },
+    { "name": "Zyfflich", "kind": "village", "centre": { "lat": 51.8239, "lon": 5.9739 }, "radiusKm": 0, "label": false, "source": "settlements-roads-1944.md 1c" },
+    { "name": "Kranenburg", "kind": "town", "centre": { "lat": 51.7897, "lon": 6.0072 }, "radiusKm": 0.3, "label": true, "source": "settlements-roads-1944.md 1c" }
+  ],
+  "features": [
+    { "name": "Valkhof", "at": { "lat": 51.8478, "lon": 5.8703 }, "source": "crossings-timeline.md key places" },
+    { "name": "Fort Hof van Holland", "at": { "lat": 51.8621, "lon": 5.8522 }, "source": "crossings-timeline.md (identification provisional)" },
+    { "name": "Duivelsberg", "at": { "lat": 51.8206, "lon": 5.9436 }, "source": "settlements-roads-1944.md 4" },
+    { "name": "Kiekberg", "at": { "lat": 51.7486, "lon": 5.9186 }, "source": "settlements-roads-1944.md 4" },
+    { "name": "Heumensoord", "at": { "lat": 51.8090, "lon": 5.8720 }, "source": "settlements-roads-1944.md 4" },
+    { "name": "Reichswald", "at": { "lat": 51.7650, "lon": 6.0250 }, "source": "settlements-roads-1944.md 4" },
+    { "name": "Ooijpolder", "at": { "lat": 51.8480, "lon": 5.9500 }, "source": "settlements-roads-1944.md 4" }
+  ],
+  "bridges": [
+    { "id": "waal-road-bridge", "name": "Waal road bridge (Waalbrug)", "river": "waal", "at": { "lat": 51.8514, "lon": 5.8711 }, "source": "crossings-timeline.md A: intact, captured 20 Sep" },
+    { "id": "waal-rail-bridge", "name": "Waal railway bridge", "river": "waal", "at": { "lat": 51.8519, "lon": 5.8566 }, "movementClasses": ["foot"], "source": "crossings-timeline.md A: intact until 28/29 Sep; railway deck, infantry only in the game" },
+    { "id": "grave-bridge", "name": "Grave bridge", "river": "maas", "at": { "lat": 51.7694, "lon": 5.7370 }, "source": "crossings-timeline.md A: captured intact 17 Sep" },
+    { "id": "heumen-lock-bridge", "name": "Heumen lock bridge (bridge 7)", "river": "maas-waal-canal", "at": { "lat": 51.7694, "lon": 5.8514 }, "source": "crossings-timeline.md A: captured intact 17 Sep, XXX Corps route; position from geography-1944.md 1a (OSM lock)" },
+    { "id": "waal-assault-boats", "name": "Waal crossing by assault boat (PGEM power station)", "river": "waal", "at": { "lat": 51.8560, "lon": 5.8380 }, "movementClasses": ["foot"], "side": "allied", "fromTurn": 14, "source": "crossings-timeline.md B and allied-forces.md 1: 26 assault boats arrived about 14:30-14:40 on 20 Sep; launch between the power plant and the De Oversteek site (position provisional)" },
+    { "id": "honinghutje-bridge", "name": "Honinghutje bridge (bridge 10)", "river": "maas-waal-canal", "at": { "lat": 51.8261, "lon": 5.8082 }, "movementClasses": ["foot", "wheeled"], "source": "crossings-timeline.md A: damaged, judged unfit for armour 19 Sep" }
+  ],
+  "roads": [
+    { "id": "grave-nijmegen", "name": "Grave–Nijmegen main road", "kind": "main", "via": [
+      { "lat": 51.6960, "lon": 5.7330 }, { "lat": 51.7592, "lon": 5.7383 }, { "lat": 51.7694, "lon": 5.7370 }, { "lat": 51.7722, "lon": 5.7453 },
+      { "lat": 51.8033, "lon": 5.7583 }, { "lat": 51.8261, "lon": 5.8082 }, { "lat": 51.8422, "lon": 5.8592 }
+    ], "source": "settlements-roads-1944.md 2 (N324 heerbaan, Graafseweg); southern entry towards Uden provisional" },
+    { "id": "xxx-corps-route", "name": "Overasselt–Heumen–Malden road", "kind": "secondary", "via": [
+      { "lat": 51.7722, "lon": 5.7453 }, { "lat": 51.7597, "lon": 5.7875 }, { "lat": 51.7656, "lon": 5.8433 }, { "lat": 51.7694, "lon": 5.8514 },
+      { "lat": 51.7808, "lon": 5.8544 }, { "lat": 51.7890, "lon": 5.8540 }
+    ], "source": "crossings-timeline.md A (XXX Corps route 19 Sep: Overasselt, Heumen lock, Malden, De Kluis)" },
+    { "id": "nijmegen-gennep", "name": "Nijmegen–Mook–Gennep road", "kind": "main", "via": [
+      { "lat": 51.8422, "lon": 5.8592 }, { "lat": 51.8138, "lon": 5.8650 }, { "lat": 51.7890, "lon": 5.8540 }, { "lat": 51.7658, "lon": 5.8722 },
+      { "lat": 51.7525, "lon": 5.8817 }, { "lat": 51.7358, "lon": 5.9250 }, { "lat": 51.7267, "lon": 5.9478 }, { "lat": 51.6942, "lon": 5.9733 }
+    ], "source": "settlements-roads-1944.md 2 (N271, 19th-c. rijksweg)" },
+    { "id": "nijmegen-groesbeek", "name": "Nijmeegsebaan", "kind": "secondary", "via": [
+      { "lat": 51.8380, "lon": 5.8700 }, { "lat": 51.8175, "lon": 5.8856 }, { "lat": 51.7760, "lon": 5.9310 }
+    ], "source": "settlements-roads-1944.md 2 (built c.1770, asphalted 1933)" },
+    { "id": "groesbeek-mook", "name": "Groesbeek–Mook road", "kind": "secondary", "via": [
+      { "lat": 51.7760, "lon": 5.9310 }, { "lat": 51.7525, "lon": 5.8817 }
+    ], "source": "settlements-roads-1944.md 2 (old local road, provisional)" },
+    { "id": "nijmegen-kleve", "name": "Nijmegen–Kleve road", "kind": "main", "via": [
+      { "lat": 51.8445, "lon": 5.8760 }, { "lat": 51.8333, "lon": 5.9167 }, { "lat": 51.8292, "lon": 5.9258 }, { "lat": 51.8056, "lon": 5.9664 },
+      { "lat": 51.7897, "lon": 6.0072 }, { "lat": 51.7870, "lon": 6.0800 }
+    ], "source": "settlements-roads-1944.md 2 (Route impériale 86 / B9; route through Ubbergen and Beek provisional)" },
+    { "id": "groesbeek-kranenburg", "name": "Groesbeek–Kranenburg road", "kind": "secondary", "via": [
+      { "lat": 51.7760, "lon": 5.9310 }, { "lat": 51.7744, "lon": 5.9700 }, { "lat": 51.7897, "lon": 6.0072 }
+    ], "source": "geography-1944.md 2 (De Horst); provisional" },
+    { "id": "nijmegen-ooij", "name": "Nijmegen–Ooij road", "kind": "secondary", "via": [
+      { "lat": 51.8460, "lon": 5.8800 }, { "lat": 51.8556, "lon": 5.9222 }, { "lat": 51.8645, "lon": 6.0091 }
+    ], "source": "settlements-roads-1944.md 2 (Postweg / dikes, provisional)" },
+    { "id": "nijmegen-arnhem", "name": "Nijmegen–Elst–Arnhem road", "kind": "main", "via": [
+      { "lat": 51.8422, "lon": 5.8592 }, { "lat": 51.8453, "lon": 5.8737 }, { "lat": 51.8580, "lon": 5.8700 }, { "lat": 51.8631, "lon": 5.8667 },
+      { "lat": 51.9156, "lon": 5.8378 }, { "lat": 51.9220, "lon": 5.8360 }
+    ], "source": "settlements-roads-1944.md 2 (Waalbrug 1936; Arnhem-Elst on the Griftdijk)" },
+    { "id": "lent-bemmel", "name": "Lent–Bemmel–Pannerden road", "kind": "secondary", "via": [
+      { "lat": 51.8631, "lon": 5.8667 }, { "lat": 51.8892, "lon": 5.8658 }, { "lat": 51.8917, "lon": 5.8958 }, { "lat": 51.8865, "lon": 5.9266 }, { "lat": 51.8950, "lon": 6.0800 }
+    ], "source": "german-forces.md 3 (entry route Pannerden–Doornenburg–Bemmel–Ressen–Lent)" },
+    { "id": "oosterhout-lent", "name": "Waal dike road", "kind": "secondary", "via": [
+      { "lat": 51.8583, "lon": 5.8154 }, { "lat": 51.8789, "lon": 5.8253 }, { "lat": 51.8631, "lon": 5.8667 }
+    ], "source": "crossings-timeline.md B (dike road behind the crossing site); provisional" },
+    { "id": "alverna-wijchen", "name": "Alverna–Wijchen road", "kind": "secondary", "via": [
+      { "lat": 51.8033, "lon": 5.7583 }, { "lat": 51.8067, "lon": 5.7211 }
+    ], "source": "settlements-roads-1944.md 2" },
+    { "id": "grave-cuijk", "name": "Grave–Cuijk road", "kind": "secondary", "via": [
+      { "lat": 51.7592, "lon": 5.7383 }, { "lat": 51.7485, "lon": 5.8282 }, { "lat": 51.7269, "lon": 5.8794 }
+    ], "source": "geography-1944.md 2 (Linden, west bank of the Maas); provisional" }
+  ]
+}

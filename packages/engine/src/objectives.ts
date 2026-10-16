@@ -26,6 +26,7 @@ export interface Objective {
   kind: 'hold';
   hexes: Hex[];
   holdTurns: number;
+  requireSupply: boolean;
 }
 
 export interface Victory {
@@ -57,6 +58,8 @@ export interface ObjectiveStatus {
   holdTurns: number;
   /** Consecutive turn ends at which `side` has held every hex. */
   heldFor: number;
+  /** Whether a supplied unit must also stand on the objective. */
+  requireSupply: boolean;
 }
 
 export function buildObjectives(file: ScenarioFile): Objective[] {
@@ -68,6 +71,7 @@ export function buildObjectives(file: ScenarioFile): Objective[] {
     kind: o.kind,
     hexes: o.hexes.map(fromOffset),
     holdTurns: o.holdTurns,
+    requireSupply: o.requireSupply ?? false,
   }));
 }
 
@@ -103,8 +107,10 @@ export function updateObjectives(
     events.push({ ...at, kind: 'objective-control', hex, from: before, to: now });
   }
   for (const o of world.objectives) {
-    const held = o.hexes.every((h) => state.objectives.control[hexKey(h)] === o.side);
-    state.objectives.heldFor[o.id] = held ? (state.objectives.heldFor[o.id] ?? 0) + 1 : 0;
+    const keys = new Set(o.hexes.map(hexKey));
+    const controlled = o.hexes.every((h) => state.objectives.control[hexKey(h)] === o.side);
+    const supplied = !o.requireSupply || state.units.some((u) => u.side === o.side && u.inSupply && keys.has(hexKey(u.pos)));
+    state.objectives.heldFor[o.id] = controlled && supplied ? (state.objectives.heldFor[o.id] ?? 0) + 1 : 0;
   }
   return events;
 }
@@ -152,5 +158,6 @@ export function objectiveStatus(state: GameState, world: World): ObjectiveStatus
     control: o.hexes.map((h) => state.objectives.control[hexKey(h)] ?? null),
     holdTurns: o.holdTurns,
     heldFor: state.objectives.heldFor[o.id] ?? 0,
+    requireSupply: o.requireSupply,
   }));
 }

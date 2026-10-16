@@ -54,6 +54,9 @@ export interface FireCalculation {
   base: number;
   /** Running value after each modifier, in the order documented. */
   steps: { name: string; percent: number; value: number }[];
+  /** The final value, in hundredths of a fire point. */
+  points: number;
+  /** Whole damage points this fire alone is worth (fractions carry over on the target). */
   damage: number;
 }
 
@@ -103,7 +106,7 @@ export function calculateFire(
     value = Math.floor((value * percent) / 100);
     return { name, percent, value };
   });
-  return { base, steps, damage: Math.floor(value / (100 * rules.firePointsPerDamage)) };
+  return { base, steps, points: value, damage: Math.floor(value / (100 * rules.firePointsPerDamage)) };
 }
 
 export interface PlannedFire {
@@ -111,6 +114,8 @@ export interface PlannedFire {
   target: UnitState;
   mode: FireMode;
   assault: boolean;
+  /** Hundredths of a fire point. */
+  points: number;
   damage: number;
 }
 
@@ -133,7 +138,7 @@ export function planFires(world: World, rules: Rules, units: readonly UnitState[
       if (target && target.side !== firer.side) {
         const observed = spot.bySide[firer.side].has(target.id);
         const c = calculateFire(world, rules, firer, target, { mode: 'indirect', assault: false, observed });
-        options.push({ firer, target, mode: 'indirect', assault: false, damage: c.damage });
+        options.push({ firer, target, mode: 'indirect', assault: false, points: c.points, damage: c.damage });
       }
     } else {
       const assaultHex = assaultTarget(rules, firer);
@@ -141,22 +146,22 @@ export function planFires(world: World, rules: Rules, units: readonly UnitState[
         const target = byId.get(id)!;
         const assault = assaultHex !== null && hexEquals(assaultHex, target.pos);
         const direct = calculateFire(world, rules, firer, target, { mode: 'direct', assault, observed: true });
-        options.push({ firer, target, mode: 'direct', assault, damage: direct.damage });
+        options.push({ firer, target, mode: 'direct', assault, points: direct.points, damage: direct.damage });
       }
       if (maxRange(world, rules, firer, 'indirect') > 0) {
         for (const id of spot.bySide[firer.side]) {
           const target = byId.get(id)!;
           const c = calculateFire(world, rules, firer, target, { mode: 'indirect', assault: false, observed: true });
-          options.push({ firer, target, mode: 'indirect', assault: false, damage: c.damage });
+          options.push({ firer, target, mode: 'indirect', assault: false, points: c.points, damage: c.damage });
         }
       }
     }
 
     const best = options
-      .filter((o) => o.damage > 0)
+      .filter((o) => o.points > 0)
       .sort(
         (a, b) =>
-          b.damage - a.damage ||
+          b.points - a.points ||
           hexDistance(firer.pos, a.target.pos) - hexDistance(firer.pos, b.target.pos) ||
           compareHex(a.target.pos, b.target.pos) ||
           (a.mode === b.mode ? 0 : a.mode === 'direct' ? -1 : 1),

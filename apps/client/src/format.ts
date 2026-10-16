@@ -8,6 +8,7 @@ import {
   type ObservedEvent,
   type Order,
   type Side,
+  type SupplyStatus,
   type UnitRef,
   type UnitType,
 } from '@ww2hex/engine';
@@ -26,6 +27,8 @@ export function fmtDuration(minutes: number): string {
 }
 
 export const SIDE_NAME: Record<Side, string> = { allied: 'Allied', german: 'German' };
+
+export const SUPPLY_TEXT: Record<SupplyStatus, string> = { supplied: 'Supplied', low: 'Low', exhausted: 'Exhausted' };
 
 export const TYPE_LABEL: Record<UnitType, string> = {
   infantry: 'Infantry',
@@ -104,7 +107,7 @@ export function describeObserved(e: ObservedEvent, names: Names): string {
       return `${ownName(e.unitId)} lost ${e.personnel} men${kit ? ` and ${kit}` : ''}; cohesion now ${e.cohesionAfter}`;
     }
     case 'destroyed':
-      return `${ref(e.unit)} was destroyed at ${fmtHex(e.at)}`;
+      return `${ref(e.unit)} ${e.surrendered ? 'surrendered' : 'was destroyed'} at ${fmtHex(e.at)}`;
     case 'retreated':
       return `${ref(e.unit)} broke and fell back to ${fmtHex(e.to)}`;
     case 'pinned':
@@ -117,6 +120,16 @@ export function describeObserved(e: ObservedEvent, names: Names): string {
       return `${fmtHex(e.at)} is clear; contact ${e.contactId} has gone`;
     case 'objective-control':
       return `Objective hex ${fmtHex(e.hex)} is now held by the ${SIDE_NAME[e.to]} side`;
+    case 'reinforcement-arrived':
+      return `${ownName(e.unitId)} arrived at ${fmtHex(e.at)}`;
+    case 'reinforcement-delayed':
+      return `${ownName(e.unitId)} is delayed: every entry hex is occupied`;
+    case 'supply-drop':
+      return e.delivered
+        ? `Supplies dropped at ${fmtHex(e.at)} reached ${e.unitIds.length} unit${e.unitIds.length === 1 ? '' : 's'}`
+        : `Supplies dropped at ${fmtHex(e.at)} fell into enemy hands`;
+    case 'supply-changed':
+      return `${ownName(e.unitId)}: supply ${SUPPLY_TEXT[e.to].toLowerCase()}, route ${e.inSupply ? 'open' : 'cut'}`;
     case 'turn-ended':
       return `End of turn ${e.endedTurn}`;
   }

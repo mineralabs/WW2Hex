@@ -7,7 +7,12 @@ import type { PlayerView, PublicScenario } from '@ww2hex/protocol';
  * exact payloads.
  */
 
-/** The scenario minus anything about the other side: no units, no enemy formations, no future events. */
+/**
+ * The scenario minus anything about the other side: no units, no enemy
+ * formations, no events (each side learns its own reinforcements from its
+ * view), only this side's supply sources, and no crossings reserved for the
+ * other side (such as an assault-boat site).
+ */
 export function publicScenario(file: ScenarioFile, side: Side): PublicScenario {
   const copy = JSON.parse(JSON.stringify(file)) as ScenarioFile;
   return {
@@ -15,6 +20,8 @@ export function publicScenario(file: ScenarioFile, side: Side): PublicScenario {
     formations: copy.formations.filter((f) => f.side === side),
     units: [],
     events: [],
+    supplySources: (copy.supplySources ?? []).filter((s) => s.side === side),
+    map: { ...copy.map, bridges: copy.map.bridges.filter((b) => b.side === undefined || b.side === side) },
   };
 }
 

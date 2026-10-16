@@ -240,8 +240,15 @@ export class MapRenderer {
       const half = HEX_SIZE * 0.38;
       const s = { x: mid.x - ux * half, y: mid.y - uy * half };
       const t = { x: mid.x + ux * half, y: mid.y + uy * half };
-      bridges.moveTo(s.x, s.y).lineTo(t.x, t.y).stroke({ width: 11, color: COLORS.bridge, cap: 'butt' });
-      bridges.moveTo(s.x, s.y).lineTo(t.x, t.y).stroke({ width: 5, color: COLORS.roadMain, cap: 'butt' });
+      if (bridge.side !== null || bridge.fromTurn > 1) {
+        // A boat crossing or other limited crossing: a dashed line of small boats across the river.
+        dashed(bridges, [s, t], { width: 6, color: COLORS.boatCrossing, alpha: 0.95 });
+        continue;
+      }
+      // Foot-only bridges (rail, damaged) are drawn narrower.
+      const all = bridge.movementClasses.length === 3;
+      bridges.moveTo(s.x, s.y).lineTo(t.x, t.y).stroke({ width: all ? 11 : 7, color: COLORS.bridge, cap: 'butt' });
+      bridges.moveTo(s.x, s.y).lineTo(t.x, t.y).stroke({ width: all ? 5 : 2, color: all ? COLORS.roadMain : COLORS.labelHalo, cap: 'butt' });
     }
 
     layer.addChild(g, detail, roads, rivers, bridges);

@@ -85,12 +85,14 @@ describe('simultaneous fire', () => {
       units: [ARMED.infantry('a', 'allied', [0, 0]), ARMED.infantry('g', 'german', [1, 0], 22, 500)],
     });
     const g = unit(state, 'g');
-    g.personnel = 80;
+    g.personnel = 76;
     g.equipment['rifle-section'] = 4;
     const r = resolveStep(state, world, rules);
     const fires = r.events.filter((e) => e.kind === 'fire');
     expect(fires.map((e) => e.kind === 'fire' && e.firerId)).toEqual(['a', 'g']);
-    expect(unit(r.state, 'a').personnel).toBe(619);
+    // Its fire still counts: too little for a casualty this step, so it carries over on the target.
+    expect(unit(r.state, 'a').personnel).toBe(620);
+    expect(unit(r.state, 'a').fireCarry).toBe(1600);
     expect(r.state.units.map((u) => u.id)).toEqual(['a']);
     expect(r.events.some((e) => e.kind === 'destroyed' && e.unitId === 'g')).toBe(true);
   });
@@ -155,8 +157,9 @@ describe('orders in contact', () => {
   });
 
   it('rejects a bombardment beyond range', () => {
-    const { world, state } = tiny({ cols: 10, rows: 1, units: [ARMED.artillery('art', 'allied', [0, 0])] });
-    expect(applyUnitOrder(state, world, rules, 'allied', 'art', { kind: 'attack', target: at(9, 0) }).ok).toBe(false);
+    const { world, state } = tiny({ cols: 14, rows: 1, units: [ARMED.artillery('art', 'allied', [0, 0])] });
+    expect(applyUnitOrder(state, world, rules, 'allied', 'art', { kind: 'attack', target: at(10, 0) }).ok).toBe(true);
+    expect(applyUnitOrder(state, world, rules, 'allied', 'art', { kind: 'attack', target: at(11, 0) }).ok).toBe(false);
   });
 });
 
