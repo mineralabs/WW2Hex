@@ -120,7 +120,7 @@ what any unit sees.
 
 **Dusk and night.** The clock shows **Twilight** or **Night** when it is dark. In twilight every
 distance above is halved. At night a unit sees only the hexes next to it, except an enemy that
-**fires**: its muzzle flash shows out to 3 hexes. At Nijmegen it is dark from about 19:40 to 07:25.
+**fires**: its muzzle flash shows out to 3 hexes. At Nijmegen twilight starts at about 18:40 and it is night from about 19:15 to 05:45.
 
 What this means:
 

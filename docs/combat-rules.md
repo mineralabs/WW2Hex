@@ -69,9 +69,13 @@ check and at its end for fire and observation:
 | Night | More than 6° below | Only the next hex, except a unit that **fired**: its muzzle flash shows out to **3 hexes** in line of sight |
 
 So at night unseen bombardment (50%) is the rule, a defender who holds his fire stays hidden until
-the attacker is next to him, and a lost contact cannot be cleared from more than a hex away. At
-Nijmegen on 19-20 September 1944 (German wartime time, UTC+2) the sun sets at about 19:37 and rises
-at about 07:25: evening twilight runs to about 20:16 and morning twilight from about 06:45.
+the attacker is next to him, and a lost contact cannot be cleared from more than a hex away.
+
+Scenario times follow the clock of their main sources. For Market Garden that is the Allied "A"
+time, GMT+1, used in the Allied orders and war diaries; German records ran an hour later (GMT+2).
+At Nijmegen on 19-20 September 1944 the sun sets at about 18:37 and rises at about 06:24 (A time):
+twilight lasts to about 19:16 and starts again at about 05:45. The Guards crossed the Waal road
+bridge at about 19:10, in the last of the twilight.
 
 A side sees whatever any of its units sees. A **contact** is an enemy as the other side knows it:
 an anonymous contact id, a position, an apparent type and the time it was last seen.

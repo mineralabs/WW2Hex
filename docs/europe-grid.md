@@ -71,10 +71,10 @@ view shows also appears in 3D, and a click lands on the hex under the pointer.
   and 750 buildings at Nijmegen in 12 draw calls.
 - **Time of day** (the sun button): the sun follows the game clock, placed by NOAA's solar
   position formulas from the scenario's `start.date`, `start.utcOffsetMinutes` and the map's
-  centre (`map.geo.centre`). At Nijmegen on 19-20 September 1944 (German wartime time, UTC+2) it
-  rises about 07:25, is due south at 13:30 and sets about 19:37, so the Guards' bridge crossing at
-  19:10 comes in a low, red sun. Shadows lengthen and warm towards dusk, the sky darkens through
-  twilight, and the night is lit by a dim blue moon. Off, the board has a fixed afternoon sun.
+  centre (`map.geo.centre`). At Nijmegen on 19-20 September 1944 (Allied "A" time, GMT+1) it
+  rises about 06:24, is due south at 12:30 and sets about 18:37, so the Guards' bridge crossing at
+  19:10 comes in the last of the dusk. Shadows lengthen and warm towards sunset, the sky darkens
+  through twilight, and the night is lit by a dim blue moon. Off, the board has a fixed afternoon sun.
 - **Big maps:** the board picture is drawn at a fixed sharpness (1.6 canvas pixels per map pixel)
   in tiles of at most 4,096 pixels a side ([`tiles.ts`](../apps/client/src/map/tiles.ts)), each on
   its own patch of ground. A Nijmegen-sized map is one tile drawn straight from the board's canvas;
