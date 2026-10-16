@@ -30,7 +30,9 @@ Two scenarios:
 - **Host player:** Node.js 22.12 or newer (developed on 24.15). Nothing else: no database, no paid
   service, no account.
 - **Both players:** a desktop browser with WebGL (any current Chrome, Edge, Firefox or Safari).
-- **Players in different houses:** Tailscale (free), on both computers.
+- **Players in different houses:** Tailscale (free), on both computers; or, when software cannot
+  be installed (work laptops), a tunnel program run from a folder on the host computer and
+  nothing on the guest's. See the connection guide.
 
 ## Start
 

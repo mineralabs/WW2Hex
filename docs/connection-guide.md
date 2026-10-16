@@ -12,7 +12,7 @@ Windows PCs and Macs work in any combination: either one can host, and either on
 |---|---|---|
 | Computer | Windows or macOS | Windows or macOS |
 | Software | Node.js 22.12 or newer (nodejs.org), and this project (`npm install` once) | A current Chrome, Edge, Firefox or Safari. Nothing else |
-| Different houses | Tailscale, signed in | Tailscale, signed in to the **same** tailnet |
+| Different houses | Tailscale, signed in; **or** a tunnel program run from a folder, when you cannot install software (see [Work computers](#work-computers-no-admin-rights-a-tunnel)) | Tailscale, signed in to the **same** tailnet; **or** nothing at all, with a tunnel |
 
 ## 1. Start the host
 
@@ -53,7 +53,8 @@ sleeping computer cannot host: keep it awake while you play.
 3. A box shows the **room code** and the **invitation links**. Send the guest the link for your
    situation (by message or email):
    - **Same home network**: the `192.168…` (or `10…`) link.
-   - **Different houses**: the `100…` Tailscale link.
+   - **Different houses**: the `100…` Tailscale link, or the tunnel address (below) with
+     `?room=` and the room code on the end.
 
 You can plan your first turn while you wait. Reopen the box from **Room ABC123** in the top bar.
 
@@ -106,12 +107,74 @@ plan covers playing games with friends.
 The game knows nothing about Tailscale; it just listens on the computer's addresses. Any other way
 of making the host reachable works the same way.
 
+## Work computers, no admin rights: a tunnel
+
+On a managed work laptop you usually cannot install Tailscale, and the Windows firewall prompt
+that appears the first time Node.js listens for connections needs an administrator. Without it,
+nobody can connect **in** to your computer. A tunnel gets round both: a small program on the host
+computer opens an **outgoing** connection to a relay service, and the guest reaches your game
+through the relay's address. Nothing listens from outside, so the firewall never asks, and the
+guest installs nothing. The game host already accepts the relay's addresses; there is nothing to
+configure.
+
+Check your organisation's rules first: this is personal use of a work computer and network, and
+some IT departments block tunnel services.
+
+**Cloudflare quick tunnel** (no account, free):
+
+1. Download `cloudflared` for your computer from
+   https://github.com/cloudflare/cloudflared/releases (on Windows, `cloudflared-windows-amd64.exe`;
+   on a Mac, the `darwin` build or `brew install cloudflared`). Put it in any folder of your own,
+   such as Downloads, and on Windows rename it `cloudflared.exe`. It needs no installation.
+2. Start the game host as usual (`npm run host`) and leave it running.
+3. In a second terminal, in the folder with the program:
+
+   ```
+   .\cloudflared.exe tunnel --url http://localhost:8790
+   ```
+
+   (On a Mac: `./cloudflared tunnel --url http://localhost:8790`.) After a few seconds it prints
+   an address like `https://quiet-river-1234.trycloudflare.com`. Keep this window open too.
+4. Host a game in your browser at http://localhost:8790/ as usual, and send the guest the tunnel
+   address with the room code on the end:
+
+   ```
+   https://quiet-river-1234.trycloudflare.com/?room=ABC123
+   ```
+
+   The invitation box cannot show this address, because the game does not know about the tunnel;
+   copy it from the tunnel window. The guest opens it and presses **Join**.
+
+**localtunnel** (runs inside Node, if a separate program is not allowed):
+
+```
+npx localtunnel --port 8790
+```
+
+It prints an address like `https://brave-cats-sing.loca.lt`. The first time the guest opens it, the
+service shows a page asking for a "tunnel password": that is the host computer's public address,
+which the host can read at https://loca.lt/mytunnelpassword and send along with the link. The
+service is free and often slow or blocked by company filters; try Cloudflare first.
+
+**What to expect**
+
+- The address changes every time the tunnel starts. Send the new one each session.
+- Anyone who has the address can open the lobby, but can do nothing without a room code: a
+  connection through a tunnel is never treated as the host computer, so it cannot start games,
+  list saved games or release seats. A room code takes the open side once.
+- Stop the tunnel with Ctrl+C when you finish. Saved games stay on the host computer as usual.
+- Both players' browsers show `https://` through a tunnel; the host player still uses
+  http://localhost:8790/ locally.
+- If the tunnel program will not run at all (a policy message, or it closes at once), the
+  computer's software restrictions block it, and only IT can change that. The remaining option
+  is to host from a computer you control, such as a home PC with Tailscale.
+
 ## Troubleshooting
 
 | Problem | What to try |
 |---|---|
 | Guest's browser says the site can't be reached | Is the host window still open, and the host computer awake? Is the guest using an address from the host window (not `localhost`)? Then check the host's firewall, below |
-| Firewall on a Windows host | Settings → Privacy & security → Windows Security → Firewall → **Allow an app through firewall** → tick **Private** for Node.js. Also check the network is marked Private: Settings → Network & internet → your network → **Private network** |
+| Firewall on a Windows host | Settings → Privacy & security → Windows Security → Firewall → **Allow an app through firewall** → tick **Private** for Node.js. Also check the network is marked Private: Settings → Network & internet → your network → **Private network**. If this needs an administrator you do not have, use a tunnel (above) |
 | Firewall on a Mac host | System Settings → Network → Firewall → Options. Set **node** to **Allow incoming connections** (or remove it, and allow it when asked next time) |
 | Page says "Connection to the host lost" or "Cannot reach the host" | The host stopped, or the network dropped. Start the host again if needed; the page reconnects by itself |
 | "No game with that room code on this host" | Check the code (it is not case sensitive). Make sure the guest is connected to the right host address |
@@ -129,7 +192,7 @@ above:
 | `PORT` | `8790` | The port to listen on |
 | `HOST` | `0.0.0.0` | `0.0.0.0` accepts this computer, the home network and Tailscale. `127.0.0.1` accepts only this computer |
 | `SAVES_DIR` | `saves/` | Where games are saved |
-| `ALLOWED_HOSTS` | (none) | Extra names the guest may use to reach the host, for example a custom DNS name. IP addresses, `localhost`, the computer's own name and Tailscale `*.ts.net` names always work |
+| `ALLOWED_HOSTS` | (none) | Extra names the guest may use to reach the host, for example a custom DNS name. IP addresses, `localhost`, the computer's own name, Tailscale `*.ts.net` names and the tunnel names `*.trycloudflare.com` and `*.loca.lt` always work |
 
 ## Test checklist for Stage 3
 

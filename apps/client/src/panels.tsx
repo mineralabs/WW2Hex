@@ -721,6 +721,10 @@ export function InviteDialog(props: { invite: InviteInfo | null; roomCode: strin
           The first person to join with this code takes the other side. After that, the code alone cannot take a side. See
           docs/connection-guide.md if the link does not open.
         </p>
+        <p className="muted small">
+          Reaching this computer through a tunnel instead (work computers, no admin rights)? Send the tunnel address with{' '}
+          <code>?room={props.roomCode}</code> on the end.
+        </p>
         <p className={props.opponentJoined ? 'ok-text' : 'muted'}>{props.opponentJoined ? 'The other player has joined.' : 'Waiting for the other player to join…'}</p>
         <button className="primary" onClick={props.onClose}>
           Close

@@ -420,6 +420,21 @@ describe('recognising the host computer', () => {
     }
     expect(isThisComputer('203.0.113.9')).toBe(false);
   });
+
+  it('never counts a connection forwarded by a tunnel on this computer, whatever address the header names', async () => {
+    const s = await server();
+    const local = await TestClient.connect(s.port);
+    clients.push(local);
+    expect(local.received[0]).toMatchObject({ type: 'welcome', hostComputer: true });
+    const tunnelHeaders: Record<string, string>[] = [{ 'x-forwarded-for': '203.0.113.9' }, { 'x-forwarded-for': '127.0.0.1' }, { 'cf-connecting-ip': '127.0.0.1' }];
+    for (const headers of tunnelHeaders) {
+      const guest = await TestClient.connect(s.port, headers);
+      clients.push(guest);
+      expect(guest.received[0]).toMatchObject({ type: 'welcome', hostComputer: false, scenarios: [], rooms: [] });
+      guest.send({ type: 'create-room', scenarioId: 'synthetic-test', side: 'allied' });
+      expect(await guest.next('error')).toMatchObject({ code: 'not-host-computer' });
+    }
+  });
 });
 
 describe('WebSocket origin checks', () => {
@@ -440,6 +455,13 @@ describe('WebSocket origin checks', () => {
     expect(await upgrade(s.port, { host: `localhost:${s.port}`, origin: 'http://evil.example' })).toBe(403);
     expect(await upgrade(s.port, { host: `evil.example:${s.port}`, origin: `http://evil.example:${s.port}` })).toBe(403);
     expect(await upgrade(s.port, { host: `my-pc.tail1234.ts.net:${s.port}`, origin: `http://my-pc.tail1234.ts.net:${s.port}` })).toBe(101);
+  });
+
+  it('accepts the names tunnel services hand out, which change on every run', async () => {
+    const s = await server();
+    expect(await upgrade(s.port, { host: 'quiet-river-1234.trycloudflare.com', origin: 'https://quiet-river-1234.trycloudflare.com' })).toBe(101);
+    expect(await upgrade(s.port, { host: 'brave-cats-sing.loca.lt', origin: 'https://brave-cats-sing.loca.lt' })).toBe(101);
+    expect(await upgrade(s.port, { host: 'trycloudflare.com.evil.example', origin: 'https://trycloudflare.com.evil.example' })).toBe(403);
   });
 });
 

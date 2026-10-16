@@ -113,10 +113,16 @@ export function startServer(opts: ServerOptions): Promise<RunningServer> {
 
   const alive = new WeakSet<WebSocket>();
   wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
-    const remote = req.socket.remoteAddress ?? 'unknown';
+    const socketAddress = req.socket.remoteAddress ?? 'unknown';
+    // A tunnel (cloudflared, localtunnel) runs on this computer and forwards the
+    // guest's connection from loopback, naming the real client in a header. A
+    // browser on this computer never sends such a header, so its presence means
+    // the connection is not from the host computer, whatever the header says.
+    const forwardedFor = headerValue(req.headers['cf-connecting-ip']) ?? headerValue(req.headers['x-forwarded-for']);
+    const remote = forwardedFor !== null ? `${forwardedFor.split(',')[0]!.trim()} via tunnel` : socketAddress;
     const conn: Connection = {
       remote,
-      hostComputer: isThisComputer(remote),
+      hostComputer: forwardedFor === null && isThisComputer(socketAddress),
       send(message) {
         if (ws.readyState === ws.OPEN) ws.send(JSON.stringify(message));
       },
@@ -169,7 +175,7 @@ export function startServer(opts: ServerOptions): Promise<RunningServer> {
  * Refuses WebSocket connections opened by other websites, including through
  * DNS rebinding: the page must come from this host (same origin), and the
  * name it used must be an IP address, localhost, this computer's name, a
- * Tailscale name, or one listed in ALLOWED_HOSTS.
+ * Tailscale name, a tunnel name, or one listed in ALLOWED_HOSTS.
  */
 export function upgradeAllowed(req: IncomingMessage, extraNames: ReadonlySet<string>): boolean {
   const hostHeader = req.headers.host;
@@ -194,7 +200,15 @@ function hostNameAllowed(name: string, extra: ReadonlySet<string>): boolean {
   const bare = name.replace(/^\[|\]$/g, '');
   if (/^\d{1,3}(\.\d{1,3}){3}$/.test(bare) || bare.includes(':')) return true;
   const me = hostname().toLowerCase();
-  return bare === 'localhost' || bare === me || bare === `${me}.local` || bare.endsWith('.ts.net') || extra.has(bare);
+  return bare === 'localhost' || bare === me || bare === `${me}.local` || bare.endsWith('.ts.net') || TUNNEL_SUFFIXES.some((s) => bare.endsWith(s)) || extra.has(bare);
+}
+
+/** Names handed out by the tunnel services the connection guide describes; they change on every run, so they cannot be listed in ALLOWED_HOSTS ahead of time. */
+const TUNNEL_SUFFIXES = ['.trycloudflare.com', '.loca.lt'];
+
+function headerValue(h: string | string[] | undefined): string | null {
+  if (h === undefined) return null;
+  return Array.isArray(h) ? (h[0] ?? null) : h;
 }
 
 /**
