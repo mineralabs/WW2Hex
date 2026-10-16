@@ -113,6 +113,8 @@ const GUNS: GunEntry[] = [
 const FIGURES: FigureEntry[] = [
   { kind: 'figure', id: 'us-para', side: 'allied', name: 'US paratrooper', helmet: 'M2 steel helmet: deep and round, with the paratroop chinstrap',
     units: ['504th, 505th and 508th Parachute Infantry', '307th Airborne Engineer Bn'], note: 'The 82nd Airborne, dropped round Groesbeek and Grave on 17 September.' },
+  { kind: 'figure', id: 'uk-para', side: 'allied', name: 'British paratrooper', helmet: 'Airborne steel helmet: a plain rimless dome on a leather chinstrap',
+    units: ['Arnhem: 1st, 4th Parachute and 1st Airlanding Brigades, 1st Airborne Division', 'The Glider Pilot Regiment'], note: 'The 1st British Airborne Division, landed west of Arnhem on 17 and 18 September.' },
   { kind: 'figure', id: 'uk', side: 'allied', name: 'British infantryman', helmet: 'Mk II "Brodie": a shallow bowl on a wide, flat brim',
     units: ['1st (Motor) Bn Grenadier Guards', '5th Coldstream, 3rd Irish and 1st Welsh Guards'], note: 'The Guards Armoured Division’s infantry, up the corridor with XXX Corps.' },
   { kind: 'figure', id: 'de', side: 'german', name: 'German soldier', helmet: 'M42 Stahlhelm: a tall crown and a skirt flaring over the neck and ears',
@@ -159,7 +161,7 @@ export class GunPark {
       <div class="gp-labels"></div>
       <aside class="gp-panel gp-register" aria-label="Guns and soldiers">
         <div class="gp-head">
-          <div><div class="gp-eyebrow">WW2Hex · Nijmegen 1944</div><h1>Gun Park</h1></div>
+          <div><div class="gp-eyebrow">WW2Hex · Market Garden 1944</div><h1>Gun Park</h1></div>
           <button type="button" class="gp-close" aria-label="Close the Gun Park" title="Close">×</button>
         </div>
         <div><div class="gp-eyebrow gp-side allied">Allied artillery</div><ul class="gp-list" data-group="allied-artillery"></ul></div>

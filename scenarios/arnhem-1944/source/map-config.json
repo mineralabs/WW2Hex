@@ -1,0 +1,1029 @@
+{
+  "id": "arnhem-1944",
+  "name": "Arnhem, 17-18 September 1944",
+  "grid": {
+    "grid": "europe-laea-1km",
+    "col": 2023,
+    "row": 2734,
+    "cols": 30,
+    "rows": 26
+  },
+  "elevationStepMeters": 10,
+  "reliefSpacingMeters": 100,
+  "polderBelowMeters": 11.5,
+  "polderRisePerKmEast": 0.1,
+  "woodsFraction": 0.35,
+  "woods": {
+    "netherlands": "bosstatistiek",
+    "osmAreas": []
+  },
+  "rivers": [
+    {
+      "id": "nederrijn",
+      "name": "Nederrijn",
+      "kind": "major",
+      "osmNames": [
+        "Nederrijn",
+        "Neder-Rijn",
+        "Rijn"
+      ],
+      "osmWaterway": "river"
+    },
+    {
+      "id": "ijssel",
+      "name": "IJssel",
+      "kind": "major",
+      "osmNames": [
+        "IJssel",
+        "Gelderse IJssel"
+      ],
+      "osmWaterway": "river"
+    }
+  ],
+  "settlements": [
+    {
+      "name": "Arnhem",
+      "kind": "town",
+      "centre": {
+        "lat": 51.985,
+        "lon": 5.907
+      },
+      "radiusKm": 1,
+      "label": true,
+      "source": "settlements-roads-1944.md 1a-1b: old town, station, Spijkerkwartier, St Marten; city of ~97,000 (1947)"
+    },
+    {
+      "name": "",
+      "kind": "town",
+      "centre": {
+        "lat": 51.993,
+        "lon": 5.93
+      },
+      "radiusKm": 0.7,
+      "label": false,
+      "source": "settlements-roads-1944.md 1b: Klarendal (from 1830), Mussenbuurt (1911), Geitenkamp (1920-30)"
+    },
+    {
+      "name": "",
+      "kind": "town",
+      "centre": {
+        "lat": 51.989,
+        "lon": 5.885
+      },
+      "radiusKm": 0.6,
+      "label": false,
+      "source": "settlements-roads-1944.md 1b: Heijenoord, Lombok, Burgemeesterswijk, Hoogkamp (1930s); built up to about 5.876 E"
+    },
+    {
+      "name": "",
+      "kind": "town",
+      "centre": {
+        "lat": 52.002,
+        "lon": 5.909
+      },
+      "radiusKm": 0.4,
+      "label": false,
+      "source": "settlements-roads-1944.md 1b: Alteveer / 't Cranevelt (1930s)"
+    },
+    {
+      "name": "Malburgen",
+      "kind": "village",
+      "centre": {
+        "lat": 51.9698,
+        "lon": 5.9104
+      },
+      "radiusKm": 0,
+      "label": false,
+      "source": "settlements-roads-1944.md 1b: ~360 houses by 1940 at the bridge's south ramp; rest post-war"
+    },
+    {
+      "name": "Oosterbeek",
+      "kind": "town",
+      "centre": {
+        "lat": 51.9862,
+        "lon": 5.8443
+      },
+      "radiusKm": 0.8,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c: villa village between the railway and the river (TT 1:25k)"
+    },
+    {
+      "name": "Velp",
+      "kind": "town",
+      "centre": {
+        "lat": 51.9955,
+        "lon": 5.9747
+      },
+      "radiusKm": 0.6,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Renkum",
+      "kind": "village",
+      "centre": {
+        "lat": 51.9751,
+        "lon": 5.7336
+      },
+      "radiusKm": 0.3,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Heelsum",
+      "kind": "village",
+      "centre": {
+        "lat": 51.9832,
+        "lon": 5.7554
+      },
+      "radiusKm": 0,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Doorwerth",
+      "kind": "village",
+      "centre": {
+        "lat": 51.9789,
+        "lon": 5.8048
+      },
+      "radiusKm": 0,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Heveadorp",
+      "kind": "village",
+      "centre": {
+        "lat": 51.9758,
+        "lon": 5.8092
+      },
+      "radiusKm": 0,
+      "label": false,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Wolfheze",
+      "kind": "village",
+      "centre": {
+        "lat": 52.003,
+        "lon": 5.794
+      },
+      "radiusKm": 0,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c: station hamlet and asylum"
+    },
+    {
+      "name": "Driel",
+      "kind": "village",
+      "centre": {
+        "lat": 51.961,
+        "lon": 5.814
+      },
+      "radiusKm": 0,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Elden",
+      "kind": "village",
+      "centre": {
+        "lat": 51.96,
+        "lon": 5.886
+      },
+      "radiusKm": 0,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Westervoort",
+      "kind": "village",
+      "centre": {
+        "lat": 51.9623,
+        "lon": 5.9663
+      },
+      "radiusKm": 0,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c (municipality 2,662 in 1947)"
+    },
+    {
+      "name": "Schaarsbergen",
+      "kind": "village",
+      "centre": {
+        "lat": 52.025,
+        "lon": 5.872
+      },
+      "radiusKm": 0,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Deelen",
+      "kind": "village",
+      "centre": {
+        "lat": 52.066,
+        "lon": 5.8927
+      },
+      "radiusKm": 0,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Ede",
+      "kind": "town",
+      "centre": {
+        "lat": 52.043,
+        "lon": 5.672
+      },
+      "radiusKm": 0.6,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c: one hex from the west edge"
+    },
+    {
+      "name": "Bennekom",
+      "kind": "village",
+      "centre": {
+        "lat": 51.998,
+        "lon": 5.6759
+      },
+      "radiusKm": 0.3,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Wageningen",
+      "kind": "town",
+      "centre": {
+        "lat": 51.9686,
+        "lon": 5.6683
+      },
+      "radiusKm": 0.5,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Heteren",
+      "kind": "village",
+      "centre": {
+        "lat": 51.9554,
+        "lon": 5.7573
+      },
+      "radiusKm": 0,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Randwijk",
+      "kind": "village",
+      "centre": {
+        "lat": 51.9534,
+        "lon": 5.7097
+      },
+      "radiusKm": 0,
+      "label": false,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Huissen",
+      "kind": "town",
+      "centre": {
+        "lat": 51.9384,
+        "lon": 5.9394
+      },
+      "radiusKm": 0.3,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c (south edge row)"
+    },
+    {
+      "name": "Duiven",
+      "kind": "village",
+      "centre": {
+        "lat": 51.9496,
+        "lon": 6.0246
+      },
+      "radiusKm": 0,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Rozendaal",
+      "kind": "village",
+      "centre": {
+        "lat": 52.0031,
+        "lon": 5.9601
+      },
+      "radiusKm": 0,
+      "label": false,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Rheden",
+      "kind": "village",
+      "centre": {
+        "lat": 52.0044,
+        "lon": 6.0303
+      },
+      "radiusKm": 0.3,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "De Steeg",
+      "kind": "village",
+      "centre": {
+        "lat": 52.02,
+        "lon": 6.0606
+      },
+      "radiusKm": 0,
+      "label": false,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Lathum",
+      "kind": "village",
+      "centre": {
+        "lat": 51.9868,
+        "lon": 6.0196
+      },
+      "radiusKm": 0,
+      "label": false,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Otterlo",
+      "kind": "village",
+      "centre": {
+        "lat": 52.1015,
+        "lon": 5.7721
+      },
+      "radiusKm": 0,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Hoenderloo",
+      "kind": "village",
+      "centre": {
+        "lat": 52.1177,
+        "lon": 5.8762
+      },
+      "radiusKm": 0,
+      "label": true,
+      "source": "settlements-roads-1944.md 1c"
+    },
+    {
+      "name": "Terlet",
+      "kind": "village",
+      "centre": {
+        "lat": 52.059,
+        "lon": 5.9413
+      },
+      "radiusKm": 0,
+      "label": false,
+      "source": "settlements-roads-1944.md 1c: hamlet on the Apeldoorn road"
+    },
+    {
+      "name": "Woeste Hoeve",
+      "kind": "village",
+      "centre": {
+        "lat": 52.1053,
+        "lon": 5.9515
+      },
+      "radiusKm": 0,
+      "label": false,
+      "source": "settlements-roads-1944.md 1c: hamlet on the Apeldoorn road"
+    }
+  ],
+  "features": [
+    {
+      "name": "Hartenstein",
+      "at": {
+        "lat": 51.9877,
+        "lon": 5.8327
+      },
+      "source": "geography-1944.md 3b (Div HQ from 18 Sep)"
+    },
+    {
+      "name": "St Elisabeth Hospital",
+      "at": {
+        "lat": 51.987,
+        "lon": 5.888
+      },
+      "source": "geography-1944.md 3b; moved about 250 m north-east so it sits in the north-bank hex: at 1 km the hex holding its true position falls on the river's south side"
+    },
+    {
+      "name": "Den Brink",
+      "at": {
+        "lat": 51.987,
+        "lon": 5.876
+      },
+      "source": "geography-1944.md 3b; allied-forces.md 8.3 (grid 723782); provisional"
+    },
+    {
+      "name": "Monastery",
+      "at": {
+        "lat": 51.9855,
+        "lon": 5.8922
+      },
+      "source": "geography-1944.md 3b: probably the Municipal Museum; provisional"
+    },
+    {
+      "name": "Oosterbeek church",
+      "at": {
+        "lat": 51.978,
+        "lon": 5.8378
+      },
+      "source": "geography-1944.md 3b (Oude Kerk)"
+    },
+    {
+      "name": "Westerbouwing",
+      "at": {
+        "lat": 51.9755,
+        "lon": 5.8223
+      },
+      "source": "geography-1944.md 3b"
+    },
+    {
+      "name": "Tafelberg Hotel",
+      "at": {
+        "lat": 51.9845,
+        "lon": 5.8371
+      },
+      "source": "geography-1944.md 3b; provisional; probably the same hex as Hartenstein"
+    },
+    {
+      "name": "Ginkel Heath",
+      "at": {
+        "lat": 52.036,
+        "lon": 5.733
+      },
+      "source": "geography-1944.md 4 (DZ Y)"
+    },
+    {
+      "name": "Renkum Heath",
+      "at": {
+        "lat": 51.991,
+        "lon": 5.758
+      },
+      "source": "geography-1944.md 4 (DZ X / LZ X)"
+    },
+    {
+      "name": "LZ Z",
+      "at": {
+        "lat": 52,
+        "lon": 5.772
+      },
+      "source": "geography-1944.md 4"
+    },
+    {
+      "name": "Reijers-Camp",
+      "at": {
+        "lat": 52.013,
+        "lon": 5.785
+      },
+      "source": "geography-1944.md 4 (LZ S)"
+    },
+    {
+      "name": "Johannahoeve",
+      "at": {
+        "lat": 52.004,
+        "lon": 5.829
+      },
+      "source": "geography-1944.md 4 (LZ L)"
+    },
+    {
+      "name": "Koepel",
+      "at": {
+        "lat": 51.996,
+        "lon": 5.861
+      },
+      "source": "geography-1944.md 3b; allied-forces.md 8.3"
+    },
+    {
+      "name": "Deelen airfield",
+      "at": {
+        "lat": 52.0603,
+        "lon": 5.8725
+      },
+      "source": "geography-1944.md 3b (Fliegerhorst Deelen)"
+    },
+    {
+      "name": "Betuwe",
+      "at": {
+        "lat": 51.945,
+        "lon": 5.82
+      },
+      "source": "geography-1944.md 3a (polder label)"
+    }
+  ],
+  "bridges": [
+    {
+      "id": "arnhem-road-bridge",
+      "name": "Arnhem road bridge (Rijnbrug)",
+      "river": "nederrijn",
+      "at": {
+        "lat": 51.9748,
+        "lon": 5.9116
+      },
+      "source": "geography-1944.md 1b: intact 17-18 Sep; north end British from 20:00 17 Sep, south end German"
+    },
+    {
+      "id": "heveadorp-ferry",
+      "name": "Heveadorp-Driel ferry",
+      "river": "nederrijn",
+      "at": {
+        "lat": 51.9726,
+        "lon": 5.8244
+      },
+      "movementClasses": [
+        "foot",
+        "wheeled"
+      ],
+      "source": "geography-1944.md 1b: cable ferry, working 17-18 Sep (provisional); disabled about 20-21 Sep"
+    },
+    {
+      "id": "westervoort-ijssel-bridges",
+      "name": "Westervoort IJssel bridges",
+      "river": "ijssel",
+      "at": {
+        "lat": 51.971,
+        "lon": 5.957
+      },
+      "source": "geography-1944.md 1b: road and rail, in German use (provisional)"
+    }
+  ],
+  "roads": [
+    {
+      "id": "utrechtseweg",
+      "name": "Utrechtseweg (TIGER)",
+      "kind": "main",
+      "via": [
+        {
+          "lat": 51.9686,
+          "lon": 5.6683
+        },
+        {
+          "lat": 51.9751,
+          "lon": 5.7336
+        },
+        {
+          "lat": 51.9832,
+          "lon": 5.7554
+        },
+        {
+          "lat": 51.9881,
+          "lon": 5.8168
+        },
+        {
+          "lat": 51.9877,
+          "lon": 5.8327
+        },
+        {
+          "lat": 51.9849,
+          "lon": 5.8673
+        },
+        {
+          "lat": 51.985,
+          "lon": 5.886
+        },
+        {
+          "lat": 51.9855,
+          "lon": 5.8922
+        },
+        {
+          "lat": 51.9836,
+          "lon": 5.9062
+        },
+        {
+          "lat": 51.977,
+          "lon": 5.912
+        }
+      ],
+      "source": "settlements-roads-1944.md 2: Wageningen-Renkum-Heelsum-Oosterbeek-Arnhem; OSM points, 1944 alignment from TT"
+    },
+    {
+      "id": "lion",
+      "name": "Benedendorpsweg-Klingelbeekseweg (LION)",
+      "kind": "secondary",
+      "via": [
+        {
+          "lat": 51.9832,
+          "lon": 5.7554
+        },
+        {
+          "lat": 51.98,
+          "lon": 5.785
+        },
+        {
+          "lat": 51.9789,
+          "lon": 5.8048
+        },
+        {
+          "lat": 51.9762,
+          "lon": 5.8231
+        },
+        {
+          "lat": 51.9785,
+          "lon": 5.8369
+        },
+        {
+          "lat": 51.98,
+          "lon": 5.856
+        },
+        {
+          "lat": 51.9815,
+          "lon": 5.8736
+        },
+        {
+          "lat": 51.9839,
+          "lon": 5.8845
+        },
+        {
+          "lat": 51.98,
+          "lon": 5.898
+        },
+        {
+          "lat": 51.977,
+          "lon": 5.912
+        }
+      ],
+      "source": "settlements-roads-1944.md 2; allied-forces.md 4.1 (Heelsum-Heveadorp-Oosterbeek-Laag-Onderlangs-Rijnkade)"
+    },
+    {
+      "id": "amsterdamseweg",
+      "name": "Ede-Arnhem road (Amsterdamseweg, LEOPARD)",
+      "kind": "main",
+      "via": [
+        {
+          "lat": 52.043,
+          "lon": 5.672
+        },
+        {
+          "lat": 52.0369,
+          "lon": 5.7341
+        },
+        {
+          "lat": 52.034,
+          "lon": 5.78
+        },
+        {
+          "lat": 52.0184,
+          "lon": 5.8085
+        },
+        {
+          "lat": 52.0102,
+          "lon": 5.8324
+        },
+        {
+          "lat": 52.0021,
+          "lon": 5.859
+        },
+        {
+          "lat": 51.9958,
+          "lon": 5.8721
+        },
+        {
+          "lat": 51.9854,
+          "lon": 5.9019
+        }
+      ],
+      "source": "settlements-roads-1944.md 2: via Ginkel Heath and Planken Wambuis (TT, OSM)"
+    },
+    {
+      "id": "dreijenseweg",
+      "name": "Dreijenseweg",
+      "kind": "secondary",
+      "via": [
+        {
+          "lat": 51.9877,
+          "lon": 5.84
+        },
+        {
+          "lat": 51.9937,
+          "lon": 5.8409
+        },
+        {
+          "lat": 52.0027,
+          "lon": 5.8444
+        },
+        {
+          "lat": 52.0079,
+          "lon": 5.8453
+        }
+      ],
+      "source": "settlements-roads-1944.md 2 (Spindler line, 18 Sep)"
+    },
+    {
+      "id": "wolfheze-oosterbeek",
+      "name": "Wolfhezerweg (south)",
+      "kind": "secondary",
+      "via": [
+        {
+          "lat": 52.005,
+          "lon": 5.7926
+        },
+        {
+          "lat": 51.9942,
+          "lon": 5.8028
+        },
+        {
+          "lat": 51.9881,
+          "lon": 5.8168
+        }
+      ],
+      "source": "settlements-roads-1944.md 2 (TT)"
+    },
+    {
+      "id": "wolfheze-north",
+      "name": "Wolfhezerweg (north)",
+      "kind": "secondary",
+      "via": [
+        {
+          "lat": 52.005,
+          "lon": 5.7926
+        },
+        {
+          "lat": 52.0166,
+          "lon": 5.803
+        },
+        {
+          "lat": 52.0184,
+          "lon": 5.8085
+        }
+      ],
+      "source": "settlements-roads-1944.md 2 (1 Para's route north to LEOPARD)"
+    },
+    {
+      "id": "heelsum-wolfheze",
+      "name": "Heelsum-Wolfheze road",
+      "kind": "secondary",
+      "via": [
+        {
+          "lat": 51.9832,
+          "lon": 5.7554
+        },
+        {
+          "lat": 51.995,
+          "lon": 5.775
+        },
+        {
+          "lat": 52.005,
+          "lon": 5.7926
+        }
+      ],
+      "source": "settlements-roads-1944.md 2; alignment provisional"
+    },
+    {
+      "id": "arnhem-apeldoorn",
+      "name": "Arnhem-Apeldoorn road",
+      "kind": "main",
+      "via": [
+        {
+          "lat": 51.988,
+          "lon": 5.91
+        },
+        {
+          "lat": 52.0023,
+          "lon": 5.9092
+        },
+        {
+          "lat": 52.0281,
+          "lon": 5.9299
+        },
+        {
+          "lat": 52.0623,
+          "lon": 5.9433
+        },
+        {
+          "lat": 52.101,
+          "lon": 5.9531
+        }
+      ],
+      "source": "settlements-roads-1944.md 2: Apeldoornseweg via Terlet and Woeste Hoeve (TT 1:50k)"
+    },
+    {
+      "id": "arnhem-deelen",
+      "name": "Arnhem-Schaarsbergen-Deelen road",
+      "kind": "secondary",
+      "via": [
+        {
+          "lat": 51.9958,
+          "lon": 5.8721
+        },
+        {
+          "lat": 52.025,
+          "lon": 5.872
+        },
+        {
+          "lat": 52.0603,
+          "lon": 5.8725
+        },
+        {
+          "lat": 52.066,
+          "lon": 5.8927
+        }
+      ],
+      "source": "settlements-roads-1944.md 2; provisional"
+    },
+    {
+      "id": "arnhem-velp-zutphen",
+      "name": "Arnhem-Velp-Zutphen road",
+      "kind": "main",
+      "via": [
+        {
+          "lat": 51.977,
+          "lon": 5.912
+        },
+        {
+          "lat": 51.983,
+          "lon": 5.918
+        },
+        {
+          "lat": 51.989,
+          "lon": 5.945
+        },
+        {
+          "lat": 51.9955,
+          "lon": 5.9747
+        },
+        {
+          "lat": 52.0044,
+          "lon": 6.0303
+        },
+        {
+          "lat": 52.02,
+          "lon": 6.0606
+        }
+      ],
+      "source": "settlements-roads-1944.md 2: Velperweg, Rheden, De Steeg towards Dieren and Zutphen"
+    },
+    {
+      "id": "arnhem-zevenaar",
+      "name": "Arnhem-Westervoort-Zevenaar road",
+      "kind": "main",
+      "via": [
+        {
+          "lat": 51.983,
+          "lon": 5.918
+        },
+        {
+          "lat": 51.978,
+          "lon": 5.94
+        },
+        {
+          "lat": 51.971,
+          "lon": 5.957
+        },
+        {
+          "lat": 51.9623,
+          "lon": 5.9663
+        },
+        {
+          "lat": 51.9496,
+          "lon": 6.0246
+        },
+        {
+          "lat": 51.9357,
+          "lon": 6.0789
+        }
+      ],
+      "source": "settlements-roads-1944.md 2 (TT)"
+    },
+    {
+      "id": "arnhem-elst",
+      "name": "Arnhem-Elst road (south bank)",
+      "kind": "main",
+      "via": [
+        {
+          "lat": 51.9748,
+          "lon": 5.9116
+        },
+        {
+          "lat": 51.9681,
+          "lon": 5.9032
+        },
+        {
+          "lat": 51.9624,
+          "lon": 5.8939
+        },
+        {
+          "lat": 51.9545,
+          "lon": 5.879
+        },
+        {
+          "lat": 51.9477,
+          "lon": 5.867
+        },
+        {
+          "lat": 51.9386,
+          "lon": 5.8604
+        }
+      ],
+      "source": "settlements-roads-1944.md 2: diagonal bridge road past Elden to Elst (TT 1:50k); joins nijmegen-1944 'nijmegen-arnhem' road; provisional"
+    },
+    {
+      "id": "driel-elden",
+      "name": "Driel-Elden dike road",
+      "kind": "secondary",
+      "via": [
+        {
+          "lat": 51.9726,
+          "lon": 5.8244
+        },
+        {
+          "lat": 51.961,
+          "lon": 5.814
+        },
+        {
+          "lat": 51.964,
+          "lon": 5.85
+        },
+        {
+          "lat": 51.96,
+          "lon": 5.886
+        }
+      ],
+      "source": "settlements-roads-1944.md 2: ferry-Driel-Elden; provisional"
+    },
+    {
+      "id": "driel-heteren",
+      "name": "Driel-Heteren dike road",
+      "kind": "secondary",
+      "via": [
+        {
+          "lat": 51.961,
+          "lon": 5.814
+        },
+        {
+          "lat": 51.9554,
+          "lon": 5.7573
+        },
+        {
+          "lat": 51.9534,
+          "lon": 5.7097
+        }
+      ],
+      "source": "settlements-roads-1944.md 2; provisional"
+    },
+    {
+      "id": "ede-wageningen",
+      "name": "Ede-Bennekom-Wageningen road",
+      "kind": "secondary",
+      "via": [
+        {
+          "lat": 52.043,
+          "lon": 5.672
+        },
+        {
+          "lat": 51.998,
+          "lon": 5.6759
+        },
+        {
+          "lat": 51.9686,
+          "lon": 5.6683
+        }
+      ],
+      "source": "settlements-roads-1944.md 2; provisional"
+    },
+    {
+      "id": "ede-otterlo",
+      "name": "Ede-Otterlo road",
+      "kind": "secondary",
+      "via": [
+        {
+          "lat": 52.043,
+          "lon": 5.672
+        },
+        {
+          "lat": 52.07,
+          "lon": 5.73
+        },
+        {
+          "lat": 52.1015,
+          "lon": 5.7721
+        }
+      ],
+      "source": "settlements-roads-1944.md 2; provisional (route north-west towards Lunteren leaves the map via Ede)"
+    },
+    {
+      "id": "otterlo-hoenderloo-apeldoorn",
+      "name": "Otterlo-Hoenderloo-Apeldoorn road",
+      "kind": "secondary",
+      "via": [
+        {
+          "lat": 52.1015,
+          "lon": 5.7721
+        },
+        {
+          "lat": 52.1222,
+          "lon": 5.8161
+        },
+        {
+          "lat": 52.1177,
+          "lon": 5.8762
+        }
+      ],
+      "source": "settlements-roads-1944.md 2 (TT 1:50k: Hoenderloo north-east towards Ugchelen and Apeldoorn); provisional"
+    }
+  ]
+}

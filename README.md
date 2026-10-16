@@ -14,13 +14,18 @@ A two-player, simultaneous-turn WWII operational wargame on hex maps. The design
 - A match ends when a side holds its objective, wipes out the other side, or the turn limit
   passes. Games are saved as you play and survive closing a browser or restarting the host.
 
-Two scenarios:
+Three scenarios:
 
 - **Nijmegen bridges, 19–20 September 1944.** A researched but **provisional** scenario. It
   covers the US 82nd Airborne and the Guards Armoured Division against the Nijmegen garrison and
   the German counter-attacks from the Reichswald. It is played on a georeferenced 1 km hex map
   of the real ground in 1944, with supply and reinforcements. See
   [docs/stage-4-notes.md](docs/stage-4-notes.md) and [docs/research](docs/research).
+- **Arnhem bridge, 17–18 September 1944.** Also researched and **provisional**: the 1st British
+  Airborne Division's dash for the Arnhem road bridge against the 9th SS, the 10th SS, Division
+  von Tettau and the reinforcements gathering from every direction. Its map sits directly north
+  of Nijmegen's on the same hex grid. See [docs/arnhem-notes.md](docs/arnhem-notes.md) and
+  [docs/research-arnhem](docs/research-arnhem).
 - **Synthetic test map.** Placeholder counters for engine development; nothing in it is
   historical.
 
@@ -158,10 +163,11 @@ The tests cover:
 | `apps/client` | React panels and a PixiJS map. Holds only what the host sends this player |
 | `apps/server` | The local game-host program: serves the client, rooms and seats, authoritative turns, saving |
 | `scenarios/nijmegen-1944` | The Nijmegen scenario (`scenario.json`) and the sources it is built from (`source/`) |
+| `scenarios/arnhem-1944` | The Arnhem scenario, built the same way: `npm run build:map:arnhem`, `npm run build:scenario:arnhem` |
 | `scenarios/synthetic-test` | The synthetic engine-development scenario |
 | `tools/map-builder` | Builds georeferenced hex maps and scenarios from open data and research: `npm run build:map`, `npm run build:scenario` |
 | `saves` | Saved matches (created by the host; not in git) |
-| `docs` | [Player's guide](docs/players-guide.md), [connection guide](docs/connection-guide.md), [combat rules](docs/combat-rules.md), [research](docs/research), [Stage 5 notes](docs/stage-5-notes.md), [Stage 4 notes](docs/stage-4-notes.md), [Stage 3 notes](docs/stage-3-notes.md), [Stage 2 notes](docs/stage-2-notes.md), [Stage 1 notes](docs/stage-1-notes.md), [scenario format](docs/scenario-format.md), [Europe grid and 3D view](docs/europe-grid.md) |
+| `docs` | [Player's guide](docs/players-guide.md), [connection guide](docs/connection-guide.md), [combat rules](docs/combat-rules.md), [research](docs/research), [Arnhem research](docs/research-arnhem), [Arnhem notes](docs/arnhem-notes.md), [Stage 5 notes](docs/stage-5-notes.md), [Stage 4 notes](docs/stage-4-notes.md), [Stage 3 notes](docs/stage-3-notes.md), [Stage 2 notes](docs/stage-2-notes.md), [Stage 1 notes](docs/stage-1-notes.md), [scenario format](docs/scenario-format.md), [Europe grid and 3D view](docs/europe-grid.md) |
 
 ## Next
 

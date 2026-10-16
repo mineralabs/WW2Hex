@@ -11,7 +11,7 @@ import { MODELS, type ModelId } from './catalog3d.ts';
 export type PaintSubject = ModelId | 'vehicles-us' | 'vehicles-uk' | 'vehicles-de' | FigureKind;
 
 /** The soldiers: who they are decides the helmet and the uniform. */
-export type FigureKind = 'us-para' | 'uk' | 'de' | 'de-ss' | 'de-fj';
+export type FigureKind = 'us-para' | 'uk' | 'uk-para' | 'de' | 'de-ss' | 'de-fj';
 
 export interface Scheme {
   id: string;
@@ -74,6 +74,10 @@ const SCHEMES: Record<Exclude<PaintSubject, ModelId>, Scheme[]> = {
     { id: 'm42', name: 'M42 jump suit', colours: ['#8d8462'], note: 'The khaki-tan suit the 82nd jumped in at Nijmegen.' },
     { id: 'm42-painted', name: 'M42, field painted', colours: ['#8d8462', '#4a4a34', '#2f2f26'], scale: 0.32, soft: 0.25, cover: [0.32, 0.12], note: 'Suits daubed with paint before the drop.' },
     { id: 'm43', name: 'M43 olive drab', colours: ['#5a5636'], note: 'The later olive drab combat uniform.' },
+  ],
+  'uk-para': [
+    { id: 'denison', name: 'Denison smock', colours: ['#a49b72', '#5b4a30', '#3f4a2c'], scale: 0.28, soft: 0.7, cover: [0.3, 0.22], note: 'The airborne smock, brush-stroke camouflage, worn at Arnhem.' },
+    { id: 'battledress', name: 'Khaki battledress', colours: ['#6b5a3c'], note: 'Battledress without the smock, as the airlanding battalions often wore it.' },
   ],
   uk: [
     { id: 'battledress', name: 'Khaki battledress', colours: ['#6b5a3c'], note: 'Serge battledress, the Guards’ standard dress.' },

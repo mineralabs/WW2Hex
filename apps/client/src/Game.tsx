@@ -267,7 +267,12 @@ export function Game(props: {
   const figureFor = useMemo(() => {
     const byId = new Map(file.formations.map((f) => [f.id, f]));
     return (u: UnitState, nation: Nation | null): FigureKind | null => {
-      if (u.side === 'allied') return nation === 'us' || u.type === 'airborne-infantry' ? 'us-para' : 'uk';
+      if (u.side === 'allied') {
+        if (nation === 'us') return 'us-para';
+        // British troops of an airborne division wore the airborne helmet and, mostly, the Denison smock.
+        for (let f = byId.get(u.formationId); f; f = f.parentId ? byId.get(f.parentId) : undefined) if (/Airborne/.test(f.name)) return 'uk-para';
+        return u.type === 'airborne-infantry' ? 'uk-para' : 'uk';
+      }
       if (u.type === 'airborne-infantry') return 'de-fj';
       // Only the unit and its own formation count: Kampfgruppe Henke's army troops served under an SS division.
       return /\bSS\b|SS-/.test(`${u.name} ${byId.get(u.formationId)?.name ?? ''}`) ? 'de-ss' : 'de';
@@ -432,6 +437,8 @@ export function Game(props: {
       };
     });
     // Enemy contacts show only their apparent type; their nationality is the side's usual one.
+    // Airborne contacts look like whichever airborne troops the scenario has: American, or else British.
+    const alliedPara = file.formations.some((f) => f.side === 'allied' && f.nation === 'us') ? 'us-para' : 'uk-para';
     const enemyNation: Nation | null = file.formations.some((f) => f.nation) ? (enemy === 'german' ? 'de' : 'uk') : null;
     const contacts = shown.contacts.map((c) => ({
       id: `contact:${c.contactId}`,
@@ -450,7 +457,7 @@ export function Game(props: {
       picture: genericPicture(c.apparentType),
       // Only what can be seen: the side's usual guns and soldiers, never which unit it is.
       model: null,
-      figure: (enemy === 'german' ? (c.apparentType === 'airborne-infantry' ? 'de-fj' : 'de') : c.apparentType === 'airborne-infantry' ? 'us-para' : 'uk') as FigureKind,
+      figure: (enemy === 'german' ? (c.apparentType === 'airborne-infantry' ? 'de-fj' : 'de') : c.apparentType === 'airborne-infantry' ? alliedPara : 'uk') as FigureKind,
       badge: null,
       via: viaByCounter.get(`contact:${c.contactId}`) ?? [],
       delta: null,

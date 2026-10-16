@@ -31,10 +31,10 @@ const STEEL = () => mat('#2f312f', 0.45, 0.5);
 const WOOD = () => mat('#6b4528', 0.7);
 
 /** Helmet colours where the helmet is not covered in the uniform's camouflage. */
-const HELMET: Record<FigureKind, string> = { 'us-para': '#4c5136', uk: '#545a3e', de: '#4f544c', 'de-ss': '', 'de-fj': '#565b55' };
+const HELMET: Record<FigureKind, string> = { 'us-para': '#4c5136', uk: '#545a3e', 'uk-para': '#4f553c', de: '#4f544c', 'de-ss': '', 'de-fj': '#565b55' };
 /** Belts and pouches: US canvas, British blancoed webbing, German black leather. */
-const KIT: Record<FigureKind, string> = { 'us-para': '#8b8158', uk: '#7a7752', de: '#24221e', 'de-ss': '#24221e', 'de-fj': '#3a352b' };
-const BOOTS: Record<FigureKind, string> = { 'us-para': '#5a3a24', uk: '#1f1e1b', de: '#1d1c19', 'de-ss': '#1d1c19', 'de-fj': '#2a2520' };
+const KIT: Record<FigureKind, string> = { 'us-para': '#8b8158', uk: '#7a7752', 'uk-para': '#7a7752', de: '#24221e', 'de-ss': '#24221e', 'de-fj': '#3a352b' };
+const BOOTS: Record<FigureKind, string> = { 'us-para': '#5a3a24', uk: '#1f1e1b', 'uk-para': '#1f1e1b', de: '#1d1c19', 'de-ss': '#1d1c19', 'de-fj': '#2a2520' };
 
 function mesh(geo: THREE.BufferGeometry, m: THREE.Material): THREE.Mesh {
   const o = new THREE.Mesh(geo, m);
@@ -109,6 +109,13 @@ function helmet(kind: FigureKind, m: THREE.Material): THREE.Object3D {
       g.add(shell([[0, 0.105], [0.08, 0.095], [0.12, 0.05], [0.13, 0.01], [0.205, -0.005], [0.21, -0.015], [0.12, -0.012], [0, 0.0]], m, 1.59));
       g.add(limb([0.02, 1.58, 0.11], [0.05, 1.46, 0.0], 0.007, mat(KIT.uk)));
       break;
+    case 'uk-para': {
+      // British airborne helmet: a plain rimless dome, sides a little lower than the Fallschirmjäger's, on a leather chinstrap.
+      const b = shell([[0, 0.112], [0.08, 0.105], [0.114, 0.068], [0.124, 0.02], [0.126, -0.02], [0.118, -0.024], [0.116, 0.0], [0, 0.0]], m, 0);
+      g.add(tipped(b, 0.1));
+      for (const z of [-0.112, 0.112]) g.add(limb([0.0, 1.575, z], [0.065, 1.47, z * 0.45], 0.008, mat('#3a2e22')));
+      break;
+    }
     case 'de':
     case 'de-ss': {
       // M42 Stahlhelm: a tall crown, and a skirt that flares out over the ears and neck; a short visor in front.
@@ -146,7 +153,7 @@ function rifle(kind: FigureKind): THREE.Group {
     g.add(box(0.08, 0.04, 0.03, STEEL(), -0.02, -0.06, 0)); // trigger guard and clip well
     g.add(cone([0.32, 0.01, 0], [0.55, 0.01, 0], 0.011, 0.01, STEEL(), 8));
     g.add(box(0.015, 0.03, 0.012, STEEL(), 0.53, 0.035, 0)); // front sight
-  } else if (kind === 'uk') {
+  } else if (kind === 'uk' || kind === 'uk-para') {
     // Lee-Enfield No. 4, 1.13 m: wood nearly to the muzzle, a box magazine below, the barrel just showing.
     g.add(extrude([[-0.56, -0.07], [-0.56, 0.045], [-0.28, 0.025], [-0.15, -0.005], [0.0, 0.02], [0.48, 0.018], [0.48, -0.015], [0.0, -0.03], [-0.15, -0.05], [-0.28, -0.035]], 0.04, WOOD()));
     g.add(box(0.16, 0.035, 0.034, STEEL(), -0.08, 0.035, 0));
@@ -179,7 +186,7 @@ export function soldier(kind: FigureKind, uniform: THREE.Material, pose = 0): TH
   const g = new THREE.Group();
   const kit = mat(KIT[kind], 0.8);
   const boots = mat(BOOTS[kind], 0.65);
-  const smock = kind === 'de-ss' || kind === 'de-fj';
+  const smock = kind === 'de-ss' || kind === 'de-fj' || kind === 'uk-para';
   const baggy = kind === 'de-fj' || kind === 'us-para';
 
   // Legs: thigh and shin with a slight bend at the knee, then the army's boots.
@@ -192,7 +199,7 @@ export function soldier(kind: FigureKind, uniform: THREE.Material, pose = 0): TH
     g.add(box(0.27, 0.08, 0.1, boots, 0.05, 0.04, z * 1.05)); // sole and toe
     if (kind === 'de' || kind === 'de-ss') g.add(cone([0, 0.06, z * 1.05], [0.01, 0.42, z * 1.05], 0.068, 0.072, boots)); // marching boots
     else if (kind === 'us-para') g.add(cone([0, 0.06, z * 1.05], [0.01, 0.28, z * 1.05], 0.066, 0.068, boots)); // jump boots
-    else if (kind === 'uk') {
+    else if (kind === 'uk' || kind === 'uk-para') {
       g.add(cone([0, 0.06, z * 1.05], [0, 0.13, z * 1.05], 0.064, 0.064, boots));
       g.add(cone([0, 0.12, z * 1.05], [0.005, 0.22, z * 1.05], 0.066, 0.066, kit)); // anklets
     } else g.add(cone([0, 0.06, z * 1.05], [0.005, 0.2, z * 1.05], 0.066, 0.07, boots)); // side-laced jump boots
@@ -220,7 +227,7 @@ export function soldier(kind: FigureKind, uniform: THREE.Material, pose = 0): TH
   if (kind === 'us-para') {
     for (let i = 0; i < 5; i++) for (const s of [-1, 1]) g.add(box(0.045, 0.06, 0.04, kit, 0.11 * Math.cos(0.35 * i), 1.0, s * (0.06 + 0.035 * i))); // cartridge-belt pockets
     g.add(box(0.1, 0.16, 0.22, kit, -0.17, 1.2, 0)); // musette bag
-  } else if (kind === 'uk') {
+  } else if (kind === 'uk' || kind === 'uk-para') {
     for (const z of [-0.08, 0.08]) g.add(box(0.07, 0.12, 0.1, kit, 0.14, 1.2, z)); // basic pouches
     g.add(box(0.1, 0.2, 0.26, kit, -0.17, 1.24, 0)); // small pack
   } else if (kind === 'de' || kind === 'de-ss') {

@@ -268,6 +268,26 @@ may also open a crossing or a supply source on a set turn, or drop supplies on t
   counter-attack groups arrive from the Reichswald on turns 9, 14 and 15.
 - If neither side has won by the end of turn 16, the German side wins.
 
+## 12a. Arnhem in brief
+
+15:00 on 17 September to 21:00 on 18 September 1944: fifteen turns, on the Allied clock.
+
+- **Allied:** the 1st Airborne Division's first lift starts at its rendezvous on Renkum Heath
+  and the landing zones round Wolfheze, about 10 km from the Arnhem road bridge. Win by holding
+  the **north end of the road bridge and the Utrechtseweg just east of the St Elisabeth
+  Hospital** (the way in from the west) at **four turn ends in a row**, with a supplied unit on
+  them, or **both ends of the bridge** at two turn ends in a row. Supply comes from the
+  division's area on LZ Z (and the Hartenstein from turn 13), so a force at the bridge that is cut
+  off lives on what it carries. The second lift (4th Parachute Brigade on Ginkel Heath, gliders on
+  LZ X and LZ S) lands on turn 12; the supply drop on turn 14 lands on DZ X.
+- **German:** stop that. Krafft's battalion is at Wolfheze, a weak guard on the bridge and
+  Gräbner's reconnaissance battalion at Hoenderloo. The rest gather from every side: Möller and
+  Spindler from Velp, Allwörden from the north, Brinkmann and the 10th SS from the east at 19:00,
+  Knaust and Mielke's tanks over the Westervoort bridge before dawn, and Division von Tettau from
+  Ede and Wageningen in the west.
+- The night of 17/18 September is dark from about 19:20 to 06:20: see section 6.
+- If neither side has won by the end of turn 15, the German side wins.
+
 ## 13. What the game tells you, and what it hides
 
 You get exact figures for your own units: losses, cohesion, halts, retreats, and the reasons

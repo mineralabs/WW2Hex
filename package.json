@@ -20,7 +20,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc -p packages/engine && tsc -p packages/protocol && tsc -p apps/client && tsc -p apps/server && tsc -p tools/map-builder",
-    "check": "npm run typecheck && npm test"
+    "check": "npm run typecheck && npm test",
+    "build:map:arnhem": "node tools/map-builder/build-map.ts scenarios/arnhem-1944/source/map-config.json",
+    "build:scenario:arnhem": "node tools/map-builder/build-scenario.ts scenarios/arnhem-1944/source"
   },
   "devDependencies": {
     "@types/node": "^24.19.2",

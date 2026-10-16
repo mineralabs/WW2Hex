@@ -176,7 +176,8 @@ const SQUAD_PICTURES = new Set<Picture>(['infantry', 'paratroops', 'engineers', 
 /** Which soldiers a unit shows when the counter does not say: the side's usual infantry. */
 function defaultFigure(picture: Picture, nation: Nation | null, side: Side): FigureKind {
   if (side === 'german') return picture === 'paratroops' ? 'de-fj' : 'de';
-  return nation === 'us' || picture === 'paratroops' ? 'us-para' : 'uk';
+  if (nation === 'us') return 'us-para';
+  return picture === 'paratroops' ? 'uk-para' : 'uk';
 }
 
 export interface MiniatureSpec {
