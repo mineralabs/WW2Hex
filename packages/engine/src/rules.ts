@@ -36,6 +36,12 @@ export interface Rules {
   movedVisibilityBonus: number;
   /** An observer this many metres above woods or town can see over it. */
   lookDownMarginMeters: number;
+  /**
+   * Darkness, for scenarios that say where and when they are. In twilight every spotting
+   * distance is multiplied by `twilightFactor` (rounded up). At night a unit sees only the hexes
+   * next to it, except a unit that fired, whose muzzle flash shows out to `flashSpotRange`.
+   */
+  night: { twilightFactor: number; flashSpotRange: number };
   /** An Advance halts when the unit itself sees an enemy this close (hexes). */
   advanceHaltRadius: number;
 
@@ -119,7 +125,7 @@ export interface WeaponProfile {
 }
 
 export const DEFAULT_RULES: Rules = {
-  rulesVersion: '0.6.1-provisional',
+  rulesVersion: '0.7.0-provisional',
   stepMinutes: 10,
   stepsPerTurn: 12,
   movementTicksPerStep: 10,
@@ -144,6 +150,7 @@ export const DEFAULT_RULES: Rules = {
   },
   concealment: { clear: 4, polder: 4, woods: 1, town: 1, water: 0 },
   firedVisibilityBonus: 2,
+  night: { twilightFactor: 0.5, flashSpotRange: 3 },
   movedVisibilityBonus: 1,
   lookDownMarginMeters: 10,
   advanceHaltRadius: 2,

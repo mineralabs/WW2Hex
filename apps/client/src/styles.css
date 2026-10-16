@@ -1680,3 +1680,23 @@ table.rooms td button.link {
 .gun-park-open {
   margin-left: auto;
 }
+
+/* The clock's darkness badge: dark blue for night, dusky violet for twilight. */
+.light-badge {
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+.light-badge.night {
+  background: #1c2a48;
+  color: #c9d6f2;
+  border: 1px solid #3a4c74;
+}
+.light-badge.twilight {
+  background: #4a3550;
+  color: #f0d8e6;
+  border: 1px solid #6c5274;
+}

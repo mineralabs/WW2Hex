@@ -1,6 +1,7 @@
 import { compareHex, hexDistance, hexRound, type Hex } from './hex.ts';
 import { cellAt } from './map.ts';
 import type { Rules } from './rules.ts';
+import type { Light } from './sun.ts';
 import type { GameMap, Side, UnitState } from './types.ts';
 
 /**
@@ -39,28 +40,38 @@ export function hasLineOfSight(map: GameMap, rules: Rules, from: Hex, to: Hex): 
   return true;
 }
 
-/** Whether `observer` can see `target`, given what the target did this step. */
-export function canSee(map: GameMap, rules: Rules, observer: UnitState, target: UnitState): boolean {
+/** A spotting distance as darkness cuts it: halved (rounded up) in twilight. Night is handled by the callers. */
+function dimmed(rules: Rules, d: number, light: Light): number {
+  return light === 'twilight' ? Math.ceil(d * rules.night.twilightFactor) : d;
+}
+
+/** Whether `observer` can see `target`, given what the target did this step and how dark it is. */
+export function canSee(map: GameMap, rules: Rules, observer: UnitState, target: UnitState, light: Light = 'day'): boolean {
   const d = hexDistance(observer.pos, target.pos);
   if (d <= 1) return true;
-  if (d > rules.spotRange[observer.type]) return false;
+  if (light === 'night') {
+    // In the dark only a muzzle flash gives a unit away beyond the next hex.
+    return target.lastStep.fired && d <= rules.night.flashSpotRange && hasLineOfSight(map, rules, observer.pos, target.pos);
+  }
+  if (d > dimmed(rules, rules.spotRange[observer.type], light)) return false;
   const cell = cellAt(map, target.pos);
   if (!cell) return false;
   const limit =
     rules.concealment[cell.terrain] +
     (target.lastStep.fired ? rules.firedVisibilityBonus : 0) +
     (target.lastStep.moved ? rules.movedVisibilityBonus : 0);
-  if (d > limit) return false;
+  if (d > dimmed(rules, limit, light)) return false;
   return hasLineOfSight(map, rules, observer.pos, target.pos);
 }
 
 /** Whether `observer` could see a unit standing still in `hex` (used to clear stale contacts). */
-export function canObserveHex(map: GameMap, rules: Rules, observer: UnitState, h: Hex): boolean {
+export function canObserveHex(map: GameMap, rules: Rules, observer: UnitState, h: Hex, light: Light = 'day'): boolean {
   const d = hexDistance(observer.pos, h);
   if (d <= 1) return true;
+  if (light === 'night') return false;
   const cell = cellAt(map, h);
   if (!cell) return false;
-  if (d > rules.spotRange[observer.type] || d > rules.concealment[cell.terrain]) return false;
+  if (d > dimmed(rules, rules.spotRange[observer.type], light) || d > dimmed(rules, rules.concealment[cell.terrain], light)) return false;
   return hasLineOfSight(map, rules, observer.pos, h);
 }
 
@@ -71,13 +82,13 @@ export interface Spotting {
   bySide: Record<Side, Set<string>>;
 }
 
-export function computeSpotting(map: GameMap, rules: Rules, units: readonly UnitState[]): Spotting {
+export function computeSpotting(map: GameMap, rules: Rules, units: readonly UnitState[], light: Light = 'day'): Spotting {
   const byUnit = new Map<string, Set<string>>();
   const bySide: Record<Side, Set<string>> = { allied: new Set(), german: new Set() };
   for (const o of units) {
     const seen = new Set<string>();
     for (const t of units) {
-      if (t.side !== o.side && canSee(map, rules, o, t)) seen.add(t.id);
+      if (t.side !== o.side && canSee(map, rules, o, t, light)) seen.add(t.id);
     }
     byUnit.set(o.id, seen);
     for (const id of seen) bySide[o.side].add(id);

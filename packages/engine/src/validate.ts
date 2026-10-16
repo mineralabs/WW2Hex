@@ -157,6 +157,10 @@ export function validateScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULE
     if (!(e.combatClass in rules.weapons)) {
       error('equipment-combat-class', `Equipment ${e.id}: combat class "${e.combatClass}" is not in the rules`);
     }
+    if (e.indirectRange !== undefined) {
+      if (!Number.isInteger(e.indirectRange) || e.indirectRange < 1) error('equipment-indirect-range', `Equipment ${e.id}: indirectRange must be a whole number of hexes, at least 1`);
+      else if (!(rules.weapons[e.combatClass]?.indirectRange ?? 0)) error('equipment-indirect-range-class', `Equipment ${e.id}: indirectRange is set but class "${e.combatClass}" does not fire indirectly`);
+    }
   }
 
   const formations = new Map(file.formations.map((f) => [f.id, f]));

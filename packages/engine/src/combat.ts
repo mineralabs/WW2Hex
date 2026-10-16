@@ -15,7 +15,10 @@ function weaponsOf(world: World, rules: Rules, unit: UnitState): [WeaponProfile,
     .flatMap((id): [WeaponProfile, number][] => {
       const w = rules.weapons[world.combatClass.get(id) ?? ''];
       const n = unit.equipment[id] ?? 0;
-      return w && n > 0 ? [[w, n]] : [];
+      if (!w || n <= 0) return [];
+      // A gun can have its own range, where its real range differs from its class's.
+      const range = world.indirectRange.get(id);
+      return [[range !== undefined && w.indirectRange > 0 ? { ...w, indirectRange: range } : w, n]];
     });
 }
 

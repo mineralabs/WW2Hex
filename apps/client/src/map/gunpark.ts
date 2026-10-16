@@ -55,11 +55,11 @@ const GUNS: GunEntry[] = [
   { kind: 'gun', id: 'pack-75', side: 'allied', group: 'artillery', name: '75 mm Pack Howitzer M1A1', nation: 'United States', facts: art('75 mm', '653 kg', '6.2 kg'), range: 8.8, game: 8,
     units: ['376th Parachute Field Artillery Bn · 10', '456th Parachute Field Artillery Bn · 11', '319th Glider Field Artillery Bn · 12'],
     note: 'Breaks down into nine loads for parachute or glider delivery. The 82nd Airborne\u2019s main artillery at Nijmegen.' },
-  { kind: 'gun', id: 'm3-105', side: 'allied', group: 'artillery', name: '105 mm Howitzer M3', nation: 'United States', facts: art('105 mm', '1,130 kg', '15 kg'), range: 7.6, game: 10,
+  { kind: 'gun', id: 'm3-105', side: 'allied', group: 'artillery', name: '105 mm Howitzer M3', nation: 'United States', facts: art('105 mm', '1,130 kg', '15 kg'), range: 7.6, game: 7,
     units: ['320th Glider Field Artillery Bn · 12'], note: 'A shortened 105 mm barrel on a pack-howitzer-type split-trail carriage, light enough to fly in by glider.' },
-  { kind: 'gun', id: 'gun-25pdr', side: 'allied', group: 'artillery', name: 'Ordnance QF 25-pounder', nation: 'United Kingdom', facts: art('87.6 mm', '1,800 kg', '11.3 kg'), range: 12.3, game: 10,
+  { kind: 'gun', id: 'gun-25pdr', side: 'allied', group: 'artillery', name: 'Ordnance QF 25-pounder', nation: 'United Kingdom', facts: art('87.6 mm', '1,800 kg', '11.3 kg'), range: 12.3, game: 12,
     units: ['55th (West Somerset Yeomanry) Field Regt RA · 24 (from turn 3)'], note: 'Fires from its circular platform, so the crew can swing it through a full circle. Comes up the corridor with the Guards.' },
-  { kind: 'gun', id: 'sexton', side: 'allied', group: 'artillery', name: 'Sexton self-propelled 25-pounder', nation: 'Canada / United Kingdom', facts: art('87.6 mm', '25.9 t', '11.3 kg'), range: 12.3, game: 10,
+  { kind: 'gun', id: 'sexton', side: 'allied', group: 'artillery', name: 'Sexton self-propelled 25-pounder', nation: 'Canada / United Kingdom', facts: art('87.6 mm', '25.9 t', '11.3 kg'), range: 12.3, game: 12,
     units: ['153rd (Leicestershire Yeomanry) Field Regt RA · 24 (from turn 3)'], note: 'A 25-pounder in an open-topped hull on a Ram tank chassis, so the guns keep up with the armour.' },
   // Allied anti-tank guns
   { kind: 'gun', id: 'towed-17pdr', side: 'allied', group: 'anti-tank', name: '17-pounder anti-tank gun', nation: 'United Kingdom', facts: [['Calibre', '76.2 mm'], ['Weight', '3,040 kg'], ['Penetration', 'about 130 mm at 1,000 m']], inGame: rated(2, 10, 1),
@@ -91,7 +91,7 @@ const GUNS: GunEntry[] = [
     units: ['SS-Artillerie-Ausbildungs- und Ersatz-Regiment · 4', 'Battery, SS-Panzer-Artillerie-Regiment 10 · 4'], note: 'The German divisional workhorse. Many still rode on the large spoked wheels of horse-drawn batteries.' },
   { kind: 'gun', id: 'sfh-18', side: 'german', group: 'artillery', name: '15 cm sFH 18', nation: 'Germany', facts: art('149 mm', '5,512 kg', '43.5 kg'), range: 13.3, game: 13,
     units: ['SS-Artillerie-Ausbildungs- und Ersatz-Regiment · 4'], note: 'The standard German heavy field howitzer, shelling the approaches to the Waal bridges from north of the river.' },
-  { kind: 'gun', id: 'ml-20', side: 'german', group: 'artillery', name: '152 mm ML-20 (captured)', nation: 'Soviet Union, in German service', facts: art('152 mm', '7,270 kg', '43.6 kg'), range: 17.2, game: 13,
+  { kind: 'gun', id: 'ml-20', side: 'german', group: 'artillery', name: '152 mm ML-20 (captured)', nation: 'Soviet Union, in German service', facts: art('152 mm', '7,270 kg', '43.6 kg'), range: 17.2, game: 17,
     units: ['Korps Feldt artillery · 9'], note: 'A Soviet gun-howitzer taken in the East and issued to German units as the 15.2 cm KH 433/1.' },
   // German anti-tank and flak
   { kind: 'gun', id: 'flak-88', side: 'german', group: 'anti-tank', name: '8.8 cm Flak 36', nation: 'Germany', facts: [['Calibre', '88 mm'], ['Weight', '7,400 kg travelling'], ['Penetration', 'about 100 mm at 1,000 m']], inGame: rated(3, 14, 4),

@@ -56,6 +56,23 @@ A unit sees an enemy when:
 
 Adjacent units always see each other.
 
+### Twilight and night (0.7.0)
+
+When a scenario says where and when it is (`start.date`, `start.utcOffsetMinutes` and
+`map.geo.centre`), the sun's height decides how dark each step is, at its start for the halt
+check and at its end for fire and observation:
+
+| Light | Sun | Spotting |
+| --- | --- | --- |
+| Day | Above the horizon | As above |
+| Twilight | Up to 6° below (civil twilight) | Spot range and concealment limit halved, rounded up |
+| Night | More than 6° below | Only the next hex, except a unit that **fired**: its muzzle flash shows out to **3 hexes** in line of sight |
+
+So at night unseen bombardment (50%) is the rule, a defender who holds his fire stays hidden until
+the attacker is next to him, and a lost contact cannot be cleared from more than a hex away. At
+Nijmegen on 19-20 September 1944 (German wartime time, UTC+2) the sun sets at about 19:37 and rises
+at about 07:25: evening twilight runs to about 20:16 and morning twilight from about 06:45.
+
 A side sees whatever any of its units sees. A **contact** is an enemy as the other side knows it:
 an anonymous contact id, a position, an apparent type and the time it was last seen.
 

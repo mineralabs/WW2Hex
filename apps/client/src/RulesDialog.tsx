@@ -143,6 +143,10 @@ export function RulesDialog({ rules, onClose }: { rules: Rules; onClose: () => v
               {r.concealment.clear}. Moving adds {r.movedVisibilityBonus}, <strong>firing adds {r.firedVisibilityBonus}</strong>.
             </li>
             <li>A lost contact stays on your map at its last-seen time until one of your units finds the hex empty.</li>
+            <li>
+              <strong>Dusk and night:</strong> in twilight every spotting distance is halved; at night a unit sees only the next hex, except an
+              enemy that fires, whose muzzle flash shows out to {r.night.flashSpotRange} hexes.
+            </li>
           </ul>
         </section>
 

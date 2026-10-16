@@ -6,7 +6,7 @@ import { deliverSupplyDrops, placeReinforcements, updateSupply } from './logisti
 import { updateObjectives } from './objectives.ts';
 import { observeStep, playerView, updateContacts } from './observe.ts';
 import { tickMinutes, type Rules } from './rules.ts';
-import { byId, cloneState, elapsedMinutes } from './scenario.ts';
+import { byId, cloneState, elapsedMinutes, lightAt } from './scenario.ts';
 import {
   SIDES,
   orderPath,
@@ -55,8 +55,12 @@ export function resolveStep(state: GameState, world: World, rules: Rules): Resol
   const at = (time: number) => ({ time, turn, step });
   const unitById = () => new Map(next.units.map((u) => [u.id, u]));
 
+  // How dark it is at the start and the end of the step.
+  const lightStart = lightAt(world, t0);
+  const lightEnd = lightAt(world, tEnd);
+
   // 1. Halt check -----------------------------------------------------------
-  const spotStart = computeSpotting(map, rules, next.units);
+  const spotStart = computeSpotting(map, rules, next.units, lightStart);
   const units0 = unitById();
   for (const u of next.units) {
     if (u.order?.kind !== 'advance') continue;
@@ -79,7 +83,7 @@ export function resolveStep(state: GameState, world: World, rules: Rules): Resol
   for (const u of next.units) u.lastStep.moved = !hexEquals(startPos.get(u.id)!, u.pos);
 
   // 3. Spotting ---------------------------------------------------------------
-  const spotFire = computeSpotting(map, rules, next.units);
+  const spotFire = computeSpotting(map, rules, next.units, lightEnd);
 
   // 4. Fire -------------------------------------------------------------------
   const fires = planFires(world, rules, next.units, spotFire);
@@ -190,8 +194,8 @@ export function resolveStep(state: GameState, world: World, rules: Rules): Resol
   events.push(...placeReinforcements(next, world, rules, at(tEnd)));
 
   // 7. Observation ------------------------------------------------------------
-  const spotEnd = computeSpotting(map, rules, next.units);
-  const contacts = updateContacts(next, map, rules, spotEnd, destroyedIds, at(tEnd));
+  const spotEnd = computeSpotting(map, rules, next.units, lightEnd);
+  const contacts = updateContacts(next, map, rules, spotEnd, destroyedIds, at(tEnd), lightEnd);
   if (endOfTurn) events.push({ ...at(tEnd), kind: 'turn-ended', endedTurn: turn });
 
   const ctx = { start: spotStart, fire: spotFire, end: spotEnd, contacts, losses };

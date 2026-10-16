@@ -13,6 +13,7 @@ import {
   hexEquals,
   edgeKey,
   hexKey,
+  lightAt,
   maxRange,
   neighbors,
   orderPath,
@@ -653,6 +654,8 @@ export function Game(props: {
     );
   }, [hoverHex, map, view.objectives, counters, side]);
 
+  // Day, twilight or night at the moment shown, which the rules use for spotting.
+  const light = lightAt(world, shown.time);
   // The sun over the map at the moment shown, for the 3D view's light; rounded to the minute it moves by.
   const sunMinute = Math.round(shown.time);
   const sun = useMemo(() => scenarioSun(file.start, file.map.geo.centre, sunMinute), [file, sunMinute]);
@@ -880,6 +883,11 @@ export function Game(props: {
         <div className="clock" aria-live="polite">
           <span className="turn">{turnLabel}</span>
           <span className="time">{clockLabel(file, shown.time)}</span>
+          {light !== 'day' && (
+            <span className={`light-badge ${light}`} title={light === 'night' ? 'Night: units see only the next hex, or a muzzle flash out to 3' : 'Twilight: spotting distances are halved'}>
+              {light === 'night' ? 'Night' : 'Twilight'}
+            </span>
+          )}
           {world.victory && phase !== 'finished' && <span className="muted-light">of {world.victory.lastTurn}</span>}
         </div>
         <div className="sides">

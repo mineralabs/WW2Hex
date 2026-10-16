@@ -14,6 +14,7 @@ import {
   type UnitRef,
   type UnitState,
 } from './types.ts';
+import type { Light } from './sun.ts';
 import { canObserveHex, type Spotting } from './visibility.ts';
 
 /**
@@ -59,6 +60,7 @@ export function updateContacts(
   spot: Spotting,
   destroyedIds: ReadonlySet<string>,
   at: { time: number; turn: number; step: number },
+  light: Light = 'day',
 ): ContactUpdate {
   const units = new Map(state.units.map((u) => [u.id, u]));
   const update: ContactUpdate = {
@@ -109,7 +111,7 @@ export function updateContacts(
 
     const observers = state.units.filter((u) => u.side === side);
     contacts = contacts.filter((r) => {
-      if (r.live || !observers.some((o) => canObserveHex(map, rules, o, r.pos))) return true;
+      if (r.live || !observers.some((o) => canObserveHex(map, rules, o, r.pos, light))) return true;
       out.push({ ...at, kind: 'contact-cleared', contactId: r.contactId, at: r.pos });
       return false;
     });

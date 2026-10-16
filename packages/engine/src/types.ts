@@ -213,6 +213,11 @@ export interface EquipmentFile {
   role: string;
   /** Key into the rules' weapon profiles: the gameplay side of this item. */
   combatClass: string;
+  /**
+   * Artillery range in hexes when this gun's differs from its class's: the real maximum range,
+   * rounded down to whole kilometres, as the class ranges are.
+   */
+  indirectRange?: number;
   researchStatus: DataStatus;
   sources: string[];
 }
@@ -311,6 +316,10 @@ export interface World {
   map: GameMap;
   /** Equipment id → combat class. */
   combatClass: ReadonlyMap<string, string>;
+  /** Equipment id → its own artillery range, where it overrides the class's. */
+  indirectRange: ReadonlyMap<string, number>;
+  /** Where and when the scenario is, for day and night; null when it does not say. */
+  sky: { start: { day: number; minuteOfDay: number; date?: string; utcOffsetMinutes?: number }; centre: { lat: number; lon: number } } | null;
   objectives: readonly Objective[];
   victory: Victory | null;
   supplySources: readonly SupplySource[];

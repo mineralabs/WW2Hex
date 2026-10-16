@@ -140,8 +140,10 @@
       "name": "105 mm howitzer M3",
       "role": "howitzer",
       "combatClass": "field-gun",
+      "indirectRange": 7,
       "researchStatus": "provisional",
       "sources": [
+        "Range: maximum about 7.6 km (general reference figure, not yet in the research), rounded down to 7 hexes.",
         "allied-forces.md 2.5 (type disputed)"
       ]
     },
@@ -150,8 +152,10 @@
       "name": "25-pdr field gun (towed)",
       "role": "field gun",
       "combatClass": "field-gun",
+      "indirectRange": 12,
       "researchStatus": "provisional",
       "sources": [
+        "Range: maximum about 12.3 km with charge super (general reference figure, not yet in the research), rounded down to 12 hexes.",
         "allied-forces.md 3.2 (55th Field Regt)"
       ]
     },
@@ -160,8 +164,10 @@
       "name": "Sexton self-propelled 25-pdr",
       "role": "field gun",
       "combatClass": "field-gun",
+      "indirectRange": 12,
       "researchStatus": "provisional",
       "sources": [
+        "Range: the 25-pounder, about 12.3 km (general reference figure, not yet in the research), rounded down to 12 hexes.",
         "allied-forces.md 3.2 (153rd Field Regt)"
       ]
     },
@@ -290,8 +296,10 @@
       "name": "Captured Soviet 152 mm gun-howitzer",
       "role": "heavy howitzer",
       "combatClass": "medium-gun",
+      "indirectRange": 17,
       "researchStatus": "provisional",
       "sources": [
+        "Range: maximum about 17.2 km (general reference figure, not yet in the research), rounded down to 17 hexes.",
         "german-forces.md 4.1 (Nafziger)"
       ]
     }

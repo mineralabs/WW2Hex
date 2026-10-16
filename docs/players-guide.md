@@ -117,6 +117,10 @@ Woods and towns block the view behind them unless the observer is 10 m higher; s
 ground between you and the target. Adjacent units always see each other. Your whole side shares
 what any unit sees.
 
+**Dusk and night.** The clock shows **Twilight** or **Night** when it is dark. In twilight every
+distance above is halved. At night a unit sees only the hexes next to it, except an enemy that
+**fires**: its muzzle flash shows out to 3 hexes. At Nijmegen it is dark from about 19:40 to 07:25.
+
 What this means:
 
 - A unit in a **town or wood that has not fired is invisible beyond the next hex**. Expect to
@@ -137,8 +141,10 @@ nobody gets a free first shot.
 
 **Ranges.** Infantry fires 1 hex. Tanks, anti-tank guns, armoured cars and light flak fire 2; the
 8.8 cm flak fires 3. Direct fire falls off with distance: 100% at 1 hex, 60% at 2, 40% at 3.
-Artillery bombards anything its side can see within 8 hexes (pack howitzers), 10 (field guns) or
-13 (medium guns) at full effect, or a hex nobody can see at **half** effect. Guns cannot fire
+Artillery bombards anything its side can see within its range at full effect, or a hex nobody can
+see at **half** effect. Ranges are each gun's real maximum, rounded down to whole kilometres: the
+US 105 mm M3 7 hexes, the 75 mm pack howitzer 8, the leFH 18 10, the 25-pounder and Sexton 12, the
+sFH 18 13 and the captured 152 mm ML-20 17. Guns cannot fire
 while moving; infantry and tanks fire at half strength on the move.
 
 **What makes fire stronger or weaker**, in the order the reasons are listed in the game:

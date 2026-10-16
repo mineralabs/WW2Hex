@@ -13,3 +13,4 @@ export * from './resolve.ts';
 export * from './objectives.ts';
 export * from './logistics.ts';
 export * from './match.ts';
+export * from './sun.ts';

@@ -6,6 +6,7 @@ import { DEFAULT_RULES, type Rules } from './rules.ts';
 import { SIDES, type GameMap, type GameState, type PendingUnit, type ScenarioFile, type UnitFile, type UnitState, type World } from './types.ts';
 import { validateScenario, type ValidationIssue } from './validate.ts';
 import { updateContacts } from './observe.ts';
+import { lightFor, scenarioSun, type Light } from './sun.ts';
 import { computeSpotting } from './visibility.ts';
 
 export interface LoadedScenario {
@@ -41,7 +42,8 @@ export function loadScenario(file: ScenarioFile, rules: Rules = DEFAULT_RULES): 
     for (const u of state.units) if (u.side === side) u.inSupply = reach.has(hexKey(u.pos));
   }
   // Each side starts knowing whatever its units can already see.
-  updateContacts(state, map, rules, computeSpotting(map, rules, state.units), new Set(), start);
+  const light = lightAt(world, 0);
+  updateContacts(state, map, rules, computeSpotting(map, rules, state.units, light), new Set(), start, light);
   return { file, map, world, state, issues };
 }
 
@@ -49,6 +51,8 @@ export function buildWorld(file: ScenarioFile, map: GameMap = buildMap(file.map)
   return {
     map,
     combatClass: new Map(file.equipment.map((e) => [e.id, e.combatClass])),
+    sky: file.start.date && file.map.geo.centre ? { start: { ...file.start }, centre: { ...file.map.geo.centre } } : null,
+    indirectRange: new Map(file.equipment.flatMap((e) => (e.indirectRange !== undefined ? [[e.id, e.indirectRange] as const] : []))),
     objectives: buildObjectives(file),
     victory: file.victory ? { ...file.victory } : null,
     supplySources: (file.supplySources ?? []).map((s) => ({ id: s.id, name: s.name, side: s.side, at: fromOffset(s.at), range: s.range, fromTurn: s.fromTurn ?? 1, toward: s.toward ?? null })),
@@ -116,6 +120,11 @@ export function byId(a: { id: string }, b: { id: string }): number {
 }
 
 /** Scenario minutes elapsed at the start of the clock's next step. */
+/** Day, twilight or night at `elapsed` minutes into the game; always day when the scenario does not say where and when it is. */
+export function lightAt(world: World, elapsed: number): Light {
+  return world.sky ? lightFor(scenarioSun(world.sky.start, world.sky.centre, elapsed)) : 'day';
+}
+
 export function elapsedMinutes(state: GameState, rules: Rules): number {
   return ((state.clock.turn - 1) * rules.stepsPerTurn + state.clock.step) * rules.stepMinutes;
 }
