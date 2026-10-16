@@ -1,7 +1,7 @@
 # Combat, spotting, cohesion and supply rules
 
 This document is written for the designer and playtesters. It explains how a fight is worked out,
-with four worked examples. Every number is a **provisional playtest value** from
+with four worked examples. Players want [players-guide.md](players-guide.md) instead. Every number is a **provisional playtest value** from
 `packages/engine/src/rules.ts` (`rulesVersion 0.6.1-provisional`). None of them is a researched
 historical rate.
 
@@ -71,7 +71,7 @@ somewhere else, it appears as a new contact, so the player cannot tell it is the
 | Attack (ground) | Moves towards the objective and does not halt | Yes. Gets the **assault** bonus against the hex it is trying to enter if its cohesion is at least 50 | Enters only once the defender has gone. On reaching the objective, it switches to Defend |
 | Attack (artillery) | None | Bombards the chosen hex every step while it is in indirect range | Hits whoever is in the hex, seen or not |
 | Defend | None | Yes | Preparation builds up to level 3 |
-| Withdraw | Follows its route and does not halt | **No** | Puts disengaging first |
+| Withdraw | Follows its route and does not halt | **No** | Queues like any other unit. Not firing keeps it harder to see (no +2 to its visibility) |
 | No order | None | Yes | Preparation builds up to level 1 |
 
 **Preparation.** A unit gains one level for every 3 steps (30 minutes) it stays still, up to the

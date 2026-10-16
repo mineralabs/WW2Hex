@@ -38,6 +38,7 @@ import { genericPicture, pictureFor } from './map/silhouettes.ts';
 import type { ConnectionStatus } from './net/connection.ts';
 import { keyMoments, placeNamer, summarizeTurn, type NarrativeContext } from './narrative.ts';
 import { sessionValue, setSessionValue } from './net/seats.ts';
+import { RulesDialog } from './RulesDialog.tsx';
 import {
   ConflictPanel,
   ContactPanel,
@@ -124,6 +125,7 @@ export function Game(props: {
   const [fitRequest, setFitRequest] = useState(0);
   const [focus, setFocus] = useState<{ hex: Hex; nonce: number } | null>(null);
   const [showInvite, setShowInvite] = useState(() => side === session.hostSide && !view.claimed[enemy]);
+  const [showRules, setShowRules] = useState(false);
   const [outcomeClosed, setOutcomeClosed] = useState(false);
   const [showPicture, setShowPicture] = useState(false);
 
@@ -758,6 +760,9 @@ export function Game(props: {
           <button onClick={() => setFitRequest((n) => n + 1)} title="Fit the whole map in view">
             Fit
           </button>
+          <button onClick={() => setShowRules(true)} title="The rules in brief">
+            Rules
+          </button>
           <button onClick={props.onLeave} title="Back to the lobby. You can rejoin this game later from this browser.">
             Leave
           </button>
@@ -865,6 +870,7 @@ export function Game(props: {
       {showInvite && (
         <InviteDialog invite={props.invite} roomCode={roomCode} opponentJoined={view.claimed[enemy]} onClose={() => setShowInvite(false)} />
       )}
+      {showRules && <RulesDialog rules={RULES} onClose={() => setShowRules(false)} />}
       {view.outcome && !outcomeClosed && (
         <OutcomeDialog
           outcome={view.outcome}

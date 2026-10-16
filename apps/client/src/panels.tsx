@@ -581,6 +581,10 @@ export function HelpPanel({ phase }: { phase: MatchPhase }) {
         Counter colours: US olive, British khaki, German grey. Enemy counters show only what has been observed. Red lines are
         fire. <strong>Pictures / Symbols</strong> in the top bar changes how units are drawn.
       </p>
+      <p className="muted small">
+        <strong>Rules</strong> in the top bar has the rules in brief: orders, seeing, fighting, cohesion, supply and winning. The full
+        player’s guide is docs/players-guide.md.
+      </p>
     </section>
   );
 }

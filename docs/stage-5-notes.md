@@ -92,6 +92,13 @@ through a friend that is still moving (that is a queue), and never two halted fr
 The summary now says who was held up and behind whom, and saves resume across patch versions of
 the rules so games in progress carry on.
 
+## The player's guide
+
+The first game's questions ("do they recover?", "can Withdraw slip past the enemy?") had answers
+only in the designer's rules document. [players-guide.md](players-guide.md) now gives a player
+the rules in the order they meet them, and the **Rules** button in the top bar shows the same in
+brief, with every number read from the rules object so the text cannot drift from the engine.
+
 ## Known limitations
 
 - **No sound**, and terrain is drawn as before.

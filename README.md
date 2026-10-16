@@ -107,7 +107,9 @@ both ends of the Heumen lock bridge. The assault boats for crossing the Waal arr
 | Stop the host after one side locks, then start it again | Both pages reconnect; the turn resolves when the other side locks |
 | Take and hold Northton and the bridge end | The objective hexes change colour, then the result screen after two turn ends |
 
-The rules, numbers and four worked examples are in [docs/combat-rules.md](docs/combat-rules.md).
+**How to play:** [docs/players-guide.md](docs/players-guide.md) covers the controls, orders,
+seeing, fighting, cohesion, supply and winning; the **Rules** button in the game has the same in
+brief. The arithmetic and four worked examples are in [docs/combat-rules.md](docs/combat-rules.md).
 All numbers are provisional playtest values.
 
 ## Checks
@@ -155,7 +157,7 @@ The tests cover:
 | `scenarios/synthetic-test` | The synthetic engine-development scenario |
 | `tools/map-builder` | Builds georeferenced hex maps and scenarios from open data and research: `npm run build:map`, `npm run build:scenario` |
 | `saves` | Saved matches (created by the host; not in git) |
-| `docs` | [Connection guide](docs/connection-guide.md), [combat rules](docs/combat-rules.md), [research](docs/research), [Stage 5 notes](docs/stage-5-notes.md), [Stage 4 notes](docs/stage-4-notes.md), [Stage 3 notes](docs/stage-3-notes.md), [Stage 2 notes](docs/stage-2-notes.md), [Stage 1 notes](docs/stage-1-notes.md), [scenario format](docs/scenario-format.md) |
+| `docs` | [Player's guide](docs/players-guide.md), [connection guide](docs/connection-guide.md), [combat rules](docs/combat-rules.md), [research](docs/research), [Stage 5 notes](docs/stage-5-notes.md), [Stage 4 notes](docs/stage-4-notes.md), [Stage 3 notes](docs/stage-3-notes.md), [Stage 2 notes](docs/stage-2-notes.md), [Stage 1 notes](docs/stage-1-notes.md), [scenario format](docs/scenario-format.md) |
 
 ## Next
 

@@ -43,8 +43,11 @@ export const NATION_COLOR: Record<Nation, { fill: number; text: number }> = {
   de: { fill: 0x9aa5ad, text: 0x15191c },
 };
 
+/** Cohesion at which the readiness dot turns green, and amber below which it turns red. */
+export const READINESS = { good: 70, fair: 40 };
+
 export function readinessColor(cohesion: number): number {
-  if (cohesion >= 70) return 0x2f8f46;
-  if (cohesion >= 40) return 0xd99a1e;
+  if (cohesion >= READINESS.good) return 0x2f8f46;
+  if (cohesion >= READINESS.fair) return 0xd99a1e;
   return 0xc23b2b;
 }

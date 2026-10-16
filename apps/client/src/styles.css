@@ -618,6 +618,42 @@ button.primary:hover:not(:disabled) {
 .modal h2 {
   margin: 0 0 10px;
 }
+.modal.rules {
+  width: min(820px, calc(100vw - 32px));
+  font-size: 13px;
+  line-height: 1.5;
+}
+.modal.rules section {
+  margin-top: 14px;
+}
+.modal.rules h3 {
+  margin: 0 0 4px;
+  font-size: 14px;
+}
+.modal.rules ul {
+  margin: 4px 0;
+  padding-left: 18px;
+}
+.modal.rules table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 6px 0;
+}
+.modal.rules th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  padding: 3px 8px 3px 0;
+}
+.modal.rules td {
+  vertical-align: top;
+  border-bottom: 1px dotted var(--line);
+  padding: 4px 8px 4px 0;
+}
+.modal.rules button.primary {
+  margin-top: 16px;
+}
 .room-code {
   display: inline-block;
   font-size: 22px;
