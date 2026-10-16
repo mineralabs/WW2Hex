@@ -586,6 +586,7 @@ export function ObjectivePanel(props: {
 /** Addresses and links another player can use to reach this host. */
 export function InviteLinks({ invite, roomCode }: { invite: InviteInfo; roomCode: string | null }) {
   const [copied, setCopied] = useState<string | null>(null);
+  const [failed, setFailed] = useState<string | null>(null);
   if (!invite.listeningOnNetwork) {
     return (
       <p className="warning">
@@ -596,11 +597,42 @@ export function InviteLinks({ invite, roomCode }: { invite: InviteInfo; roomCode
   if (invite.addresses.length === 0) {
     return <p className="warning">This computer has no network address. Connect it to your network (or to Tailscale) and restart the host.</p>;
   }
-  const copy = (text: string) => {
-    void navigator.clipboard?.writeText(text).then(
-      () => setCopied(text),
-      () => setCopied(null),
-    );
+  // The clipboard API works only on secure pages (https or localhost). A page opened by its
+  // network address falls back to the old copy command; if that fails too, say so.
+  const copy = async (text: string) => {
+    let ok = false;
+    try {
+      if (window.isSecureContext && navigator.clipboard) {
+        await navigator.clipboard.writeText(text);
+        ok = true;
+      }
+    } catch {
+      ok = false;
+    }
+    if (!ok) {
+      const box = document.createElement('textarea');
+      box.value = text;
+      box.setAttribute('readonly', '');
+      box.style.position = 'fixed';
+      box.style.opacity = '0';
+      document.body.appendChild(box);
+      box.select();
+      try {
+        ok = document.execCommand('copy');
+      } catch {
+        ok = false;
+      }
+      box.remove();
+    }
+    setCopied(ok ? text : null);
+    setFailed(ok ? null : text);
+  };
+  const selectAll = (el: HTMLElement) => {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const sel = window.getSelection();
+    sel?.removeAllRanges();
+    sel?.addRange(range);
   };
   return (
     <ul className="invite-links">
@@ -610,9 +642,12 @@ export function InviteLinks({ invite, roomCode }: { invite: InviteInfo; roomCode
           <li key={a.address}>
             <span className="muted small">{a.kind === 'tailscale' ? 'Over Tailscale (different houses)' : 'Same home network'}</span>
             <span className="invite-row">
-              <code>{link}</code>
-              <button onClick={() => copy(link)}>{copied === link ? 'Copied' : 'Copy'}</button>
+              <code onClick={(e) => selectAll(e.currentTarget)} title="Click to select the whole link">
+                {link}
+              </code>
+              <button onClick={() => void copy(link)}>{copied === link ? 'Copied' : 'Copy'}</button>
             </span>
+            {failed === link && <span className="warning small">Could not copy automatically. Click the link to select it, then press Ctrl+C (⌘C on a Mac).</span>}
           </li>
         );
       })}
