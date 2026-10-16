@@ -60,6 +60,8 @@ export function UnitPanel(props: {
   fights?: { text: string; detail: string[] }[];
   /** Direct and indirect fire ranges and spotting range, in hexes. */
   ranges: { direct: number; indirect: number; spot: number };
+  /** How the unit stood at the start of the turn being shown or just finished, for comparison. */
+  turnChange: { label: string; personnelBefore: number; equipmentBefore: Record<string, number>; vehiclesLost: number } | null;
 }) {
   const { unit: u, file, eta } = props;
   const formations = new Map(file.formations.map((f) => [f.id, f]));
@@ -93,6 +95,14 @@ export function UnitPanel(props: {
         <dd>
           {u.personnel}
           {u.personnel < u.baseline.personnel && <span className="muted"> of {u.baseline.personnel}</span>}
+          {props.turnChange && (
+            <div className={`turn-change ${props.turnChange.personnelBefore > u.personnel ? 'loss' : ''}`}>
+              {props.turnChange.label}: {props.turnChange.personnelBefore} → {u.personnel}
+              {props.turnChange.personnelBefore > u.personnel
+                ? ` (lost ${props.turnChange.personnelBefore - u.personnel} men${props.turnChange.vehiclesLost ? ` and ${props.turnChange.vehiclesLost} vehicle${props.turnChange.vehiclesLost === 1 ? '' : 's'}` : ''})`
+                : ' (no losses)'}
+            </div>
+          )}
         </dd>
         <dt>Cohesion</dt>
         <dd>
@@ -132,16 +142,29 @@ export function UnitPanel(props: {
       <details className="equipment">
         <summary>Equipment</summary>
         <table>
-          <tbody>
-            {Object.entries(u.equipment).map(([id, n]) => (
-              <tr key={id}>
-                <td>{props.names.equipment(id)}</td>
-                <td className="num">
-                  {n}
-                  {n < (u.baseline.equipment[id] ?? 0) && <span className="muted"> / {u.baseline.equipment[id]}</span>}
-                </td>
+          {props.turnChange && (
+            <thead>
+              <tr>
+                <th />
+                <th className="num">now</th>
+                <th className="num">{props.turnChange.label.toLowerCase()}</th>
               </tr>
-            ))}
+            </thead>
+          )}
+          <tbody>
+            {Object.entries(u.equipment).map(([id, n]) => {
+              const before = props.turnChange?.equipmentBefore[id];
+              return (
+                <tr key={id}>
+                  <td>{props.names.equipment(id)}</td>
+                  <td className="num">
+                    {n}
+                    {n < (u.baseline.equipment[id] ?? 0) && <span className="muted"> / {u.baseline.equipment[id]}</span>}
+                  </td>
+                  {props.turnChange && <td className={`num ${before !== undefined && before > n ? 'loss' : 'muted'}`}>{before !== undefined && before > n ? `−${before - n}` : '–'}</td>}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </details>

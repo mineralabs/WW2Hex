@@ -460,6 +460,20 @@ export function Game(props: {
     return { trails, fights: [...fights.values()], losses };
   }, [pictureWanted, replay, side, enemy]);
 
+  // The selected unit at the start of the turn shown (during a replay) or of the turn just finished (in planning).
+  const turnChange = useMemo(() => {
+    if (!selectedUnit || !replay) return null;
+    const before = replay.frames[0]!.ownUnits.find((u) => u.id === selectedUnit.id);
+    if (!before) return null;
+    const vehiclesLost = Object.entries(before.equipment).reduce((n, [id, had]) => (vehicleName(id) ? n + Math.max(0, had - (selectedUnit.equipment[id] ?? 0)) : n), 0);
+    return {
+      label: watching ? 'This turn so far' : `Turn ${replay.turn}`,
+      personnelBefore: before.personnel,
+      equipmentBefore: before.equipment,
+      vehiclesLost,
+    };
+  }, [selectedUnit, replay, watching, vehicleName]);
+
   // The selected unit's reach, for the ring on the map and the line in its panel.
   const selectedRanges = useMemo(
     () =>
@@ -815,6 +829,7 @@ export function Game(props: {
             onClearWaypoints={() => setWaypoints([])}
             fights={selectedFights}
             ranges={selectedRanges ?? { direct: 0, indirect: 0, spot: 0 }}
+            turnChange={turnChange}
             costToNext={(() => {
               const next = orderPath(selectedUnit.order).slice(0, 1);
               return next.length ? (pathCosts(map, RULES, selectedUnit.movementClass, selectedUnit.pos, next, { side, turn })?.[0] ?? null) : null;
