@@ -161,6 +161,10 @@ export const MOVE_MS = 650;
 /** How long the step's effects keep animating. */
 const EFFECTS_MS = 1200;
 const DRAG_THRESHOLD = 4;
+/** Fingers wobble: a touch must move further before it counts as a drag. */
+const TOUCH_DRAG_THRESHOLD = 12;
+/** Holding a finger still this long on a hex is a right-click, for tablets. */
+export const LONG_PRESS_MS = 500;
 const MIN_ZOOM = 0.35;
 const MAX_ZOOM = 4;
 
@@ -862,12 +866,21 @@ export class MapRenderer {
   }
 
   // -------------------------------------------------------------------------
-  // Input: click, right-click, drag to pan, wheel to zoom
+  // Input: click, right-click, drag to pan, wheel to zoom; on a touch screen,
+  // tap, press and hold for a right-click, drag to pan, pinch to zoom
   // -------------------------------------------------------------------------
 
   private attachInput(): void {
     const canvas = this.app.canvas;
-    let down: { x: number; y: number; wx: number; wy: number; button: number; dragging: boolean } | null = null;
+    canvas.style.touchAction = 'none';
+    let down: { x: number; y: number; wx: number; wy: number; button: number; dragging: boolean; touch: boolean; held: boolean } | null = null;
+    const fingers = new Map<number, Point>();
+    let pinch: { d: number; scale: number; mid: Point; wx: number; wy: number } | null = null;
+    let hold: ReturnType<typeof setTimeout> | null = null;
+    const stopHold = () => {
+      if (hold) clearTimeout(hold);
+      hold = null;
+    };
 
     const local = (e: { clientX: number; clientY: number }) => {
       const rect = canvas.getBoundingClientRect();
@@ -886,18 +899,58 @@ export class MapRenderer {
 
     const onDown = (e: PointerEvent) => {
       const p = local(e);
+      const touch = e.pointerType === 'touch' || e.pointerType === 'pen';
+      if (touch) {
+        fingers.set(e.pointerId, p);
+        if (fingers.size === 2) {
+          // A second finger: pinch to zoom, and no tap or hold.
+          stopHold();
+          down = null;
+          const [a, b] = [...fingers.values()] as [Point, Point];
+          pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, scale: this.world.scale.x, mid: { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }, wx: this.world.x, wy: this.world.y };
+          return;
+        }
+        if (fingers.size > 2) return;
+      }
       // On a Mac, Ctrl+click is the usual right-click; treat it as one everywhere.
       const button = e.button === 0 && e.ctrlKey ? 2 : e.button;
-      down = { x: p.x, y: p.y, wx: this.world.x, wy: this.world.y, button, dragging: false };
+      down = { x: p.x, y: p.y, wx: this.world.x, wy: this.world.y, button, dragging: false, touch, held: false };
       canvas.setPointerCapture(e.pointerId);
+      if (touch) {
+        stopHold();
+        hold = setTimeout(() => {
+          hold = null;
+          if (!down || down.dragging) return;
+          const h = hexAtScreen({ x: down.x, y: down.y });
+          down.held = true;
+          if (!h) return;
+          navigator.vibrate?.(15);
+          this.handlers.onRightClick(h, false);
+        }, LONG_PRESS_MS);
+      }
     };
     const onMove = (e: PointerEvent) => {
       const p = local(e);
+      if (fingers.has(e.pointerId)) fingers.set(e.pointerId, p);
+      if (pinch && fingers.size >= 2) {
+        const [a, b] = [...fingers.values()] as [Point, Point];
+        const d = Math.hypot(a.x - b.x, a.y - b.y) || 1;
+        const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+        const next = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, (pinch.scale * d) / pinch.d));
+        // Keep the point that was under the fingers under them, and follow them as they move.
+        const wx = (pinch.mid.x - pinch.wx) / pinch.scale;
+        const wy = (pinch.mid.y - pinch.wy) / pinch.scale;
+        this.pan = null;
+        this.world.scale.set(next);
+        this.world.position.set(mid.x - wx * next, mid.y - wy * next);
+        return;
+      }
       if (down) {
         const dx = p.x - down.x;
         const dy = p.y - down.y;
-        if (!down.dragging && Math.hypot(dx, dy) > DRAG_THRESHOLD && down.button !== 2) {
+        if (!down.dragging && Math.hypot(dx, dy) > (down.touch ? TOUCH_DRAG_THRESHOLD : DRAG_THRESHOLD) && down.button !== 2 && !down.held) {
           down.dragging = true;
+          stopHold();
           canvas.style.cursor = 'grabbing';
         }
         if (down.dragging) {
@@ -909,8 +962,15 @@ export class MapRenderer {
       setHover(hexAtScreen(p));
     };
     const onUp = (e: PointerEvent) => {
+      fingers.delete(e.pointerId);
+      if (pinch) {
+        if (fingers.size < 2) pinch = null;
+        down = null;
+        return;
+      }
+      stopHold();
       if (!down) return;
-      const wasDrag = down.dragging;
+      const wasDrag = down.dragging || down.held;
       const button = down.button;
       down = null;
       canvas.style.cursor = '';
@@ -920,6 +980,13 @@ export class MapRenderer {
       if (!h) return;
       if (button === 0) this.handlers.onClick(h);
       else if (button === 2) this.handlers.onRightClick(h, e.shiftKey);
+    };
+    const onCancel = (e: PointerEvent) => {
+      fingers.delete(e.pointerId);
+      if (fingers.size < 2) pinch = null;
+      stopHold();
+      down = null;
+      canvas.style.cursor = '';
     };
     const onLeave = () => {
       if (!down) setHover(null);
@@ -941,13 +1008,16 @@ export class MapRenderer {
     canvas.addEventListener('pointerdown', onDown);
     canvas.addEventListener('pointermove', onMove);
     canvas.addEventListener('pointerup', onUp);
+    canvas.addEventListener('pointercancel', onCancel);
     canvas.addEventListener('pointerleave', onLeave);
     canvas.addEventListener('wheel', onWheel, { passive: false });
     canvas.addEventListener('contextmenu', noMenu);
     this.cleanup.push(() => {
+      stopHold();
       canvas.removeEventListener('pointerdown', onDown);
       canvas.removeEventListener('pointermove', onMove);
       canvas.removeEventListener('pointerup', onUp);
+      canvas.removeEventListener('pointercancel', onCancel);
       canvas.removeEventListener('pointerleave', onLeave);
       canvas.removeEventListener('wheel', onWheel);
       canvas.removeEventListener('contextmenu', noMenu);

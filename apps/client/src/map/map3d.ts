@@ -1,7 +1,7 @@
 import { hexKey, hexToPixel, pixelToHex, type GameMap, type Hex, type MapRelief } from '@ww2hex/engine';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { COUNTER_H, COUNTER_W, MOVE_MS, MapRenderer, TWEEN_MS, alongPath, type CounterView, type MapHandlers, type RenderView } from './renderer.ts';
+import { COUNTER_H, COUNTER_W, LONG_PRESS_MS, MOVE_MS, MapRenderer, TWEEN_MS, alongPath, type CounterView, type MapHandlers, type RenderView } from './renderer.ts';
 import { miniature, miniatureKey } from './models3d.ts';
 import { Scenery } from './scenery3d.ts';
 import { tileRegions, type Region } from './tiles.ts';
@@ -15,6 +15,7 @@ const PX_PER_HEX = HEX_SIZE * Math.sqrt(3);
 /** Mesh vertices per hex, along each axis. */
 const MESH_PER_HEX = 10;
 const DRAG_THRESHOLD = 4;
+const TOUCH_DRAG_THRESHOLD = 12;
 /** How long after a change the board keeps redrawing, to play tweens and effects (ms). */
 const ANIMATE_MS = 1700;
 const BASE_Y = -0.3;
@@ -885,24 +886,55 @@ export class Map3D {
   }
 
   private attachInput(canvas: HTMLCanvasElement): void {
-    let down: { x: number; y: number; button: number } | null = null;
+    // Touch: tap selects, press and hold is a right-click; the camera controls handle drag and pinch.
+    let down: { x: number; y: number; button: number; touch: boolean; held: boolean } | null = null;
+    const fingers = new Set<number>();
+    let hold: ReturnType<typeof setTimeout> | null = null;
+    const stopHold = () => {
+      if (hold) clearTimeout(hold);
+      hold = null;
+    };
+    const moved = (e: PointerEvent) => !!down && Math.hypot(e.clientX - down.x, e.clientY - down.y) > (down.touch ? TOUCH_DRAG_THRESHOLD : DRAG_THRESHOLD);
     const onDown = (e: PointerEvent) => {
+      const touch = e.pointerType === 'touch' || e.pointerType === 'pen';
+      if (touch) fingers.add(e.pointerId);
+      stopHold();
+      if (fingers.size > 1) {
+        down = null;
+        return;
+      }
       // On a Mac, Ctrl+click is the usual right-click; treat it as one everywhere.
-      down = { x: e.clientX, y: e.clientY, button: e.button === 0 && e.ctrlKey ? 2 : e.button };
+      down = { x: e.clientX, y: e.clientY, button: e.button === 0 && e.ctrlKey ? 2 : e.button, touch, held: false };
+      if (touch) {
+        hold = setTimeout(() => {
+          hold = null;
+          if (!down) return;
+          down.held = true;
+          const h = this.hexAtScreen(canvas, down.x, down.y);
+          if (!h) return;
+          navigator.vibrate?.(15);
+          this.handlers.onRightClick(h, false);
+        }, LONG_PRESS_MS);
+      }
     };
     const onMove = (e: PointerEvent) => {
-      if (down && Math.hypot(e.clientX - down.x, e.clientY - down.y) > DRAG_THRESHOLD) return;
+      if (down && moved(e)) {
+        stopHold();
+        return;
+      }
       const h = this.hexAtScreen(canvas, e.clientX, e.clientY);
       if ((h && this.hover && hexKey(h) === hexKey(this.hover)) || (!h && !this.hover)) return;
       this.hover = h;
       this.handlers.onHover(h);
     };
     const onUp = (e: PointerEvent) => {
+      fingers.delete(e.pointerId);
+      stopHold();
       if (!down) return;
-      const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y) > DRAG_THRESHOLD;
+      const wasMoved = moved(e) || down.held;
       const button = down.button;
       down = null;
-      if (moved) return;
+      if (wasMoved) return;
       const h = this.hexAtScreen(canvas, e.clientX, e.clientY);
       if (!h) return;
       if (button === 0) this.handlers.onClick(h);
@@ -916,13 +948,21 @@ export class Map3D {
     const noMenu = (e: Event) => e.preventDefault();
     canvas.addEventListener('pointerdown', onDown);
     canvas.addEventListener('pointermove', onMove);
+    const onCancel = (e: PointerEvent) => {
+      fingers.delete(e.pointerId);
+      stopHold();
+      down = null;
+    };
     canvas.addEventListener('pointerup', onUp);
+    canvas.addEventListener('pointercancel', onCancel);
     canvas.addEventListener('pointerleave', onLeave);
     canvas.addEventListener('contextmenu', noMenu);
     this.cleanup.push(() => {
+      stopHold();
       canvas.removeEventListener('pointerdown', onDown);
       canvas.removeEventListener('pointermove', onMove);
       canvas.removeEventListener('pointerup', onUp);
+      canvas.removeEventListener('pointercancel', onCancel);
       canvas.removeEventListener('pointerleave', onLeave);
       canvas.removeEventListener('contextmenu', noMenu);
     });
