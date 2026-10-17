@@ -84,7 +84,14 @@ export function startServer(opts: ServerOptions): Promise<RunningServer> {
       const s = await stat(file);
       if (s.isDirectory()) file = join(file, 'index.html');
     } catch {
-      file = join(root, 'index.html'); // single-page app fallback
+      // A missing script or picture is a 404, so a page from an older build fails clearly;
+      // only page addresses fall back to the single-page app.
+      if (extname(requested)) {
+        res.writeHead(404, { 'content-type': 'text/plain', 'cache-control': 'no-store' });
+        res.end('Not found');
+        return;
+      }
+      file = join(root, 'index.html');
     }
     try {
       await stat(file);

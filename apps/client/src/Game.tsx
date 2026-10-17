@@ -297,7 +297,13 @@ export function Game(props: {
   };
   const on3dFailed = useCallback((reason: string) => {
     setMapMode('2d');
-    setMessage(`The 3D view could not start on this computer (${reason}), so the map is back in 2D.`);
+    // A page loaded before the host was rebuilt asks for 3D code under its old file name.
+    const stale = /MIME type|dynamically imported module|Importing a module script failed|Loading chunk/i.test(reason);
+    setMessage(
+      stale
+        ? 'The host has been updated since this page was loaded. Reload the page to use the 3D view (your game carries on).'
+        : `The 3D view could not start on this computer (${reason}), so the map is back in 2D.`,
+    );
   }, []);
   // In 3D, which pieces show: miniatures have no counter art, so Pictures / Symbols then does nothing.
   const [pieceStyle, setPieceStyle] = useState<string>(() => {

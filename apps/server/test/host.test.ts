@@ -550,3 +550,28 @@ describe('the scenario each side is sent', () => {
     expect(publicScenario(file, 'german').diary!.map((d) => d.title)).toEqual(['G', 'Sunset']);
   });
 });
+
+describe('serving the client', () => {
+  it('answers a missing script with 404, so a page from an older build fails clearly, but sends the app for page addresses', async () => {
+    const { mkdirSync } = await import('node:fs');
+    const client = tempDir();
+    mkdirSync(join(client, 'assets'));
+    writeFileSync(join(client, 'index.html'), '<!doctype html><title>app</title>');
+    writeFileSync(join(client, 'assets', 'map3d-new.js'), 'export {}');
+    const s = await startServer({ port: 0, host: '127.0.0.1', clientDir: client, store: new FileMatchStore(tempDir()), scenarios: new Map(), log: () => {} });
+    running.push(s);
+    const get = (path: string) =>
+      new Promise<{ status: number; type: string }>((resolve, reject) => {
+        request({ host: '127.0.0.1', port: s.port, path }, (res) => {
+          res.resume();
+          resolve({ status: res.statusCode ?? 0, type: String(res.headers['content-type'] ?? '') });
+        })
+          .on('error', reject)
+          .end();
+      });
+    expect(await get('/assets/map3d-new.js')).toMatchObject({ status: 200 });
+    expect((await get('/assets/map3d-old.js')).status).toBe(404);
+    expect(await get('/?room=ABC123')).toMatchObject({ status: 200, type: expect.stringContaining('text/html') });
+    expect(await get('/some/page')).toMatchObject({ status: 200, type: expect.stringContaining('text/html') });
+  });
+});
