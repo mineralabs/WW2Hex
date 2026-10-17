@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { COUNTER_H, COUNTER_W, LONG_PRESS_MS, MOVE_MS, MapRenderer, TWEEN_MS, alongPath, type CounterView, type MapHandlers, type RenderView } from './renderer.ts';
 import { miniature, miniatureKey } from './models3d.ts';
 import { Scenery } from './scenery3d.ts';
+import { FireEffects } from './fire3d.ts';
 import { tileRegions, type Region } from './tiles.ts';
 import { PAINT_EVENT } from './paint.ts';
 import { isDark, onThemeChange, tokenColour } from '../theme.ts';
@@ -127,6 +128,9 @@ export class Map3D {
   private readonly pieceGroup = new THREE.Group();
   private readonly pieces = new Map<string, Piece>();
   private lastView: RenderView | null = null;
+  /** Shell arcs, tracers and bursts for the replay step on show. */
+  private readonly fire = new FireEffects();
+  private fireFor: RenderView['effects'] = null;
   private readonly pieceGeo = new THREE.BoxGeometry(PIECE_W, PIECE_H, PIECE_T).translate(0, PIECE_H / 2, 0);
 
   constructor(map: GameMap, relief: MapRelief | null, handlers: MapHandlers) {
@@ -185,6 +189,7 @@ export class Map3D {
     this.makeTiles(tex.canvas, renderer.capabilities.getMaxAnisotropy());
     this.buildGround();
     this.scene.add(this.pieceGroup);
+    this.scene.add(this.fire.group);
     try {
       this.showScenery = localStorage.getItem('ww2hex:scenery') !== 'off';
       this.timeOfDay = localStorage.getItem('ww2hex:daylight') !== 'off';
@@ -246,6 +251,7 @@ export class Map3D {
     }
     this.skirtGeo?.dispose();
     this.pieceGeo.dispose();
+    this.fire.dispose();
     for (const p of this.pieces.values()) this.removePiece(p);
     this.pieces.clear();
     this.scene.traverse((o) => {
@@ -271,7 +277,23 @@ export class Map3D {
     }
     this.board.update(view);
     this.syncPieces();
+    // A new replay step: fire its shots in 3D.
+    if (view.effects !== this.fireFor) {
+      this.fireFor = view.effects;
+      if (view.effects) {
+        const bursts = view.effects.flatMap((e) => (e.kind === 'burst' ? [{ hex: e.hex, big: e.big }] : []));
+        this.fire.start(view.fireLines, bursts, (hex) => this.groundAt(hex), performance.now());
+      } else this.fire.clear();
+    }
     this.dirtyUntil = performance.now() + ANIMATE_MS;
+  }
+
+  /** The ground at a hex centre, in scene units. */
+  private groundAt(hex: Hex): THREE.Vector3 {
+    const p = hexToPixel(hex, HEX_SIZE);
+    const x = p.x / PX_PER_HEX;
+    const z = p.y / PX_PER_HEX;
+    return new THREE.Vector3(x, this.y(x, z), z);
   }
 
   private setPieceStyle(style: PieceStyle): void {
@@ -852,6 +874,7 @@ export class Map3D {
     }
     this.controls?.update();
     this.placePieces(now);
+    this.fire.tick(now);
     // Redraw the board picture only while something on it may be moving.
     if (now < this.dirtyUntil && this.tiles.length) this.redrawTiles();
     this.renderer?.render(this.scene, this.camera);

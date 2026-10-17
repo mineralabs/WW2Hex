@@ -112,6 +112,16 @@ model's own coordinates, so they run unbroken across every part. A choice is kep
 only and repaints the miniatures on the 3D map at once. It is purely cosmetic and never sent to
 the host.
 
+In the replay, fire is drawn in the air as well as on the board.
+- **Bombardment:** shells climb from the guns on an arc and drop on the target. The arc is
+  higher for longer ranges.
+- **Direct fire:** a quick tracer just above the ground.
+- **Landing:** each shot ends in a flash and a puff of smoke.
+- **Unseen guns:** when the firing guns were not seen, only the shells landing are shown.
+
+Shots carry on into the next replay step if it starts before they land. With reduced motion
+turned on in the system settings, the trails appear whole and fade.
+
 On the 3D map, own units show their real gun and soldiers. Enemy contacts show only what can be
 seen: the side's usual field gun and ordinary soldiers (or paratroops, when the contact looks
 airborne), never which unit it is.
