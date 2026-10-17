@@ -29,7 +29,7 @@ The same text, in short form, is behind the **Rules** button in the game's top b
 | Select a unit or hex | Click it |
 | Pan, zoom | Drag; mouse wheel or pinch. **Fit** shows the whole map |
 | See the map in relief | **3D** in the toolbar (**2D** goes back). Drag to move; **Shift+drag** (or ⌘+drag, or right-drag with a mouse) to turn and tilt; wheel, two-finger scroll or pinch to zoom; the icons in the corner give set views, all seen from your own side's lines (oblique views of the board and key places, top-down, low, and face the front: north up for the Allies, south up for the Germans), cycle the units between miniatures (little tanks, guns and soldiers), counter blocks and flat counters, and **Gun Park** shows the guns and soldiers close up and lets you choose their paint schemes for the 3D map, and set how much heights are exaggerated. Clicks and orders work as in 2D |
-| Choose what a right-click gives | **A** Advance, **T** Attack, **W** Withdraw, or the buttons in the unit panel |
+| Choose what a right-click gives | **A** Advance, **T** Attack, **W** Withdraw, or the order bar at the bottom left of the map, which appears when one of your units is selected (it also has Defend, Hold, Formation and Undo) |
 | Give the order | Right-click the destination (on a Mac: two-finger click, or Ctrl+click) |
 | On a tablet | Tap to select; **press and hold** the destination to give the order (it buzzes, where the tablet can); drag to pan, pinch to zoom. Use the unit panel's buttons in place of the keys. Waypoints need Shift, so give single moves |
 | A route with turns in it | **Shift**+right-click each waypoint, then a plain right-click on the final destination |

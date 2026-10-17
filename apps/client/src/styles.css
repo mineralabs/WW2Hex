@@ -1773,3 +1773,51 @@ table.rooms td button.link {
 .diary-earlier > summary {
   cursor: pointer;
 }
+
+/* Order buttons on the map, for the selected unit */
+.order-bar {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  max-width: calc(100% - 200px);
+  padding: 5px 6px;
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  border-radius: 10px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.12);
+}
+.order-bar .ob-unit {
+  padding: 0 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--glass-ink);
+}
+.order-bar .ob-group {
+  display: flex;
+  gap: 3px;
+}
+.order-bar button {
+  min-height: 36px;
+  padding: 0 12px;
+  font-size: 14px;
+  color: var(--glass-ink);
+  background: var(--glass-faint);
+  border: 1px solid var(--glass-line);
+  border-radius: 7px;
+  cursor: pointer;
+}
+.order-bar button:hover {
+  background: var(--glass);
+}
+.order-bar button.active {
+  color: #23211b;
+  background: var(--accent);
+  border-color: var(--accent);
+}

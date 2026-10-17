@@ -52,6 +52,7 @@ import {
   ConflictPanel,
   ContactPanel,
   DiaryPanel,
+  OrderBar,
   EventLog,
   HelpPanel,
   HexPanel,
@@ -1011,6 +1012,21 @@ export function Game(props: {
           hoverCard={hoverCard}
           viewpoints={viewpoints}
         />
+        {!watching && canOrder(selectedUnit) && (
+          <OrderBar
+            unit={selectedUnit}
+            mode={mode}
+            onMode={setMode}
+            isArtillery={maxRange(world, RULES, selectedUnit, 'indirect') > 0}
+            onDefend={() => (formationOn && mates.length > 1 ? draftFormation(null, 'defend') : draft(selectedUnit, { kind: 'defend' }))}
+            onHold={() => draft(selectedUnit, null)}
+            drafted={selectedUnit.id in drafts && !locked[side]}
+            onUndo={() => clearDraft(selectedUnit)}
+            formation={mates.length > 1 ? { on: formationOn, count: mates.length, onToggle: () => setFormationOn((on) => !on) } : null}
+            waypoints={waypoints.length}
+            onClearWaypoints={() => setWaypoints([])}
+          />
+        )}
         {watching && (
           <ReplayBar
             frame={frame}

@@ -851,3 +851,62 @@ export function DiaryPanel(props: { entries: DiaryEntryFile[]; turn: number; mon
     </section>
   );
 }
+
+/**
+ * The order buttons on the map itself, for the selected unit: easier to reach than the sidebar,
+ * and big enough for a finger.
+ */
+export function OrderBar(props: {
+  unit: UnitState;
+  mode: OrderMode;
+  onMode: (m: OrderMode) => void;
+  isArtillery: boolean;
+  onDefend: () => void;
+  onHold: () => void;
+  drafted: boolean;
+  onUndo: () => void;
+  formation: { on: boolean; count: number; onToggle: () => void } | null;
+  waypoints: number;
+  onClearWaypoints: () => void;
+}) {
+  const modes: [OrderMode, string, string][] = [
+    ['advance', 'Advance', 'A'],
+    ['attack', props.isArtillery ? 'Bombard' : 'Attack', 'T'],
+    ['withdraw', 'Withdraw', 'W'],
+  ];
+  return (
+    <div className="order-bar" role="toolbar" aria-label={`Orders for ${props.unit.shortName}`} onPointerDown={(e) => e.stopPropagation()}>
+      <span className="ob-unit">{props.unit.shortName}</span>
+      <span className="ob-group" role="group" aria-label="The next order on the map">
+        {modes.map(([m, label, key]) => (
+          <button key={m} className={props.mode === m ? 'active' : ''} aria-pressed={props.mode === m} onClick={() => props.onMode(m)} title={`${label}: then right-click (or press and hold) the destination. Key ${key}`}>
+            {label}
+          </button>
+        ))}
+      </span>
+      <span className="ob-group">
+        <button onClick={props.onDefend} title="Defend in place. Key D">
+          Defend
+        </button>
+        <button onClick={props.onHold} title="No order: hold the ground and return fire">
+          Hold
+        </button>
+        {props.formation && (
+          <button className={props.formation.on ? 'active' : ''} aria-pressed={props.formation.on} onClick={props.formation.onToggle} title="Key F. Orders go to the whole formation">
+            Formation ({props.formation.count})
+          </button>
+        )}
+        {props.drafted && (
+          <button onClick={props.onUndo} title="Undo this turn's change">
+            Undo
+          </button>
+        )}
+        {props.waypoints > 0 && (
+          <button onClick={props.onClearWaypoints} title="Drop the waypoints">
+            Clear {props.waypoints} waypoint{props.waypoints === 1 ? '' : 's'}
+          </button>
+        )}
+      </span>
+    </div>
+  );
+}
