@@ -217,10 +217,12 @@ export class Map3D {
     // Left-drag moves the map, as in 2D; right-drag, or Shift/⌘/Ctrl with a left-drag (OrbitControls swaps pan for rotate), turns and tilts it.
     // A right-click that does not drag is still an order.
     controls.mouseButtons = { LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE };
-    controls.touches = { ONE: THREE.TOUCH.PAN, TWO: THREE.TOUCH.DOLLY_ROTATE };
+    // One finger pans; two fingers are handled in attachTouchGestures (pinch, twist, tilt), not by OrbitControls.
+    controls.touches = { ONE: THREE.TOUCH.PAN, TWO: -1 as unknown as THREE.TOUCH };
     this.fitToMap(false);
 
     this.attachInput(renderer.domElement);
+    this.attachTouchGestures(renderer.domElement);
     // Repaint the miniatures when the player changes a scheme in the Gun Park.
     const repaint = () => this.syncPieces();
     window.addEventListener(PAINT_EVENT, repaint);
@@ -906,6 +908,86 @@ export class Map3D {
     }
     const h = pixelToHex({ x: x * PX_PER_HEX, y: z * PX_PER_HEX }, HEX_SIZE);
     return this.map.cells.has(hexKey(h)) ? h : null;
+  }
+
+  /**
+   * Two fingers on a touch screen, as on a phone's map: pinch to zoom and twist to turn, the map
+   * following the fingers; or slide both up or down together to tilt. Whichever the fingers start
+   * doing first is kept for that touch, so turning does not also zoom.
+   */
+  private attachTouchGestures(canvas: HTMLCanvasElement): void {
+    const fingers = new Map<number, { x: number; y: number }>();
+    type Start = { d: number; angle: number; midY: number; ys: number[]; azimuth: number; polar: number; radius: number };
+    let start: Start | null = null;
+    let mode: 'pinch' | 'tilt' | null = null;
+    const pair = () => [...fingers.values()].slice(0, 2) as [{ x: number; y: number }, { x: number; y: number }];
+    const begin = () => {
+      const c = this.controls;
+      if (!c) return;
+      const [a, b] = pair();
+      const off = this.camera.position.clone().sub(c.target);
+      start = {
+        d: Math.hypot(a.x - b.x, a.y - b.y) || 1,
+        angle: Math.atan2(b.y - a.y, b.x - a.x),
+        midY: (a.y + b.y) / 2,
+        ys: [a.y, b.y],
+        azimuth: c.getAzimuthalAngle(),
+        polar: c.getPolarAngle(),
+        radius: off.length(),
+      };
+      mode = null;
+      this.flight = null;
+    };
+    const onDown = (e: PointerEvent) => {
+      if (e.pointerType !== 'touch') return;
+      fingers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (fingers.size === 2) begin();
+    };
+    const onMove = (e: PointerEvent) => {
+      if (!fingers.has(e.pointerId)) return;
+      fingers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      const c = this.controls;
+      if (fingers.size !== 2 || !start || !c) return;
+      const [a, b] = pair();
+      const scale = Math.hypot(a.x - b.x, a.y - b.y) / start.d;
+      let turn = Math.atan2(b.y - a.y, b.x - a.x) - start.angle;
+      turn = Math.atan2(Math.sin(turn), Math.cos(turn));
+      const dyA = a.y - start.ys[0]!;
+      const dyB = b.y - start.ys[1]!;
+      if (!mode) {
+        const together = Math.sign(dyA) === Math.sign(dyB) && Math.min(Math.abs(dyA), Math.abs(dyB)) > 12;
+        if (together && Math.abs(scale - 1) < 0.06 && Math.abs(turn) < 0.08) mode = 'tilt';
+        else if (Math.abs(scale - 1) > 0.05 || Math.abs(turn) > 0.06) mode = 'pinch';
+        else return;
+      }
+      let { azimuth, polar, radius } = start;
+      if (mode === 'pinch') {
+        radius = Math.min(c.maxDistance, Math.max(c.minDistance, start.radius / Math.max(0.05, scale)));
+        azimuth = start.azimuth + turn;
+      } else {
+        // Fingers up tilts towards the horizon, down looks straight down.
+        polar = Math.min(c.maxPolarAngle, Math.max(0.05, start.polar - ((a.y + b.y) / 2 - start.midY) * 0.006));
+      }
+      this.camera.position.copy(c.target).add(new THREE.Vector3().setFromSpherical(new THREE.Spherical(radius, polar, azimuth)));
+      this.camera.lookAt(c.target);
+      c.update();
+    };
+    const onUp = (e: PointerEvent) => {
+      if (!fingers.delete(e.pointerId)) return;
+      start = null;
+      mode = null;
+      if (fingers.size === 2) begin();
+    };
+    canvas.addEventListener('pointerdown', onDown);
+    canvas.addEventListener('pointermove', onMove);
+    canvas.addEventListener('pointerup', onUp);
+    canvas.addEventListener('pointercancel', onUp);
+    this.cleanup.push(() => {
+      canvas.removeEventListener('pointerdown', onDown);
+      canvas.removeEventListener('pointermove', onMove);
+      canvas.removeEventListener('pointerup', onUp);
+      canvas.removeEventListener('pointercancel', onUp);
+    });
   }
 
   private attachInput(canvas: HTMLCanvasElement): void {
